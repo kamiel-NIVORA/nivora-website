@@ -195,8 +195,7 @@ function BoxCard() {
           <ComingSoon />
         </div>
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">
-          Email, chat and DMs in one calm inbox. Read it, sort it, reply — without ever switching
-          apps.
+          Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.
         </p>
         <a
           href="#contact"
@@ -225,7 +224,7 @@ function MobileCard() {
           Made for mobile
         </h3>
         <p className="mt-2.5 text-[13.5px] leading-relaxed text-faint">
-          The whole suite in your pocket — fast, native, and quietly out of your way.
+          The whole suite in your pocket. Fast, native, and quietly out of your way.
         </p>
       </div>
     </>
@@ -243,7 +242,7 @@ function VoiceCard() {
           <ComingSoon />
         </div>
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">
-          Speech-to-text tuned to how you talk — and how you write. Dictate once, get clean copy.
+          Speech-to-text tuned to how you talk and how you write. Dictate once, get clean copy.
         </p>
       </div>
 
@@ -296,7 +295,7 @@ function EditorCard() {
           <ComingSoon />
         </div>
         <p className="mt-3.5 max-w-sm text-[14px] leading-relaxed text-faint">
-          Design motion in the browser, then export straight into After Effects — every keyframe
+          Design motion in the browser, then export straight into After Effects, every keyframe
           intact.
         </p>
       </div>
