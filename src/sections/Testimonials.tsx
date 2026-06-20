@@ -1,0 +1,109 @@
+import { Aperture, Hexagon, Sparkle } from 'lucide-react'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+
+type Card =
+  | { kind: 'quote'; bg: string; avatar: string; name: string; role: string; quote: string }
+  | { kind: 'portrait'; image: string; name: string; role: string }
+  | { kind: 'logo'; name: string; Icon: typeof Hexagon }
+
+const CARDS: Card[] = [
+  {
+    kind: 'quote',
+    bg: '/images/s8GPxlDcxupng4c3ToZpTaaLQ.jpg',
+    avatar: '/images/34CHRdTurlCbv7kCKIQR4GZmcI.jpg',
+    name: 'James Gowley',
+    role: 'CEO · NeoRick',
+    quote:
+      'This tool transformed how we do research. We can scan, generate summaries, and deliver insights in a fraction of the time.',
+  },
+  { kind: 'logo', name: 'NeoRick', Icon: Sparkle },
+  { kind: 'portrait', image: '/images/Ksud8CvJrW8EBKK6UADg7okcqg.jpg', name: 'Marcus Lee', role: 'Head of Research' },
+  {
+    kind: 'quote',
+    bg: '/images/gdn7G7rY1qzcykNXS1rYUKGlGM.jpg',
+    avatar: '/images/NE97Dd8nYnoAtbGouH0WCRgyOM.jpg',
+    name: 'Thomas Aspen',
+    role: 'CTO · Analyx',
+    quote:
+      'The AI research analyst helps our team scan information quickly, making strategic decisions easier and far more data-driven and accurate.',
+  },
+  { kind: 'portrait', image: '/images/MKA7INDXm9nEkdIrbzOYK7fJ4A.jpg', name: 'Sara Müller', role: 'Operations Lead' },
+  { kind: 'logo', name: 'Colfare', Icon: Aperture },
+  { kind: 'portrait', image: '/images/rxBNYoypQWFpaC9BMn51oDYSs8.jpg', name: 'Elena Park', role: 'Data Analyst' },
+  {
+    kind: 'quote',
+    bg: '/images/oJMn0JMIXRyu0NZ9cSstBe6B9Q.jpg',
+    avatar: '/images/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
+    name: 'Aria Patel',
+    role: 'Founder · Colfare',
+    quote:
+      'We replaced three tools with one workspace. Everything our analysts need now lives in a single, calm place.',
+  },
+]
+
+function TestimonialCard({ card }: { card: Card }) {
+  if (card.kind === 'logo') {
+    const { Icon, name } = card
+    return (
+      <div className="flex h-[340px] w-[260px] shrink-0 flex-col items-center justify-center gap-3 rounded-3xl border border-line bg-white/[0.02]">
+        <Icon className="h-7 w-7 text-ink-soft" strokeWidth={1.5} />
+        <span className="text-lg font-semibold tracking-tight text-ink-soft">{name}</span>
+      </div>
+    )
+  }
+
+  if (card.kind === 'portrait') {
+    return (
+      <div className="relative h-[340px] w-[280px] shrink-0 overflow-hidden rounded-3xl border border-line">
+        <img src={card.image} alt={card.name} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-12">
+          <p className="text-[15px] font-semibold text-ink">{card.name}</p>
+          <p className="text-[13px] text-ink-soft/70">{card.role}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative h-[340px] w-[440px] shrink-0 overflow-hidden rounded-3xl border border-line">
+      <img src={card.bg} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="relative flex h-full flex-col justify-between p-6">
+        <div className="flex items-center gap-3">
+          <img src={card.avatar} alt={card.name} className="h-9 w-9 rounded-full object-cover" loading="lazy" />
+          <div>
+            <p className="text-sm font-semibold text-ink">{card.name}</p>
+            <p className="text-xs text-ink-soft/70">{card.role}</p>
+          </div>
+        </div>
+        <p className="font-serif text-xl leading-snug tracking-tight text-ink">“{card.quote}”</p>
+      </div>
+    </div>
+  )
+}
+
+export function Testimonials() {
+  const loop = [...CARDS, ...CARDS]
+  return (
+    <section className="relative w-full overflow-hidden py-24 lg:py-28">
+      <div className="mx-auto w-full max-w-[1200px] px-6">
+        <SectionHeading
+          title="Hear from customers like you"
+          subtitle="Discover what brought them to us, what they tried before, and how they work today."
+        />
+      </div>
+
+      {/* Marquee */}
+      <div className="group relative mt-14">
+        {/* edge fades */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-bg to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-bg to-transparent" />
+        <div className="flex w-max gap-5 [animation:marquee_55s_linear_infinite] group-hover:[animation-play-state:paused]">
+          {loop.map((card, i) => (
+            <TestimonialCard key={i} card={card} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
