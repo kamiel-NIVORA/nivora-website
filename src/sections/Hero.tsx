@@ -36,9 +36,9 @@ const fadeUp: Variants = {
 export function Hero() {
   return (
     <section id="top" className="relative min-h-[100svh] w-full overflow-hidden">
-      {/* Background image */}
+      {/* Background image — Nivora landscape, generated with Nano Banana Pro */}
       <img
-        src="/images/EqTvMX987cRyoYGTSVcaTDhwgWM.jpg"
+        src="/images/hero-nivora.png"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />

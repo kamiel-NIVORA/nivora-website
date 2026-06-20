@@ -29,11 +29,17 @@ export function RippleButton({
   href = '#contact',
   variant = 'solid',
   className,
+  onClick,
+  target,
+  rel,
 }: {
   children: React.ReactNode
   href?: string
   variant?: Variant
   className?: string
+  onClick?: (e: React.MouseEvent) => void
+  target?: string
+  rel?: string
 }) {
   const ref = useRef<HTMLAnchorElement>(null)
   const [ripple, setRipple] = useState<Ripple | null>(null)
@@ -54,6 +60,9 @@ export function RippleButton({
     <a
       ref={ref}
       href={href}
+      target={target}
+      rel={rel}
+      onClick={onClick}
       className={cn(
         'relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full px-4 text-[13px] font-medium transition-[color] duration-500',
         base,

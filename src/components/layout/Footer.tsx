@@ -7,7 +7,11 @@ const COLUMNS = [
   { title: 'Services', links: toLinks(SERVICES) },
   {
     title: 'Company',
-    links: [...toLinks(COMPANY_PRIMARY), { label: 'Blog', href: '/blog' }],
+    links: [
+      ...toLinks(COMPANY_PRIMARY),
+      { label: 'Blog', href: '/blog' },
+      { label: 'Brand Kit', href: '/media' },
+    ],
   },
   {
     title: 'Legal',

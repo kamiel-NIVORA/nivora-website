@@ -1,5 +1,5 @@
 import { Reveal } from '@/components/animations/Reveal'
-import { Button } from '@/components/ui/Button'
+import { RippleButton } from '@/components/ui/RippleButton'
 
 export function FinalCTA() {
   return (
@@ -18,12 +18,12 @@ export function FinalCTA() {
         </Reveal>
         <Reveal delay={0.12}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button size="lg" asChild>
-              <a href="#contact">Try for Free</a>
-            </Button>
-            <Button variant="dark" size="lg" asChild>
-              <a href="#contact">Contact Us</a>
-            </Button>
+            <RippleButton variant="solid" href="#contact" className="h-12 px-6 text-[15px]">
+              Try for Free
+            </RippleButton>
+            <RippleButton variant="ghost" href="#contact" className="h-12 px-6 text-[15px]">
+              Contact Us
+            </RippleButton>
           </div>
         </Reveal>
       </div>

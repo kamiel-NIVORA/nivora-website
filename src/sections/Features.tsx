@@ -1,9 +1,44 @@
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Button } from '@/components/ui/Button'
+import { RippleButton } from '@/components/ui/RippleButton'
 import { NotificationStack } from '@/components/ui/NotificationStack'
 import { ServicesShowcase } from '@/components/ui/ServicesShowcase'
 import { SERVICES } from '@/lib/navigation'
+
+const cycleEase = [0.22, 1, 0.36, 1] as const
+
+/** Service names the "Our Services" CTA rolls through, kept in sync with the nav. */
+const SERVICE_TITLES = SERVICES.map((s) => s.title)
+
+/** A single word that rolls over to the next on a timer; width stays fixed to the
+ *  longest entry so the surrounding button never reflows. */
+function CyclingWord({ words, interval = 2200 }: { words: string[]; interval?: number }) {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % words.length), interval)
+    return () => clearInterval(id)
+  }, [words.length, interval])
+  const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '')
+  return (
+    <span className="relative ml-1 inline-block whitespace-nowrap font-semibold">
+      <span aria-hidden className="invisible">{longest}</span>
+      <AnimatePresence initial={false}>
+        <motion.span
+          key={words[i]}
+          initial={{ y: 7, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -7, opacity: 0 }}
+          transition={{ duration: 0.32, ease: cycleEase }}
+          className="absolute left-0 top-0"
+        >
+          {words[i]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
 
 type Feature = {
   title: string
@@ -15,12 +50,6 @@ type Feature = {
   cta: string
   href: string
 }
-
-const PRODUCT_ICONS = [
-  { label: 'Box', logo: '/box-logo.png' },
-  { label: 'Voice', logo: '/voice-logo.png' },
-  { label: 'Editor', logo: '/editor-logo.png' },
-]
 
 const FEATURES: Feature[] = [
   {
@@ -75,46 +104,15 @@ function FeatureCard({ feature }: { feature: Feature }) {
             )}
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-faint">{body}</p>
-          {notifications ? (
-            <div className="mt-7 flex items-center justify-center gap-5">
-              {PRODUCT_ICONS.map((p) => (
-                <a
-                  key={p.label}
-                  href={href}
-                  title={p.label}
-                  aria-label={`${p.label} — join the waiting list`}
-                  className="transition-transform duration-200 hover:-translate-y-0.5 hover:scale-105 active:translate-y-0 active:scale-95"
-                >
-                  <img
-                    src={p.logo}
-                    alt={p.label}
-                    className="h-14 w-14 rounded-2xl object-cover shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
-                  />
-                </a>
-              ))}
-            </div>
-          ) : services ? (
-            <div className="mt-7 flex items-center justify-center gap-5">
-              {SERVICES.map((s) => (
-                <a
-                  key={s.title}
-                  href={s.href}
-                  title={s.title}
-                  aria-label={s.title}
-                  className="transition-transform duration-200 hover:-translate-y-0.5 hover:scale-105 active:translate-y-0 active:scale-95"
-                >
-                  <img
-                    src={s.img}
-                    alt={s.title}
-                    className="h-14 w-14 rounded-2xl object-cover shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
-                  />
-                </a>
-              ))}
-            </div>
+          {services ? (
+            <RippleButton variant="ghost" href={href} className="mt-7 h-11 self-start px-5 text-sm">
+              Lees meer over
+              <CyclingWord words={SERVICE_TITLES} />
+            </RippleButton>
           ) : (
-            <Button variant="dark" size="md" className="mt-7 self-start" asChild>
-              <a href={href}>{cta}</a>
-            </Button>
+            <RippleButton variant="solid" href={href} className="mt-7 h-11 self-start px-5 text-sm">
+              {cta}
+            </RippleButton>
           )}
         </div>
       </div>

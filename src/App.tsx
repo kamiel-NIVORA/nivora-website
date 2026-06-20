@@ -6,6 +6,7 @@ import { ScrollManager } from '@/components/ScrollManager'
 import { Home } from '@/pages/Home'
 import { BlogIndex } from '@/pages/BlogIndex'
 import { BlogPost } from '@/pages/BlogPost'
+import { MediaKit } from '@/pages/MediaKit'
 import { LegalPage } from '@/pages/LegalPage'
 import { TERMS, PRIVACY } from '@/data/legal'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/blog" element={<BlogIndex />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/media" element={<MediaKit />} />
             <Route path="/terms" element={<LegalPage doc={TERMS} />} />
             <Route path="/privacy" element={<LegalPage doc={PRIVACY} />} />
             <Route path="*" element={<Home />} />

@@ -5,10 +5,9 @@ import { Button } from '@/components/ui/Button'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { cn } from '@/lib/utils'
 import {
-  COMPANY_MEDIA,
   COMPANY_PRIMARY,
-  COMPANY_SECONDARY,
   PRODUCTS,
+  RESOURCES,
   SERVICES,
   type NavItem as Item,
 } from '@/lib/navigation'
@@ -16,8 +15,8 @@ import { useContactModal } from '@/components/contact/ContactModal'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const MENU = ['Products', 'Services', 'Company']
-const ORDER: Record<string, number> = { Products: 0, Services: 1, Company: 2 }
+const MENU = ['Products', 'Services', 'Company', 'Resources']
+const ORDER: Record<string, number> = { Products: 0, Services: 1, Company: 2, Resources: 3 }
 
 const slide = {
   enter: (d: number) => ({ opacity: 0, x: d * 28 }),
@@ -41,7 +40,7 @@ function ComingSoonTag({ className }: { className?: string }) {
 }
 
 /* ── Item primitives ── */
-function CardItem({ title, desc, href, Icon, img, comingSoon }: Item) {
+function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   return (
     <a href={href} className="group/i flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-white/[0.06]">
       {img ? (
@@ -53,7 +52,11 @@ function CardItem({ title, desc, href, Icon, img, comingSoon }: Item) {
         />
       ) : (
         <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line bg-white/[0.04] text-ink-soft transition-colors group-hover/i:bg-white/[0.08]">
-          {Icon && <Icon className="h-[18px] w-[18px]" strokeWidth={1.6} />}
+          {iconImg ? (
+            <img src={iconImg} alt="" className="h-5 w-5 object-contain" loading="lazy" />
+          ) : (
+            Icon && <Icon className="h-[18px] w-[18px]" strokeWidth={1.6} />
+          )}
         </span>
       )}
       <span className="min-w-0">
@@ -64,28 +67,6 @@ function CardItem({ title, desc, href, Icon, img, comingSoon }: Item) {
         {desc && <span className="mt-1 block text-[13px] leading-snug text-faint">{desc}</span>}
       </span>
     </a>
-  )
-}
-
-function ListItem({ title, href, Icon }: Item) {
-  return (
-    <a href={href} className="group/i flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-white/[0.06]">
-      {Icon && <Icon className="h-[18px] w-[18px] text-ink-soft" strokeWidth={1.6} />}
-      <span className="text-[15px] font-medium text-ink">{title}</span>
-    </a>
-  )
-}
-
-function SideCard({ items }: { items: Item[] }) {
-  return (
-    <div className="flex w-[280px] shrink-0 rounded-2xl border border-line bg-white/[0.03] p-2">
-      {/* Centred vertically so it stays balanced next to a taller right column. */}
-      <div className="flex max-h-[62vh] flex-1 flex-col justify-center overflow-y-auto pr-1 [scrollbar-color:rgba(255,255,255,0.18)_transparent] [scrollbar-width:thin]">
-        {items.map((it) => (
-          <CardItem key={it.title} {...it} />
-        ))}
-      </div>
-    </div>
   )
 }
 
@@ -108,45 +89,25 @@ function InterestedRow({ label, onSelect }: { label: string; onSelect?: () => vo
   )
 }
 
-const PANELS: Record<string, { items: Item[]; extra?: Item[]; label: string }> = {
+const PANELS: Record<string, { items: Item[]; label?: string }> = {
   Products: { items: PRODUCTS, label: 'Book a demo' },
   Services: { items: SERVICES, label: 'Book a strategy call' },
-  Company: { items: COMPANY_PRIMARY, extra: COMPANY_MEDIA, label: 'Get in touch' },
+  Company: { items: COMPANY_PRIMARY, label: 'Get in touch' },
+  Resources: { items: RESOURCES },
 }
 
 function PanelContent({ active, onSelect }: { active: string; onSelect?: () => void }) {
   const panel = PANELS[active] ?? PANELS.Products
-  // Three primary items stay in the left frame; anything beyond (the 4th item,
-  // plus media assets on Company) flows into the continuous right frame.
-  const leftItems = panel.items.slice(0, 3)
-  const rightCards = [...panel.items.slice(3), ...(panel.extra ?? [])]
 
   return (
-    <div className="w-[680px]">
-      <div className="flex items-stretch gap-2">
-        {/* Left: primary offerings */}
-        <SideCard items={leftItems} />
-
-        {/* Right: one continuous frame — overflow + media cards, then quick links */}
-        <div className="flex flex-1 flex-col rounded-2xl border border-line bg-white/[0.03] p-2">
-          {rightCards.length > 0 && (
-            <>
-              <div className="flex flex-col">
-                {rightCards.map((it) => (
-                  <CardItem key={it.title} {...it} />
-                ))}
-              </div>
-              <div className="mx-2 my-2 h-px bg-line" />
-            </>
-          )}
-          <div className="grid flex-1 grid-cols-2 content-center gap-x-1">
-            {COMPANY_SECONDARY.map((it) => (
-              <ListItem key={it.title} {...it} />
-            ))}
-          </div>
-        </div>
+    <div className="w-[360px]">
+      {/* One clean frame holding every item for this menu */}
+      <div className="flex flex-col rounded-2xl border border-line bg-white/[0.03] p-2">
+        {panel.items.map((it) => (
+          <CardItem key={it.title} {...it} />
+        ))}
       </div>
-      <InterestedRow label={panel.label} onSelect={onSelect} />
+      {panel.label && <InterestedRow label={panel.label} onSelect={onSelect} />}
     </div>
   )
 }
@@ -250,7 +211,11 @@ export function Navbar() {
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
               <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Company</p>
-              {[...COMPANY_PRIMARY, ...COMPANY_MEDIA, ...COMPANY_SECONDARY].map((l) => (
+              {COMPANY_PRIMARY.map((l) => (
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
+              ))}
+              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Resources</p>
+              {RESOURCES.map((l) => (
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
               <Button size="sm" className="mt-2" asChild>

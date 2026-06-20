@@ -1,5 +1,5 @@
 import { Reveal } from '@/components/animations/Reveal'
-import { Button } from '@/components/ui/Button'
+import { RippleButton } from '@/components/ui/RippleButton'
 
 /** Closing call to action shown at the bottom of the blog index and post pages. */
 export function BlogCTA() {

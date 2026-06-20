@@ -1,13 +1,4 @@
-import {
-  FileText,
-  Handshake,
-  HelpCircle,
-  Leaf,
-  Shield,
-  Star,
-  Users,
-  type LucideIcon,
-} from 'lucide-react'
+import { HelpCircle, Leaf, type LucideIcon } from 'lucide-react'
 
 /** Shared navigation source of truth — used by both the Navbar and the Footer
  *  so the two never drift apart. Update items here once and both stay in sync. */
@@ -16,7 +7,10 @@ export type NavItem = {
   desc?: string
   href: string
   Icon?: LucideIcon
+  /** Full-bleed app-style logo (noisy black tile) — used for Products/Services. */
   img?: string
+  /** White line icon shown inside the subtle grey square — like the Lucide icons. */
+  iconImg?: string
   comingSoon?: boolean
 }
 
@@ -34,20 +28,16 @@ export const SERVICES: NavItem[] = [
 ]
 
 export const COMPANY_PRIMARY: NavItem[] = [
-  { title: 'About Us', desc: 'Learn more about our story and team.', href: '/#contact', Icon: Users },
-  { title: 'Customer Stories', desc: "See how we've helped our clients succeed.", href: '/#contact', Icon: Star },
-  { title: 'Partnerships', desc: 'Collaborate with us for mutual growth.', href: '/#contact', Icon: Handshake },
+  { title: 'About Us', desc: 'Learn more about our story and team.', href: '/#contact', iconImg: '/icon-about.png' },
+  { title: 'Customer Stories', desc: "See how we've helped our clients succeed.", href: '/#contact', iconImg: '/icon-stories.png' },
+  { title: 'Partnerships', desc: 'Collaborate with us for mutual growth.', href: '/#contact', iconImg: '/icon-partnerships.png' },
+  { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/#contact', iconImg: '/icon-affiliate.png' },
 ]
 
-/** Nivora media / branding assets — the branding page is on the way. */
-export const COMPANY_MEDIA: NavItem[] = [
-  { title: 'Media Assets', desc: 'Logos, colours and brand kit.', href: '/#contact', img: '/media-logo.png', comingSoon: true },
-  { title: 'Brand Guidelines', desc: 'How to use the Nivora brand.', href: '/#contact', img: '/media-logo.png', comingSoon: true },
-]
-
-export const COMPANY_SECONDARY: NavItem[] = [
-  { title: 'Terms of Service', href: '/terms', Icon: FileText },
-  { title: 'Privacy Policy', href: '/privacy', Icon: Shield },
-  { title: 'Blog', href: '/blog', Icon: Leaf },
-  { title: 'Help Center', href: '/#contact', Icon: HelpCircle },
+export const RESOURCES: NavItem[] = [
+  { title: 'Media', desc: 'Logos, colours and the full brand kit.', href: '/media', iconImg: '/icon-media.png' },
+  { title: 'Blog', desc: 'Insights, updates and ideas.', href: '/blog', Icon: Leaf },
+  { title: 'Terms of Service', desc: 'The rules for using Nivora.', href: '/terms', iconImg: '/icon-terms.png' },
+  { title: 'Privacy Policy', desc: 'How we handle and protect your data.', href: '/privacy', iconImg: '/icon-privacy.png' },
+  { title: 'Help Center', desc: 'Get answers and support.', href: '/#contact', Icon: HelpCircle },
 ]
