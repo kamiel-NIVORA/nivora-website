@@ -10,7 +10,7 @@ import { SERVICES, type NavItem } from '@/lib/navigation'
 const MotionLink = motion.create(Link)
 
 /** Soft luminous backdrop — lives in /public, served from the site root.
- *  Clean B&W peak, heavily blurred + masked into the dark behind the cards. */
+ *  Clean B&W peak, kept sharp and masked into the dark behind the cards. */
 const GLOW = '/bg-peak-stars.jpg'
 
 /** Per-service line icons (white glyphs, no frame), keyed by service title. */
@@ -34,12 +34,14 @@ const ICONS: Record<string, string> = {
 export function Services() {
   return (
     <section id="services" className="relative w-full overflow-hidden py-28 lg:py-36">
-      {/* Ambient glow — softly blurred, spread across the section, masked into the dark */}
+      {/* Ambient backdrop — kept SHARP and spread across the section, masked into the
+          dark. The blur is owned by the cards' own backdrop-filter, so the image stays
+          crisp between and around them (and while they tilt). */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <img
           src={GLOW}
           alt=""
-          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-60 blur-[3px] [mask-image:radial-gradient(54%_52%_at_50%_50%,black_26%,transparent_78%)]"
+          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-60 [mask-image:radial-gradient(54%_52%_at_50%_50%,black_26%,transparent_78%)]"
         />
       </div>
 
