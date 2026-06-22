@@ -19,9 +19,9 @@ const GLOW = '/IMG_0683.JPG'
 /**
  * Our Products — a bento of the Nivora tools.
  *
- * Five cards: Box (converging inboxes), Voice (a wide hero where spoken words
- * flow as ribbons of text and resolve into clean copy), and three smaller
- * utility cards — Made for mobile, Made for desktop, and a locked Download rack.
+ * Box (converging inboxes) sits tall on the left. Made for mobile and Voice (one
+ * clean wave of speech becoming clean copy) share the top; Made for desktop and a
+ * locked Download rack share the bottom.
  *
  * It mirrors the "Our Services" language: glossy frosted-glass cards lifted on a
  * soft glow, paired with solid near-black cards for contrast. As the section
@@ -60,9 +60,9 @@ export function Products() {
 
         <div
           ref={bentoRef}
-          className="mt-16 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:[grid-template-rows:400px_300px] lg:gap-6"
+          className="mt-16 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:[grid-template-rows:420px_300px] lg:gap-6"
         >
-          {/* ── Box — tall black card, converging-apps animation ── */}
+          {/* Box — tall black card, converging-apps animation */}
           <BentoCard
             progress={progress}
             dx={-44}
@@ -74,46 +74,45 @@ export function Products() {
             <BoxCard />
           </BentoCard>
 
-          {/* ── Voice — wide black hero, flowing-text slingers ── */}
+          {/* Made for mobile — glass card, top middle */}
           <BentoCard
             progress={progress}
-            dx={24}
-            dy={-30}
-            start={0.05}
-            dark
-            href="/waitlist?product=voice"
-            ariaLabel="Voice, join the waiting list"
-            className="lg:col-start-4 lg:col-span-9 lg:row-start-1"
-          >
-            <VoiceCard />
-          </BentoCard>
-
-          {/* ── Made for mobile — small glass card ── */}
-          <BentoCard
-            progress={progress}
-            dx={-32}
-            dy={36}
-            start={0.12}
+            dy={-26}
+            start={0.1}
             href="/waitlist"
             ariaLabel="Made for mobile, join the waiting list"
-            className="lg:col-start-4 lg:col-span-3 lg:row-start-2"
+            className="lg:col-start-4 lg:col-span-3 lg:row-start-1"
           >
             <MobileCard />
           </BentoCard>
 
-          {/* ── Made for desktop — small glass card ── */}
+          {/* Voice — wide black hero, one clean wave */}
           <BentoCard
             progress={progress}
-            dy={42}
+            dx={30}
+            dy={-20}
+            start={0.06}
+            dark
+            href="/waitlist?product=voice"
+            ariaLabel="Voice, join the waiting list"
+            className="lg:col-start-7 lg:col-span-6 lg:row-start-1"
+          >
+            <VoiceCard />
+          </BentoCard>
+
+          {/* Made for desktop — wide glass card, bottom middle */}
+          <BentoCard
+            progress={progress}
+            dy={40}
             start={0.16}
             href="/waitlist"
             ariaLabel="Made for desktop, join the waiting list"
-            className="lg:col-start-7 lg:col-span-3 lg:row-start-2"
+            className="lg:col-start-4 lg:col-span-6 lg:row-start-2"
           >
             <DesktopCard />
           </BentoCard>
 
-          {/* ── Download — small glass card, locked until launch ── */}
+          {/* Download — small glass card, locked until launch */}
           <BentoCard
             progress={progress}
             dx={32}
@@ -131,12 +130,10 @@ export function Products() {
   )
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   Card shell — converge-on-scroll wrapper, glass or black, with the same
-   frosted gloss the service cards use. When `href` is set the whole card is a
-   link to the waiting list: an overlay anchor sits under the (pointer-events
-   transparent) content, and any real button inside re-enables its own clicks.
-   ────────────────────────────────────────────────────────────────────────── */
+/* Card shell — converge-on-scroll wrapper, glass or black, with the same frosted
+   gloss the service cards use. When `href` is set the whole card is a link to the
+   waiting list: an overlay anchor sits under the (pointer-events transparent)
+   content, and any real button inside re-enables its own clicks. */
 function BentoCard({
   progress,
   dx = 0,
@@ -194,7 +191,7 @@ function BentoCard({
   )
 }
 
-/* Small shared bits ───────────────────────────────────────────────────────── */
+/* Small shared bits */
 function ComingSoon() {
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
@@ -204,7 +201,19 @@ function ComingSoon() {
   )
 }
 
-/* ── Card 1 · Box ─────────────────────────────────────────────────────────── */
+/** Small app icon — the same mark used in the nav Products menu. */
+function AppLogo({ src }: { src: string }) {
+  return (
+    <img
+      src={src}
+      alt=""
+      className="h-9 w-9 shrink-0 rounded-[10px] border border-line object-cover"
+      loading="lazy"
+    />
+  )
+}
+
+/* Card 1 · Box */
 function BoxCard() {
   return (
     <>
@@ -216,6 +225,7 @@ function BoxCard() {
       {/* Text */}
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <AppLogo src="/box-logo.png" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
           <ComingSoon />
         </div>
@@ -233,19 +243,20 @@ function BoxCard() {
   )
 }
 
-/* ── Card 2 · Voice — wide hero with flowing-text slingers ─────────────────── */
+/* Card 2 · Voice — wide hero with the one clean wave */
 function VoiceCard() {
   return (
     <div className="relative flex h-full flex-col">
-      {/* Full-bleed slingers — escape the card padding, clipped to its corners */}
+      {/* Full-bleed wave — escape the card padding, clipped to its corners */}
       <div className="pointer-events-none absolute -inset-7 overflow-hidden rounded-[28px] lg:-inset-8">
         <VoiceSlingers />
-        {/* Soft corner scrim so the label reads cleanly over the faint streams */}
+        {/* Soft corner scrim so the label reads cleanly over the wave */}
         <div className="absolute inset-0 bg-[radial-gradient(62%_82%_at_0%_0%,rgba(10,10,10,0.94),rgba(10,10,10,0.4)_42%,transparent_66%)]" />
       </div>
 
       <div className="relative z-[1] max-w-sm">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <AppLogo src="/voice-logo.png" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
           <ComingSoon />
         </div>
@@ -257,12 +268,12 @@ function VoiceCard() {
   )
 }
 
-/* ── Card 3 · Made for mobile (empty phone-bottom frame) ──────────────────── */
+/* Card 3 · Made for mobile (empty phone-bottom frame) */
 function MobileCard() {
   return (
     <>
       <div className="relative flex-1 overflow-hidden rounded-[14px] border border-line bg-white/[0.02]">
-        <div className="absolute inset-x-[26%] -bottom-3 top-6 rounded-t-[26px] border border-b-0 border-line bg-gradient-to-b from-white/[0.06] to-transparent" />
+        <div className="absolute -bottom-3 left-1/2 top-6 w-[58%] max-w-[150px] -translate-x-1/2 rounded-t-[26px] border border-b-0 border-line bg-gradient-to-b from-white/[0.06] to-transparent" />
         <div className="absolute bottom-2.5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-white/15" />
       </div>
 
@@ -278,12 +289,12 @@ function MobileCard() {
   )
 }
 
-/* ── Card 4 · Made for desktop (empty browser-window frame) ───────────────── */
+/* Card 4 · Made for desktop (empty browser-window frame) */
 function DesktopCard() {
   return (
     <>
       <div className="relative flex-1 overflow-hidden rounded-[14px] border border-line bg-white/[0.02]">
-        <div className="absolute inset-x-5 -bottom-4 top-6 overflow-hidden rounded-t-[12px] border border-b-0 border-line bg-gradient-to-b from-white/[0.06] to-transparent">
+        <div className="absolute -bottom-4 left-1/2 top-6 w-[calc(100%-3rem)] max-w-[520px] -translate-x-1/2 overflow-hidden rounded-t-[12px] border border-b-0 border-line bg-gradient-to-b from-white/[0.06] to-transparent">
           <div className="flex items-center gap-1.5 border-b border-line px-3 py-2.5">
             <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
             <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
@@ -305,7 +316,7 @@ function DesktopCard() {
   )
 }
 
-/* ── Card 5 · Download (locked until launch — lock only, no caption) ──────── */
+/* Card 5 · Download (locked until launch — lock only, no caption) */
 const PLATFORMS: { name: string; Glyph: (p: SVGProps<SVGSVGElement>) => ReactNode }[] = [
   { name: 'iPhone', Glyph: AppleGlyph },
   { name: 'Mac', Glyph: AppleGlyph },
@@ -341,7 +352,7 @@ function DownloadCard() {
   )
 }
 
-/* ── Monochrome platform glyphs (white, never the logo colours) ───────────── */
+/* Monochrome platform glyphs (white, never the logo colours) */
 function AppleGlyph(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
