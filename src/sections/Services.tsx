@@ -1,6 +1,5 @@
-import { type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
@@ -22,14 +21,14 @@ const ICONS: Record<string, string> = {
 }
 
 /**
- * Our Services — four free-standing glass cards floating on a soft glow.
+ * Our Services — four free-standing frosted-glass cards over a sharp peak.
  *
- * Each card tilts in 3D toward the cursor (spring-driven rotateX/rotateY under a
- * perspective parent), and the icon, name and button sit on raised translateZ
- * planes so they lift off the surface as it tilts. No wrapping panel: the cards
- * stand on their own over an ambient, lightly blurred glow that fades into the
- * black at the edges. The glass keeps a light frosted blur so the glow reads
- * through it softly.
+ * Each card is a real frosted-glass panel: a `backdrop-blur` genuinely blurs the
+ * sharp peak behind it (same technique as the navbar/contact glass), with a dark
+ * translucent tint on top so the white serif stays legible over the bright snow.
+ * The peak stays crisp in the gaps BETWEEN the cards. No 3D tilt — a 3D transform
+ * makes browsers drop `backdrop-filter` entirely, so the cards use a flat 2D
+ * hover-lift instead, which keeps the blur intact.
  */
 export function Services() {
   return (
@@ -74,89 +73,54 @@ function ServiceCard({ service, index }: { service: NavItem; index: number }) {
   const { title, desc, href } = service
   const icon = ICONS[title]
 
-  // ── 3D tilt toward the cursor ──
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const spring = { damping: 18, stiffness: 160 }
-  const sx = useSpring(mouseX, spring)
-  const sy = useSpring(mouseY, spring)
-  const rotateX = useTransform(sy, [-0.5, 0.5], ['8deg', '-8deg'])
-  const rotateY = useTransform(sx, [-0.5, 0.5], ['-8deg', '8deg'])
-
-  const handleMove = (e: MouseEvent<HTMLAnchorElement>) => {
-    const r = e.currentTarget.getBoundingClientRect()
-    mouseX.set((e.clientX - r.left) / r.width - 0.5)
-    mouseY.set((e.clientY - r.top) / r.height - 0.5)
-  }
-  const handleLeave = () => {
-    mouseX.set(0)
-    mouseY.set(0)
-  }
-
   return (
-    <div style={{ perspective: '1000px' }}>
-      <MotionLink
-        to={href}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[22px] border border-line bg-white/[0.03] p-6 backdrop-blur-2xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[440px] lg:p-7"
-      >
-        {/* Frost veil — a dark translucent fill that softens the sharp peak
-            behind the card into a quiet frosted ghost. The browser drops the
-            backdrop-blur under the card's 3D tilt (transform-style: preserve-3d),
-            so THIS veil is what makes the glass read as frosted and not
-            see-through. It is clipped to the card, so the peak stays crisp in
-            the gaps BETWEEN the cards. */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/62 via-[#0a0a0d]/58 to-[#0a0a0d]/80" />
+    <MotionLink
+      to={href}
+      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[22px] border border-line bg-white/[0.04] p-6 backdrop-blur-2xl transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[440px] lg:p-7"
+    >
+      {/* Frosted tint — a dark translucent fill over the (genuinely) blurred peak,
+          so the white serif stays legible against the bright snow. The blur itself
+          comes from the card's backdrop-filter above. */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/35 via-[#0a0a0d]/30 to-[#0a0a0d]/55" />
 
-        {/* Gloss — the same frosted feel as the header: a diagonal sheen + top hairline */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      {/* Gloss — the same frosted feel as the header: a diagonal sheen + top hairline */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
-        {/* Service icon — bare white glyph, no frame, tucked into the corner and
-            lifted off the surface */}
-        {icon && (
-          <img
-            src={icon}
-            alt={title}
-            style={{ transform: 'translateZ(45px)' }}
-            className="absolute left-5 top-5 h-10 w-10 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]"
-            loading="lazy"
-          />
+      {/* Service icon — bare white glyph, no frame, tucked into the corner */}
+      {icon && (
+        <img
+          src={icon}
+          alt={title}
+          className="absolute left-5 top-5 h-10 w-10 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]"
+          loading="lazy"
+        />
+      )}
+      {/* Quiet index in the opposite corner */}
+      <span className="absolute right-5 top-5 font-mono text-[11px] tracking-[0.12em] text-dim">
+        {String(index).padStart(2, '0')}
+      </span>
+
+      {/* Middle: just the service name, in our serif */}
+      <div className="relative flex flex-1 items-center justify-center px-1 pt-6">
+        <h3 className="text-center font-serif text-[26px] leading-tight tracking-[-0.01em] text-ink lg:text-[29px]">
+          {title}
+        </h3>
+      </div>
+
+      {/* Bottom: a short line + a button through to the service page */}
+      <div className="relative">
+        {desc && (
+          <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
         )}
-        {/* Quiet index in the opposite corner */}
-        <span
-          style={{ transform: 'translateZ(35px)' }}
-          className="absolute right-5 top-5 font-mono text-[11px] tracking-[0.12em] text-dim"
-        >
-          {String(index).padStart(2, '0')}
+        <span className="mt-4 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-white/[0.06] px-4 text-[13px] font-medium text-ink-soft transition-colors group-hover:bg-white/[0.10]">
+          Learn more
+          <ArrowRight
+            className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+            strokeWidth={1.8}
+          />
         </span>
-
-        {/* Middle: just the service name, in our serif */}
-        <div
-          style={{ transform: 'translateZ(55px)' }}
-          className="relative flex flex-1 items-center justify-center px-1 pt-6"
-        >
-          <h3 className="text-center font-serif text-[26px] leading-tight tracking-[-0.01em] text-ink lg:text-[29px]">
-            {title}
-          </h3>
-        </div>
-
-        {/* Bottom: a short line + a button through to the service page */}
-        <div style={{ transform: 'translateZ(35px)' }} className="relative">
-          {desc && (
-            <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
-          )}
-          <span className="mt-4 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-white/[0.06] px-4 text-[13px] font-medium text-ink-soft transition-colors group-hover:bg-white/[0.10]">
-            Learn more
-            <ArrowRight
-              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
-              strokeWidth={1.8}
-            />
-          </span>
-        </div>
-      </MotionLink>
-    </div>
+      </div>
+    </MotionLink>
   )
 }
