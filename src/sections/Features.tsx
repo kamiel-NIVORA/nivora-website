@@ -49,6 +49,9 @@ type Feature = {
   comingSoon?: boolean
   cta: string
   href: string
+  /** Optional secondary, lighter button (e.g. "Zie meer" jumping to a section). */
+  secondaryCta?: string
+  secondaryHref?: string
 }
 
 const FEATURES: Feature[] = [
@@ -58,7 +61,9 @@ const FEATURES: Feature[] = [
     notifications: true,
     comingSoon: true,
     cta: 'Join the waiting list',
-    href: '#contact',
+    href: '/waitlist',
+    secondaryCta: 'Zie meer',
+    secondaryHref: '#products',
   },
   {
     title: 'Our Services',
@@ -70,7 +75,7 @@ const FEATURES: Feature[] = [
 ]
 
 function FeatureCard({ feature }: { feature: Feature }) {
-  const { title, body, image, notifications, services, comingSoon, cta, href } = feature
+  const { title, body, image, notifications, services, comingSoon, cta, href, secondaryCta, secondaryHref } = feature
   return (
     <Reveal>
       <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.015] p-4 lg:p-5">
@@ -110,9 +115,16 @@ function FeatureCard({ feature }: { feature: Feature }) {
               <CyclingWord words={SERVICE_TITLES} />
             </RippleButton>
           ) : (
-            <RippleButton variant="solid" href={href} className="mt-7 h-11 self-start px-5 text-sm">
-              {cta}
-            </RippleButton>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <RippleButton variant="solid" href={href} className="h-11 px-5 text-sm">
+                {cta}
+              </RippleButton>
+              {secondaryCta && secondaryHref && (
+                <RippleButton variant="ghost" href={secondaryHref} className="h-11 px-5 text-sm">
+                  {secondaryCta}
+                </RippleButton>
+              )}
+            </div>
           )}
         </div>
       </div>

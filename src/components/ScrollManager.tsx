@@ -8,6 +8,12 @@ export function ScrollManager() {
   const { pathname, hash } = useLocation()
   const lenis = useLenis()
 
+  // Stop the browser from restoring the previous scroll position on reload,
+  // so a refresh always lands at the top (unless the URL carries a hash).
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+  }, [])
+
   useEffect(() => {
     if (hash) {
       const el = document.querySelector(hash)

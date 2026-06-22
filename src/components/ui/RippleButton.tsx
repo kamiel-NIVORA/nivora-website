@@ -12,16 +12,24 @@ type Variant = 'solid' | 'ghost'
  * The fill is a single expanding circle over an UNCHANGED base — the base
  * colour never animates, so no intermediate-tone rim trails the circle (the
  * old version faded the base via `transition-colors`, which left a faint grey
- * fringe). Only the text colour eases. `overflow-hidden rounded-full` clips the
- * (over-sized) circle exactly to the pill, so the fill reaches the edge cleanly.
+ * fringe). Only the text colour eases.
+ *
+ * Killing the white hairline at the edge — the key detail:
+ *   `overflow-hidden rounded-full` anti-aliases the rounded corners against
+ *   whatever shows THROUGH the pill there. An element's own background-color is
+ *   clipped by its own border-radius, so we paint the `<a>` itself the FILL
+ *   colour (near-black) and put the resting face (white for `solid`) in an
+ *   absolute `layer` span on top. The ripple then covers that layer on hover,
+ *   and because the element's own background is already black, the corners
+ *   stay black no matter what sits behind the button — no white/light rim.
  *
  *  - `solid` — white pill that fills BLACK from the cursor (primary CTA).
  *  - `ghost` — transparent, hairline-bordered pill that fills a soft light
  *    from the cursor (secondary CTA, e.g. "Contact Us").
  */
-const VARIANTS: Record<Variant, { base: string; fill: string }> = {
-  solid: { base: 'bg-ink text-[#0a0a0a] hover:text-white', fill: '#0a0a0a' },
-  ghost: { base: 'border border-line bg-transparent text-muted hover:text-ink', fill: 'rgba(255,255,255,0.09)' },
+const VARIANTS: Record<Variant, { surface: string; text: string; layer?: string; fill: string }> = {
+  solid: { surface: 'bg-[#0a0a0a]', text: 'text-[#0a0a0a] hover:text-white', layer: 'bg-ink', fill: '#0a0a0a' },
+  ghost: { surface: 'bg-transparent', text: 'border border-line text-muted hover:text-ink', fill: 'rgba(255,255,255,0.09)' },
 }
 
 export function RippleButton({
@@ -44,15 +52,16 @@ export function RippleButton({
   const ref = useRef<HTMLAnchorElement>(null)
   const [ripple, setRipple] = useState<Ripple | null>(null)
   const [hovered, setHovered] = useState(false)
-  const { base, fill } = VARIANTS[variant]
+  const { surface, text, layer, fill } = VARIANTS[variant]
 
   const at = (e: React.MouseEvent) => {
     const rect = ref.current!.getBoundingClientRect()
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-      // diagonal * 2 guarantees full coverage from any entry point
-      size: Math.hypot(rect.width, rect.height) * 2,
+      // diagonal * 2.4 guarantees the fill reaches every corner cleanly,
+      // even when the cursor enters at an extreme edge
+      size: Math.hypot(rect.width, rect.height) * 2.4,
     }
   }
 
@@ -65,7 +74,8 @@ export function RippleButton({
       onClick={onClick}
       className={cn(
         'relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full px-4 text-[13px] font-medium transition-[color] duration-500',
-        base,
+        surface,
+        text,
         className,
       )}
       onMouseEnter={(e) => {
@@ -83,6 +93,7 @@ export function RippleButton({
         setRipple((prev) => (prev ? { ...prev, ...at(e) } : null))
       }}
     >
+      {layer && <span className={cn('pointer-events-none absolute inset-0 z-0 rounded-full', layer)} />}
       <span className="relative z-[2]">{children}</span>
       <AnimatePresence>
         {ripple && (

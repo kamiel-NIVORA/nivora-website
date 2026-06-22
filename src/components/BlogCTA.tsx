@@ -19,9 +19,9 @@ export function BlogCTA() {
         </Reveal>
         <Reveal delay={0.12}>
           <div className="mt-8">
-            <Button size="lg" asChild>
-              <a href="/#contact">Book a call</a>
-            </Button>
+            <RippleButton href="/#contact" className="h-12 px-6 text-[15px]">
+              Book a call
+            </RippleButton>
           </div>
         </Reveal>
       </div>

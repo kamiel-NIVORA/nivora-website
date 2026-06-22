@@ -1,9 +1,13 @@
 import { type MouseEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SERVICES, type NavItem } from '@/lib/navigation'
+
+/** Card is a motion-wrapped router Link so the tilt works and navigation is client-side. */
+const MotionLink = motion.create(Link)
 
 /** Soft luminous backdrop — lives in /public, served from the site root. */
 const GLOW = '/IMG_0479.JPG'
@@ -82,8 +86,8 @@ function ServiceCard({ service, index }: { service: NavItem; index: number }) {
 
   return (
     <div style={{ perspective: '1000px' }}>
-      <motion.a
-        href={href}
+      <MotionLink
+        to={href}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
@@ -135,7 +139,7 @@ function ServiceCard({ service, index }: { service: NavItem; index: number }) {
             />
           </span>
         </div>
-      </motion.a>
+      </MotionLink>
     </div>
   )
 }

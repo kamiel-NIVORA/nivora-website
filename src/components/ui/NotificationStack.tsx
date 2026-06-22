@@ -3,8 +3,8 @@ import { motion, useInView } from 'framer-motion'
 
 /**
  * Cleane iOS-stijl meldingen binnen het visual-paneel van het Products-kaartje.
- * De surf-foto is de wallpaper; daarboven komen drie glass-meldingen
- * (Box / Voice / Editor → "Coming soon") één voor één in beeld geschoven en
+ * De surf-foto is de wallpaper; daarboven komen de glass-meldingen
+ * (Box / Voice → "Coming soon") één voor één in beeld geschoven en
  * settelen verdeeld over het HELE kader (boven / midden / onder) — net als op
  * een Apple-lockscreen. Elke melding is een knop: tikken brengt je naar de
  * wachtlijst.
@@ -15,7 +15,6 @@ type Notif = { app: string; logo: string; blurb: string }
 const NOTIFS: Notif[] = [
   { app: 'Box', logo: '/box-logo.png', blurb: 'All your communication in one place.' },
   { app: 'Voice', logo: '/voice-logo.png', blurb: 'Speech-to-text, tuned to your voice.' },
-  { app: 'Editor', logo: '/editor-logo.png', blurb: 'Animations, straight into After Effects.' },
 ]
 
 /** Houdt de echte tijd bij (HH:MM) — ververst elke 15s. */

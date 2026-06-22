@@ -73,6 +73,10 @@ export interface ServiceMeta {
   name: string
   /** White glyph icon in /public. */
   icon: string
+  /** App-style rounded tile mark — the same image shown in the nav Services menu. */
+  tile: string
+  /** Per-service ambient image washed faintly behind the hero (unique per service). */
+  heroImage: string
   /** Calm atmosphere photo used in the mid-page band. */
   photo: string
   /** Accent colour (from the brand palette) used sparingly for glow + detail. */
@@ -92,6 +96,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     slug: 'app-design',
     name: 'App Design',
     icon: '/icon-appdesign.png',
+    tile: '/service-appdesign.png',
+    heroImage: '/IMG_0690%202.jpg',
     photo: '/IMG_0701.JPG',
     accent: '#d07a54',
   },
@@ -99,6 +105,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     slug: 'local-ai',
     name: 'Local AI',
     icon: '/icon-localai.png',
+    tile: '/service-localai.png',
+    heroImage: '/IMG_0479.JPG',
     photo: '/IMG_0683.JPG',
     accent: '#6691a3',
   },
@@ -106,6 +114,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     slug: 'aios',
     name: 'AIOS',
     icon: '/icon-aios.png',
+    tile: '/service-aios.png',
+    heroImage: '/IMG_0459%202.JPG',
     photo: '/images/hero-bg.jpg',
     accent: '#bda96d',
   },
@@ -113,6 +123,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     slug: 'ai-consulting',
     name: 'AI Consulting',
     icon: '/icon-consulting.png',
+    tile: '/service-consulting.png',
+    heroImage: '/IMG_0743.jpg',
     photo: '/cta-landscape.jpg',
     accent: '#96a766',
   },

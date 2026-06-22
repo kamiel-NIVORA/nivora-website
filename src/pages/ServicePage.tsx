@@ -7,7 +7,7 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -137,12 +137,12 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
           background: `radial-gradient(70% 55% at 50% 18%, ${meta.accent}26, transparent 70%)`,
         }}
       />
-      {/* Ambient luminous wash, masked into the dark */}
+      {/* Ambient luminous wash, unique per service, masked into the dark */}
       <img
         aria-hidden
-        src="/IMG_0479.JPG"
+        src={meta.heroImage}
         alt=""
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.22] blur-[3px] [mask-image:radial-gradient(50%_50%_at_50%_45%,black_20%,transparent_78%)]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.20] blur-[3px] [mask-image:radial-gradient(50%_50%_at_50%_45%,black_20%,transparent_78%)]"
       />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
 
@@ -152,30 +152,23 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        {/* Breadcrumb */}
-        <motion.div variants={heroFade}>
-          <Link
-            to="/#services"
-            className="inline-flex items-center gap-1.5 text-[13px] text-faint transition-colors hover:text-ink"
-          >
-            <span>Services</span>
-            <span className="text-dim">/</span>
-            <span className="text-ink-soft">{content.name}</span>
-          </Link>
-        </motion.div>
-
-        {/* Glyph */}
-        <motion.div variants={heroFade} className="relative mt-8">
+        {/* Service mark — the rounded app-style tile from the nav menu */}
+        <motion.div variants={heroFade} className="relative">
           <div
             aria-hidden
             className="absolute inset-0 -z-10 blur-2xl"
             style={{ background: `radial-gradient(circle, ${meta.accent}40, transparent 65%)` }}
           />
-          <img src={meta.icon} alt="" className="h-14 w-14 object-contain drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)]" />
+          <img
+            src={meta.tile}
+            alt=""
+            className="h-16 w-16 rounded-[18px] border border-line object-cover shadow-[0_10px_34px_rgba(0,0,0,0.5)]"
+          />
         </motion.div>
 
-        <motion.div variants={heroFade} className="mt-6">
-          <Eyebrow>{content.hero.eyebrow}</Eyebrow>
+        {/* Service name — clear label, replaces the breadcrumb */}
+        <motion.div variants={heroFade} className="mt-5">
+          <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-faint">{content.name}</span>
         </motion.div>
 
         <h1 className="mt-5 font-serif text-[40px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[56px] lg:text-[68px] lg:leading-[1.03]">

@@ -6,24 +6,24 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion'
-import { ArrowRight, ArrowDownToLine, Clapperboard } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Lock } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import { BoxConverge } from '@/components/ui/BoxConverge'
+import { VoiceWave } from '@/components/ui/VoiceWave'
 import { cn } from '@/lib/utils'
 
 /** Soft luminous backdrop — placeholder, swap for the final art later. */
 const GLOW = '/IMG_0683.JPG'
-/** In-card photo — placeholder (hero landscape), swap per card later. */
-const PHOTO = '/images/hero-nivora.png'
 
 /**
- * Our Products — a bento of the three Nivora tools (Box, Voice, Editor), a
- * mobile showcase, and a download rack.
+ * Our Products — a bento of the Nivora tools (Box, Voice), a mobile showcase,
+ * and a download rack.
  *
  * It mirrors the "Our Services" language: glossy frosted-glass cards lifted on a
- * soft glow, paired here with solid near-black cards for contrast (the same
- * black as the product/service panels elsewhere on the site). As the section
- * scrolls into view the cards drift in from their edges and settle together —
- * soft, small, but unmistakably alive.
+ * soft glow, paired with solid near-black cards for contrast. As the section
+ * scrolls into view the cards drift in from their edges and settle together.
+ * Every card is a doorway to the waiting list.
  */
 export function Products() {
   const bentoRef = useRef<HTMLDivElement | null>(null)
@@ -59,55 +59,52 @@ export function Products() {
           ref={bentoRef}
           className="mt-16 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:auto-rows-[370px] lg:gap-6"
         >
-          {/* ── Box — tall black card, glass inbox mockup on top ── */}
+          {/* ── Box — tall black card, converging-apps animation ── */}
           <BentoCard
             progress={progress}
             dx={-48}
             dark
+            href="/waitlist?product=box"
+            ariaLabel="Box — join the waiting list"
             className="lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2"
           >
             <BoxCard />
           </BentoCard>
 
-          {/* ── Mobile showcase — glass, empty frame for the iPhone mockup ── */}
+          {/* ── Mobile showcase — glass ── */}
           <BentoCard
             progress={progress}
             dy={-34}
             start={0.05}
-            className="lg:col-start-4 lg:col-span-4 lg:row-start-1"
+            href="/waitlist"
+            ariaLabel="Made for mobile — join the waiting list"
+            className="lg:col-start-4 lg:col-span-5 lg:row-start-1"
           >
             <MobileCard />
           </BentoCard>
 
-          {/* ── Voice — black card, glass transcription panel ── */}
+          {/* ── Voice — black card, Wispr-style voice line ── */}
           <BentoCard
             progress={progress}
             dx={48}
             dy={-12}
             start={0.1}
             dark
-            className="lg:col-start-8 lg:col-span-5 lg:row-start-1"
+            href="/waitlist?product=voice"
+            ariaLabel="Voice — join the waiting list"
+            className="lg:col-start-9 lg:col-span-4 lg:row-start-1"
           >
             <VoiceCard />
           </BentoCard>
 
-          {/* ── Editor — glass card, timeline + After Effects tooltip ── */}
+          {/* ── Download — glass card, full-width, locked until launch ── */}
           <BentoCard
             progress={progress}
             dy={34}
-            start={0.14}
-            className="lg:col-start-4 lg:col-span-5 lg:row-start-2"
-          >
-            <EditorCard />
-          </BentoCard>
-
-          {/* ── Download — glass card, platform rack ── */}
-          <BentoCard
-            progress={progress}
-            dx={48}
-            dy={22}
-            start={0.18}
-            className="lg:col-start-9 lg:col-span-4 lg:row-start-2"
+            start={0.16}
+            href="/waitlist"
+            ariaLabel="Download — join the waiting list"
+            className="lg:col-start-4 lg:col-span-9 lg:row-start-2"
           >
             <DownloadCard />
           </BentoCard>
@@ -119,7 +116,9 @@ export function Products() {
 
 /* ──────────────────────────────────────────────────────────────────────────
    Card shell — converge-on-scroll wrapper, glass or black, with the same
-   frosted gloss the service cards use.
+   frosted gloss the service cards use. When `href` is set the whole card is a
+   link to the waiting list: an overlay anchor sits under the (pointer-events
+   transparent) content, and any real button inside re-enables its own clicks.
    ────────────────────────────────────────────────────────────────────────── */
 function BentoCard({
   progress,
@@ -127,6 +126,8 @@ function BentoCard({
   dy = 0,
   start = 0,
   dark = false,
+  href,
+  ariaLabel,
   className,
   children,
 }: {
@@ -135,6 +136,8 @@ function BentoCard({
   dy?: number
   start?: number
   dark?: boolean
+  href?: string
+  ariaLabel?: string
   className?: string
   children: ReactNode
 }) {
@@ -164,7 +167,12 @@ function BentoCard({
           dark ? 'via-white/10' : 'via-white/25',
         )}
       />
-      <div className="relative flex h-full flex-col">{children}</div>
+      {href && (
+        <Link to={href} aria-label={ariaLabel} className="absolute inset-0 z-[1] rounded-[28px]" />
+      )}
+      <div className={cn('relative z-[2] flex h-full flex-col', href && 'pointer-events-none')}>
+        {children}
+      </div>
     </motion.div>
   )
 }
@@ -183,9 +191,9 @@ function ComingSoon() {
 function BoxCard() {
   return (
     <>
-      {/* Photo (placeholder — swap later) */}
-      <div className="relative flex-1 overflow-hidden rounded-[20px] border border-line">
-        <img src={PHOTO} alt="" className="h-full w-full object-cover" loading="lazy" />
+      {/* Converging-apps animation — every channel resolves into Box */}
+      <div className="relative flex-1 overflow-hidden">
+        <BoxConverge />
       </div>
 
       {/* Text */}
@@ -197,13 +205,13 @@ function BoxCard() {
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">
           Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.
         </p>
-        <a
-          href="#contact"
-          className="mt-6 inline-flex h-10 items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-white/90"
+        <Link
+          to="/waitlist?product=box"
+          className="pointer-events-auto mt-6 inline-flex h-10 w-fit items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-white/90"
         >
           Join the waiting list
           <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
-        </a>
+        </Link>
       </div>
     </>
   )
@@ -246,64 +254,15 @@ function VoiceCard() {
         </p>
       </div>
 
-      {/* Photo (placeholder — swap later) */}
-      <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-[20px] border border-line sm:w-[58%]">
-        <img src={PHOTO} alt="" className="h-full w-full object-cover" loading="lazy" />
+      {/* Wispr-style voice line */}
+      <div className="relative min-h-[200px] flex-1 sm:w-[58%]">
+        <VoiceWave />
       </div>
     </div>
   )
 }
 
-/* ── Card 4 · Editor ──────────────────────────────────────────────────────── */
-function EditorCard() {
-  return (
-    <>
-      {/* Faint timeline texture */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.5]">
-        {[0, 1, 2, 3].map((r) => (
-          <div
-            key={r}
-            className="absolute inset-x-7 h-px bg-white/[0.06]"
-            style={{ top: `${22 + r * 16}%` }}
-          />
-        ))}
-        {[
-          { t: 22, l: 30 },
-          { t: 38, l: 52 },
-          { t: 38, l: 18 },
-          { t: 54, l: 68 },
-          { t: 70, l: 40 },
-        ].map((d, i) => (
-          <span
-            key={i}
-            className="absolute h-2 w-2 rotate-45 rounded-[2px] bg-white/15"
-            style={{ top: `calc(${d.t}% - 4px)`, left: `${d.l}%` }}
-          />
-        ))}
-      </div>
-
-      {/* Floating export tooltip */}
-      <div className="pointer-events-none absolute left-1/2 top-[34%] flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-line-strong bg-[#0f0f0f] px-3 py-1.5 text-[12px] text-ink shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)]">
-        <Clapperboard className="h-3.5 w-3.5 text-gold-light" strokeWidth={1.8} />
-        Export to After Effects
-      </div>
-
-      {/* Copy */}
-      <div className="relative mt-auto">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Editor</h3>
-          <ComingSoon />
-        </div>
-        <p className="mt-3.5 max-w-sm text-[14px] leading-relaxed text-faint">
-          Design motion in the browser, then export straight into After Effects, every keyframe
-          intact.
-        </p>
-      </div>
-    </>
-  )
-}
-
-/* ── Card 5 · Download ────────────────────────────────────────────────────── */
+/* ── Card 4 · Download (locked until launch) ──────────────────────────────── */
 const PLATFORMS: { name: string; meta: string; Glyph: (p: SVGProps<SVGSVGElement>) => ReactNode }[] = [
   { name: 'iPhone', meta: 'iOS', Glyph: AppleGlyph },
   { name: 'Mac', meta: 'macOS', Glyph: AppleGlyph },
@@ -314,26 +273,43 @@ const PLATFORMS: { name: string; meta: string; Glyph: (p: SVGProps<SVGSVGElement
 function DownloadCard() {
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h3 className="font-serif text-[24px] leading-none tracking-[-0.01em] text-ink">Download</h3>
-        <span className="label-mono text-[10px] text-dim">FREE IN BETA</span>
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="font-serif text-[24px] leading-none tracking-[-0.01em] text-ink">Download</h3>
+          <p className="mt-2 max-w-xs text-[13.5px] leading-relaxed text-faint">
+            Box, Voice and the whole suite, native on every device you use.
+          </p>
+        </div>
+        <span className="label-mono shrink-0 text-[10px] text-dim">AT LAUNCH</span>
       </div>
 
-      <ul className="mt-5 flex flex-1 flex-col justify-center gap-2.5">
-        {PLATFORMS.map(({ name, meta, Glyph }) => (
-          <li
-            key={name}
-            className="flex items-center gap-3 rounded-[13px] border border-line bg-white/[0.03] px-3.5 py-3 transition-colors hover:bg-white/[0.06]"
-          >
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-white/[0.05] text-ink-soft">
-              <Glyph className="h-[18px] w-[18px]" />
+      {/* Platform rack — blurred + dimmed, with a clean lock badge over it */}
+      <div className="relative mt-6 flex-1">
+        <div className="grid grid-cols-2 gap-2.5 opacity-40 blur-[2px] sm:grid-cols-4">
+          {PLATFORMS.map(({ name, meta, Glyph }) => (
+            <div
+              key={name}
+              className="flex flex-col items-center gap-2 rounded-[14px] border border-line bg-white/[0.03] px-3 py-5"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-[11px] bg-white/[0.05] text-ink-soft">
+                <Glyph className="h-[19px] w-[19px]" />
+              </span>
+              <span className="text-[13px] text-ink-soft">{name}</span>
+              <span className="font-mono text-[10px] text-dim">{meta}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="flex flex-col items-center text-center">
+            <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/80 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md">
+              <Lock className="h-[18px] w-[18px]" strokeWidth={1.8} />
             </span>
-            <span className="text-[14px] text-ink-soft">{name}</span>
-            <span className="font-mono text-[11px] text-dim">{meta}</span>
-            <ArrowDownToLine className="ml-auto h-[18px] w-[18px] text-faint" strokeWidth={1.8} />
-          </li>
-        ))}
-      </ul>
+            <span className="mt-3 text-[14px] font-medium text-ink-soft">Available at launch</span>
+            <span className="mt-1 text-[12.5px] text-faint">Join the waiting list for early access</span>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
