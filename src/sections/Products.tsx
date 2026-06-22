@@ -19,9 +19,9 @@ const GLOW = '/IMG_0683.JPG'
 /**
  * Our Products — a bento of the Nivora tools.
  *
- * Box (converging inboxes) sits tall on the left. Made for mobile and Voice (one
- * clean wave of speech becoming clean copy) share the top; Made for desktop and a
- * locked Download rack share the bottom.
+ * Five cards: Box (converging inboxes), Voice (a wide hero where spoken words
+ * flow as ribbons of text and resolve into clean copy), and three smaller
+ * utility cards — Made for mobile, Made for desktop, and a locked Download rack.
  *
  * It mirrors the "Our Services" language: glossy frosted-glass cards lifted on a
  * soft glow, paired with solid near-black cards for contrast. As the section
@@ -62,7 +62,7 @@ export function Products() {
           ref={bentoRef}
           className="mt-16 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:[grid-template-rows:420px_300px] lg:gap-6"
         >
-          {/* Box — tall black card, converging-apps animation */}
+          {/* ── Box — tall black card, converging-apps animation ── */}
           <BentoCard
             progress={progress}
             dx={-44}
@@ -74,7 +74,7 @@ export function Products() {
             <BoxCard />
           </BentoCard>
 
-          {/* Made for mobile — glass card, top middle */}
+          {/* ── Made for mobile — glass card, top middle ── */}
           <BentoCard
             progress={progress}
             dy={-26}
@@ -86,7 +86,7 @@ export function Products() {
             <MobileCard />
           </BentoCard>
 
-          {/* Voice — wide black hero, one clean wave */}
+          {/* ── Voice — wide black hero, one clean wave ── */}
           <BentoCard
             progress={progress}
             dx={30}
@@ -100,7 +100,7 @@ export function Products() {
             <VoiceCard />
           </BentoCard>
 
-          {/* Made for desktop — wide glass card, bottom middle */}
+          {/* ── Made for desktop — wide glass card, bottom middle ── */}
           <BentoCard
             progress={progress}
             dy={40}
@@ -112,7 +112,7 @@ export function Products() {
             <DesktopCard />
           </BentoCard>
 
-          {/* Download — small glass card, locked until launch */}
+          {/* ── Download — small glass card, locked until launch ── */}
           <BentoCard
             progress={progress}
             dx={32}
@@ -130,10 +130,12 @@ export function Products() {
   )
 }
 
-/* Card shell — converge-on-scroll wrapper, glass or black, with the same frosted
-   gloss the service cards use. When `href` is set the whole card is a link to the
-   waiting list: an overlay anchor sits under the (pointer-events transparent)
-   content, and any real button inside re-enables its own clicks. */
+/* ──────────────────────────────────────────────────────
+   Card shell — converge-on-scroll wrapper, glass or black, with the same
+   frosted gloss the service cards use. When `href` is set the whole card is a
+   link to the waiting list: an overlay anchor sits under the (pointer-events
+   transparent) content, and any real button inside re-enables its own clicks.
+   ────────────────────────────────────────────────────── */
 function BentoCard({
   progress,
   dx = 0,
@@ -191,7 +193,7 @@ function BentoCard({
   )
 }
 
-/* Small shared bits */
+/* Small shared bits ──────────────────────────────────────── */
 function ComingSoon() {
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
@@ -213,7 +215,7 @@ function AppLogo({ src }: { src: string }) {
   )
 }
 
-/* Card 1 · Box */
+/* ── Card 1 · Box ─────────────────────────────────────────── */
 function BoxCard() {
   return (
     <>
@@ -243,14 +245,14 @@ function BoxCard() {
   )
 }
 
-/* Card 2 · Voice — wide hero with the one clean wave */
+/* ── Card 2 · Voice — wide hero with flowing-text slingers ───────────────── */
 function VoiceCard() {
   return (
     <div className="relative flex h-full flex-col">
-      {/* Full-bleed wave — escape the card padding, clipped to its corners */}
+      {/* Full-bleed slingers — escape the card padding, clipped to its corners */}
       <div className="pointer-events-none absolute -inset-7 overflow-hidden rounded-[28px] lg:-inset-8">
         <VoiceSlingers />
-        {/* Soft corner scrim so the label reads cleanly over the wave */}
+        {/* Soft corner scrim so the label reads cleanly over the faint streams */}
         <div className="absolute inset-0 bg-[radial-gradient(62%_82%_at_0%_0%,rgba(10,10,10,0.94),rgba(10,10,10,0.4)_42%,transparent_66%)]" />
       </div>
 
@@ -268,7 +270,7 @@ function VoiceCard() {
   )
 }
 
-/* Card 3 · Made for mobile (empty phone-bottom frame) */
+/* ── Card 3 · Made for mobile (empty phone-bottom frame) ──────────────── */
 function MobileCard() {
   return (
     <>
@@ -289,7 +291,7 @@ function MobileCard() {
   )
 }
 
-/* Card 4 · Made for desktop (empty browser-window frame) */
+/* ── Card 4 · Made for desktop (empty browser-window frame) ───────────── */
 function DesktopCard() {
   return (
     <>
@@ -316,7 +318,7 @@ function DesktopCard() {
   )
 }
 
-/* Card 5 · Download (locked until launch — lock only, no caption) */
+/* ── Card 5 · Download (locked until launch — lock only, no caption) ──────── */
 const PLATFORMS: { name: string; Glyph: (p: SVGProps<SVGSVGElement>) => ReactNode }[] = [
   { name: 'iPhone', Glyph: AppleGlyph },
   { name: 'Mac', Glyph: AppleGlyph },
@@ -352,7 +354,7 @@ function DownloadCard() {
   )
 }
 
-/* Monochrome platform glyphs (white, never the logo colours) */
+/* ── Monochrome platform glyphs (white, never the logo colours) ─────────── */
 function AppleGlyph(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>

@@ -24,8 +24,8 @@ const VB_H = 420
 /* One smooth wave, run past both edges so the text dissolves into the fades. */
 const WAVE = 'M -180 206 C 70 138 250 138 430 206 S 720 296 850 222 S 1090 150 1180 208'
 
-/* The repeating line — clean sentences; the fill gradient does the raw to
-   polished feel, so the same words read dim on the left and crisp on the right. */
+/* The repeating line — clean sentences; the fill gradient does the raw→polished
+   feel, so the same words read dim on the left and crisp on the right. */
 const UNIT =
   "Send the recap to the team.   Add a follow-up for Friday.   Confirm the deadline.   Share yesterday's notes.   "
 const REPEAT = 6
