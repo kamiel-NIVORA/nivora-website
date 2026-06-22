@@ -34,30 +34,36 @@ const ICONS: Record<string, string> = {
 export function Services() {
   return (
     <section id="services" className="relative w-full overflow-hidden py-28 lg:py-36">
-      {/* Ambient backdrop — kept SHARP and spread across the section, masked into the
-          dark. The blur is owned by the cards' own backdrop-filter, so the image stays
-          crisp between and around them (and while they tilt). */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <img
-          src={GLOW}
-          alt=""
-          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-60 [mask-image:radial-gradient(54%_52%_at_50%_50%,black_26%,transparent_78%)]"
-        />
-      </div>
-
       <div className="relative mx-auto w-full max-w-[1400px] px-6">
         <SectionHeading
           title="Our Services"
           subtitle="Tell us the challenge. We design, build, and install exactly what your business needs."
         />
 
-        {/* Four free-standing cards */}
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {SERVICES.map((s, i) => (
-            <Reveal key={s.title} delay={(i % 4) * 0.08}>
-              <ServiceCard service={s} index={i + 1} />
-            </Reveal>
-          ))}
+        {/* Cards band. The sharp peak backdrop is confined to EXACTLY this row
+            (overflow-hidden), so it never bleeds up into the heading above. The
+            cards' own backdrop-blur is the ONLY blur, so in the gaps BETWEEN the
+            cards the image stays crisp. */}
+        <div className="relative mt-16">
+          {/* Sharp backdrop, clipped to the band: peak centred, the star sky on top
+              and the watermark on the bottom-right both cropped out, edges faded
+              softly into the black. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+            <img
+              src={GLOW}
+              alt=""
+              className="h-full w-full object-cover object-[50%_46%] opacity-[0.55] [mask-image:radial-gradient(88%_84%_at_50%_50%,black_44%,transparent_90%)]"
+            />
+          </div>
+
+          {/* Four free-standing cards, lifted above the backdrop */}
+          <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.title} delay={(i % 4) * 0.08}>
+                <ServiceCard service={s} index={i + 1} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -94,8 +100,16 @@ function ServiceCard({ service, index }: { service: NavItem; index: number }) {
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[22px] border border-line bg-gradient-to-b from-white/[0.10] via-white/[0.05] to-white/[0.02] p-6 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[440px] lg:p-7"
+        className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[22px] border border-line bg-white/[0.03] p-6 backdrop-blur-2xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[440px] lg:p-7"
       >
+        {/* Frost veil — a dark translucent fill that softens the sharp peak
+            behind the card into a quiet frosted ghost. The browser drops the
+            backdrop-blur under the card's 3D tilt (transform-style: preserve-3d),
+            so THIS veil is what makes the glass read as frosted and not
+            see-through. It is clipped to the card, so the peak stays crisp in
+            the gaps BETWEEN the cards. */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/62 via-[#0a0a0d]/58 to-[#0a0a0d]/80" />
+
         {/* Gloss — the same frosted feel as the header: a diagonal sheen + top hairline */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
