@@ -26,9 +26,9 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-/* ──────────────────────────────────────────────────────
+/* ───────────────────────────────────────────
    Page
-   ────────────────────────────────────────────────────── */
+   ─────────────────────────────────────────── */
 export function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
   const isValid = !!slug && slug in SERVICE_CONTENT
@@ -78,7 +78,7 @@ export function ServicePage() {
   )
 }
 
-/* Shared bits ──────────────────────────────────────────────── */
+/* Shared bits ─────────────────────────────────── */
 
 /** Small uppercase mono eyebrow with an accent dot. */
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -126,7 +126,7 @@ function SectionHead({
   )
 }
 
-/* Hero ────────────────────────────────────────────────────── */
+/* Hero ──────────────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -237,7 +237,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
   )
 }
 
-/* Intro strip ──────────────────────────────────────────────── */
+/* Intro strip ─────────────────────────────────── */
 
 function IntroStrip({ content }: { content: ServiceContent }) {
   return (
@@ -264,7 +264,7 @@ function IntroStrip({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Problem ──────────────────────────────────────────────────── */
+/* Problem ─────────────────────────────────── */
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
@@ -285,7 +285,7 @@ function Problem({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Solution ──────────────────────────────────────────────── */
+/* Solution ───────────────────────────────── */
 
 function Solution({ content }: { content: ServiceContent }) {
   return (
@@ -320,7 +320,7 @@ function Solution({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Atmosphere band ─────────────────────────────────────────── */
+/* Atmosphere band ─────────────────────────────── */
 
 function AtmosphereBand({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -353,7 +353,7 @@ function AtmosphereBand({ content, meta }: { content: ServiceContent; meta: Serv
   )
 }
 
-/* Capabilities ───────────────────────────────────────────── */
+/* Capabilities ────────────────────────────── */
 
 function Capabilities({ content }: { content: ServiceContent }) {
   return (
@@ -380,7 +380,7 @@ function Capabilities({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Process ──────────────────────────────────────────────────── */
+/* Process ─────────────────────────────────── */
 
 function Process({ content }: { content: ServiceContent }) {
   return (
@@ -439,7 +439,7 @@ function ProcessStep({
   )
 }
 
-/* Differentiators ────────────────────────────────────────── */
+/* Differentiators ─────────────────────────────── */
 
 function Differentiators({ content }: { content: ServiceContent }) {
   return (
@@ -462,7 +462,7 @@ function Differentiators({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Audience ──────────────────────────────────────────────── */
+/* Audience ─────────────────────────────── */
 
 function Audience({ content }: { content: ServiceContent }) {
   return (
@@ -500,10 +500,11 @@ function Audience({ content }: { content: ServiceContent }) {
   )
 }
 
-/* FAQ ────────────────────────────────────────────────────── */
+/* FAQ ─────────────────────────────────── */
 
 function Faq({ content }: { content: ServiceContent }) {
   const [openIdx, setOpenIdx] = useState<number | null>(0)
+  const { open } = useContactModal()
   return (
     <section className="relative mx-auto w-full max-w-[820px] px-6 py-20 lg:py-28">
       <SectionHead eyebrow="Questions" title="Good to know" center />
@@ -540,11 +541,36 @@ function Faq({ content }: { content: ServiceContent }) {
           )
         })}
       </div>
+
+      {/* Extra-questions nudge: route to the Help Center chat, or a real person. */}
+      <Reveal delay={0.05}>
+        <div className="mt-10 flex flex-col items-center gap-3 text-center">
+          <Eyebrow>Need more</Eyebrow>
+          <p className="text-[14px] leading-relaxed text-faint">
+            Still have a question?{' '}
+            <Link
+              to="/help"
+              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+            >
+              Ask the Nivora assistant
+            </Link>
+            , or{' '}
+            <button
+              type="button"
+              onClick={open}
+              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+            >
+              reach a person
+            </button>
+            .
+          </p>
+        </div>
+      </Reveal>
     </section>
   )
 }
 
-/* Final CTA ────────────────────────────────────────────── */
+/* Final CTA ────────────────────────────── */
 
 function FinalCta({ content }: { content: ServiceContent }) {
   return (
@@ -572,7 +598,7 @@ function FinalCta({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Other services ────────────────────────────────────────── */
+/* Other services ────────────────────────────── */
 
 function OtherServices({ current }: { current: ServiceSlug }) {
   const others = SERVICE_ORDER.filter((s) => s !== current)
