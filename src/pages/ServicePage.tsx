@@ -4,6 +4,7 @@ import {
   AnimatePresence,
   motion,
   useScroll,
+  useSpring,
   useTransform,
   type Variants,
 } from 'framer-motion'
@@ -11,7 +12,9 @@ import { ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
+import { ServiceScrollLine } from '@/components/ui/ServiceScrollLine'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { cn } from '@/lib/utils'
 import { SERVICE_CONTENT } from '@/data/services'
 import {
   SERVICE_META,
@@ -23,14 +26,23 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-/* ──────────────────────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────
    Page
-   ────────────────────────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────── */
 export function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
   const isValid = !!slug && slug in SERVICE_CONTENT
   const content = isValid ? SERVICE_CONTENT[slug as ServiceSlug] : null
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
+
+  // The grey scroll thread draws across everything from the hero down to the
+  // final CTA (OtherServices sits outside the wrapper, so the line ends there).
+  const lineWrapRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: lineWrapRef,
+    offset: ['start start', 'end end'],
+  })
+  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 30, restDelta: 0.0005 })
 
   useEffect(() => {
     if (content) document.title = `${content.name} — Nivora`
@@ -44,25 +56,29 @@ export function ServicePage() {
   return (
     <main
       className="relative w-full overflow-hidden bg-bg"
-      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
+      // Monochrome: one neutral grey drives every former per-service accent.
+      style={{ ['--accent' as string]: '#9aa1ab' } as CSSProperties}
     >
-      <Hero content={content} meta={meta} />
-      <IntroStrip content={content} />
-      <Problem content={content} />
-      <Solution content={content} />
-      <AtmosphereBand content={content} meta={meta} />
-      <Capabilities content={content} />
-      <Process content={content} />
-      <Differentiators content={content} />
-      <Audience content={content} />
-      <Faq content={content} />
-      <FinalCta content={content} />
+      <div ref={lineWrapRef} className="relative">
+        <ServiceScrollLine progress={progress} />
+        <Hero content={content} meta={meta} />
+        <IntroStrip content={content} />
+        <Problem content={content} />
+        <Solution content={content} />
+        <AtmosphereBand content={content} meta={meta} />
+        <Capabilities content={content} />
+        <Process content={content} />
+        <Differentiators content={content} />
+        <Audience content={content} />
+        <Faq content={content} />
+        <FinalCta content={content} />
+      </div>
       <OtherServices current={meta.slug} />
     </main>
   )
 }
 
-/* Shared bits ─────────────────────────────────────────────────────────────── */
+/* Shared bits ──────────────────────────────────────────────── */
 
 /** Small uppercase mono eyebrow with an accent dot. */
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -110,7 +126,7 @@ function SectionHead({
   )
 }
 
-/* Hero ─────────────────────────────────────────────────────────────────────── */
+/* Hero ────────────────────────────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -129,20 +145,20 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
   const { open } = useContactModal()
   return (
     <section className="relative flex min-h-[92svh] w-full flex-col items-center justify-center px-6 pb-24 pt-32">
-      {/* Accent glow */}
+      {/* Neutral glow — no colour, just a faint lift behind the title */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(70% 55% at 50% 18%, ${meta.accent}26, transparent 70%)`,
+          background: 'radial-gradient(70% 55% at 50% 18%, rgba(255,255,255,0.05), transparent 70%)',
         }}
       />
-      {/* Ambient luminous wash, unique per service, masked into the dark */}
+      {/* Ambient B&W wash, kept sharp and masked into the dark */}
       <img
         aria-hidden
         src={meta.heroImage}
         alt=""
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.20] blur-[3px] [mask-image:radial-gradient(50%_50%_at_50%_45%,black_20%,transparent_78%)]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.28] [mask-image:radial-gradient(50%_50%_at_50%_45%,black_20%,transparent_78%)]"
       />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
 
@@ -157,7 +173,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
           <div
             aria-hidden
             className="absolute inset-0 -z-10 blur-2xl"
-            style={{ background: `radial-gradient(circle, ${meta.accent}40, transparent 65%)` }}
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.20), transparent 65%)' }}
           />
           <img
             src={meta.tile}
@@ -221,7 +237,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
   )
 }
 
-/* Intro strip ──────────────────────────────────────────────────────────────── */
+/* Intro strip ──────────────────────────────────────────────── */
 
 function IntroStrip({ content }: { content: ServiceContent }) {
   return (
@@ -248,7 +264,7 @@ function IntroStrip({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Problem ──────────────────────────────────────────────────────────────────── */
+/* Problem ──────────────────────────────────────────────────── */
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
@@ -269,7 +285,7 @@ function Problem({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Solution ─────────────────────────────────────────────────────────────────── */
+/* Solution ──────────────────────────────────────────────── */
 
 function Solution({ content }: { content: ServiceContent }) {
   return (
@@ -304,7 +320,7 @@ function Solution({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Atmosphere band ──────────────────────────────────────────────────────────── */
+/* Atmosphere band ─────────────────────────────────────────── */
 
 function AtmosphereBand({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -337,7 +353,7 @@ function AtmosphereBand({ content, meta }: { content: ServiceContent; meta: Serv
   )
 }
 
-/* Capabilities ─────────────────────────────────────────────────────────────── */
+/* Capabilities ───────────────────────────────────────────── */
 
 function Capabilities({ content }: { content: ServiceContent }) {
   return (
@@ -364,28 +380,24 @@ function Capabilities({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Process ──────────────────────────────────────────────────────────────────── */
+/* Process ──────────────────────────────────────────────────── */
 
 function Process({ content }: { content: ServiceContent }) {
-  const cols = content.process.steps.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
   return (
     <section className="relative w-full px-6 py-20 lg:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 50% at 50% 0%, var(--accent), transparent 70%)`, opacity: 0.07 }}
+        style={{ background: 'radial-gradient(60% 50% at 50% 0%, rgba(255,255,255,0.04), transparent 70%)' }}
       />
-      <div className="relative mx-auto w-full max-w-[1200px]">
+      <div className="relative mx-auto w-full max-w-[1100px]">
         <SectionHead eyebrow="How we work" title={content.process.title} center />
-        <div className={`mt-14 grid gap-8 ${cols}`}>
+        {/* Vertical timeline: each step is a node on the centre thread. The dots
+            sit on the page centre line (where ServiceScrollLine's spine runs) and
+            light up as they pass the middle of the viewport. */}
+        <div className="relative mt-14 flex flex-col gap-10 lg:mt-20 lg:gap-2">
           {content.process.steps.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08}>
-              <div className="relative">
-                <span className="font-serif text-[44px] leading-none text-[var(--accent)]/70">{s.label}</span>
-                <h3 className="mt-4 text-[18px] font-semibold tracking-tight text-ink">{s.title}</h3>
-                <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{s.body}</p>
-              </div>
-            </Reveal>
+            <ProcessStep key={s.label} step={s} side={i % 2 === 0 ? 'left' : 'right'} />
           ))}
         </div>
       </div>
@@ -393,7 +405,41 @@ function Process({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Differentiators ──────────────────────────────────────────────────────────── */
+function ProcessStep({
+  step,
+  side,
+}: {
+  step: { label: string; title: string; body: string }
+  side: 'left' | 'right'
+}) {
+  return (
+    <div className="relative lg:py-9">
+      {/* Dot on the centre thread */}
+      <motion.span
+        aria-hidden
+        className="absolute left-1/2 top-1/2 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full lg:block"
+        initial={{ scale: 0.55, backgroundColor: 'rgba(255,255,255,0.16)', boxShadow: '0 0 0 0 rgba(255,255,255,0)' }}
+        whileInView={{ scale: 1, backgroundColor: 'rgba(255,255,255,0.95)', boxShadow: '0 0 16px 3px rgba(255,255,255,0.3)' }}
+        viewport={{ once: false, margin: '-48% 0px -48% 0px' }}
+        transition={{ duration: 0.4, ease }}
+      />
+      <Reveal>
+        <div
+          className={cn(
+            'lg:w-[calc(50%-2.75rem)]',
+            side === 'left' ? 'lg:mr-auto lg:pr-10 lg:text-right' : 'lg:ml-auto lg:pl-10',
+          )}
+        >
+          <span className="font-serif text-[40px] leading-none text-ink/30 lg:text-[46px]">{step.label}</span>
+          <h3 className="mt-3 text-[18px] font-semibold tracking-tight text-ink">{step.title}</h3>
+          <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{step.body}</p>
+        </div>
+      </Reveal>
+    </div>
+  )
+}
+
+/* Differentiators ────────────────────────────────────────── */
 
 function Differentiators({ content }: { content: ServiceContent }) {
   return (
@@ -416,7 +462,7 @@ function Differentiators({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Audience ─────────────────────────────────────────────────────────────────── */
+/* Audience ──────────────────────────────────────────────── */
 
 function Audience({ content }: { content: ServiceContent }) {
   return (
@@ -454,7 +500,7 @@ function Audience({ content }: { content: ServiceContent }) {
   )
 }
 
-/* FAQ ──────────────────────────────────────────────────────────────────────── */
+/* FAQ ────────────────────────────────────────────────────── */
 
 function Faq({ content }: { content: ServiceContent }) {
   const [openIdx, setOpenIdx] = useState<number | null>(0)
@@ -498,7 +544,7 @@ function Faq({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Final CTA ────────────────────────────────────────────────────────────────── */
+/* Final CTA ────────────────────────────────────────────── */
 
 function FinalCta({ content }: { content: ServiceContent }) {
   return (
@@ -506,7 +552,7 @@ function FinalCta({ content }: { content: ServiceContent }) {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 70% at 50% 50%, var(--accent), transparent 70%)`, opacity: 0.1 }}
+        style={{ background: 'radial-gradient(60% 70% at 50% 50%, rgba(255,255,255,0.05), transparent 70%)' }}
       />
       <Reveal>
         <div className="relative mx-auto max-w-2xl text-center">
@@ -526,7 +572,7 @@ function FinalCta({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Other services ───────────────────────────────────────────────────────────── */
+/* Other services ────────────────────────────────────────── */
 
 function OtherServices({ current }: { current: ServiceSlug }) {
   const others = SERVICE_ORDER.filter((s) => s !== current)
