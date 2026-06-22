@@ -9,8 +9,9 @@ import { SERVICES, type NavItem } from '@/lib/navigation'
 /** Card is a motion-wrapped router Link so the tilt works and navigation is client-side. */
 const MotionLink = motion.create(Link)
 
-/** Soft luminous backdrop — lives in /public, served from the site root. */
-const GLOW = '/IMG_0479.JPG'
+/** Soft luminous backdrop — lives in /public, served from the site root.
+ *  Clean B&W peak, heavily blurred + masked into the dark behind the cards. */
+const GLOW = '/bg-peak-stars.jpg'
 
 /** Per-service line icons (white glyphs, no frame), keyed by service title. */
 const ICONS: Record<string, string> = {

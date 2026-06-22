@@ -97,8 +97,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'App Design',
     icon: '/icon-appdesign.png',
     tile: '/service-appdesign.png',
-    heroImage: '/IMG_0690%202.jpg',
-    photo: '/IMG_0701.JPG',
+    heroImage: '/bg-moon.jpg',
+    photo: '/bg-waves.jpg',
     accent: '#d07a54',
   },
   'local-ai': {
@@ -106,8 +106,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'Local AI',
     icon: '/icon-localai.png',
     tile: '/service-localai.png',
-    heroImage: '/IMG_0479.JPG',
-    photo: '/IMG_0683.JPG',
+    heroImage: '/bg-dunes-blue.jpg',
+    photo: '/bg-peak-mono.jpg',
     accent: '#6691a3',
   },
   aios: {
@@ -115,8 +115,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AIOS',
     icon: '/icon-aios.png',
     tile: '/service-aios.png',
-    heroImage: '/IMG_0459%202.JPG',
-    photo: '/images/hero-bg.jpg',
+    heroImage: '/bg-dunes-mist.jpg',
+    photo: '/bg-mountains-mist.jpg',
     accent: '#bda96d',
   },
   'ai-consulting': {
@@ -124,8 +124,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AI Consulting',
     icon: '/icon-consulting.png',
     tile: '/service-consulting.png',
-    heroImage: '/IMG_0743.jpg',
-    photo: '/cta-landscape.jpg',
+    heroImage: '/bg-dunes-pale.jpg',
+    photo: '/bg-ridges.jpg',
     accent: '#96a766',
   },
 }
