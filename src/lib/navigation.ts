@@ -38,5 +38,5 @@ export const RESOURCES: NavItem[] = [
   { title: 'Blog', desc: 'Insights, updates and ideas.', href: '/blog', Icon: Leaf },
   { title: 'Terms of Service', desc: 'The rules for using Nivora.', href: '/terms', iconImg: '/icon-terms.png' },
   { title: 'Privacy Policy', desc: 'How we handle and protect your data.', href: '/privacy', iconImg: '/icon-privacy.png' },
-  { title: 'Help Center', desc: 'Get answers and support.', href: '/#contact', Icon: HelpCircle },
+  { title: 'Help Center', desc: 'Ask our assistant or reach a person.', href: '/help', Icon: HelpCircle },
 ]
