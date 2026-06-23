@@ -67,6 +67,8 @@ export function VoiceSlingers() {
   const cleanMeasureRef = useRef<SVGTextElement>(null)
   const inView = useInView(rootRef, { amount: 0.3 })
   const [fix, setFix] = useState(0)
+  // Each correction plays in two beats: the struck word, then the framed fix label.
+  const [phase, setPhase] = useState<'word' | 'label'>('word')
 
   // ── Flowing text — measure each repeat unit against the real font, then loop ──
   useEffect(() => {
@@ -116,11 +118,21 @@ export function VoiceSlingers() {
   }, [reduced, inView])
 
   // ── Cycle the correction pills while the card is on screen ──
+  // Beat 1: show the struck word. Beat 2 (after ~1.7s): swap to the fix label.
+  // Then (~3.8s) move to the next correction. Re-runs whenever `fix` changes.
   useEffect(() => {
-    if (reduced || !inView) return
-    const id = window.setInterval(() => setFix((f) => (f + 1) % CORRECTIONS.length), 4000)
-    return () => window.clearInterval(id)
-  }, [reduced, inView])
+    if (reduced || !inView) {
+      setPhase('label')
+      return
+    }
+    setPhase('word')
+    const toLabel = window.setTimeout(() => setPhase('label'), 1700)
+    const toNext = window.setTimeout(() => setFix((f) => (f + 1) % CORRECTIONS.length), 3800)
+    return () => {
+      window.clearTimeout(toLabel)
+      window.clearTimeout(toNext)
+    }
+  }, [fix, reduced, inView])
 
   const c = CORRECTIONS[fix]
 
@@ -196,19 +208,19 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Wispr nudge — plain text (no frame), the wrong word strikes through, then a small fix pop-up. */}
+      {/* Wispr nudge — beat 1: the struck word as plain text (no frame); beat 2: it fades
+          out and a framed fix label fades in, in the same spot. One thing at a time. */}
       <div className="pointer-events-none absolute inset-x-0 top-[46%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={fix}
-            initial={reduced ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduced ? undefined : { opacity: 0, y: -14 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-center gap-2.5"
-          >
-            {/* the raw phrase, no frame — the wrong word strikes through in place */}
-            <div className="text-[17px] font-medium text-white/65 [text-shadow:0_2px_12px_rgba(0,0,0,0.9)]">
+          {phase === 'word' ? (
+            <motion.div
+              key={`w-${fix}`}
+              initial={reduced ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduced ? undefined : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="whitespace-nowrap text-[18px] font-medium text-white/65 [text-shadow:0_2px_12px_rgba(0,0,0,0.9)]"
+            >
               {c.pre}
               {c.strike ? (
                 <>
@@ -219,7 +231,7 @@ export function VoiceSlingers() {
                       aria-hidden
                       initial={reduced ? false : { scaleX: 0 }}
                       animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.35, duration: 0.4, ease: 'easeOut' }}
+                      transition={{ delay: 0.45, duration: 0.45, ease: 'easeOut' }}
                       style={{ originX: 0 }}
                       className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/80"
                     />
@@ -227,29 +239,34 @@ export function VoiceSlingers() {
                   {c.post ? <>{' '}{c.post}</> : null}
                 </>
               ) : (
-                <motion.span
-                  initial={reduced ? false : { opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.35, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-white"
-                >
-                  ?
-                </motion.span>
+                <>
+                  {' '}
+                  <motion.span
+                    initial={reduced ? false : { opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.45, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-white"
+                  >
+                    ?
+                  </motion.span>
+                </>
               )}
-            </div>
-            {/* the fix — a small separate pop-up that lands after the strike */}
+            </motion.div>
+          ) : (
             <motion.div
-              initial={reduced ? false : { opacity: 0, y: 6, scale: 0.92 }}
+              key={`l-${fix}`}
+              initial={reduced ? false : { opacity: 0, y: 10, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-[#171717]/95 py-1.5 pl-1.5 pr-3 text-[12.5px] font-semibold text-white shadow-[0_14px_32px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md"
+              exit={reduced ? undefined : { opacity: 0, y: -8, scale: 0.92 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-[#171717]/95 py-2 pl-2 pr-4 text-[13.5px] font-semibold text-white shadow-[0_16px_36px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
             >
-              <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-white/15">
-                <Check className="h-3 w-3 text-white" strokeWidth={2.8} />
+              <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
+                <Check className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />
               </span>
               {c.label}
             </motion.div>
-          </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
