@@ -21,8 +21,13 @@ export type Post = {
   image: string
   /** object-position for the hero crop, e.g. 'center 28%' to lift a tall photo. */
   imagePosition?: string
-  /** Short word shown as a glass chip on the hero. */
+  /** Big serif word shown on the hero (magazine-cover style). */
   coverLabel?: string
+  /** When true, the bright subject occludes the label for a sense of depth
+   *  (works on bright-subject-on-dark photos, e.g. the snow peak on black). */
+  coverOcclude?: boolean
+  /** Vertical anchor of the occluded label, e.g. '40%' (CSS top). */
+  coverLabelY?: string
   /** App-logo chips on the hero (one per bottom corner). */
   coverIcons?: { src: string; name: string }[]
   excerpt: string
@@ -104,8 +109,10 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'May 22, 2026',
     image: '/images/blog-local-peak.jpg',
-    imagePosition: 'center 16%',
+    imagePosition: 'center 42%',
     coverLabel: 'Local AI',
+    coverOcclude: true,
+    coverLabelY: '40%',
     excerpt:
       'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',
     body: [

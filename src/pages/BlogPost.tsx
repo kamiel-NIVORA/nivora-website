@@ -67,16 +67,39 @@ export function BlogPost() {
         {/* Cover — optional object-position lift, a big centered serif label
             (brand-cover style), and/or app-icon chips at the bottom corners. */}
         <Reveal mode="mount" delay={0.12}>
-          <div className="relative mt-12 overflow-hidden rounded-3xl border border-line">
+          <div className="relative mt-12 overflow-hidden rounded-3xl border border-line isolate">
             <img
               src={post.image}
               alt={post.title}
-              className="aspect-[16/9] w-full object-cover"
+              className="block aspect-[16/9] w-full object-cover"
               style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
             />
 
-            {/* Centered serif label, like the magazine-cover marks */}
-            {post.coverLabel && (
+            {/* Occluded label: the word sits BEHIND the bright subject. A second
+                copy of the photo on top with mix-blend-lighten lets the dark sky
+                reveal the word while the bright peak covers it (the "24M" depth). */}
+            {post.coverLabel && post.coverOcclude && (
+              <>
+                <div
+                  className="pointer-events-none absolute inset-x-0 flex justify-center px-6"
+                  style={{ top: post.coverLabelY ?? '50%', transform: 'translateY(-50%)' }}
+                >
+                  <span className="font-serif text-[46px] leading-none tracking-[0.01em] text-white sm:text-[70px] lg:text-[84px]">
+                    {post.coverLabel}
+                  </span>
+                </div>
+                <img
+                  src={post.image}
+                  alt=""
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-lighten"
+                  style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
+                />
+              </>
+            )}
+
+            {/* Plain centered serif label (brand-cover style) */}
+            {post.coverLabel && !post.coverOcclude && (
               <div className="pointer-events-none absolute inset-0 grid place-items-center">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_56%_48%_at_50%_50%,rgba(0,0,0,0.34),transparent_70%)]" />
                 <span className="relative px-6 text-center font-serif text-[44px] leading-none tracking-[0.01em] text-white/95 [text-shadow:0_2px_22px_rgba(0,0,0,0.55)] sm:text-[64px] lg:text-[76px]">
