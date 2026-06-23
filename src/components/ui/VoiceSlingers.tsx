@@ -120,10 +120,10 @@ export function VoiceSlingers() {
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden">
-      {/* Soft olive focal glow behind the node so it lifts off the wave. */}
+      {/* Soft neutral focal glow behind the node so it lifts off the wave. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[83%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(150,167,102,0.15),transparent)] blur-[2px]"
+        className="pointer-events-none absolute left-1/2 top-[83%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
       />
 
       {/* The flowing transcript + ribbon */}
@@ -242,7 +242,7 @@ function Dot({ className, delay, reduced }: { className?: string; delay: string;
   return (
     <span
       aria-hidden
-      className={`absolute h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.8)] ${className ?? ''}`}
+      className={`absolute h-1.5 w-1.5 rounded-full bg-white/45 shadow-[0_0_8px_rgba(255,255,255,0.5)] ${className ?? ''}`}
       style={reduced ? { opacity: 0.6 } : { animation: `voiceDot 2.6s ease-in-out ${delay} infinite` }}
     />
   )
