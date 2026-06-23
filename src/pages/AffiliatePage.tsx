@@ -1,17 +1,14 @@
-import { useEffect, type CSSProperties, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, type ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
-import { ArrowLeft, Gift } from 'lucide-react'
+import { Gift } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { useContactModal } from '@/components/contact/ContactModal'
 
-/** Warm gold, the brand accent. Olive is reused for the "coming soon" cue. */
-const ACCENT = '#bda96d'
 const ease = [0.16, 1, 0.3, 1] as const
 
-/** Home-style scenic hero, so the page lives in the same world as the rest of the site. */
-const HERO_IMG = '/images/hero-nivora.png'
+/** Full-bleed scenic peak, so the page lives in the same world as the home page. */
+const HERO_IMG = '/IMG_0694.JPG'
 
 /** The three plain facts, modelled on a clear affiliate page but in our voice. */
 const FACTS = [
@@ -54,9 +51,9 @@ const APPS = [
   },
 ]
 
-/* ─────────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────────────────
    Page
-   ───────────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────────────────────────── */
 export function AffiliatePage() {
   useEffect(() => {
     document.title = 'Affiliate — Nivora'
@@ -66,10 +63,7 @@ export function AffiliatePage() {
   }, [])
 
   return (
-    <main
-      className="relative w-full overflow-hidden bg-bg"
-      style={{ ['--accent' as string]: ACCENT } as CSSProperties}
-    >
+    <main className="relative w-full overflow-hidden bg-bg">
       <Hero />
       <Facts />
       <HowItWorks />
@@ -80,12 +74,12 @@ export function AffiliatePage() {
   )
 }
 
-/* Shared bits ─────────────────────────────────────────── */
+/* Shared bits — monochrome, separators instead of colour ────────────────────── */
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.14em] text-faint">
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+    <span className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em] text-faint">
+      <span className="h-px w-6 bg-white/25" />
       {children}
     </span>
   )
@@ -94,13 +88,13 @@ function Eyebrow({ children }: { children: ReactNode }) {
 function ComingSoonPill() {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-faint backdrop-blur-sm">
-      <span className="h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
+      <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
       Coming soon
     </span>
   )
 }
 
-/* Hero ──────────────────────────────────────────────────── */
+/* Hero ─────────────────────────────────────────────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -131,16 +125,17 @@ function Hero() {
   const { open } = useContactModal()
   return (
     <section className="relative flex min-h-[92svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32">
-      {/* Scenic image, same world as the home page */}
-      <img src={HERO_IMG} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+      {/* Scenic peak */}
+      <img src={HERO_IMG} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-center" />
+      {/* Legibility: even darken, a soft scrim under the text, and fades top and bottom */}
       <div className="absolute inset-0 bg-black/55" />
-      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/60 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-bg via-bg/75 to-transparent" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 50% at 50% 28%, ${ACCENT}1f, transparent 70%)` }}
+        style={{ background: 'radial-gradient(72% 56% at 50% 54%, rgba(0,0,0,0.5), transparent 78%)' }}
       />
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-bg via-bg/75 to-transparent" />
 
       <motion.div
         variants={heroContainer}
@@ -158,12 +153,7 @@ function Hero() {
             <HeroWords text="Share Box and Voice." />
           </span>
           <span className="mt-1 block">
-            <motion.span variants={heroWord} className="mr-[0.22em] inline-block">
-              Earn
-            </motion.span>
-            <motion.span variants={heroWord} className="inline-block text-[var(--accent)]">
-              20%.
-            </motion.span>
+            <HeroWords text="Earn 20%." />
           </span>
         </h1>
 
@@ -189,20 +179,11 @@ function Hero() {
           </RippleButton>
         </motion.div>
       </motion.div>
-
-      {/* Back link, quiet, top-left under the nav */}
-      <Link
-        to="/"
-        className="absolute left-6 top-28 z-10 inline-flex items-center gap-1.5 text-[13px] text-ink-soft/70 transition-colors hover:text-ink lg:left-10"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.8} />
-        Back to home
-      </Link>
     </section>
   )
 }
 
-/* Facts ─────────────────────────────────────────────────── */
+/* Facts ─────────────────────────────────────────────────────────────────────── */
 
 function Facts() {
   return (
@@ -223,7 +204,7 @@ function Facts() {
   )
 }
 
-/* How it works ─────────────────────────────────────────── */
+/* How it works ──────────────────────────────────────────────────────────────── */
 
 function HowItWorks() {
   return (
@@ -231,7 +212,9 @@ function HowItWorks() {
       <div className="relative mx-auto w-full max-w-[1200px]">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <Eyebrow>How it will work</Eyebrow>
+            <div className="flex justify-center">
+              <Eyebrow>How it will work</Eyebrow>
+            </div>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-4 font-serif text-[30px] leading-[1.15] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -241,17 +224,16 @@ function HowItWorks() {
         </div>
 
         <div className="relative mt-16">
-          {/* connecting line on desktop */}
+          {/* connecting line on desktop, neutral */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-0 right-0 top-[18px] hidden h-px lg:block"
-            style={{ background: `linear-gradient(to right, transparent, ${ACCENT}40, transparent)` }}
+            className="pointer-events-none absolute left-0 right-0 top-[18px] hidden h-px bg-gradient-to-r from-transparent via-white/20 to-transparent lg:block"
           />
           <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {STEPS.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.08}>
                 <div className="relative">
-                  <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-line bg-bg font-mono text-[13px] text-[var(--accent)]">
+                  <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-line bg-bg font-mono text-[13px] text-ink-soft">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <h3 className="mt-5 text-[16px] font-semibold tracking-tight text-ink">{s.title}</h3>
@@ -266,20 +248,14 @@ function HowItWorks() {
   )
 }
 
-/* Gift ──────────────────────────────────────────────────── */
+/* Gift ───────────────────────────────────────────────────────────────────────── */
 
 function GiftBlock() {
   return (
     <section className="relative w-full px-6 pb-4 lg:pb-8">
       <div className="relative mx-auto w-full max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-[32px] border border-line">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{ background: `radial-gradient(80% 120% at 15% 10%, ${ACCENT}26, transparent 60%)` }}
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        <div className="relative overflow-hidden rounded-[32px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015]">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
           <div className="relative grid items-center gap-12 p-8 sm:p-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:p-16">
             {/* Copy */}
@@ -301,14 +277,11 @@ function GiftBlock() {
               </Reveal>
             </div>
 
-            {/* Gift card visual */}
+            {/* Gift card visual, monochrome */}
             <Reveal delay={0.1}>
               <div className="relative mx-auto w-full max-w-[360px] overflow-hidden rounded-[24px] border border-line bg-bg-soft/70 p-8 backdrop-blur-sm">
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <span
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl border text-[var(--accent)]"
-                  style={{ borderColor: `${ACCENT}55`, background: 'rgba(189,169,109,0.10)' }}
-                >
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft">
                   <Gift className="h-6 w-6" strokeWidth={1.6} />
                 </span>
                 <p className="mt-6 font-serif text-[20px] leading-tight text-ink">Early access, on you</p>
@@ -316,7 +289,7 @@ function GiftBlock() {
                   Friends and followers who use your link skip the queue and get in first.
                 </p>
                 <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-3 py-1 text-[12px] text-ink-soft/80">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+                  <span className="h-px w-4 bg-white/30" />
                   A gift worth sharing
                 </span>
               </div>
@@ -328,14 +301,16 @@ function GiftBlock() {
   )
 }
 
-/* Apps ──────────────────────────────────────────────────── */
+/* Apps ───────────────────────────────────────────────────────────────────────── */
 
 function Apps() {
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-24 lg:py-32">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>What you will share</Eyebrow>
+          <div className="flex justify-center">
+            <Eyebrow>What you will share</Eyebrow>
+          </div>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-4 font-serif text-[30px] leading-[1.15] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -364,7 +339,7 @@ function Apps() {
                 <div className="flex flex-wrap items-center gap-2.5">
                   <span className="font-serif text-[24px] leading-none text-ink">{a.name}</span>
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-muted">
-                    <span className="h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
                     Coming soon
                   </span>
                 </div>
@@ -378,17 +353,12 @@ function Apps() {
   )
 }
 
-/* Final CTA ─────────────────────────────────────────────── */
+/* Final CTA ─────────────────────────────────────────────────────────────────── */
 
 function FinalCta() {
   const { open } = useContactModal()
   return (
     <section id="contact" className="relative w-full px-6 pb-28 pt-4 lg:pb-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 70% at 50% 50%, var(--accent), transparent 70%)`, opacity: 0.1 }}
-      />
       <Reveal>
         <div className="relative mx-auto max-w-2xl text-center">
           <div className="flex justify-center">
