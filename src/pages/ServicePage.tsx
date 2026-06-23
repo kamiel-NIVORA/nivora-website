@@ -56,9 +56,19 @@ export function ServicePage() {
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
 
   useEffect(() => {
-    if (content) document.title = `${content.name} · Nivora`
+    if (!content) return
+    document.title = `${content.name} · Nivora`
+    let meta = document.querySelector('meta[name="description"]')
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('name', 'description')
+      document.head.appendChild(meta)
+    }
+    const prev = meta.getAttribute('content')
+    meta.setAttribute('content', content.hero.subhead)
     return () => {
       document.title = 'Nivora'
+      if (prev != null) meta!.setAttribute('content', prev)
     }
   }, [content])
 
@@ -75,7 +85,7 @@ export function ServicePage() {
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
-        <Capabilities content={content} meta={meta} />
+        <Capabilities content={content} />
         <Preview meta={meta} />
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
@@ -322,14 +332,12 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
           <Reveal delay={0.08}>
             <p className="text-[15.5px] leading-relaxed text-faint lg:text-base">{content.solution.body}</p>
           </Reveal>
-          <div className="mt-9 rounded-[24px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-7 backdrop-blur-md lg:p-8">
-            <span className="text-[12px] font-medium uppercase tracking-[0.14em] text-faint">What you walk away with</span>
-            <ul className="mt-6 flex flex-col gap-4">
+          <div className="mt-9 rounded-[22px] border border-line bg-white/[0.02] p-7 lg:p-8">
+            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">What you walk away with</span>
+            <ul className="mt-6 flex flex-col gap-4.5">
               {content.solution.outcomes.map((o, i) => (
-                <Reveal as="li" key={o} delay={i * 0.07} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10">
-                    <Check className="h-3.5 w-3.5 text-[var(--accent)]" strokeWidth={2.2} />
-                  </span>
+                <Reveal as="li" key={o} delay={i * 0.07} className="flex items-start gap-3.5">
+                  <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
                   <span className="text-[15px] leading-relaxed text-ink-soft">{o}</span>
                 </Reveal>
               ))}
@@ -344,69 +352,35 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
   )
 }
 
-/* Capabilities · offset bento (one video feature tile + varied cards) ───────── */
+/* Capabilities · a calm, even grid of what's included ───────────────────────── */
 
-function Capabilities({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  const items = content.capabilities.items
-  // explicit lg placement so no row is three equal cards
-  const place = [
-    'lg:col-start-1 lg:col-span-5 lg:row-start-1 lg:row-span-2',
-    'lg:col-start-6 lg:col-span-7 lg:row-start-1',
-    'lg:col-start-6 lg:col-span-4 lg:row-start-2',
-    'lg:col-start-10 lg:col-span-3 lg:row-start-2',
-    'lg:col-start-1 lg:col-span-6 lg:row-start-3',
-    'lg:col-start-7 lg:col-span-6 lg:row-start-3',
-  ]
+function Capabilities({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
-      <div className="max-w-2xl">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+      <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>{content.capabilities.title}</Eyebrow>
+          <Eyebrow>What you get</Eyebrow>
         </Reveal>
         <Reveal delay={0.06}>
-          <p className="mt-5 text-[16px] leading-relaxed text-muted lg:text-[18px]">{content.capabilities.intro}</p>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {content.capabilities.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
         </Reveal>
       </div>
 
-      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(170px,1fr)] lg:grid-cols-12 lg:gap-5">
-        {items.map((it, i) => {
-          const feature = i === 0
-          return (
-            <Reveal key={it.title} delay={(i % 3) * 0.06} className={cn('group', place[i])}>
-              <div
-                className={cn(
-                  'relative flex h-full flex-col overflow-hidden rounded-[20px] border border-line p-6 transition-colors duration-300 hover:border-line-strong',
-                  feature ? 'bg-[#070709]' : 'bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-md',
-                )}
-              >
-                {feature && (
-                  <>
-                    <img
-                      src={meta.photo}
-                      alt=""
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
-                    />
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0"
-                      style={{ background: `radial-gradient(80% 70% at 30% 20%, ${meta.accent}33, transparent 65%)` }}
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#070709] to-transparent" />
-                  </>
-                )}
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-                <div className="relative mt-auto">
-                  <span className="font-mono text-[12px] tracking-[0.12em] text-dim">{String(i + 1).padStart(2, '0')}</span>
-                  <h3 className={cn('mt-3 font-semibold tracking-tight text-ink', feature ? 'text-[20px] lg:text-[22px]' : 'text-[16px]')}>
-                    {it.title}
-                  </h3>
-                  <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{it.body}</p>
-                </div>
-              </div>
-            </Reveal>
-          )
-        })}
+      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {content.capabilities.items.map((it, i) => (
+          <Reveal key={it.title} delay={(i % 3) * 0.07}>
+            <GlassCard className="h-full">
+              <span className="font-serif text-[30px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-4 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink lg:text-[20px]">{it.title}</h3>
+              <p className="mt-3 text-[14px] leading-relaxed text-faint">{it.body}</p>
+            </GlassCard>
+          </Reveal>
+        ))}
       </div>
     </section>
   )

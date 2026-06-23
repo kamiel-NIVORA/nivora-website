@@ -41,7 +41,7 @@ export function ServiceIntro({
     const isLast = index >= words.length - 1
     const t = window.setTimeout(
       () => (isLast ? setPhase('reveal') : setIndex((i) => i + 1)),
-      isLast ? 950 : 780,
+      isLast ? 1040 : 870,
     )
     return () => window.clearTimeout(t)
   }, [phase, index, words.length])

@@ -10,9 +10,9 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 export function useCountUp(target: number): number {
   const reduced = usePrefersReducedMotion()
   const mv = useMotionValue(0)
-  // Gentle, over-damped spring: rolls up and trails a slider drag smoothly,
-  // never overshoots or snaps (Kamiel: the number was "verspringing" too much).
-  const spring = useSpring(mv, { stiffness: 42, damping: 20, mass: 1, restDelta: 0.5 })
+  // Fast but over-damped: it reaches the amount quickly (Kamiel: it was "supertraag"
+  // before) yet never overshoots or snaps, so the number settles cleanly.
+  const spring = useSpring(mv, { stiffness: 150, damping: 26, mass: 1, restDelta: 2 })
   const [display, setDisplay] = useState(0)
 
   useEffect(() => {
