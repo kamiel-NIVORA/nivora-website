@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 
-// Types for the component
 export interface DockApp {
   id: string
   name: string
@@ -17,7 +16,6 @@ interface MacOSDockProps {
 /**
  * Authentic macOS dock with cosine-based magnification on hover. Icons sit at
  * their resting size; as the cursor nears, they and their neighbours swell.
- * Self-contained (no external deps); falls back to a CSS bounce on click.
  */
 const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], className = '' }) => {
   const [mouseX, setMouseX] = useState<number | null>(null)
@@ -40,7 +38,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
     } else if (smallerDimension < 1024) {
       return { baseIconSize: Math.max(48, smallerDimension * 0.05), maxScale: 1.6, effectWidth: smallerDimension * 0.3 }
     } else {
-      return { baseIconSize: Math.max(52, Math.min(60, smallerDimension * 0.045)), maxScale: 1.75, effectWidth: 260 }
+      return { baseIconSize: 64, maxScale: 1.7, effectWidth: 280 }
     }
   }, [])
 

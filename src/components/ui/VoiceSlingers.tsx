@@ -8,16 +8,18 @@ type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
 /**
  * Voice card visual — speech in, clean writing out (Wispr-style ribbon).
- * Raw dim speech flows in from the lower-left, through a live waveform node,
- * and rides a soft pale ribbon up to the right as crisp, clean copy.
+ * Raw dim speech bends down from the upper-left into a live waveform node, then
+ * rides a soft pale ribbon up to the upper-right as crisp, clean copy.
  */
 
 const VB_W = 1000
 const VB_H = 420
 
+/* A valley: raw text bends down from the upper-LEFT into the node at the bottom
+   centre, then the clean copy sweeps up to the upper-RIGHT. Both sides bend up. */
 const WAVE =
-  'M -120 360 C 160 348 330 332 500 320 C 664 308 772 232 902 178 C 1004 140 1094 122 1190 112'
-const RIBBON = 'M 500 320 C 664 308 772 232 902 178 C 1004 140 1094 122 1190 112'
+  'M -120 196 C 150 258 340 318 500 334 C 672 320 802 232 922 166 C 1012 124 1096 106 1190 96'
+const RIBBON = 'M 500 334 C 672 320 802 232 922 166 C 1012 124 1096 106 1190 96'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
 const RAW =
@@ -28,19 +30,20 @@ const CLEAN =
 
 const REPEAT = 3
 const FONT_SIZE = 20
-const SPEED = 42 // px/second — both streams share it, so the flow reads as one motion
+const SPEED = 66 // px/second — both streams share it, so the flow reads as one motion
 
 /* The fixes Nivora calls out, popping above the node in turn. */
 const FIXES: { icon: LucideIcon; label: string }[] = [
+  { icon: Check, label: 'Removed filler' },
   { icon: Check, label: 'Removed repetition' },
   { icon: Check, label: 'Fixed grammar' },
-  { icon: Check, label: 'Added question mark' },
+  { icon: Check, label: 'Added punctuation' },
   { icon: Sparkles, label: 'Polished the copy' },
 ]
 
 /* Equaliser profile — taller in the middle so the resting node reads as a voice. */
 const BARS = [0.34, 0.5, 0.42, 0.66, 0.82, 0.58, 0.94, 0.72, 1, 0.72, 0.94, 0.58, 0.82, 0.66, 0.42, 0.5, 0.34]
-const BAR_TRACK = 24 // px, the tallest a bar can reach inside the pill
+const BAR_TRACK = 30 // px, the tallest a bar can reach inside the pill
 
 export function VoiceSlingers() {
   const reduced = usePrefersReducedMotion()
@@ -96,7 +99,7 @@ export function VoiceSlingers() {
 
   useEffect(() => {
     if (reduced || !inView) return
-    const id = window.setInterval(() => setFix((f) => (f + 1) % FIXES.length), 2200)
+    const id = window.setInterval(() => setFix((f) => (f + 1) % FIXES.length), 3400)
     return () => window.clearInterval(id)
   }, [reduced, inView])
 
@@ -107,7 +110,7 @@ export function VoiceSlingers() {
       {/* Soft neutral focal glow behind the node so it lifts off the wave. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[77%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
+        className="pointer-events-none absolute left-1/2 top-[80%] h-[210px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
       />
 
       <svg
@@ -167,19 +170,19 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Correction pill — one fix at a time, above the node. Clear, Wispr-style pop. */}
-      <div className="pointer-events-none absolute inset-x-0 top-[54%] flex -translate-y-1/2 justify-center">
+      {/* Correction pill — one fix at a time, above the node. Clear, slow, Wispr-style. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[50%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={fix}
-            initial={reduced ? false : { opacity: 0, y: 14, scale: 0.9 }}
+            initial={reduced ? false : { opacity: 0, y: 16, scale: 0.88 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: -14, scale: 0.9 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#171717]/95 py-2 pl-2 pr-4 text-[13px] font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md"
+            exit={reduced ? undefined : { opacity: 0, y: -16, scale: 0.88 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-[#171717]/95 py-2.5 pl-2.5 pr-5 text-[14.5px] font-semibold text-white shadow-[0_20px_44px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
           >
-            <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
-              <Active className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />
+            <span className="grid h-[24px] w-[24px] place-items-center rounded-full bg-white/15">
+              <Active className="h-4 w-4 text-white" strokeWidth={2.8} />
             </span>
             {FIXES[fix].label}
           </motion.div>
@@ -187,7 +190,7 @@ export function VoiceSlingers() {
       </div>
 
       {/* The Nivora voice node — a live waveform lozenge the flow passes through. */}
-      <div className="absolute left-1/2 top-[77%] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-[80%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
           <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
           <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
@@ -196,7 +199,7 @@ export function VoiceSlingers() {
           <motion.div
             animate={reduced ? undefined : { scale: [1, 1.04, 1] }}
             transition={reduced ? undefined : { duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative flex h-[54px] w-[138px] items-center justify-center gap-[3px] overflow-hidden rounded-full border border-white/30 bg-[#0d0d0d]/80 px-6 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md"
+            className="relative flex h-[66px] w-[170px] items-center justify-center gap-[3.5px] overflow-hidden rounded-full border border-white/30 bg-[#0d0d0d]/80 px-7 shadow-[0_22px_50px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md"
           >
             {BARS.map((h, i) => (
               <span

@@ -26,7 +26,6 @@ export function Products() {
     target: bentoRef,
     offset: ['start 0.92', 'start 0.4'],
   })
-  // One spring drives every card so the assembly glides instead of tracking the wheel.
   const progress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 26,
@@ -35,7 +34,6 @@ export function Products() {
 
   return (
     <section id="products" className="relative w-full overflow-hidden py-28 lg:py-36">
-      {/* Ambient glow */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <img
           src={GLOW}
@@ -281,7 +279,7 @@ function DesktopCard() {
   return (
     <>
       {/* Live macOS dock — Box and Voice sit in the middle and magnify on hover */}
-      <div className="pointer-events-auto relative flex flex-1 items-end justify-center overflow-hidden pb-2">
+      <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-hidden">
         <MacOSDock apps={DOCK_APPS} openApps={['box', 'voice']} onAppClick={() => navigate('/waitlist')} />
       </div>
 
