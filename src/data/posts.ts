@@ -35,7 +35,12 @@ export type Post = {
   imagePosition?: string
   /** Optional cover overlay authored in the AIOS (rendered by BlogCover). */
   coverLabel?: string
+  /** Vertical position of the label (e.g. "42%"). */
   coverLabelY?: string
+  /** Horizontal position of the label (e.g. "42%"). Undefined = centered. */
+  coverLabelX?: string
+  /** Label font size in cqw units (relative to cover width). Undefined = ~7. */
+  coverLabelSize?: number
   coverOcclude?: boolean
   coverIcons?: CoverIcon[]
 }

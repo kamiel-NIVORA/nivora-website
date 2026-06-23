@@ -32,6 +32,8 @@ type Row = {
   cover_label: string | null
   cover_occlude: boolean | null
   cover_label_y: string | null
+  cover_label_x: string | null
+  cover_label_size: number | null
   cover_icons: unknown
 }
 
@@ -49,6 +51,8 @@ function mapRow(r: Row): Post {
     coverLabel: r.cover_label ?? undefined,
     coverOcclude: r.cover_occlude ?? undefined,
     coverLabelY: r.cover_label_y ?? undefined,
+    coverLabelX: r.cover_label_x ?? undefined,
+    coverLabelSize: typeof r.cover_label_size === 'number' ? r.cover_label_size : undefined,
     coverIcons: (r.cover_icons as Post['coverIcons']) ?? undefined,
   }
 }

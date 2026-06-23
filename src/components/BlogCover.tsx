@@ -3,10 +3,14 @@ import { cn } from '@/lib/utils'
 
 /**
  * Cover image plus the optional overlay authored in the AIOS cover editor:
- * a brand-serif label (positioned with `coverLabelY`), a dark scrim for
- * legibility, and icons/photos. Icons with x/y are placed freely (percent of
- * the cover); icons without are laid out as a centered row (legacy posts).
- * The parent supplies the rounded, aspect-ratio box.
+ * a brand-serif label, a dark scrim for legibility, and icons/photos.
+ *
+ * The label can be placed freely: `coverLabelX` + `coverLabelY` (percent of the
+ * cover) position it anywhere; when `coverLabelX` is absent it stays
+ * horizontally centered (legacy posts). `coverLabelSize` sets the font size in
+ * `cqw` units so it scales with the cover width and looks identical in the
+ * editor preview and here. Icons with x/y are placed freely; icons without lay
+ * out as a centered row (legacy). The parent supplies the rounded aspect box.
  */
 export function BlogCover({ post, variant = 'card' }: { post: Post; variant?: 'card' | 'hero' }) {
   const icons = post.coverIcons ?? []
@@ -14,8 +18,17 @@ export function BlogCover({ post, variant = 'card' }: { post: Post; variant?: 'c
   const hero = variant === 'hero'
   const showRow = icons.length > 0 && !positioned
 
+  const freePos = typeof post.coverLabelX === 'string'
+  const labelClass =
+    'font-serif font-medium tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]'
+  const labelStyle = {
+    fontSize: `clamp(13px, ${post.coverLabelSize ?? 7}cqw, 120px)`,
+    lineHeight: 1.05,
+  }
+  const showLabelInColumn = !!post.coverLabel && !freePos
+
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full" style={{ containerType: 'inline-size' }}>
       {post.image ? (
         <img
           src={post.image}
@@ -51,7 +64,8 @@ export function BlogCover({ post, variant = 'card' }: { post: Post; variant?: 'c
           ) : null,
         )}
 
-      {(post.coverLabel || showRow) && (
+      {/* Centered column: legacy icon row + (legacy) centered label */}
+      {(showRow || showLabelInColumn) && (
         <div
           className="absolute inset-x-0 flex -translate-y-1/2 flex-col items-center gap-3 px-6 text-center"
           style={{ top: post.coverLabelY ?? '50%' }}
@@ -71,16 +85,23 @@ export function BlogCover({ post, variant = 'card' }: { post: Post; variant?: 'c
               ))}
             </div>
           )}
-          {post.coverLabel && (
-            <span
-              className={cn(
-                'font-serif font-medium tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]',
-                hero ? 'text-[40px] leading-[1.05] sm:text-[56px]' : 'text-[22px] leading-tight sm:text-[26px]',
-              )}
-            >
+          {showLabelInColumn && (
+            <span className={labelClass} style={labelStyle}>
               {post.coverLabel}
             </span>
           )}
+        </div>
+      )}
+
+      {/* Freely placed label (coverLabelX set) */}
+      {post.coverLabel && freePos && (
+        <div
+          className="absolute -translate-x-1/2 -translate-y-1/2 px-4 text-center"
+          style={{ left: post.coverLabelX, top: post.coverLabelY ?? '50%' }}
+        >
+          <span className={labelClass} style={labelStyle}>
+            {post.coverLabel}
+          </span>
         </div>
       )}
     </div>
