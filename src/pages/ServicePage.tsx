@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   AnimatePresence,
   motion,
   useScroll,
-  useSpring,
   useTransform,
   type Variants,
 } from 'framer-motion'
@@ -12,10 +11,13 @@ import { ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { ServiceScrollLine } from '@/components/ui/ServiceScrollLine'
+import { RoiCalculator } from '@/components/ui/RoiCalculator'
+import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { SERVICE_CONTENT } from '@/data/services'
+import { SERVICE_ROI } from '@/data/serviceRoi'
 import {
   SERVICE_META,
   SERVICE_ORDER,
@@ -26,26 +28,19 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-/* ───────────────────────────────────────────
-   Page
-   ─────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────
+   Service page · scenic, image-led, home-page branding
+   Flow: hero → statement → scroll-reveal → problem → solution → capabilities
+        → why-us band → process → ROI (not for consulting) → fit/faq → CTA
+   ───────────────────────────────────────────────────────── */
 export function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
   const isValid = !!slug && slug in SERVICE_CONTENT
   const content = isValid ? SERVICE_CONTENT[slug as ServiceSlug] : null
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
 
-  // The grey scroll thread draws across everything from the hero down to the
-  // final CTA (OtherServices sits outside the wrapper, so the line ends there).
-  const lineWrapRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: lineWrapRef,
-    offset: ['start start', 'end end'],
-  })
-  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 30, restDelta: 0.0005 })
-
   useEffect(() => {
-    if (content) document.title = `${content.name} — Nivora`
+    if (content) document.title = `${content.name} · Nivora`
     return () => {
       document.title = 'Nivora'
     }
@@ -56,140 +51,146 @@ export function ServicePage() {
   return (
     <main
       className="relative w-full overflow-hidden bg-bg"
-      // Monochrome: one neutral grey drives every former per-service accent.
-      style={{ ['--accent' as string]: '#9aa1ab' } as CSSProperties}
+      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
     >
-      <div ref={lineWrapRef} className="relative">
-        <ServiceScrollLine progress={progress} />
-        <Hero content={content} meta={meta} />
-        <IntroStrip content={content} />
-        <Problem content={content} />
-        <Solution content={content} />
-        <AtmosphereBand content={content} meta={meta} />
-        <Capabilities content={content} />
-        <Process content={content} />
-        <Differentiators content={content} />
-        <Audience content={content} />
-        <Faq content={content} />
-        <FinalCta content={content} />
-      </div>
+      <Hero content={content} meta={meta} />
+      <Statement content={content} />
+      <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+      <Problem content={content} />
+      <Solution content={content} meta={meta} />
+      <Capabilities content={content} meta={meta} />
+      <WhyUs content={content} meta={meta} />
+      <Process content={content} />
+      <RoiBand meta={meta} />
+      <FitFaq content={content} />
+      <FinalCta content={content} meta={meta} />
       <OtherServices current={meta.slug} />
     </main>
   )
 }
 
-/* Shared bits ─────────────────────────────────── */
+/* Shared bits ─────────────────────────────────────────────────── */
 
-/** Small uppercase mono eyebrow with an accent dot. */
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.14em] text-faint">
+    <span className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-faint">
       <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
       {children}
     </span>
   )
 }
 
-function SectionHead({
-  eyebrow,
-  title,
-  intro,
-  center,
+/** A scenic photo that drifts gently against the scroll. Always covers its box. */
+function ParallaxImage({
+  src,
+  range = ['-8%', '8%'],
+  className,
 }: {
-  eyebrow?: string
-  title: string
-  intro?: string
-  center?: boolean
+  src: string
+  range?: [string, string]
+  className?: string
 }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], range)
   return (
-    <div className={center ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
-      {eyebrow && (
-        <Reveal>
-          <div className={center ? 'flex justify-center' : ''}>
-            <Eyebrow>{eyebrow}</Eyebrow>
-          </div>
-        </Reveal>
-      )}
-      <Reveal delay={0.05}>
-        <h2 className="mt-4 font-serif text-[30px] leading-[1.15] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-          {title}
-        </h2>
-      </Reveal>
-      {intro && (
-        <Reveal delay={0.1}>
-          <p className={`mt-4 text-[15px] leading-relaxed text-faint lg:text-base ${center ? 'mx-auto max-w-xl' : ''}`}>
-            {intro}
-          </p>
-        </Reveal>
-      )}
+    <div ref={ref} className={cn('absolute inset-0 overflow-hidden', className)}>
+      <motion.img
+        src={src}
+        alt=""
+        aria-hidden
+        style={{ y, top: '-15%' }}
+        className="absolute left-0 h-[130%] w-full object-cover"
+      />
     </div>
   )
 }
 
-/* Hero ──────────────────────────────────────── */
+/** A glass card, the page's single repeated surface. */
+function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-[22px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-7 backdrop-blur-md',
+        className,
+      )}
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+      {children}
+    </div>
+  )
+}
+
+/** A rounded, hairline-framed scenic photo panel with a soft accent glow. */
+function ImageFrame({
+  src,
+  accent,
+  className,
+}: {
+  src: string
+  accent: string
+  className?: string
+}) {
+  return (
+    <div className={cn('relative overflow-hidden rounded-[24px] border border-line bg-[#070709]', className)}>
+      <img src={src} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `radial-gradient(80% 70% at 50% 30%, ${accent}26, transparent 72%)` }}
+      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070709]/85 via-[#070709]/15 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+    </div>
+  )
+}
+
+/* Hero · scenic landscape, like the home page ────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } },
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } },
 }
 const heroWord: Variants = {
   hidden: { opacity: 0, y: 16, filter: 'blur(12px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.4, ease } },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.3, ease } },
 }
 const heroFade: Variants = {
   hidden: { opacity: 0, y: 14, filter: 'blur(8px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.3, ease } },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.2, ease } },
 }
 
 function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const { open } = useContactModal()
+  const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative flex min-h-[92svh] w-full flex-col items-center justify-center px-6 pb-24 pt-32">
-      {/* Neutral glow — no colour, just a faint lift behind the title */}
+    <section className="relative grid min-h-[100svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
+      {/* Scenic landscape backdrop, drifting on scroll */}
+      <ParallaxImage src={meta.heroImage} range={['-6%', '6%']} />
+      {/* Overlays: darken for the nav, fade the foot into the page */}
+      <div className="absolute inset-0 bg-black/30" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44vh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          background: 'radial-gradient(70% 55% at 50% 18%, rgba(255,255,255,0.05), transparent 70%)',
-        }}
+        style={{ background: `radial-gradient(60% 50% at 50% 28%, ${meta.accent}1a, transparent 66%)` }}
       />
-      {/* Ambient B&W wash, kept sharp and masked into the dark */}
-      <img
-        aria-hidden
-        src={meta.heroImage}
-        alt=""
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[120%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.28] [mask-image:radial-gradient(50%_50%_at_50%_45%,black_20%,transparent_78%)]"
-      />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
 
       <motion.div
         variants={heroContainer}
-        initial="hidden"
+        initial={reduced ? false : 'hidden'}
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        {/* Service mark — the rounded app-style tile from the nav menu */}
-        <motion.div variants={heroFade} className="relative">
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-10 blur-2xl"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.20), transparent 65%)' }}
-          />
-          <img
-            src={meta.tile}
-            alt=""
-            className="h-16 w-16 rounded-[18px] border border-line object-cover shadow-[0_10px_34px_rgba(0,0,0,0.5)]"
-          />
+        <motion.div variants={heroFade}>
+          <Eyebrow>{content.hero.eyebrow}</Eyebrow>
         </motion.div>
 
-        {/* Service name — clear label, replaces the breadcrumb */}
-        <motion.div variants={heroFade} className="mt-5">
-          <span className="text-[13px] font-medium uppercase tracking-[0.2em] text-faint">{content.name}</span>
-        </motion.div>
-
-        <h1 className="mt-5 font-serif text-[40px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[56px] lg:text-[68px] lg:leading-[1.03]">
+        <h1 className="mt-6 font-serif text-[38px] leading-[1.05] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[66px] lg:leading-[1.03]">
           {content.hero.headline.split(' ').map((w, i) => (
-            <motion.span key={i} variants={heroWord} className="mr-[0.2em] inline-block last:mr-0">
+            <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
             </motion.span>
           ))}
@@ -197,7 +198,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
 
         <motion.p
           variants={heroFade}
-          className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-ink-soft/80 lg:text-[17px]"
+          className="mt-7 max-w-xl text-[15.5px] leading-relaxed text-ink-soft/85 lg:text-[17px]"
         >
           {content.hero.subhead}
         </motion.p>
@@ -217,38 +218,22 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
           </RippleButton>
         </motion.div>
       </motion.div>
-
-      {/* Scroll cue */}
-      <motion.div
-        variants={heroFade}
-        initial="hidden"
-        animate="show"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 7, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="text-dim"
-        >
-          <ChevronDown className="h-5 w-5" />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }
 
-/* Intro strip ─────────────────────────────────── */
+/* Statement ─────────────────────────────────────────────────── */
 
-function IntroStrip({ content }: { content: ServiceContent }) {
+function Statement({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1000px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[920px] px-6 py-24 text-center lg:py-32">
       <Reveal>
-        <p className="mx-auto max-w-3xl text-center font-serif text-[22px] leading-[1.4] tracking-[-0.01em] text-ink-soft sm:text-[26px] lg:text-[30px]">
+        <p className="font-serif text-[26px] leading-[1.4] tracking-[-0.01em] text-ink-soft sm:text-[30px] lg:text-[36px]">
           {content.intro.statement}
         </p>
       </Reveal>
       <Reveal delay={0.1}>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-2.5">
           {content.intro.chips.map((chip) => (
             <span
               key={chip}
@@ -264,20 +249,33 @@ function IntroStrip({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Problem ─────────────────────────────────── */
+/* Problem · clean cards, no rails ──────────────────────────────────── */
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <SectionHead eyebrow="The problem" title={content.problem.title} intro={content.problem.intro} />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <Eyebrow>The problem</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {content.problem.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.problem.intro}</p>
+        </Reveal>
+      </div>
+
+      <div className="mt-14 grid gap-5 md:grid-cols-3">
         {content.problem.points.map((p, i) => (
-          <Reveal key={p.title} delay={(i % 3) * 0.08}>
-            <div className="flex h-full flex-col rounded-[20px] border border-line bg-white/[0.02] p-6">
-              <span className="font-mono text-[12px] tracking-[0.12em] text-dim">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-tight text-ink">{p.title}</h3>
-              <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{p.body}</p>
-            </div>
+          <Reveal key={p.title} delay={i * 0.08}>
+            <GlassCard className="h-full">
+              <span className="font-serif text-[40px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-5 text-[18px] font-semibold tracking-tight text-ink">{p.title}</h3>
+              <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{p.body}</p>
+            </GlassCard>
           </Reveal>
         ))}
       </div>
@@ -285,119 +283,155 @@ function Problem({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Solution ───────────────────────────────── */
+/* Solution · sticky media + outcomes checklist (the "sold" moment) ─────────── */
 
-function Solution({ content }: { content: ServiceContent }) {
+function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <SectionHead eyebrow="What it is" title={content.solution.title} />
-          <Reveal delay={0.12}>
-            <p className="mt-6 text-[15.5px] leading-relaxed text-faint lg:text-base">{content.solution.body}</p>
+      <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="lg:sticky lg:top-28">
+          <Reveal>
+            <Eyebrow>What we build</Eyebrow>
           </Reveal>
-          <Reveal delay={0.18}>
-            <BookCallButton className="mt-8 h-11 px-6 text-[14px]">Book a strategy call</BookCallButton>
+          <Reveal delay={0.05}>
+            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              {content.solution.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <ImageFrame src={meta.heroImage} accent={meta.accent} className="mt-8 aspect-[5/4]" />
           </Reveal>
         </div>
-        <Reveal delay={0.1}>
-          <div className="rounded-[24px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-7 backdrop-blur-md lg:p-8">
+
+        <div>
+          <Reveal delay={0.08}>
+            <p className="text-[15.5px] leading-relaxed text-faint lg:text-base">{content.solution.body}</p>
+          </Reveal>
+          <div className="mt-9 rounded-[24px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-7 backdrop-blur-md lg:p-8">
             <span className="text-[12px] font-medium uppercase tracking-[0.14em] text-faint">What you walk away with</span>
             <ul className="mt-6 flex flex-col gap-4">
-              {content.solution.outcomes.map((o) => (
-                <li key={o} className="flex items-start gap-3">
+              {content.solution.outcomes.map((o, i) => (
+                <Reveal as="li" key={o} delay={i * 0.07} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10">
                     <Check className="h-3.5 w-3.5 text-[var(--accent)]" strokeWidth={2.2} />
                   </span>
                   <span className="text-[15px] leading-relaxed text-ink-soft">{o}</span>
-                </li>
+                </Reveal>
               ))}
             </ul>
           </div>
-        </Reveal>
+          <Reveal delay={0.12}>
+            <BookCallButton className="mt-8 h-11 px-6 text-[14px]">Book a strategy call</BookCallButton>
+          </Reveal>
+        </div>
       </div>
     </section>
   )
 }
 
-/* Atmosphere band ─────────────────────────────── */
+/* Capabilities · offset bento (one feature tile + varied cards) ───────────── */
 
-function AtmosphereBand({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  const ref = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
-
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-10 lg:py-16">
-      <Reveal>
-        <div ref={ref} className="relative h-[300px] overflow-hidden rounded-[28px] border border-line sm:h-[380px] lg:h-[440px]">
-          <motion.img
-            src={meta.photo}
-            alt=""
-            style={{ y }}
-            className="absolute inset-0 h-[116%] w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/45" />
-          <div
-            className="absolute inset-0"
-            style={{ background: `radial-gradient(120% 90% at 50% 50%, transparent 30%, rgba(6,6,6,0.7) 100%)` }}
-          />
-          <div className="relative flex h-full items-center justify-center px-6">
-            <p className="max-w-2xl text-center font-serif text-[24px] leading-[1.32] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[36px]">
-              {content.intro.statement}
-            </p>
-          </div>
-        </div>
-      </Reveal>
-    </section>
-  )
-}
-
-/* Capabilities ────────────────────────────── */
-
-function Capabilities({ content }: { content: ServiceContent }) {
+function Capabilities({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+  const items = content.capabilities.items
+  // explicit lg placement so no row is three equal cards
+  const place = [
+    'lg:col-start-1 lg:col-span-5 lg:row-start-1 lg:row-span-2',
+    'lg:col-start-6 lg:col-span-7 lg:row-start-1',
+    'lg:col-start-6 lg:col-span-4 lg:row-start-2',
+    'lg:col-start-10 lg:col-span-3 lg:row-start-2',
+    'lg:col-start-1 lg:col-span-6 lg:row-start-3',
+    'lg:col-start-7 lg:col-span-6 lg:row-start-3',
+  ]
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <SectionHead eyebrow="What's included" title={content.capabilities.title} intro={content.capabilities.intro} center />
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {content.capabilities.items.map((it, i) => (
-          <Reveal key={it.title} delay={(i % 3) * 0.07}>
-            <div className="group relative h-full overflow-hidden rounded-[20px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-6 backdrop-blur-md transition-colors duration-300 hover:border-line-strong">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              <span
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-line text-[13px] font-mono text-ink-soft"
-                style={{ background: 'rgba(255,255,255,0.03)' }}
+      <div className="max-w-2xl">
+        <Reveal>
+          <Eyebrow>{content.capabilities.title}</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <p className="mt-5 text-[16px] leading-relaxed text-muted lg:text-[18px]">{content.capabilities.intro}</p>
+        </Reveal>
+      </div>
+
+      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(170px,1fr)] lg:grid-cols-12 lg:gap-5">
+        {items.map((it, i) => {
+          const feature = i === 0
+          return (
+            <Reveal key={it.title} delay={(i % 3) * 0.06} className={cn('group', place[i])}>
+              <div
+                className={cn(
+                  'relative flex h-full flex-col overflow-hidden rounded-[20px] border border-line p-6 transition-colors duration-300 hover:border-line-strong',
+                  feature ? 'bg-[#070709]' : 'bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-md',
+                )}
               >
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-5 text-[16px] font-semibold tracking-tight text-ink">{it.title}</h3>
-              <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{it.body}</p>
-            </div>
-          </Reveal>
-        ))}
+                {feature && (
+                  <>
+                    <img
+                      src={meta.photo}
+                      alt=""
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
+                    />
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0"
+                      style={{ background: `radial-gradient(80% 70% at 30% 20%, ${meta.accent}33, transparent 65%)` }}
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#070709] to-transparent" />
+                  </>
+                )}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                <div className="relative mt-auto">
+                  <span className="font-mono text-[12px] tracking-[0.12em] text-dim">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className={cn('mt-3 font-semibold tracking-tight text-ink', feature ? 'text-[20px] lg:text-[22px]' : 'text-[16px]')}>
+                    {it.title}
+                  </h3>
+                  <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{it.body}</p>
+                </div>
+              </div>
+            </Reveal>
+          )
+        })}
       </div>
     </section>
   )
 }
 
-/* Process ─────────────────────────────────── */
+/* Why us · selling reasons over a scenic, drifting band ─────────────────── */
 
-function Process({ content }: { content: ServiceContent }) {
+function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative w-full px-6 py-20 lg:py-28">
+    <section className="relative w-full overflow-hidden py-24 lg:py-32">
+      <ParallaxImage src="/cta-landscape.jpg" range={['-10%', '10%']} />
+      <div className="absolute inset-0 bg-bg/80" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(60% 50% at 50% 0%, rgba(255,255,255,0.04), transparent 70%)' }}
+        style={{ background: `radial-gradient(60% 60% at 50% 40%, ${meta.accent}14, transparent 70%)` }}
       />
-      <div className="relative mx-auto w-full max-w-[1100px]">
-        <SectionHead eyebrow="How we work" title={content.process.title} center />
-        {/* Vertical timeline: each step is a node on the centre thread. The dots
-            sit on the page centre line (where ServiceScrollLine's spine runs) and
-            light up as they pass the middle of the viewport. */}
-        <div className="relative mt-14 flex flex-col gap-10 lg:mt-20 lg:gap-2">
-          {content.process.steps.map((s, i) => (
-            <ProcessStep key={s.label} step={s} side={i % 2 === 0 ? 'left' : 'right'} />
+
+      <div className="relative mx-auto w-full max-w-[1100px] px-6">
+        <div className="max-w-2xl">
+          <Reveal>
+            <Eyebrow>Why Nivora</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              {content.differentiators.title}
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="mt-12 grid gap-5 sm:grid-cols-2">
+          {content.differentiators.items.map((d, i) => (
+            <Reveal key={d.title} delay={(i % 2) * 0.08}>
+              <GlassCard className="h-full">
+                <h3 className="text-[17px] font-semibold tracking-tight text-ink">{d.title}</h3>
+                <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{d.body}</p>
+              </GlassCard>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -405,56 +439,30 @@ function Process({ content }: { content: ServiceContent }) {
   )
 }
 
-function ProcessStep({
-  step,
-  side,
-}: {
-  step: { label: string; title: string; body: string }
-  side: 'left' | 'right'
-}) {
-  return (
-    <div className="relative lg:py-9">
-      {/* Dot on the centre thread */}
-      <motion.span
-        aria-hidden
-        className="absolute left-1/2 top-1/2 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full lg:block"
-        initial={{ scale: 0.55, backgroundColor: 'rgba(255,255,255,0.16)', boxShadow: '0 0 0 0 rgba(255,255,255,0)' }}
-        whileInView={{ scale: 1, backgroundColor: 'rgba(255,255,255,0.95)', boxShadow: '0 0 16px 3px rgba(255,255,255,0.3)' }}
-        viewport={{ once: false, margin: '-48% 0px -48% 0px' }}
-        transition={{ duration: 0.4, ease }}
-      />
-      <Reveal>
-        <div
-          className={cn(
-            'lg:w-[calc(50%-2.75rem)]',
-            side === 'left' ? 'lg:mr-auto lg:pr-10 lg:text-right' : 'lg:ml-auto lg:pl-10',
-          )}
-        >
-          <span className="font-serif text-[40px] leading-none text-ink/30 lg:text-[46px]">{step.label}</span>
-          <h3 className="mt-3 text-[18px] font-semibold tracking-tight text-ink">{step.title}</h3>
-          <p className="mt-2.5 text-[14px] leading-relaxed text-faint">{step.body}</p>
-        </div>
-      </Reveal>
-    </div>
-  )
-}
+/* Process · numbered step cards, no rails ───────────────────────────── */
 
-/* Differentiators ─────────────────────────────── */
-
-function Differentiators({ content }: { content: ServiceContent }) {
+function Process({ content }: { content: ServiceContent }) {
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <SectionHead eyebrow="Why Nivora" title={content.differentiators.title} />
-      <div className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
-        {content.differentiators.items.map((it, i) => (
-          <Reveal key={it.title} delay={(i % 2) * 0.08}>
-            <div className="flex gap-4">
-              <span className="mt-1 h-10 w-[3px] shrink-0 rounded-full bg-[var(--accent)]/70" />
-              <div>
-                <h3 className="text-[17px] font-semibold tracking-tight text-ink">{it.title}</h3>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-faint">{it.body}</p>
-              </div>
-            </div>
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <Eyebrow>How we work</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {content.process.title}
+          </h2>
+        </Reveal>
+      </div>
+
+      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {content.process.steps.map((s, i) => (
+          <Reveal key={s.label} delay={i * 0.08}>
+            <GlassCard className="h-full">
+              <span className="font-serif text-[40px] leading-none text-[var(--accent)]/70 lg:text-[46px]">{s.label}</span>
+              <h3 className="mt-5 text-[18px] font-semibold tracking-tight text-ink">{s.title}</h3>
+              <p className="mt-3 text-[14px] leading-relaxed text-faint">{s.body}</p>
+            </GlassCard>
           </Reveal>
         ))}
       </div>
@@ -462,15 +470,60 @@ function Differentiators({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Audience ─────────────────────────────── */
+/* ROI band · only where money-saved is the honest pitch (not consulting) ──── */
 
-function Audience({ content }: { content: ServiceContent }) {
+function RoiBand({ meta }: { meta: ServiceMeta }) {
+  const config = SERVICE_ROI[meta.slug]
+  if (!config) return null // AI Consulting sells the plan, not hours saved
+
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <SectionHead eyebrow="Who it's for" title={content.audience.title} intro={content.audience.body} center />
-      <div className="mx-auto mt-12 grid max-w-4xl gap-5 md:grid-cols-2">
+    <section className="relative w-full border-y border-line py-20 lg:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `radial-gradient(70% 60% at 50% 0%, ${meta.accent}0d, transparent 70%)` }}
+      />
+      <div className="relative mx-auto w-full max-w-[1200px] px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <Reveal>
+            <Eyebrow>{config.eyebrow}</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <p className="mt-5 font-serif text-[24px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
+              {config.framing}
+            </p>
+          </Reveal>
+        </div>
+        <Reveal delay={0.1}>
+          <div className="mt-12">
+            <RoiCalculator accent={meta.accent} />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+/* Fit + FAQ · comparison two-up, then accordion ───────────────────────── */
+
+function FitFaq({ content }: { content: ServiceContent }) {
+  const { open } = useContactModal()
+  const [openIdx, setOpenIdx] = useState<number | null>(0)
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+      <Reveal>
+        <h2 className="max-w-2xl font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+          {content.audience.title}
+        </h2>
+      </Reveal>
+      <Reveal delay={0.06}>
+        <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.audience.body}</p>
+      </Reveal>
+
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
         <Reveal>
-          <div className="h-full rounded-[22px] border border-[var(--accent)]/25 bg-[var(--accent)]/[0.04] p-7">
+          <div className="h-full rounded-[22px] border border-[var(--accent)]/25 bg-[var(--accent)]/[0.05] p-7">
             <h3 className="text-[15px] font-semibold text-ink">A strong fit if</h3>
             <ul className="mt-5 flex flex-col gap-3.5">
               {content.audience.fits.map((f) => (
@@ -496,65 +549,13 @@ function Audience({ content }: { content: ServiceContent }) {
           </div>
         </Reveal>
       </div>
-    </section>
-  )
-}
 
-/* FAQ ─────────────────────────────────── */
-
-function Faq({ content }: { content: ServiceContent }) {
-  const [openIdx, setOpenIdx] = useState<number | null>(0)
-  const { open } = useContactModal()
-  return (
-    <section className="relative mx-auto w-full max-w-[820px] px-6 py-20 lg:py-28">
-      <SectionHead eyebrow="Questions" title="Good to know" center />
-      <div className="mt-12 flex flex-col gap-3">
-        {content.faq.map((item, i) => {
-          const isOpen = openIdx === i
-          return (
-            <Reveal key={item.q} delay={(i % 4) * 0.05}>
-              <div className="overflow-hidden rounded-[18px] border border-line bg-white/[0.02]">
-                <button
-                  type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : i)}
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                >
-                  <span className="text-[15px] font-medium text-ink">{item.q}</span>
-                  <ChevronDown
-                    className={`h-4 w-4 shrink-0 text-faint transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.32, ease }}
-                    >
-                      <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-faint">{item.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </Reveal>
-          )
-        })}
-      </div>
-
-      {/* Extra-questions nudge: route to the Help Center chat, or a real person. */}
-      <Reveal delay={0.05}>
-        <div className="mt-10 flex flex-col items-center gap-3 text-center">
-          <Eyebrow>Need more</Eyebrow>
-          <p className="text-[14px] leading-relaxed text-faint">
+      {/* FAQ */}
+      <div className="mt-16 grid gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
+        <Reveal>
+          <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[30px]">Good to know</h3>
+          <p className="mt-4 text-[14px] leading-relaxed text-faint">
             Still have a question?{' '}
-            <Link
-              to="/help"
-              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
-            >
-              Ask the Nivora assistant
-            </Link>
-            , or{' '}
             <button
               type="button"
               onClick={open}
@@ -564,41 +565,89 @@ function Faq({ content }: { content: ServiceContent }) {
             </button>
             .
           </p>
+        </Reveal>
+        <div className="flex flex-col gap-3">
+          {content.faq.map((item, i) => {
+            const isOpen = openIdx === i
+            return (
+              <Reveal key={item.q} delay={(i % 4) * 0.04}>
+                <div className="overflow-hidden rounded-[18px] border border-line bg-white/[0.02]">
+                  <button
+                    type="button"
+                    onClick={() => setOpenIdx(isOpen ? null : i)}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                  >
+                    <span className="text-[15px] font-medium text-ink">{item.q}</span>
+                    <ChevronDown
+                      className={cn('h-4 w-4 shrink-0 text-faint transition-transform duration-300', isOpen && 'rotate-180')}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.32, ease }}
+                      >
+                        <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-faint">{item.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
-      </Reveal>
+      </div>
     </section>
   )
 }
 
-/* Final CTA ────────────────────────────── */
+/* Final CTA over a scenic image ─────────────────────────────────── */
 
-function FinalCta({ content }: { content: ServiceContent }) {
+function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+  const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative w-full px-6 py-24 lg:py-32">
+    <section className="relative grid w-full place-items-center overflow-hidden px-6 py-32 lg:py-44">
+      <ParallaxImage src={meta.photo} range={['-8%', '8%']} />
+      <div className="absolute inset-0 bg-black/40" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(60% 70% at 50% 50%, rgba(255,255,255,0.05), transparent 70%)' }}
+        style={{ background: `radial-gradient(70% 80% at 50% 50%, ${meta.accent}1f, transparent 60%)` }}
       />
-      <Reveal>
-        <div className="relative mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-[32px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[50px]">
-            {content.finalCta.title}
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">
-            {content.finalCta.body}
-          </p>
-          <div className="mt-9 flex justify-center">
-            <BookCallButton className="h-12 px-7 text-[15px]">{content.finalCta.button}</BookCallButton>
-          </div>
-          <p className="mt-5 text-[13px] text-dim">{content.finalCta.reassurance}</p>
-        </div>
-      </Reveal>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg via-bg/70 to-bg" />
+
+      <motion.div
+        initial={reduced ? false : 'hidden'}
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={heroContainer}
+        className="relative z-10 mx-auto max-w-2xl text-center"
+      >
+        <h2 className="font-serif text-[32px] leading-[1.1] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[52px]">
+          {content.finalCta.title.split(' ').map((w, i) => (
+            <motion.span key={i} variants={heroWord} className="mr-[0.2em] inline-block last:mr-0">
+              {w}
+            </motion.span>
+          ))}
+        </h2>
+        <motion.p variants={heroFade} className="mx-auto mt-6 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">
+          {content.finalCta.body}
+        </motion.p>
+        <motion.div variants={heroFade} className="mt-9 flex justify-center">
+          <BookCallButton className="h-12 px-7 text-[15px]">{content.finalCta.button}</BookCallButton>
+        </motion.div>
+        <motion.p variants={heroFade} className="mt-5 text-[13px] text-dim">
+          {content.finalCta.reassurance}
+        </motion.p>
+      </motion.div>
     </section>
   )
 }
 
-/* Other services ────────────────────────────── */
+/* Other services ────────────────────────────────────────────── */
 
 function OtherServices({ current }: { current: ServiceSlug }) {
   const others = SERVICE_ORDER.filter((s) => s !== current)

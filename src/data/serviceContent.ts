@@ -24,6 +24,8 @@ export interface ServiceContent {
     statement: string
     chips: string[]
   }
+  /** The pinned, scroll-driven line (home-style word reveal). One or two short sentences. */
+  reveal: string
   /** Agitate the real, specific pain before the solution. */
   problem: {
     title: string
@@ -75,10 +77,14 @@ export interface ServiceMeta {
   icon: string
   /** App-style rounded tile mark — the same image shown in the nav Services menu. */
   tile: string
-  /** Per-service ambient image washed faintly behind the hero (unique per service). */
+  /** Scenic landscape photo behind the hero (the home-page look, served from /public). */
   heroImage: string
-  /** Calm atmosphere photo used in the mid-page band. */
+  /** Second scenic photo, used for the pinned scroll-reveal and the parallax band. */
   photo: string
+  /** Looping muted hero-backdrop video name under /media (black bg, blends via screen). */
+  heroVideo: string
+  /** Looping muted section/feature video name under /media. */
+  sectionVideo: string
   /** Accent colour (from the brand palette) used sparingly for glow + detail. */
   accent: string
 }
@@ -97,8 +103,10 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'App Design',
     icon: '/icon-appdesign.png',
     tile: '/service-appdesign.png',
-    heroImage: '/bg-moon.jpg',
-    photo: '/bg-waves.jpg',
+    heroImage: '/bg-waves.jpg',
+    photo: '/bg-dunes-pale.jpg',
+    heroVideo: 'brain',
+    sectionVideo: 'network',
     accent: '#d07a54',
   },
   'local-ai': {
@@ -106,8 +114,10 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'Local AI',
     icon: '/icon-localai.png',
     tile: '/service-localai.png',
-    heroImage: '/bg-dunes-blue.jpg',
-    photo: '/bg-peak-mono.jpg',
+    heroImage: '/bg-peak-mono.jpg',
+    photo: '/bg-moon.jpg',
+    heroVideo: 'orb',
+    sectionVideo: 'marble',
     accent: '#6691a3',
   },
   aios: {
@@ -115,8 +125,10 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AIOS',
     icon: '/icon-aios.png',
     tile: '/service-aios.png',
-    heroImage: '/bg-dunes-mist.jpg',
-    photo: '/bg-mountains-mist.jpg',
+    heroImage: '/bg-mountains-mist.jpg',
+    photo: '/bg-dunes-blue.jpg',
+    heroVideo: 'orbit',
+    sectionVideo: 'cluster',
     accent: '#bda96d',
   },
   'ai-consulting': {
@@ -124,8 +136,10 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AI Consulting',
     icon: '/icon-consulting.png',
     tile: '/service-consulting.png',
-    heroImage: '/bg-dunes-pale.jpg',
-    photo: '/bg-ridges.jpg',
+    heroImage: '/bg-ridges.jpg',
+    photo: '/bg-peak-stars.jpg',
+    heroVideo: 'spark',
+    sectionVideo: 'terrain',
     accent: '#96a766',
   },
 }
