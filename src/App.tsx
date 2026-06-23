@@ -13,6 +13,8 @@ import { WaitlistPage } from '@/pages/WaitlistPage'
 import { AffiliatePage } from '@/pages/AffiliatePage'
 import { HelpCenterPage } from '@/pages/HelpCenterPage'
 import { LegalPage } from '@/pages/LegalPage'
+import { NewsletterConfirmed } from '@/pages/NewsletterConfirmed'
+import { Unsubscribed } from '@/pages/Unsubscribed'
 import { TERMS, PRIVACY } from '@/data/legal'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
 
@@ -33,6 +35,8 @@ export default function App() {
             <Route path="/waitlist" element={<WaitlistPage />} />
             <Route path="/affiliate" element={<AffiliatePage />} />
             <Route path="/help" element={<HelpCenterPage />} />
+            <Route path="/newsletter/confirmed" element={<NewsletterConfirmed />} />
+            <Route path="/unsubscribed" element={<Unsubscribed />} />
             <Route path="/terms" element={<LegalPage doc={TERMS} />} />
             <Route path="/privacy" element={<LegalPage doc={PRIVACY} />} />
             <Route path="*" element={<Home />} />

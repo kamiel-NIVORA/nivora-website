@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 
+// Types for the component
 export interface DockApp {
   id: string
   name: string
@@ -16,6 +17,7 @@ interface MacOSDockProps {
 /**
  * Authentic macOS dock with cosine-based magnification on hover. Icons sit at
  * their resting size; as the cursor nears, they and their neighbours swell.
+ * Self-contained (no external deps); falls back to a CSS bounce on click.
  */
 const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], className = '' }) => {
   const [mouseX, setMouseX] = useState<number | null>(null)
@@ -26,6 +28,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
   const animationFrameRef = useRef<number | undefined>(undefined)
   const lastMouseMoveTime = useRef<number>(0)
 
+  // Responsive size calculations based on viewport
   const getResponsiveConfig = useCallback(() => {
     if (typeof window === 'undefined') {
       return { baseIconSize: 56, maxScale: 1.6, effectWidth: 240 }
@@ -53,6 +56,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
     return () => window.removeEventListener('resize', handleResize)
   }, [getResponsiveConfig])
 
+  // Authentic macOS cosine-based magnification algorithm
   const calculateTargetMagnification = useCallback(
     (mousePosition: number | null) => {
       if (mousePosition === null) return apps.map(() => minScale)

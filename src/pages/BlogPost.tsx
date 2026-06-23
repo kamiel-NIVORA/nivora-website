@@ -1,16 +1,15 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
-import { Avatar, authorPhoto } from '@/components/ui/Avatar'
+import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
-import { usePosts } from '@/lib/blog'
-import { cn } from '@/lib/utils'
+import { BlogCover } from '@/components/BlogCover'
+import { usePost } from '@/lib/blog'
 
 export function BlogPost() {
   const { slug } = useParams()
-  const { posts, loaded } = usePosts()
-  const post = posts.find((p) => p.slug === slug)
+  const { post, loaded } = usePost(slug)
 
   // Per-post SEO: set the tab title and meta description, then restore on leave.
   useEffect(() => {
@@ -29,15 +28,9 @@ export function BlogPost() {
   }, [post])
 
   if (!post) {
-    // Still waiting on the live posts (e.g. a freshly published one not in the
-    // bundled set yet) — show a quiet loading state before deciding it's a 404.
-    if (!loaded) {
-      return (
-        <main className="mx-auto flex min-h-[70vh] w-full max-w-[760px] items-center justify-center px-6">
-          <span className="text-sm text-faint">Loading…</span>
-        </main>
-      )
-    }
+    // Still loading the live posts (direct link to a DB-only post): hold the
+    // layout instead of flashing "not found".
+    if (!loaded) return <main className="min-h-[70vh]" />
     return (
       <main className="mx-auto flex min-h-[70vh] w-full max-w-[760px] flex-col items-center justify-center px-6 text-center">
         <h1 className="font-serif text-3xl text-ink">Article not found</h1>
@@ -64,7 +57,7 @@ export function BlogPost() {
 
           <Reveal mode="mount" delay={0.08}>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[13px]">
-              <Avatar name={post.author} src={authorPhoto(post.author)} size="md" />
+              <Avatar name={post.author} size="md" />
               <span className="text-ink-soft">{post.author}</span>
               <span className="text-dim">·</span>
               <span className="text-faint">{post.category}</span>
@@ -74,79 +67,10 @@ export function BlogPost() {
           </Reveal>
         </header>
 
-        {/* Cover — optional object-position lift, a big centered serif label
-            (brand-cover style), and/or app-icon chips at the bottom corners. */}
+        {/* Cover */}
         <Reveal mode="mount" delay={0.12}>
-          <div className="relative mt-12 overflow-hidden rounded-3xl border border-line isolate">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="block aspect-[16/9] w-full object-cover"
-              style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
-            />
-
-            {/* Occluded label: the word sits BEHIND the bright subject. A second
-                copy of the photo on top with mix-blend-lighten lets the dark sky
-                reveal the word while the bright peak covers it (the "24M" depth). */}
-            {post.coverLabel && post.coverOcclude && (
-              <>
-                <div
-                  className="pointer-events-none absolute inset-x-0 flex justify-center px-6"
-                  style={{ top: post.coverLabelY ?? '50%', transform: 'translateY(-50%)' }}
-                >
-                  <span className="font-serif text-[46px] leading-none tracking-[0.01em] text-white sm:text-[70px] lg:text-[84px]">
-                    {post.coverLabel}
-                  </span>
-                </div>
-                <img
-                  src={post.image}
-                  alt=""
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-lighten"
-                  style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
-                />
-              </>
-            )}
-
-            {/* Plain centered serif label (brand-cover style) */}
-            {post.coverLabel && !post.coverOcclude && (
-              <div className="pointer-events-none absolute inset-0 grid place-items-center">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_56%_48%_at_50%_50%,rgba(0,0,0,0.34),transparent_70%)]" />
-                <span className="relative px-6 text-center font-serif text-[44px] leading-none tracking-[0.01em] text-white/95 [text-shadow:0_2px_22px_rgba(0,0,0,0.55)] sm:text-[64px] lg:text-[76px]">
-                  {post.coverLabel}
-                </span>
-              </div>
-            )}
-
-            {/* App-icon chips, one per bottom corner */}
-            {post.coverIcons && (
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5">
-                <div className="flex">
-                  {post.coverIcons[0] && (
-                    <CoverChip>
-                      <img
-                        src={post.coverIcons[0].src}
-                        alt=""
-                        className="h-5 w-5 rounded-[6px] object-cover"
-                      />
-                      {post.coverIcons[0].name}
-                    </CoverChip>
-                  )}
-                </div>
-                <div className="flex">
-                  {post.coverIcons[1] && (
-                    <CoverChip>
-                      <img
-                        src={post.coverIcons[1].src}
-                        alt=""
-                        className="h-5 w-5 rounded-[6px] object-cover"
-                      />
-                      {post.coverIcons[1].name}
-                    </CoverChip>
-                  )}
-                </div>
-              </div>
-            )}
+          <div className="mt-12 aspect-[16/9] overflow-hidden rounded-3xl border border-line">
+            <BlogCover post={post} variant="hero" />
           </div>
         </Reveal>
 
@@ -190,7 +114,6 @@ export function BlogPost() {
                       alt={block.alt}
                       loading="lazy"
                       className="aspect-[16/9] w-full object-cover"
-                      style={block.position ? { objectPosition: block.position } : undefined}
                     />
                   </div>
                   {block.caption && (
@@ -217,19 +140,5 @@ export function BlogPost() {
         </div>
       </article>
     </main>
-  )
-}
-
-/** Small frosted-glass chip overlaid on a cover image (a word or an app icon). */
-function CoverChip({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3.5 py-1.5 text-[12.5px] font-medium text-white shadow-[0_4px_20px_-6px_rgba(0,0,0,0.7)] backdrop-blur-md',
-        className,
-      )}
-    >
-      {children}
-    </span>
   )
 }

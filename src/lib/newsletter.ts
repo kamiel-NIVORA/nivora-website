@@ -1,32 +1,40 @@
 /**
- * Newsletter signup. Writes to the shared Supabase `newsletter_subscribers`
- * table (the AIOS Outbound > Newsletter tool reads + sends from the same list).
- * The anon key is public by design; RLS only allows anonymous INSERT here.
+ * "Keep me posted" signup. Posts to the Nivora backend, which stores the email
+ * as `pending` and sends a double opt-in confirmation mail (the subscriber only
+ * becomes active after clicking the link). The backend base URL falls back to
+ * the known production API so this works on deploy without extra config.
  */
-const SUPABASE_URL =
-  (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? 'https://agpjxjujzjzasgizpphz.supabase.co'
-const SUPABASE_ANON_KEY =
-  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ?? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFncGp4anVqemp6YXNnaXpwcGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTk5MzQsImV4cCI6MjA4NTk3NTkzNH0.-Rz-xk09qfg39dsBMXYRApzktEDz6qr1rsnscF_JX3Q'
+const API_BASE = import.meta.env.VITE_NIVORA_API || 'https://nivora-api.srv938837.hstgr.cloud'
 
-export async function subscribeEmail(
-  email: string,
-  source = 'website',
-): Promise<{ ok: boolean; already?: boolean }> {
+export type SubscribeResult = {
+  ok: boolean
+  /** 'pending' (confirm mail sent) | 'already_subscribed' */
+  status?: string
+  error?: string
+}
+
+export async function subscribe(input: {
+  email: string
+  name?: string
+  product?: string
+}): Promise<SubscribeResult> {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/newsletter_subscribers`, {
+    const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
       method: 'POST',
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
-      },
-      body: JSON.stringify({ email: email.trim().toLowerCase(), source }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: input.email.trim(),
+        name: input.name?.trim() || undefined,
+        product: input.product || undefined,
+        source: input.product ? `website:${input.product}` : 'website',
+      }),
     })
-    if (res.ok) return { ok: true }
-    if (res.status === 409) return { ok: true, already: true } // unique email = already subscribed
-    return { ok: false }
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok || data.ok === false) {
+      return { ok: false, error: data.error || 'Something went wrong. Please try again.' }
+    }
+    return { ok: true, status: data.status }
   } catch {
-    return { ok: false }
+    return { ok: false, error: 'Network error. Please check your connection and try again.' }
   }
 }

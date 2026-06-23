@@ -24,9 +24,9 @@ const STARTER_PROMPTS = [
 
 const PLACEHOLDERS = ['Message Nivora.', 'What can we build for you?', 'How does local AI work?']
 
-/* ───────────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────────────────
    Page
-   ─────────────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────────────────────────── */
 export function HelpCenterPage() {
   const reduced = usePrefersReducedMotion()
   const humanRef = useRef<HTMLDivElement>(null)
@@ -65,7 +65,7 @@ export function HelpCenterPage() {
   )
 }
 
-/* Shared ─────────────────────────────────────────────────────── */
+/* Shared ─────────────────────────────────────────────────────────────────── */
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -76,7 +76,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* Hero ────────────────────────────────────────────────────────── */
+/* Hero ─────────────────────────────────────────────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -151,7 +151,7 @@ function Hero({ reduced }: { reduced: boolean }) {
   )
 }
 
-/* Chat card ───────────────────────────────────────────────────── */
+/* Chat card ──────────────────────────────────────────────────────────────── */
 
 function ChatCard({ onTalkToHuman }: { onTalkToHuman: () => void }) {
   const reduced = usePrefersReducedMotion()
@@ -240,7 +240,7 @@ function OnlineDot({ reduced }: { reduced: boolean }) {
   )
 }
 
-/* Greeting / empty state ────────────────────────────────────────── */
+/* Greeting / empty state ───────────────────────────────────────────────────── */
 
 function GreetingState({ reduced, onPick }: { reduced: boolean; onPick: (q: string) => void }) {
   return (
@@ -272,7 +272,7 @@ function GreetingState({ reduced, onPick }: { reduced: boolean; onPick: (q: stri
   )
 }
 
-/* Messages ────────────────────────────────────────────────────── */
+/* Messages ─────────────────────────────────────────────────────────────────── */
 
 function Message({
   message,
@@ -416,7 +416,7 @@ function TypingIndicator({ reduced }: { reduced: boolean }) {
   )
 }
 
-/* Composer ────────────────────────────────────────────────────── */
+/* Composer ─────────────────────────────────────────────────────────────────── */
 
 function Composer({
   onSend,
@@ -547,7 +547,7 @@ function SendButton({ canSend, busy, onClick }: { canSend: boolean; busy: boolea
   )
 }
 
-/* Human contact card ──────────────────────────────────────────── */
+/* Human contact card ───────────────────────────────────────────────────────── */
 
 function HumanCard({ innerRef }: { innerRef: RefObject<HTMLDivElement | null> }) {
   const { copiedKey, flash } = useCopyFeedback()
@@ -668,7 +668,7 @@ function ContactRow({
   )
 }
 
-/* Reassurance + final band ─────────────────────────────────────── */
+/* Reassurance + final band ─────────────────────────────────────────────────── */
 
 function ReassuranceStrip() {
   const items = ['Usually a reply within a day.', 'We speak English and Dutch.', 'No accounts, no tracking.']

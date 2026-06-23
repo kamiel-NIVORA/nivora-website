@@ -10,7 +10,17 @@ export type PostBlock =
   | string
   | { h2: string }
   | { quote: string }
-  | { image: string; alt: string; caption?: string; position?: string }
+  | { image: string; alt: string; caption?: string }
+
+/** A logo/photo placed on the cover. x/y/size are percentages of the cover box
+ *  (set by the AIOS cover editor); legacy icons without them lay out as a row. */
+export type CoverIcon = {
+  src: string
+  name?: string
+  x?: number
+  y?: number
+  size?: number
+}
 
 export type Post = {
   slug: string
@@ -19,19 +29,15 @@ export type Post = {
   author: string
   date: string
   image: string
-  /** object-position for the hero crop, e.g. 'center 28%' to lift a tall photo. */
-  imagePosition?: string
-  /** Big serif word shown on the hero (magazine-cover style). */
-  coverLabel?: string
-  /** When true, the bright subject occludes the label for a sense of depth
-   *  (works on bright-subject-on-dark photos, e.g. the snow peak on black). */
-  coverOcclude?: boolean
-  /** Vertical anchor of the occluded label, e.g. '40%' (CSS top). */
-  coverLabelY?: string
-  /** App-logo chips on the hero (one per bottom corner). */
-  coverIcons?: { src: string; name: string }[]
   excerpt: string
   body: PostBlock[]
+  /** Optional object-position for the cover image (e.g. "center 40%"). */
+  imagePosition?: string
+  /** Optional cover overlay authored in the AIOS (rendered by BlogCover). */
+  coverLabel?: string
+  coverLabelY?: string
+  coverOcclude?: boolean
+  coverIcons?: CoverIcon[]
 }
 
 export const AUTHOR_ROLE = 'Founder'
@@ -44,11 +50,6 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'Jun 20, 2026',
     image: '/images/blog-box-voice-launch.jpg',
-    coverLabel: 'Box & Voice',
-    coverIcons: [
-      { src: '/box-logo.png', name: 'Box' },
-      { src: '/voice-logo.png', name: 'Voice' },
-    ],
     excerpt:
       'After months of building quietly, we are ready to introduce the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text.',
     body: [
@@ -75,8 +76,6 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'Jun 6, 2026',
     image: '/images/blog-ai-progress.jpg',
-    imagePosition: 'center 78%',
-    coverLabel: 'AI progress',
     excerpt:
       'An honest progress update from inside the build. What is working now, what we changed our minds about, and why the quiet, unglamorous parts are the ones we are proudest of.',
     body: [
@@ -109,10 +108,6 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'May 22, 2026',
     image: '/images/blog-local-peak.jpg',
-    imagePosition: 'center 42%',
-    coverLabel: 'Local AI',
-    coverOcclude: true,
-    coverLabelY: '40%',
     excerpt:
       'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',
     body: [
@@ -123,7 +118,6 @@ export const POSTS: Post[] = [
       {
         image: '/images/blog-local-horizon.jpg',
         alt: 'A lone figure standing on a wide beach, facing the open sea',
-        position: 'center 88%',
         caption:
           'Owning the system you depend on changes how it feels to use it. The horizon is yours, not rented.',
       },

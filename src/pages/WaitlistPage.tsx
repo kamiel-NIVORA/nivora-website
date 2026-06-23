@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
+import { subscribe } from '@/lib/newsletter'
 
 /** Map the ?product= query to a friendly label. */
 const PRODUCT_LABELS: Record<string, string> = {
@@ -14,26 +15,36 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function WaitlistPage() {
   const [params] = useSearchParams()
-  const product = PRODUCT_LABELS[(params.get('product') ?? '').toLowerCase()]
+  const productSlug = (params.get('product') ?? '').toLowerCase()
+  const product = PRODUCT_LABELS[productSlug]
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  const [already, setAlready] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const title = product ? `Be first to use ${product}` : 'Join the waiting list'
   const subtitle = product
     ? `${product} is almost ready. Leave your email and we'll let you know the moment it goes live, with early access before anyone else.`
     : "Our tools are almost ready. Leave your email and we'll let you know the moment they go live, with early access before anyone else."
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault()
     if (!EMAIL_RE.test(email.trim())) {
       setError('Please enter a valid email address.')
       return
     }
     setError(null)
-    // Front-end only for now: no storage, just confirm.
+    setSubmitting(true)
+    const res = await subscribe({ email, name, product: productSlug || undefined })
+    setSubmitting(false)
+    if (!res.ok) {
+      setError(res.error ?? 'Something went wrong. Please try again.')
+      return
+    }
+    setAlready(res.status === 'already_subscribed')
     setDone(true)
   }
 
@@ -80,11 +91,19 @@ export function WaitlistPage() {
                     <Check className="h-5 w-5" strokeWidth={2.2} />
                   </span>
                   <h2 className="mt-5 font-serif text-[22px] tracking-[-0.01em] text-ink">
-                    You're on the list
+                    {already ? "You're already on the list" : 'Almost there'}
                   </h2>
                   <p className="mt-2.5 max-w-xs text-[14px] leading-relaxed text-faint">
-                    We'll email you at <span className="text-ink-soft">{email.trim()}</span> the moment
-                    {product ? ` ${product} launches.` : ' it launches.'}
+                    {already ? (
+                      <>
+                        We already have <span className="text-ink-soft">{email.trim()}</span>. You are all set.
+                      </>
+                    ) : (
+                      <>
+                        We sent a confirmation link to <span className="text-ink-soft">{email.trim()}</span>. Click
+                        it to confirm and you are on the list.
+                      </>
+                    )}
                   </p>
                 </motion.div>
               ) : (
@@ -119,13 +138,23 @@ export function WaitlistPage() {
                   {error && <span className="px-1 text-[12.5px] text-terracotta">{error}</span>}
                   <button
                     type="submit"
-                    className="group mt-1 inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-white/90"
+                    disabled={submitting}
+                    className="group mt-1 inline-flex h-12 items-center justify-center gap-2 rounded-[14px] bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    Join the waiting list
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                      strokeWidth={1.8}
-                    />
+                    {submitting ? (
+                      <>
+                        Joining
+                        <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.8} />
+                      </>
+                    ) : (
+                      <>
+                        Join the waiting list
+                        <ArrowRight
+                          className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                          strokeWidth={1.8}
+                        />
+                      </>
+                    )}
                   </button>
                   <p className="mt-1 text-center text-[12px] text-dim">
                     No spam. One email when we launch.

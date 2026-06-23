@@ -1,3 +1,12 @@
+<!-- NIVORA:VISION:START -->
+## 🎯 Werkruimte-visie — Nivora website
+
+Dit is het gedeelde doel/de context van deze werkruimte (beheerd door Nivora Dev).
+Houd hier rekening mee bij alles wat je in deze map doet.
+
+ik wil hier de wbesite verder af maken van nivora en na elke update wil ik dat de agent het door pushed naar github en vercel
+<!-- NIVORA:VISION:END -->
+
 # Nivora Works — website
 
 Marketing website voor Nivora Works (Vite + React + TypeScript, react-router). Deze repo is `kamiel-NIVORA/nivora-website`.

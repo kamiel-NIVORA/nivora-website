@@ -1,19 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Reveal } from '@/components/animations/Reveal'
 import { PostCard } from '@/components/PostCard'
-import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
 
 export function BlogIndex() {
-  const { posts: all } = usePosts()
+  const { posts: allPosts } = usePosts()
   const [active, setActive] = useState('View All')
-
-  const categories = useMemo(
-    () => ['View All', ...Array.from(new Set(all.map((p) => p.category)))],
-    [all],
-  )
-  const posts = active === 'View All' ? all : all.filter((p) => p.category === active)
+  const categories = ['View All', ...Array.from(new Set(allPosts.map((p) => p.category)))]
+  const posts = active === 'View All' ? allPosts : allPosts.filter((p) => p.category === active)
 
   return (
     <main>
@@ -53,13 +48,6 @@ export function BlogIndex() {
             </Reveal>
           ))}
         </div>
-
-        {/* Newsletter */}
-        <Reveal delay={0.1}>
-          <div className="mt-20">
-            <NewsletterSignup source="blog" />
-          </div>
-        </Reveal>
       </section>
     </main>
   )

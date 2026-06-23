@@ -1,8 +1,8 @@
-# 🧠 Werkruimte-brein — nivora website
+# 🧠 Werkruimte-brein — Nivora website
 
 ## 🎯 Visie
 
-_Nog geen visie vastgelegd._
+ik wil hier de wbesite verder af maken van nivora en na elke update wil ik dat de agent het door pushed naar github en vercel
 
 ## 📋 Open taken
 
@@ -14,28 +14,28 @@ _Nog niets afgerond._
 
 ## 🗒️ Logboek
 
-- 📌 22 jun, 12:03 · **Uitkomst** — everything and deploy to Vercel, if you want. _(Agent 2)_
-- 📌 22 jun, 12:00 · **Uitkomst** — ⎿ Tip: Did you know you can drag and drop image files into your terminal? _(Agent 2)_
-- ✅ 22 jun, 11:58 · **Taak klaar** — rondde een taak af _(Agent 2)_
-- 📌 22 jun, 11:55 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:53 · **Uitkomst** — welek github _(Agent 4)_
-- 📌 22 jun, 11:50 · **Uitkomst** — actually fit." _(Agent 4)_
-- 📌 22 jun, 11:49 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:49 · **Uitkomst** — (disable recaps in /config) _(Agent 2)_
-- 📌 22 jun, 11:49 · **Uitkomst** — hier prompt : _(Agent 4)_
-- ✅ 22 jun, 11:49 · **Taak klaar** — rondde een taak af _(Agent 4)_
-- 📌 22 jun, 11:48 · **Uitkomst** — Design-led, bouw als logisch vervolg _(Agent 4)_
-- 📌 22 jun, 11:47 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:47 · **Uitkomst** — to #products. Next: commit today's changes and deploy to Vercel if you want. (disable reca _(Agent 2)_
-- 📌 22 jun, 11:45 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:43 · **Uitkomst** — push naar github en vercel !! en doe dit nu altijd ! _(Agent 4)_
-- 📌 22 jun, 11:43 · **Uitkomst** — (disable recaps in /config) _(Agent 2)_
-- 📌 22 jun, 11:42 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:41 · **Uitkomst** — push naar github en vercel !! en doe dit nu altijd ! _(Agent 4)_
-- 📌 22 jun, 11:40 · **Uitkomst** — push naar github en vercel !! en doe dit nu altijd ! _(Agent 4)_
-- 📌 22 jun, 11:40 · **Uitkomst** — push naar github en vercel !! en doe dit nu altijd ! _(Agent 4)_
-- 📌 22 jun, 11:37 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:34 · **Uitkomst** — whether to finish App Design's remaining sections or finetune backgrounds. (disable recaps _(Agent 3)_
-- 📌 22 jun, 11:28 · **Uitkomst** — whether to finish App Design's remaining sections or finetune backgrounds. (disable recaps _(Agent 3)_
-- 📌 22 jun, 11:28 · **Uitkomst** — products-section-rebuild _(Agent 4)_
-- 📌 22 jun, 11:28 · **Uitkomst** — (disable recaps in /config) _(Agent 2)_
+- 📌 23 jun, 19:55 · **Uitkomst** — Worked for 20m 5s _(Agent 2)_
+- ✅ 23 jun, 19:52 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- ✅ 23 jun, 19:50 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- ✅ 23 jun, 19:49 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- 📌 23 jun, 19:24 · **Uitkomst** — Crunched for 10s _(Agent 2)_
+- 📌 23 jun, 19:22 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:21 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:21 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:20 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:19 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:18 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:17 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 19:13 · **Uitkomst** — """Upload binary naar Supabase Storage with retry. Returnt (public_url, error).""" _(Agent 1)_
+- 📌 23 jun, 18:58 · **Uitkomst** — Bij de blog en de pagina moet het ook hersteld of veranderd worden. Waarom? Ten eerste moe _(Agent 1)_
+- 📌 23 jun, 18:55 · **Uitkomst** — Bij de blog en de pagina moet het ook hersteld of veranderd worden. Waarom? Ten eerste moe _(Agent 1)_
+- 📌 23 jun, 18:52 · **Uitkomst** — Bij de blog en de pagina moet het ook hersteld of veranderd worden. Waarom? Ten eerste moe _(Agent 1)_
+- ✅ 23 jun, 18:52 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- ✅ 23 jun, 18:51 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- ✅ 23 jun, 18:49 · **Taak klaar** — rondde een taak af _(Agent 1)_
+- 📌 23 jun, 18:35 · **Uitkomst** — Sautéed for 58s _(home pagina)_
+- 📌 23 jun, 18:35 · **Uitkomst** — Next: you confirm the products background looks right or send a higher-res export to swap _(company pagina's)_
+- 📌 23 jun, 18:31 · **Uitkomst** — doe het nu gewoon zie nog geen verschil bij blog pagina en ook niet bij _(connection's)_
+- 📌 23 jun, 18:21 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(connection's)_
+- 📌 23 jun, 18:15 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(connection's)_
+- 📌 23 jun, 18:07 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(connection's)_

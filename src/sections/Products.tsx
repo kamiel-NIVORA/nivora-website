@@ -19,6 +19,15 @@ const GLOW = '/IMG_0683.JPG'
 
 /**
  * Our Products — a bento of the Nivora tools.
+ *
+ * Five cards: Box (converging inboxes), Voice (a wide hero where spoken words
+ * flow as ribbons of text and resolve into clean copy), and three smaller
+ * utility cards — Made for mobile, Made for desktop, and a locked Download rack.
+ *
+ * It mirrors the "Our Services" language: glossy frosted-glass cards lifted on a
+ * soft glow, paired with solid near-black cards for contrast. As the section
+ * scrolls into view the cards drift in from their edges and settle together.
+ * Every card is a doorway to the waiting list.
  */
 export function Products() {
   const bentoRef = useRef<HTMLDivElement | null>(null)
@@ -26,6 +35,7 @@ export function Products() {
     target: bentoRef,
     offset: ['start 0.92', 'start 0.4'],
   })
+  // One spring drives every card so the assembly glides instead of tracking the wheel.
   const progress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 26,
@@ -34,11 +44,12 @@ export function Products() {
 
   return (
     <section id="products" className="relative w-full overflow-hidden py-28 lg:py-36">
+      {/* Ambient glow — softly blurred, masked into the dark, so the glass cards glow */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <img
           src={GLOW}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-55 blur-[3px] [mask-image:linear-gradient(to_bottom,transparent,black_16%,black_84%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_16%,black_84%,transparent)]"
+          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
         />
       </div>
 
@@ -52,7 +63,7 @@ export function Products() {
           ref={bentoRef}
           className="mt-16 grid grid-cols-1 gap-5 lg:grid-cols-12 lg:[grid-template-rows:420px_300px] lg:gap-6"
         >
-          {/* Box */}
+          {/* ── Box — tall black card, converging-apps animation ── */}
           <BentoCard
             progress={progress}
             dx={-44}
@@ -64,7 +75,7 @@ export function Products() {
             <BoxCard />
           </BentoCard>
 
-          {/* Made for mobile */}
+          {/* ── Made for mobile — glass card, top middle ── */}
           <BentoCard
             progress={progress}
             dy={-26}
@@ -76,7 +87,7 @@ export function Products() {
             <MobileCard />
           </BentoCard>
 
-          {/* Voice */}
+          {/* ── Voice — wide black hero, the speech-to-clean-copy flow ── */}
           <BentoCard
             progress={progress}
             dx={30}
@@ -90,7 +101,7 @@ export function Products() {
             <VoiceCard />
           </BentoCard>
 
-          {/* Made for desktop — live macOS dock */}
+          {/* ── Made for desktop — wide glass card with the live macOS dock ── */}
           <BentoCard
             progress={progress}
             dy={40}
@@ -100,7 +111,7 @@ export function Products() {
             <DesktopCard />
           </BentoCard>
 
-          {/* Download */}
+          {/* ── Download — small glass card, locked until launch ── */}
           <BentoCard
             progress={progress}
             dx={32}
@@ -118,6 +129,12 @@ export function Products() {
   )
 }
 
+/* ──────────────────────────────────────────────────────────────
+   Card shell — converge-on-scroll wrapper, glass or black, with the same
+   frosted gloss the service cards use. When `href` is set the whole card is a
+   link to the waiting list: an overlay anchor sits under the (pointer-events
+   transparent) content, and any real button inside re-enables its own clicks.
+   ────────────────────────────────────────────────────────────── */
 function BentoCard({
   progress,
   dx = 0,
@@ -155,6 +172,7 @@ function BentoCard({
         className,
       )}
     >
+      {/* Frosted sheen — diagonal glow on glass, a quiet top hairline on both */}
       {!dark && (
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
       )}
@@ -174,6 +192,7 @@ function BentoCard({
   )
 }
 
+/* Small shared bits ──────────────────────────────────────────── */
 function ComingSoon() {
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
@@ -195,13 +214,16 @@ function AppLogo({ src }: { src: string }) {
   )
 }
 
+/* ── Card 1 · Box ──────────────────────────────────────────── */
 function BoxCard() {
   return (
     <>
+      {/* Converging-apps animation — every channel resolves into Box */}
       <div className="relative flex-1 overflow-hidden">
         <BoxConverge />
       </div>
 
+      {/* Text */}
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/box-logo.png" />
@@ -211,6 +233,8 @@ function BoxCard() {
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">
           Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.
         </p>
+        {/* Presentational — the whole card is already the link, so this just
+            reads as the call to action (avoids a duplicate keyboard tab stop). */}
         <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
           Join the waiting list
           <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
@@ -220,14 +244,18 @@ function BoxCard() {
   )
 }
 
+/* ── Card 2 · Voice — wide hero with the speech-to-clean-copy flow ────────── */
 function VoiceCard() {
   return (
     <div className="relative h-full">
+      {/* Full-bleed flow + node — escape the card padding, clipped to its corners */}
       <div className="pointer-events-none absolute -inset-7 overflow-hidden rounded-[28px] lg:-inset-8">
         <VoiceSlingers />
+        {/* Top scrim so the label reads cleanly above the low flow */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,10,0.94),rgba(10,10,10,0.45)_20%,transparent_44%)]" />
       </div>
 
+      {/* Label — anchored top-left, above the node, ribbon and correction pills */}
       <div className="relative z-[1]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/voice-logo.png" />
@@ -242,6 +270,7 @@ function VoiceCard() {
   )
 }
 
+/* ── Card 3 · Made for mobile (empty phone-bottom frame) ────────────────── */
 function MobileCard() {
   return (
     <>
@@ -262,6 +291,7 @@ function MobileCard() {
   )
 }
 
+/* ── Card 4 · Made for desktop (empty browser-window frame) ─────────────── */
 const DOCK_APPS: DockApp[] = [
   { id: 'finder', name: 'Finder', icon: 'https://cdn.jim-nielsen.com/macos/1024/finder-2021-09-10.png?rf=1024' },
   { id: 'calculator', name: 'Calculator', icon: 'https://cdn.jim-nielsen.com/macos/1024/calculator-2021-04-29.png?rf=1024' },
@@ -295,6 +325,7 @@ function DesktopCard() {
   )
 }
 
+/* ── Card 5 · Download (locked until launch — lock only, no caption) ──────── */
 const PLATFORMS: { name: string; Glyph: (p: SVGProps<SVGSVGElement>) => ReactNode }[] = [
   { name: 'iPhone', Glyph: AppleGlyph },
   { name: 'Mac', Glyph: AppleGlyph },
@@ -307,6 +338,7 @@ function DownloadCard() {
     <>
       <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
 
+      {/* Platform rack — blurred + dimmed, with just a clean lock badge over it */}
       <div className="relative mt-5 flex-1">
         <div className="grid h-full grid-cols-2 gap-2.5 opacity-40 blur-[2px]">
           {PLATFORMS.map(({ name, Glyph }) => (
@@ -329,6 +361,7 @@ function DownloadCard() {
   )
 }
 
+/* ── Monochrome platform glyphs (white, never the logo colours) ─────────── */
 function AppleGlyph(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
