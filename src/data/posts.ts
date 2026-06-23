@@ -39,6 +39,7 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'Jun 20, 2026',
     image: '/images/blog-box-voice-launch.jpg',
+    coverLabel: 'Box & Voice',
     coverIcons: [
       { src: '/box-logo.png', name: 'Box' },
       { src: '/voice-logo.png', name: 'Voice' },
