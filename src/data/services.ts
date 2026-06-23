@@ -211,12 +211,12 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       chips: ['You own it', 'Private by design', 'One source of truth'],
     },
     reveal:
-      'Ten disconnected tools, replaced by one system your whole company runs on. You enter it once, and it stays true everywhere.',
+      'All your disconnected tools, replaced by one system your whole company runs on. You enter it once, and it stays true everywhere.',
     problem: {
-      title: "Your company runs on ten tools that don't talk to each other",
+      title: "Your company runs on a tangle of tools that don't talk to each other",
       intro: 'It grew one app at a time. Notion for docs, Sheets for numbers, a CRM, Slack, a dozen tabs. Each made sense alone. Together they cost your team hours every single day.',
       points: [
-        { title: 'You enter the same thing five times', body: 'A new client lands in the CRM, then gets copied into a spreadsheet, a project board, and an invoice. Every copy is a chance to get it wrong, and someone always does.' },
+        { title: 'You enter the same thing over and over', body: 'A new client lands in the CRM, then gets copied into a spreadsheet, a project board, and an invoice. Every copy is a chance to get it wrong, and someone always does.' },
         { title: 'Your knowledge scatters, then walks out the door', body: "The answer is somewhere: a doc, a thread, someone's head. Finding it takes longer than redoing the work. And when people leave, what they knew leaves with them." },
         { title: 'Nobody knows which number is right', body: 'Two tools show two totals and nobody trusts either. You end up deciding on figures you only half believe, because your tools never agree on the real picture.' },
       ],
@@ -225,7 +225,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       title: 'One system, built around how you actually run',
       body: 'AIOS replaces the scatter of disconnected tools with a single system shaped to your operations. We map how your business works, then build one data model and custom modules for your CRM, projects, ops, and knowledge, all connected underneath. On top of that, AI agents act across your workflows instead of waiting for someone to click between apps.',
       outcomes: [
-        'One system instead of ten, your team works in a single place',
+        'One system instead of many, your team works in a single place',
         'Enter data once, it stays right everywhere, no more re-typing',
         'AI that does real work across your operations, not a chatbot in a corner',
         'One source of truth, so every number finally agrees',
@@ -271,7 +271,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
         'Owners ready to build the right foundation, not bolt on another patch',
       ],
       notFor: [
-        'Very small teams a couple of apps still serve fine',
+        'Very small teams still well served by a couple of apps',
         'Anyone happy with off-the-shelf software exactly as it is',
         'Teams unwilling to change how they work to run on one system',
       ],
@@ -285,7 +285,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       { q: 'How do we get started?', a: "Book a strategy call. We'll talk through how your business runs today and whether AIOS is the right fit, before any commitment. If it's not right for you yet, we'll tell you straight." },
     ],
     finalCta: {
-      title: "Stop running your company on ten tools that don't talk.",
+      title: "Stop running your company on tools that don't talk to each other.",
       body: "If your business has outgrown the patchwork, AIOS gives it one system to run on, built around how you actually work, owned by you. Let's map what it would replace and whether it's the right move.",
       button: 'Book a strategy call',
       reassurance: 'A 30-minute call. No pitch, no obligation, just a straight answer on whether this is the right fit. We usually reply within a day.',
@@ -353,7 +353,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
         { title: 'We build, so the plan is buildable', body: "Our roadmaps come from people who ship real systems. Nothing in your plan is a slide that can't survive contact with reality." },
         { title: 'We have no tool to sell you', body: "Our build vs buy calls are honest because we don't win when you over-build. If an off-the-shelf tool is the right answer, we'll say so." },
         { title: 'Proof before spend', body: "We'd rather show you a working pilot than promise an outcome. You commit budget once you've seen it work, not before." },
-        { title: 'Clarity over jargon', body: "You'll understand every recommendation and the reason behind it. Built with clarity, built to last, applies to the thinking too." },
+        { title: 'Clarity over jargon', body: "You'll understand every recommendation and the reason behind it, in plain language. No black boxes, no buzzwords." },
       ],
     },
     audience: {

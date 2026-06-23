@@ -34,7 +34,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 const INTRO_WORDS: Record<ServiceSlug, string[]> = {
   'app-design': ['Custom software.', 'Built for you.', 'Owned by you.'],
   'local-ai': ['Real AI.', 'Kept private.', 'Owned by you.'],
-  aios: ['Ten tools.', 'One system.', 'Owned by you.'],
+  aios: ['Too many tools.', 'One system.', 'Owned by you.'],
   'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
 }
 
@@ -86,7 +86,7 @@ export function ServicePage() {
         <Problem content={content} />
         <Solution content={content} meta={meta} />
         <Capabilities content={content} />
-        <Preview meta={meta} />
+        {meta.slug !== 'ai-consulting' && <Preview meta={meta} />}
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
         <RoiBand meta={meta} />
@@ -251,18 +251,18 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
 
 function Statement({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[920px] px-6 py-24 text-center lg:py-32">
+    <section className="relative mx-auto w-full max-w-[900px] px-6 py-24 text-center lg:py-32">
       <Reveal>
-        <p className="font-serif text-[26px] leading-[1.4] tracking-[-0.01em] text-ink-soft sm:text-[30px] lg:text-[36px]">
+        <p className="font-serif text-[27px] leading-[1.38] tracking-[-0.015em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.34]">
           {content.intro.statement}
         </p>
       </Reveal>
       <Reveal delay={0.1}>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-2.5">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5">
           {content.intro.chips.map((chip) => (
             <span
               key={chip}
-              className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3.5 py-1.5 text-[13px] text-faint"
+              className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.04] px-4 py-2 text-[13px] text-ink-soft/90"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
               {chip}
