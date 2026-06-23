@@ -32,10 +32,10 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 /** Intro keywords: name the pain, then the resolution. Short, on the nose. */
 const INTRO_WORDS: Record<ServiceSlug, string[]> = {
-  'app-design': ['Outgrown.', 'Rebuilt.', 'Yours.'],
-  'local-ai': ['Exposed.', 'Private.', 'Yours.'],
-  aios: ['Scattered.', 'Connected.', 'One.'],
-  'ai-consulting': ['Hyped.', 'Proven.', 'Clear.'],
+  'app-design': ['Custom software.', 'Built for you.', 'Owned by you.'],
+  'local-ai': ['Real AI.', 'Kept private.', 'Owned by you.'],
+  aios: ['Ten tools.', 'One system.', 'Owned by you.'],
+  'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
 }
 
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */

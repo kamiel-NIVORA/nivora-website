@@ -41,7 +41,7 @@ export function ServiceIntro({
     const isLast = index >= words.length - 1
     const t = window.setTimeout(
       () => (isLast ? setPhase('reveal') : setIndex((i) => i + 1)),
-      isLast ? 1150 : 950,
+      isLast ? 950 : 780,
     )
     return () => window.clearTimeout(t)
   }, [phase, index, words.length])
@@ -50,7 +50,7 @@ export function ServiceIntro({
   useEffect(() => {
     if (phase !== 'reveal') return
     const controls = animate(progress, 1, {
-      duration: 1.3,
+      duration: 1.15,
       ease: [0.85, 0, 0.15, 1],
       onComplete: () => setPhase('done'),
     })
@@ -90,9 +90,8 @@ export function ServiceIntro({
                       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                       exit={{ opacity: 0, y: -12, filter: 'blur(6px)' }}
                       transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                      className="inline-flex items-center gap-3 font-serif text-[40px] tracking-[-0.02em] text-ink sm:text-[60px] lg:text-[76px]"
+                      className="max-w-[92vw] text-balance text-center font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[70px]"
                     >
-                      <span className="h-2 w-2 rounded-full" style={{ background: accent }} />
                       {current}
                     </motion.span>
                   )}

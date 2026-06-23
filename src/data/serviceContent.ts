@@ -113,7 +113,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     mockup: '/mockup-appdesign.jpg',
     heroVideo: 'brain',
     sectionVideo: 'network',
-    accent: '#bda96d',
+    accent: '#f5f5f5',
   },
   'local-ai': {
     slug: 'local-ai',
@@ -126,7 +126,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     mockup: '/mockup-localai.jpg',
     heroVideo: 'orb',
     sectionVideo: 'marble',
-    accent: '#bda96d',
+    accent: '#f5f5f5',
   },
   aios: {
     slug: 'aios',
@@ -139,7 +139,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     mockup: '/mockup-aios.jpg',
     heroVideo: 'orbit',
     sectionVideo: 'cluster',
-    accent: '#bda96d',
+    accent: '#f5f5f5',
   },
   'ai-consulting': {
     slug: 'ai-consulting',
@@ -152,6 +152,6 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     mockup: '/mockup-consulting.jpg',
     heroVideo: 'spark',
     sectionVideo: 'terrain',
-    accent: '#bda96d',
+    accent: '#f5f5f5',
   },
 }
