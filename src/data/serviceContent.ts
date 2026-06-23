@@ -77,9 +77,9 @@ export interface ServiceMeta {
   icon: string
   /** App-style rounded tile mark — the same image shown in the nav Services menu. */
   tile: string
-  /** Scenic landscape photo behind the hero (the home-page look, served from /public). */
+  /** Sharp, premium image behind the hero (scenic or abstract, served from /public). Must NOT be a home-page image. */
   heroImage: string
-  /** Second scenic photo, used for the pinned scroll-reveal and the parallax band. */
+  /** Second premium image, used for the pinned scroll-reveal, the why-us band, and the final CTA. */
   photo: string
   /** Looping muted hero-backdrop video name under /media (black bg, blends via screen). */
   heroVideo: string
@@ -104,7 +104,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-appdesign.png',
     tile: '/service-appdesign.png',
     heroImage: '/bg-waves.jpg',
-    photo: '/bg-dunes-pale.jpg',
+    photo: '/IMG_0647.JPG',
     heroVideo: 'brain',
     sectionVideo: 'network',
     accent: '#d07a54',
@@ -115,7 +115,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-localai.png',
     tile: '/service-localai.png',
     heroImage: '/bg-peak-mono.jpg',
-    photo: '/bg-moon.jpg',
+    photo: '/IMG_0716.JPG',
     heroVideo: 'orb',
     sectionVideo: 'marble',
     accent: '#6691a3',
@@ -125,8 +125,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AIOS',
     icon: '/icon-aios.png',
     tile: '/service-aios.png',
-    heroImage: '/bg-mountains-mist.jpg',
-    photo: '/bg-dunes-blue.jpg',
+    heroImage: '/IMG_0683.JPG',
+    photo: '/IMG_0479.JPG',
     heroVideo: 'orbit',
     sectionVideo: 'cluster',
     accent: '#bda96d',
@@ -136,8 +136,8 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AI Consulting',
     icon: '/icon-consulting.png',
     tile: '/service-consulting.png',
-    heroImage: '/bg-ridges.jpg',
-    photo: '/bg-peak-stars.jpg',
+    heroImage: '/IMG_0640.JPG',
+    photo: '/IMG_0718.JPG',
     heroVideo: 'spark',
     sectionVideo: 'terrain',
     accent: '#96a766',

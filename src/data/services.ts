@@ -21,7 +21,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       chips: ['You own it', 'Built to last', 'No templates'],
     },
     reveal:
-      'The software that fits your business does not exist yet. So we build it, around the way you already work, and you own every line of it.',
+      'The tool that finally fits your business does not exist yet. So we build it, around the way you already work, and you own it outright.',
     problem: {
       title: "You've outgrown the tools you're running on",
       intro: "There's a point where the workarounds cost more than the tool saves. If this sounds like your week, you're past it.",
@@ -116,7 +116,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       chips: ['You own it', 'Private by design', 'Built to last'],
     },
     reveal:
-      'Real AI that drafts, reads, and reasons, running inside your own walls. Your most private data never leaves the building.',
+      'Real AI, as capable as the tools everyone leans on, running entirely inside your own walls. Your most private data never leaves the building.',
     problem: {
       title: "You want AI. Your data won't let you.",
       intro: "The teams that need AI most are often the ones who can't touch the easy tools. Every prompt to a cloud model is a question you can't answer: where does this end up, who can read it, and what did you agree to in the fine print?",
@@ -211,7 +211,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       chips: ['You own it', 'Private by design', 'One source of truth'],
     },
     reveal:
-      'Ten tools that never agreed, replaced by one system your whole company runs on. Enter it once, and it stays right everywhere.',
+      'Ten disconnected tools, replaced by one system your whole company runs on. You enter it once, and it stays true everywhere.',
     problem: {
       title: "Your company runs on ten tools that don't talk to each other",
       intro: 'It grew one app at a time. Notion for docs, Sheets for numbers, a CRM, Slack, a dozen tabs. Each made sense alone. Together they cost your team hours every single day.',
@@ -306,7 +306,7 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
       chips: ['Plan first', 'Honest ROI', 'You own it'],
     },
     reveal:
-      'Before you spend a cent on AI, you see exactly where it pays off. We find it, prove it small, then hand you the plan.',
+      'Most AI budgets get spent before anyone knows what actually works. We find where it pays off, prove it small, then hand you the plan.',
     problem: {
       title: "You feel the pressure to do something with AI. You just don't know where to start.",
       intro: 'Most founders we talk to are in the same spot: the expectation is loud, the path is silent.',

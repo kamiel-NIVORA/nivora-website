@@ -28,11 +28,11 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-/* ─────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────────────────
    Service page · scenic, image-led, home-page branding
    Flow: hero → statement → scroll-reveal → problem → solution → capabilities
         → why-us band → process → ROI (not for consulting) → fit/faq → CTA
-   ───────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────────────────────────── */
 export function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
   const isValid = !!slug && slug in SERVICE_CONTENT
@@ -50,7 +50,7 @@ export function ServicePage() {
 
   return (
     <main
-      className="relative w-full overflow-hidden bg-bg"
+      className="relative w-full overflow-x-clip bg-bg"
       style={{ ['--accent' as string]: meta.accent } as CSSProperties}
     >
       <Hero content={content} meta={meta} />
@@ -69,7 +69,7 @@ export function ServicePage() {
   )
 }
 
-/* Shared bits ─────────────────────────────────────────────────── */
+/* Shared bits ─────────────────────────────────────────────────────────────── */
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
@@ -146,7 +146,7 @@ function ImageFrame({
   )
 }
 
-/* Hero · scenic landscape, like the home page ────────────────────────────── */
+/* Hero · scenic landscape, like the home page ───────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -222,7 +222,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
   )
 }
 
-/* Statement ─────────────────────────────────────────────────── */
+/* Statement ─────────────────────────────────────────────────────────────────── */
 
 function Statement({ content }: { content: ServiceContent }) {
   return (
@@ -249,7 +249,7 @@ function Statement({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Problem · clean cards, no rails ──────────────────────────────────── */
+/* Problem · clean cards, no rails ───────────────────────────────────────────── */
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
@@ -283,7 +283,7 @@ function Problem({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Solution · sticky media + outcomes checklist (the "sold" moment) ─────────── */
+/* Solution · sticky media + outcomes checklist (the "sold" moment) ──────────── */
 
 function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
@@ -329,7 +329,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
   )
 }
 
-/* Capabilities · offset bento (one feature tile + varied cards) ───────────── */
+/* Capabilities · offset bento (one video feature tile + varied cards) ───────── */
 
 function Capabilities({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const items = content.capabilities.items
@@ -397,12 +397,12 @@ function Capabilities({ content, meta }: { content: ServiceContent; meta: Servic
   )
 }
 
-/* Why us · selling reasons over a scenic, drifting band ─────────────────── */
+/* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
     <section className="relative w-full overflow-hidden py-24 lg:py-32">
-      <ParallaxImage src="/cta-landscape.jpg" range={['-10%', '10%']} />
+      <ParallaxImage src={meta.photo} range={['-10%', '10%']} />
       <div className="absolute inset-0 bg-bg/80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
@@ -439,7 +439,7 @@ function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }
   )
 }
 
-/* Process · numbered step cards, no rails ───────────────────────────── */
+/* Process · numbered step cards, no rails ───────────────────────────────────── */
 
 function Process({ content }: { content: ServiceContent }) {
   return (
@@ -470,7 +470,7 @@ function Process({ content }: { content: ServiceContent }) {
   )
 }
 
-/* ROI band · only where money-saved is the honest pitch (not consulting) ──── */
+/* ROI band · only where money-saved is the honest pitch (not consulting) ────── */
 
 function RoiBand({ meta }: { meta: ServiceMeta }) {
   const config = SERVICE_ROI[meta.slug]
@@ -504,7 +504,7 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
   )
 }
 
-/* Fit + FAQ · comparison two-up, then accordion ───────────────────────── */
+/* Fit + FAQ · comparison two-up, then accordion ─────────────────────────────── */
 
 function FitFaq({ content }: { content: ServiceContent }) {
   const { open } = useContactModal()
@@ -604,7 +604,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
   )
 }
 
-/* Final CTA over a scenic image ─────────────────────────────────── */
+/* Final CTA over media ─────────────────────────────────────────────────────── */
 
 function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const reduced = usePrefersReducedMotion()
@@ -647,7 +647,7 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
   )
 }
 
-/* Other services ────────────────────────────────────────────── */
+/* Other services ───────────────────────────────────────────────────────────── */
 
 function OtherServices({ current }: { current: ServiceSlug }) {
   const others = SERVICE_ORDER.filter((s) => s !== current)
