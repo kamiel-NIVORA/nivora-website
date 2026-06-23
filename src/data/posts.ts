@@ -10,7 +10,7 @@ export type PostBlock =
   | string
   | { h2: string }
   | { quote: string }
-  | { image: string; alt: string; caption?: string }
+  | { image: string; alt: string; caption?: string; position?: string }
 
 export type Post = {
   slug: string
@@ -19,6 +19,12 @@ export type Post = {
   author: string
   date: string
   image: string
+  /** object-position for the hero crop, e.g. 'center 28%' to lift a tall photo. */
+  imagePosition?: string
+  /** Short word shown as a glass chip on the hero. */
+  coverLabel?: string
+  /** App-logo chips on the hero (one per bottom corner). */
+  coverIcons?: { src: string; name: string }[]
   excerpt: string
   body: PostBlock[]
 }
@@ -33,6 +39,10 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'Jun 20, 2026',
     image: '/images/blog-box-voice-launch.jpg',
+    coverIcons: [
+      { src: '/box-logo.png', name: 'Box' },
+      { src: '/voice-logo.png', name: 'Voice' },
+    ],
     excerpt:
       'After months of building quietly, we are ready to introduce the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text.',
     body: [
@@ -59,6 +69,8 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'Jun 6, 2026',
     image: '/images/blog-ai-progress.jpg',
+    imagePosition: 'center 78%',
+    coverLabel: 'AI progress',
     excerpt:
       'An honest progress update from inside the build. What is working now, what we changed our minds about, and why the quiet, unglamorous parts are the ones we are proudest of.',
     body: [
@@ -91,6 +103,8 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'May 22, 2026',
     image: '/images/blog-local-peak.jpg',
+    imagePosition: 'center 28%',
+    coverLabel: 'Local AI',
     excerpt:
       'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',
     body: [
@@ -101,6 +115,7 @@ export const POSTS: Post[] = [
       {
         image: '/images/blog-local-horizon.jpg',
         alt: 'A lone figure standing on a wide beach, facing the open sea',
+        position: 'center 88%',
         caption:
           'Owning the system you depend on changes how it feels to use it. The horizon is yours, not rented.',
       },

@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { POSTS } from '@/data/posts'
+import { cn } from '@/lib/utils'
 
 export function BlogPost() {
   const { slug } = useParams()
@@ -63,10 +64,47 @@ export function BlogPost() {
           </Reveal>
         </header>
 
-        {/* Cover */}
+        {/* Cover — optional object-position lift, plus a glass label or app-icon chips */}
         <Reveal mode="mount" delay={0.12}>
-          <div className="mt-12 overflow-hidden rounded-3xl border border-line">
-            <img src={post.image} alt={post.title} className="aspect-[16/9] w-full object-cover" />
+          <div className="relative mt-12 overflow-hidden rounded-3xl border border-line">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="aspect-[16/9] w-full object-cover"
+              style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
+            />
+
+            {(post.coverLabel || post.coverIcons) && (
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5">
+                {/* left slot */}
+                <div className="flex">
+                  {post.coverLabel && <CoverChip>{post.coverLabel}</CoverChip>}
+                  {post.coverIcons?.[0] && (
+                    <CoverChip>
+                      <img
+                        src={post.coverIcons[0].src}
+                        alt=""
+                        className="h-5 w-5 rounded-[6px] object-cover"
+                      />
+                      {post.coverIcons[0].name}
+                    </CoverChip>
+                  )}
+                </div>
+                {/* right slot */}
+                <div className="flex">
+                  {post.coverIcons?.[1] && (
+                    <CoverChip>
+                      <img
+                        src={post.coverIcons[1].src}
+                        alt=""
+                        className="h-5 w-5 rounded-[6px] object-cover"
+                      />
+                      {post.coverIcons[1].name}
+                    </CoverChip>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </Reveal>
 
@@ -110,6 +148,7 @@ export function BlogPost() {
                       alt={block.alt}
                       loading="lazy"
                       className="aspect-[16/9] w-full object-cover"
+                      style={block.position ? { objectPosition: block.position } : undefined}
                     />
                   </div>
                   {block.caption && (
@@ -136,5 +175,19 @@ export function BlogPost() {
         </div>
       </article>
     </main>
+  )
+}
+
+/** Small frosted-glass chip overlaid on a cover image (a word or an app icon). */
+function CoverChip({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3.5 py-1.5 text-[12.5px] font-medium text-white shadow-[0_4px_20px_-6px_rgba(0,0,0,0.7)] backdrop-blur-md',
+        className,
+      )}
+    >
+      {children}
+    </span>
   )
 }
