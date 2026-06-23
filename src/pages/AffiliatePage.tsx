@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
-import { Gift } from 'lucide-react'
+import { ArrowRight, Gift } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { useContactModal } from '@/components/contact/ContactModal'
@@ -76,19 +76,24 @@ export function AffiliatePage() {
 
 /* Shared bits — monochrome, separators instead of colour ────────────────────── */
 
-function Eyebrow({ children }: { children: ReactNode }) {
+function Eyebrow({ children, bright }: { children: ReactNode; bright?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em] text-faint">
-      <span className="h-px w-6 bg-white/25" />
+    <span
+      className={`inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em] ${
+        bright ? 'text-ink-soft/85' : 'text-faint'
+      }`}
+    >
+      <span className={`h-px w-6 ${bright ? 'bg-white/45' : 'bg-white/25'}`} />
       {children}
     </span>
   )
 }
 
+/** Single, clear "coming soon" marker. Only used in the hero. */
 function ComingSoonPill() {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-faint backdrop-blur-sm">
-      <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3.5 py-1.5 text-[12.5px] font-medium text-ink backdrop-blur-md">
+      <span className="h-1.5 w-1.5 rounded-full bg-white" />
       Coming soon
     </span>
   )
@@ -144,8 +149,8 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <motion.div variants={heroFade} className="flex items-center gap-3">
-          <Eyebrow>Affiliate program</Eyebrow>
+        <motion.div variants={heroFade} className="flex flex-wrap items-center justify-center gap-3">
+          <Eyebrow bright>Affiliate program</Eyebrow>
           <ComingSoonPill />
         </motion.div>
 
@@ -329,7 +334,7 @@ function Apps() {
       <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {APPS.map((a, i) => (
           <Reveal key={a.name} delay={i * 0.08}>
-            <div className="relative h-full overflow-hidden rounded-[24px] border border-line bg-[#0a0a0a] p-7 lg:p-8">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[24px] border border-line bg-[#0a0a0a] p-7 lg:p-8">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <div className="flex items-center gap-4">
                 <img
@@ -337,15 +342,19 @@ function Apps() {
                   alt={a.name}
                   className="h-12 w-12 shrink-0 rounded-2xl border border-line object-cover"
                 />
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="font-serif text-[24px] leading-none text-ink">{a.name}</span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-muted">
-                    <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
-                    Coming soon
-                  </span>
-                </div>
+                <span className="font-serif text-[24px] leading-none text-ink">{a.name}</span>
               </div>
-              <p className="mt-5 text-[14.5px] leading-relaxed text-faint">{a.line}</p>
+              <p className="mt-5 flex-1 text-[14.5px] leading-relaxed text-faint">{a.line}</p>
+              <div className="mt-6">
+                <RippleButton
+                  href={`/waitlist?product=${a.name.toLowerCase()}`}
+                  variant="ghost"
+                  className="h-10 gap-2 px-5 text-sm"
+                >
+                  Join the waiting list
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+                </RippleButton>
+              </div>
             </div>
           </Reveal>
         ))}
@@ -362,10 +371,7 @@ function FinalCta() {
     <section id="contact" className="relative w-full px-6 pb-28 pt-4 lg:pb-36">
       <Reveal>
         <div className="relative mx-auto max-w-2xl text-center">
-          <div className="flex justify-center">
-            <ComingSoonPill />
-          </div>
-          <h2 className="mt-6 font-serif text-[32px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[50px]">
+          <h2 className="font-serif text-[32px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[50px]">
             The program opens soon
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">

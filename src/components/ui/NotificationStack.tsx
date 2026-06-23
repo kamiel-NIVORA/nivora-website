@@ -76,10 +76,10 @@ export function NotificationStack() {
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
-      {/* surf-wallpaper */}
-      <img src="/IMG_0701.JPG" alt="" className="absolute inset-0 h-full w-full object-cover" />
-      {/* leesbaarheid: zachte verdonkering achter de meldingen */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-black/25" />
+      {/* dark grain wallpaper, top of the frame shown */}
+      <img src="/products-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-top" />
+      {/* leesbaarheid: lichte verdonkering achter de meldingen (beeld is al donker) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
 
       {/* iPhone-lockscreen: nieuwe melding schuift van onder in, duwt de stack
           omhoog (bottom-anchored). 1 → 2 → 3, telkens van onderen erbij. */}
