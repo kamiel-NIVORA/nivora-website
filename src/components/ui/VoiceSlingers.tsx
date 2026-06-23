@@ -7,31 +7,31 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
 /**
- * Voice card visual — speech in, clean writing out (Wispr-style swoop).
+ * Voice card visual — speech in, clean writing out (Wispr-style ribbon).
  *
- * Raw dictation streams in low from the LEFT: dim, lowercase, full of stutters
- * and filler ("the the", "um", no punctuation). It passes through a live
- * waveform node at the centre and emerges riding a bold pale RIBBON that sweeps
- * up to the top-right, now bright, dark-on-light, properly punctuated copy.
- * Small pills pop above the node naming each fix Nivora just made.
+ * Raw dictation streams in low from the bottom-LEFT: dim, lowercase, full of
+ * stutters and filler ("the the", "um", no punctuation). It passes through a
+ * live waveform node near the bottom and emerges riding a bold dark RIBBON
+ * (olive-edged, lifted off the card) that sweeps up to the right, now crisp
+ * WHITE, properly punctuated copy. Pills pop above the node naming each fix.
  *
  * Both text streams are real text on one SVG path, scrolled by animating
  * `startOffset`. Each loops seamlessly by shifting exactly one MEASURED repeat
  * unit (measured only after the web font loads, so cold paints don't bake in a
  * jump), and both move at the same pixel speed so the flow reads as one motion.
- * The ribbon is a static thick stroke on the right half of the same path, so
- * the clean text rides it exactly. Idles off-screen, respects reduced-motion.
+ * The ribbon is a static thick stroke on the right of the same path, so the
+ * clean text rides it exactly. Idles off-screen, respects reduced-motion.
  */
 
 const VB_W = 1000
 const VB_H = 420
 
-/* Full path: gentle in from the lower left, through the node at ~(500, 212),
-   then a smooth swoop up to the top-right. No lumps. */
+/* Full path: gentle in from the lower left, through the node near the bottom at
+   ~(500, 350), then a smooth swoop up to the right. No lumps. */
 const WAVE =
-  'M -140 250 C 170 234 350 218 500 212 C 662 206 772 132 902 80 C 1002 40 1092 26 1190 18'
+  'M -120 392 C 160 380 330 364 500 352 C 664 340 772 266 902 212 C 1004 174 1094 156 1190 146'
 /* Right half only — the bold ribbon the clean copy rides on (starts at the node). */
-const RIBBON = 'M 500 212 C 662 206 772 132 902 80 C 1002 40 1092 26 1190 18'
+const RIBBON = 'M 500 352 C 664 340 772 266 902 212 C 1004 174 1094 156 1190 146'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
 const RAW =
@@ -48,13 +48,13 @@ const SPEED = 24 // px/second — both streams share it, so the flow reads as on
 const FIXES: { icon: LucideIcon; label: string }[] = [
   { icon: Check, label: 'Removed repetition' },
   { icon: Check, label: 'Fixed grammar' },
-  { icon: Check, label: 'Added punctuation' },
+  { icon: Check, label: 'Added question mark' },
   { icon: Sparkles, label: 'Polished the copy' },
 ]
 
 /* Equaliser profile — taller in the middle so the resting node reads as a voice. */
 const BARS = [0.34, 0.5, 0.42, 0.66, 0.82, 0.58, 0.94, 0.72, 1, 0.72, 0.94, 0.58, 0.82, 0.66, 0.42, 0.5, 0.34]
-const BAR_TRACK = 26 // px, the tallest a bar can reach inside the pill
+const BAR_TRACK = 24 // px, the tallest a bar can reach inside the pill
 
 export function VoiceSlingers() {
   const reduced = usePrefersReducedMotion()
@@ -124,10 +124,10 @@ export function VoiceSlingers() {
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden">
-      {/* Soft olive focal glow so the node lifts off the wave. */}
+      {/* Soft olive focal glow behind the node so it lifts off the wave. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[220px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(150,167,102,0.16),transparent)] blur-[2px]"
+        className="pointer-events-none absolute left-1/2 top-[83%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(150,167,102,0.15),transparent)] blur-[2px]"
       />
 
       {/* The flowing transcript + ribbon */}
@@ -141,21 +141,21 @@ export function VoiceSlingers() {
           {/* Raw — dim grey, fades out just before the node. */}
           <linearGradient id="vw-raw" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
             <stop offset="0" stopColor="#9a9a9a" stopOpacity="0" />
-            <stop offset="0.12" stopColor="#9a9a9a" stopOpacity="0.34" />
-            <stop offset="0.36" stopColor="#8f8f8f" stopOpacity="0.3" />
+            <stop offset="0.12" stopColor="#9a9a9a" stopOpacity="0.36" />
+            <stop offset="0.36" stopColor="#8f8f8f" stopOpacity="0.32" />
             <stop offset="0.46" stopColor="#8f8f8f" stopOpacity="0" />
           </linearGradient>
-          {/* Clean — dark ink riding the olive ribbon, fading in at the node. */}
+          {/* Clean — crisp white, fading in at the node, riding the dark ribbon. */}
           <linearGradient id="vw-clean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
-            <stop offset="0.5" stopColor="#16180d" stopOpacity="0" />
-            <stop offset="0.56" stopColor="#16180d" stopOpacity="1" />
-            <stop offset="0.93" stopColor="#16180d" stopOpacity="1" />
-            <stop offset="1" stopColor="#16180d" stopOpacity="0" />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="0.56" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="0.93" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
-          {/* The ribbon itself — Nivora olive, a touch of top-light for depth. */}
-          <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="40" x2="900" y2="200">
-            <stop offset="0" stopColor="#bccb8c" />
-            <stop offset="1" stopColor="#94a45e" />
+          {/* The ribbon fill — dark, a touch of top-light for depth. */}
+          <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="120" x2="950" y2="360">
+            <stop offset="0" stopColor="#26291c" />
+            <stop offset="1" stopColor="#13150d" />
           </linearGradient>
         </defs>
 
@@ -168,17 +168,18 @@ export function VoiceSlingers() {
           </textPath>
         </text>
 
-        {/* The ribbon — a thick stroke on the right half, lifted off the card */}
+        {/* Ribbon: a fine olive edge under a dark fill, lifted off the card */}
+        <path d={RIBBON} fill="none" stroke="rgba(150,167,102,0.5)" strokeWidth="45" strokeLinecap="round" />
         <path
           d={RIBBON}
           fill="none"
           stroke="url(#vw-ribbon)"
           strokeWidth="40"
           strokeLinecap="round"
-          style={{ filter: 'drop-shadow(0 9px 16px rgba(0,0,0,0.5))' }}
+          style={{ filter: 'drop-shadow(0 9px 16px rgba(0,0,0,0.55))' }}
         />
 
-        {/* Clean (right) — dark ink riding the ribbon up */}
+        {/* Clean (right) — crisp white ink riding the ribbon up */}
         <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" fontWeight={500} dominantBaseline="middle" fill="url(#vw-clean)" style={{ letterSpacing: '0.1px' }}>
           <textPath ref={cleanPathRef} href="#vw-path" startOffset="0">
             {CLEAN.repeat(REPEAT)}
@@ -194,8 +195,8 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Correction pill — one fix at a time, just above the node. */}
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-[92px] justify-center">
+      {/* Correction pill — one fix at a time, above the node. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[60%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={fix}
@@ -211,15 +212,15 @@ export function VoiceSlingers() {
         </AnimatePresence>
       </div>
 
-      {/* The Nivora voice node — a live waveform pill the flow passes through. */}
-      <div className="absolute inset-0 grid place-items-center">
+      {/* The Nivora voice node — a live waveform lozenge the flow passes through. */}
+      <div className="absolute left-1/2 top-[83%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
           {/* breathing accent dots */}
           <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
           <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
           <Dot className="-bottom-2 -left-2" delay="1.1s" reduced={reduced} />
 
-          <div className="relative flex h-[58px] w-[116px] items-center justify-center gap-[3px] overflow-hidden rounded-[16px] border border-white/20 bg-[#0d0d0d]/85 px-4 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md">
+          <div className="relative flex h-[56px] w-[120px] items-center justify-center gap-[3px] overflow-hidden rounded-[16px] border border-white/25 bg-[#0d0d0d]/75 px-4 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md">
             {BARS.map((h, i) => (
               <span
                 key={i}

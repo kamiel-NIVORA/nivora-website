@@ -252,12 +252,12 @@ function VoiceCard() {
       {/* Full-bleed flow + node — escape the card padding, clipped to its corners */}
       <div className="pointer-events-none absolute -inset-7 overflow-hidden rounded-[28px] lg:-inset-8">
         <VoiceSlingers />
-        {/* Bottom scrim so the label reads cleanly under the streams */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.96),rgba(10,10,10,0.55)_24%,transparent_52%)]" />
+        {/* Top scrim so the label reads cleanly above the low flow */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,10,0.94),rgba(10,10,10,0.45)_20%,transparent_44%)]" />
       </div>
 
-      {/* Label — anchored bottom-left, clear of the node and the correction pills */}
-      <div className="relative z-[1] flex h-full flex-col justify-end">
+      {/* Label — anchored top-left, above the node, ribbon and correction pills */}
+      <div className="relative z-[1]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/voice-logo.png" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
