@@ -38,7 +38,7 @@ export function Products() {
         <img
           src={GLOW}
           alt=""
-          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
+          className="absolute inset-0 h-full w-full object-cover opacity-55 blur-[3px] [mask-image:linear-gradient(to_bottom,transparent,black_16%,black_84%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_16%,black_84%,transparent)]"
         />
       </div>
 
