@@ -85,6 +85,7 @@ export function ServicePage() {
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
+        {meta.objectImage && <BrandObject meta={meta} />}
         <Capabilities content={content} />
         {meta.slug !== 'ai-consulting' && <Preview meta={meta} />}
         <WhyUs content={content} meta={meta} />
@@ -168,6 +169,61 @@ function AnimFrame({ src, className }: { src: string; className?: string }) {
         style={{ mixBlendMode: 'screen' }}
       />
     </div>
+  )
+}
+
+/* Brand object · a premium product shot that floats on the page's own black.
+   Its edges are feathered with a radial mask so the photo's black margin melts
+   into the page (no visible frame), with a soft bloom behind and a gentle
+   scroll-drift. Used where a service has a hero brand asset, e.g. Local AI's
+   "Private / Yours / Secure / Local" folder. */
+function BrandObject({ meta }: { meta: ServiceMeta }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['5%', '-5%'])
+
+  if (!meta.objectImage) return null
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Copy — complements the words baked into the object */}
+        <div className="order-2 lg:order-1">
+          <Reveal>
+            <Eyebrow>Private by design</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              Yours to keep. Private to the core.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
+              Everything runs inside your own infrastructure: the models, the data, and every
+              answer. Nothing is rented, nothing is sent away, and nothing ever leaves the building.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* The floating object */}
+        <div ref={ref} className="relative order-1 lg:order-2">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[80px]"
+            style={{ background: `radial-gradient(50% 45% at 50% 42%, ${meta.accent}1f, transparent 72%)` }}
+          />
+          <Reveal y={32}>
+            <motion.img
+              src={meta.objectImage}
+              alt="A Nivora folder labelled Private, Yours, Secure, Local, held in hand."
+              loading="lazy"
+              style={{ y }}
+              className="relative mx-auto block w-full max-w-[440px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)]"
+            />
+          </Reveal>
+        </div>
+      </div>
+    </section>
   )
 }
 

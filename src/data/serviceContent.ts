@@ -85,6 +85,11 @@ export interface ServiceMeta {
   anim: string
   /** Device mockup (GIF/JPG in /public) shown in the product-preview band. */
   mockup: string
+  /** Optional brand-object shot (premium product photography with copy baked in,
+   *  black background). Floats on the page's own black in a dedicated section.
+   *  Only set where such an asset exists, e.g. Local AI's "Private / Yours /
+   *  Secure / Local" folder. */
+  objectImage?: string
   /** Looping muted hero-backdrop video name under /media (black bg, blends via screen). */
   heroVideo: string
   /** Looping muted section/feature video name under /media. */
@@ -124,6 +129,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     photo: '/nature-localai.jpg',
     anim: '/anim-localai.mp4',
     mockup: '/mockup-localai.jpg',
+    objectImage: '/local-private-folder.webp',
     heroVideo: 'orb',
     sectionVideo: 'marble',
     accent: '#f5f5f5',
