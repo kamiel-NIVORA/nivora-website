@@ -49,9 +49,9 @@ export function FinalCTA() {
       {/* Landscape, softly faded into the dark on all sides, pulled up nearer the CTA */}
       <div className="pointer-events-none relative mx-auto -mt-2 h-56 w-full max-w-4xl sm:h-64 lg:h-80">
         <img
-          src="/cta-landscape.jpg"
+          src="/IMG_0846.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_38%] opacity-80 [mask-image:radial-gradient(ellipse_60%_64%_at_50%_46%,#000_8%,transparent_72%)] [-webkit-mask-image:radial-gradient(ellipse_60%_64%_at_50%_46%,#000_8%,transparent_72%)]"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-90 [mask-image:radial-gradient(ellipse_64%_70%_at_50%_46%,#000_14%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_64%_70%_at_50%_46%,#000_14%,transparent_75%)]"
         />
       </div>
     </section>
