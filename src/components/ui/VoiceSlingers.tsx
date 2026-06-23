@@ -8,30 +8,16 @@ type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
 /**
  * Voice card visual — speech in, clean writing out (Wispr-style ribbon).
- *
- * Raw dictation streams in low from the bottom-LEFT: dim, lowercase, full of
- * stutters and filler ("the the", "um", no punctuation). It passes through a
- * live waveform node near the bottom and emerges riding a soft pale RIBBON
- * (lifted off the card) that sweeps up to the right, now crisp, dark,
- * properly punctuated copy. Pills pop above the node naming each fix.
- *
- * Both text streams are real text on one SVG path, scrolled by animating
- * `startOffset`. Each loops seamlessly by shifting exactly one MEASURED repeat
- * unit (measured only after the web font loads, so cold paints don't bake in a
- * jump), and both move at the same pixel speed so the flow reads as one motion.
- * The ribbon is a static thick stroke on the right of the same path, so the
- * clean text rides it exactly. Idles off-screen, respects reduced-motion.
+ * Raw dim speech flows in from the lower-left, through a live waveform node,
+ * and rides a soft pale ribbon up to the right as crisp, clean copy.
  */
 
 const VB_W = 1000
 const VB_H = 420
 
-/* Full path: gentle in from the lower left, through the node near the bottom at
-   ~(500, 350), then a smooth swoop up to the right. No lumps. */
 const WAVE =
-  'M -120 392 C 160 380 330 364 500 352 C 664 340 772 266 902 212 C 1004 174 1094 156 1190 146'
-/* Right half only — the bold ribbon the clean copy rides on (starts at the node). */
-const RIBBON = 'M 500 352 C 664 340 772 266 902 212 C 1004 174 1094 156 1190 146'
+  'M -120 360 C 160 348 330 332 500 320 C 664 308 772 232 902 178 C 1004 140 1094 122 1190 112'
+const RIBBON = 'M 500 320 C 664 308 772 232 902 178 C 1004 140 1094 122 1190 112'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
 const RAW =
@@ -42,7 +28,7 @@ const CLEAN =
 
 const REPEAT = 3
 const FONT_SIZE = 20
-const SPEED = 24 // px/second — both streams share it, so the flow reads as one motion
+const SPEED = 42 // px/second — both streams share it, so the flow reads as one motion
 
 /* The fixes Nivora calls out, popping above the node in turn. */
 const FIXES: { icon: LucideIcon; label: string }[] = [
@@ -66,7 +52,6 @@ export function VoiceSlingers() {
   const inView = useInView(rootRef, { amount: 0.3 })
   const [fix, setFix] = useState(0)
 
-  // ── Flowing text — measure each repeat unit against the real font, then loop ──
   useEffect(() => {
     const streams = [
       { tp: rawPathRef.current, m: rawMeasureRef.current },
@@ -109,10 +94,9 @@ export function VoiceSlingers() {
     }
   }, [reduced, inView])
 
-  // ── Cycle the correction pills while the card is on screen ──
   useEffect(() => {
     if (reduced || !inView) return
-    const id = window.setInterval(() => setFix((f) => (f + 1) % FIXES.length), 2400)
+    const id = window.setInterval(() => setFix((f) => (f + 1) % FIXES.length), 2200)
     return () => window.clearInterval(id)
   }, [reduced, inView])
 
@@ -123,10 +107,9 @@ export function VoiceSlingers() {
       {/* Soft neutral focal glow behind the node so it lifts off the wave. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[83%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
+        className="pointer-events-none absolute left-1/2 top-[77%] h-[200px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
       />
 
-      {/* The flowing transcript + ribbon */}
       <svg
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
@@ -135,10 +118,10 @@ export function VoiceSlingers() {
       >
         <defs>
           <linearGradient id="vw-raw" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
-            <stop offset="0" stopColor="#9a9a9a" stopOpacity="0" />
-            <stop offset="0.12" stopColor="#9a9a9a" stopOpacity="0.36" />
-            <stop offset="0.36" stopColor="#8f8f8f" stopOpacity="0.32" />
-            <stop offset="0.46" stopColor="#8f8f8f" stopOpacity="0" />
+            <stop offset="0" stopColor="#b4b4b4" stopOpacity="0" />
+            <stop offset="0.12" stopColor="#b4b4b4" stopOpacity="0.5" />
+            <stop offset="0.36" stopColor="#a8a8a8" stopOpacity="0.44" />
+            <stop offset="0.46" stopColor="#a8a8a8" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="vw-clean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
             <stop offset="0.5" stopColor="#17190e" stopOpacity="0" />
@@ -146,7 +129,7 @@ export function VoiceSlingers() {
             <stop offset="0.93" stopColor="#17190e" stopOpacity="1" />
             <stop offset="1" stopColor="#17190e" stopOpacity="0" />
           </linearGradient>
-          <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="120" x2="950" y2="360">
+          <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="100" x2="950" y2="330">
             <stop offset="0" stopColor="#f3f1eb" />
             <stop offset="1" stopColor="#dbd7cd" />
           </linearGradient>
@@ -184,19 +167,19 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Correction pill — one fix at a time, above the node. */}
-      <div className="pointer-events-none absolute inset-x-0 top-[60%] flex -translate-y-1/2 justify-center">
+      {/* Correction pill — one fix at a time, above the node. Clear, Wispr-style pop. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[54%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={fix}
-            initial={reduced ? false : { opacity: 0, y: 12, scale: 0.94 }}
+            initial={reduced ? false : { opacity: 0, y: 14, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: -12, scale: 0.94 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#0d0d0d]/90 py-1.5 pl-1.5 pr-3.5 text-[12px] font-medium text-ink shadow-[0_16px_36px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md"
+            exit={reduced ? undefined : { opacity: 0, y: -14, scale: 0.9 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#171717]/95 py-2 pl-2 pr-4 text-[13px] font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md"
           >
-            <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-white/10">
-              <Active className="h-3 w-3 text-ink" strokeWidth={2.6} />
+            <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
+              <Active className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />
             </span>
             {FIXES[fix].label}
           </motion.div>
@@ -204,7 +187,7 @@ export function VoiceSlingers() {
       </div>
 
       {/* The Nivora voice node — a live waveform lozenge the flow passes through. */}
-      <div className="absolute left-1/2 top-[83%] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute left-1/2 top-[77%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
           <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
           <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
