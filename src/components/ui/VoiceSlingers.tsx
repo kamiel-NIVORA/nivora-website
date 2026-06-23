@@ -44,14 +44,16 @@ const REPEAT = 3
 const FONT_SIZE = 20
 const SPEED = 104 // px/second — both streams share it, so the flow reads as one motion
 
-/* Wispr-style correction nudges: a little phrase, the wrong word strikes
-   through in place, then the fix label lands. Cycles slowly so each reads. */
-const CORRECTIONS: { pre: string; strike: string; post: string; label: string }[] = [
+/* Wispr-style correction nudges: a little phrase where the wrong word strikes
+   through (or a mark is added), then the fix label lands. Cycles slowly. */
+const CORRECTIONS: { pre: string; strike?: string; post?: string; add?: string; label: string }[] = [
   { pre: 'so', strike: 'umm', post: 'i think', label: 'Removed filler' },
   { pre: 'told the', strike: 'the', post: 'team', label: 'Removed repetition' },
   { pre: 'i think', strike: 'their', post: 'going', label: 'Fixed grammar' },
-  { pre: 'be ready', strike: 'like', post: 'soon', label: 'Removed filler' },
-  { pre: 'is it ready', strike: '', post: '', label: 'Added question mark' },
+  { pre: '', strike: 'i', post: 'will send it', label: 'Capitalized' },
+  { pre: 'is it ready', add: '?', label: 'Added question mark' },
+  { pre: 'sounds good', add: '.', label: 'Added punctuation' },
+  { pre: 'meet', strike: 'at at', post: 'noon', label: 'Removed stutter' },
 ]
 
 /* Equaliser profile — taller in the middle so the resting node reads as a voice. */
@@ -126,8 +128,8 @@ export function VoiceSlingers() {
       return
     }
     setPhase('word')
-    const toLabel = window.setTimeout(() => setPhase('label'), 1700)
-    const toNext = window.setTimeout(() => setFix((f) => (f + 1) % CORRECTIONS.length), 3800)
+    const toLabel = window.setTimeout(() => setPhase('label'), 2200)
+    const toNext = window.setTimeout(() => setFix((f) => (f + 1) % CORRECTIONS.length), 4900)
     return () => {
       window.clearTimeout(toLabel)
       window.clearTimeout(toNext)
@@ -218,8 +220,8 @@ export function VoiceSlingers() {
               initial={reduced ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="whitespace-nowrap text-[18px] font-medium text-white/65 [text-shadow:0_2px_12px_rgba(0,0,0,0.9)]"
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="whitespace-nowrap text-[22px] font-medium text-white/65 [text-shadow:0_2px_14px_rgba(0,0,0,0.92)]"
             >
               {c.pre}
               {c.strike ? (
@@ -231,26 +233,23 @@ export function VoiceSlingers() {
                       aria-hidden
                       initial={reduced ? false : { scaleX: 0 }}
                       animate={{ scaleX: 1 }}
-                      transition={{ delay: 0.45, duration: 0.45, ease: 'easeOut' }}
+                      transition={{ delay: 0.6, duration: 0.5, ease: 'easeOut' }}
                       style={{ originX: 0 }}
                       className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/80"
                     />
                   </span>
                   {c.post ? <>{' '}{c.post}</> : null}
                 </>
-              ) : (
-                <>
-                  {' '}
-                  <motion.span
-                    initial={reduced ? false : { opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.45, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-white"
-                  >
-                    ?
-                  </motion.span>
-                </>
-              )}
+              ) : c.add ? (
+                <motion.span
+                  initial={reduced ? false : { opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-white"
+                >
+                  {c.add}
+                </motion.span>
+              ) : null}
             </motion.div>
           ) : (
             <motion.div
@@ -258,11 +257,11 @@ export function VoiceSlingers() {
               initial={reduced ? false : { opacity: 0, y: 10, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduced ? undefined : { opacity: 0, y: -8, scale: 0.92 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-[#171717]/95 py-2 pl-2 pr-4 text-[13.5px] font-semibold text-white shadow-[0_16px_36px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/20 bg-[#171717]/95 py-2.5 pl-2.5 pr-5 text-[15px] font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
             >
-              <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
-                <Check className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />
+              <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-white/15">
+                <Check className="h-4 w-4 text-white" strokeWidth={2.8} />
               </span>
               {c.label}
             </motion.div>
