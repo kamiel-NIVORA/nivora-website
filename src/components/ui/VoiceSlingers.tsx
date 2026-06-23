@@ -8,9 +8,19 @@ type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
 /**
  * Voice card visual — speech in, clean writing out (Wispr-style ribbon).
- * Raw dim speech comes in flat on the left, through a live waveform node, then
- * rides a pale ribbon up to the upper-right as clean copy. Above the node, a
- * correction nudge strikes the wrong word in a little phrase and names the fix.
+ *
+ * Raw dictation streams in low from the bottom-LEFT: dim, lowercase, full of
+ * stutters and filler ("the the", "um", no punctuation). It passes through a
+ * live waveform node near the bottom and emerges riding a bold dark RIBBON
+ * (olive-edged, lifted off the card) that sweeps up to the right, now crisp
+ * WHITE, properly punctuated copy. Pills pop above the node naming each fix.
+ *
+ * Both text streams are real text on one SVG path, scrolled by animating
+ * `startOffset`. Each loops seamlessly by shifting exactly one MEASURED repeat
+ * unit (measured only after the web font loads, so cold paints don't bake in a
+ * jump), and both move at the same pixel speed so the flow reads as one motion.
+ * The ribbon is a static thick stroke on the right of the same path, so the
+ * clean text rides it exactly. Idles off-screen, respects reduced-motion.
  */
 
 const VB_W = 1000
@@ -20,6 +30,7 @@ const VB_H = 420
    at the bottom centre), then the clean copy sweeps up to the upper-RIGHT. */
 const WAVE =
   'M -120 300 C 170 322 360 332 500 338 C 672 326 802 238 922 168 C 1012 126 1096 108 1190 98'
+/* Right half only — the bold ribbon the clean copy rides on (starts at the node). */
 const RIBBON = 'M 500 338 C 672 326 802 238 922 168 C 1012 126 1096 108 1190 98'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
@@ -57,6 +68,7 @@ export function VoiceSlingers() {
   const inView = useInView(rootRef, { amount: 0.3 })
   const [fix, setFix] = useState(0)
 
+  // ── Flowing text — measure each repeat unit against the real font, then loop ──
   useEffect(() => {
     const streams = [
       { tp: rawPathRef.current, m: rawMeasureRef.current },
@@ -67,6 +79,10 @@ export function VoiceSlingers() {
     let controls: ReturnType<typeof animate>[] = []
     let cancelled = false
 
+    // (Re)measure + (re)start — idempotent. Shifting by exactly one MEASURED unit
+    // keeps the loop seamless; measuring only once the web font is live avoids a
+    // cold-paint jump. startOffset runs -unit → 0 so glyphs travel rightward:
+    // raw flows in from the left and dissolves at the node, clean rides the ribbon up.
     const apply = () => {
       if (cancelled) return
       controls.forEach((c) => c.stop())
@@ -99,6 +115,7 @@ export function VoiceSlingers() {
     }
   }, [reduced, inView])
 
+  // ── Cycle the correction pills while the card is on screen ──
   useEffect(() => {
     if (reduced || !inView) return
     const id = window.setInterval(() => setFix((f) => (f + 1) % CORRECTIONS.length), 4000)
@@ -115,6 +132,7 @@ export function VoiceSlingers() {
         className="pointer-events-none absolute left-1/2 top-[80%] h-[210px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.06),transparent)] blur-[2px]"
       />
 
+      {/* The flowing transcript + ribbon */}
       <svg
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
@@ -122,18 +140,21 @@ export function VoiceSlingers() {
         aria-hidden
       >
         <defs>
+          {/* Raw — dim grey, fades out just before the node. */}
           <linearGradient id="vw-raw" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
             <stop offset="0" stopColor="#b4b4b4" stopOpacity="0" />
             <stop offset="0.12" stopColor="#b4b4b4" stopOpacity="0.5" />
             <stop offset="0.36" stopColor="#a8a8a8" stopOpacity="0.44" />
             <stop offset="0.46" stopColor="#a8a8a8" stopOpacity="0" />
           </linearGradient>
+          {/* Clean — dark ink, fading in at the node, riding the pale ribbon. */}
           <linearGradient id="vw-clean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
             <stop offset="0.5" stopColor="#17190e" stopOpacity="0" />
             <stop offset="0.56" stopColor="#17190e" stopOpacity="1" />
             <stop offset="0.93" stopColor="#17190e" stopOpacity="1" />
             <stop offset="1" stopColor="#17190e" stopOpacity="0" />
           </linearGradient>
+          {/* The ribbon fill — soft pale arc, a touch of top-light for depth. */}
           <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="120" x2="950" y2="360">
             <stop offset="0" stopColor="#f3f1eb" />
             <stop offset="1" stopColor="#dbd7cd" />
@@ -142,6 +163,7 @@ export function VoiceSlingers() {
 
         <path id="vw-path" d={WAVE} fill="none" />
 
+        {/* Raw (left) — dim text on the bare card */}
         <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" dominantBaseline="middle" fill="url(#vw-raw)" style={{ letterSpacing: '0.2px' }}>
           <textPath ref={rawPathRef} href="#vw-path" startOffset="0">
             {RAW.repeat(REPEAT)}
@@ -158,12 +180,14 @@ export function VoiceSlingers() {
           style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))' }}
         />
 
+        {/* Clean (right) — crisp white ink riding the ribbon up */}
         <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" fontWeight={500} dominantBaseline="middle" fill="url(#vw-clean)" style={{ letterSpacing: '0.1px' }}>
           <textPath ref={cleanPathRef} href="#vw-path" startOffset="0">
             {CLEAN.repeat(REPEAT)}
           </textPath>
         </text>
 
+        {/* Hidden single units — measured so each loop shifts by exactly one repeat. */}
         <text ref={rawMeasureRef} fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" visibility="hidden" x={-9999} style={{ letterSpacing: '0.2px' }}>
           {RAW}
         </text>
@@ -172,18 +196,19 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Wispr-style nudge — a little phrase, the wrong word strikes through, then the fix lands. */}
-      <div className="pointer-events-none absolute inset-x-0 top-[50%] flex -translate-y-1/2 justify-center">
+      {/* Wispr nudge — plain text (no frame), the wrong word strikes through, then a small fix pop-up. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[46%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={fix}
-            initial={reduced ? false : { opacity: 0, y: 16, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: -16, scale: 0.9 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-[#171717]/95 px-4 py-2.5 text-[14px] font-semibold text-white shadow-[0_20px_44px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduced ? undefined : { opacity: 0, y: -14 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center gap-2.5"
           >
-            <span className="font-medium text-white/45">
+            {/* the raw phrase, no frame — the wrong word strikes through in place */}
+            <div className="text-[17px] font-medium text-white/65 [text-shadow:0_2px_12px_rgba(0,0,0,0.9)]">
               {c.pre}
               {c.strike ? (
                 <>
@@ -196,7 +221,7 @@ export function VoiceSlingers() {
                       animate={{ scaleX: 1 }}
                       transition={{ delay: 0.35, duration: 0.4, ease: 'easeOut' }}
                       style={{ originX: 0 }}
-                      className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/75"
+                      className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/80"
                     />
                   </span>
                   {c.post ? <>{' '}{c.post}</> : null}
@@ -211,18 +236,19 @@ export function VoiceSlingers() {
                   ?
                 </motion.span>
               )}
-            </span>
-            <motion.span
-              initial={reduced ? false : { opacity: 0, x: -4 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.68, duration: 0.3 }}
-              className="inline-flex items-center gap-1.5 text-white"
+            </div>
+            {/* the fix — a small separate pop-up that lands after the strike */}
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 6, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.6, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-[#171717]/95 py-1.5 pl-1.5 pr-3 text-[12.5px] font-semibold text-white shadow-[0_14px_32px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md"
             >
-              <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
-                <Check className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />
+              <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-white/15">
+                <Check className="h-3 w-3 text-white" strokeWidth={2.8} />
               </span>
               {c.label}
-            </motion.span>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -230,6 +256,7 @@ export function VoiceSlingers() {
       {/* The Nivora voice node — a live waveform lozenge the flow passes through. */}
       <div className="absolute left-1/2 top-[80%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
+          {/* breathing accent dots */}
           <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
           <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
           <Dot className="-bottom-2 -left-2" delay="1.1s" reduced={reduced} />
