@@ -76,10 +76,17 @@ export function NotificationStack() {
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
-      {/* dark grain wallpaper, top of the frame shown */}
-      <img src="/products-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-top" />
+      {/* dark grain wallpaper. The source is small, so show the WHOLE frame (zoomed out =
+          downscaled = crisp) over a soft blurred copy that fills the panel edges, so it reads
+          as one calm texture instead of an enlarged, soft close-up. */}
+      <img
+        src="/products-bg.jpg"
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+      />
+      <img src="/products-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-contain" />
       {/* leesbaarheid: lichte verdonkering achter de meldingen (beeld is al donker) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/15" />
 
       {/* iPhone-lockscreen: nieuwe melding schuift van onder in, duwt de stack
           omhoog (bottom-anchored). 1 → 2 → 3, telkens van onderen erbij. */}
