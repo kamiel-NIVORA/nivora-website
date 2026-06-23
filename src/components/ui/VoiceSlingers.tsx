@@ -11,9 +11,9 @@ type VarStyle = CSSProperties & Record<`--${string}`, string | number>
  *
  * Raw dictation streams in low from the bottom-LEFT: dim, lowercase, full of
  * stutters and filler ("the the", "um", no punctuation). It passes through a
- * live waveform node near the bottom and emerges riding a bold dark RIBBON
- * (olive-edged, lifted off the card) that sweeps up to the right, now crisp
- * WHITE, properly punctuated copy. Pills pop above the node naming each fix.
+ * live waveform node near the bottom and emerges riding a soft pale RIBBON
+ * (lifted off the card) that sweeps up to the right, now crisp, dark,
+ * properly punctuated copy. Pills pop above the node naming each fix.
  *
  * Both text streams are real text on one SVG path, scrolled by animating
  * `startOffset`. Each loops seamlessly by shifting exactly one MEASURED repeat
@@ -77,10 +77,6 @@ export function VoiceSlingers() {
     let controls: ReturnType<typeof animate>[] = []
     let cancelled = false
 
-    // (Re)measure + (re)start — idempotent. Shifting by exactly one MEASURED unit
-    // keeps the loop seamless; measuring only once the web font is live avoids a
-    // cold-paint jump. startOffset runs -unit → 0 so glyphs travel rightward:
-    // raw flows in from the left and dissolves at the node, clean rides the ribbon up.
     const apply = () => {
       if (cancelled) return
       controls.forEach((c) => c.stop())
@@ -138,55 +134,48 @@ export function VoiceSlingers() {
         aria-hidden
       >
         <defs>
-          {/* Raw — dim grey, fades out just before the node. */}
           <linearGradient id="vw-raw" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
             <stop offset="0" stopColor="#9a9a9a" stopOpacity="0" />
             <stop offset="0.12" stopColor="#9a9a9a" stopOpacity="0.36" />
             <stop offset="0.36" stopColor="#8f8f8f" stopOpacity="0.32" />
             <stop offset="0.46" stopColor="#8f8f8f" stopOpacity="0" />
           </linearGradient>
-          {/* Clean — crisp white, fading in at the node, riding the dark ribbon. */}
           <linearGradient id="vw-clean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
-            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0" />
-            <stop offset="0.56" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="0.93" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="0.5" stopColor="#17190e" stopOpacity="0" />
+            <stop offset="0.56" stopColor="#17190e" stopOpacity="1" />
+            <stop offset="0.93" stopColor="#17190e" stopOpacity="1" />
+            <stop offset="1" stopColor="#17190e" stopOpacity="0" />
           </linearGradient>
-          {/* The ribbon fill — dark, a touch of top-light for depth. */}
           <linearGradient id="vw-ribbon" gradientUnits="userSpaceOnUse" x1="500" y1="120" x2="950" y2="360">
-            <stop offset="0" stopColor="#26291c" />
-            <stop offset="1" stopColor="#13150d" />
+            <stop offset="0" stopColor="#f3f1eb" />
+            <stop offset="1" stopColor="#dbd7cd" />
           </linearGradient>
         </defs>
 
         <path id="vw-path" d={WAVE} fill="none" />
 
-        {/* Raw (left) — dim text on the bare card */}
         <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" dominantBaseline="middle" fill="url(#vw-raw)" style={{ letterSpacing: '0.2px' }}>
           <textPath ref={rawPathRef} href="#vw-path" startOffset="0">
             {RAW.repeat(REPEAT)}
           </textPath>
         </text>
 
-        {/* Ribbon: a fine olive edge under a dark fill, lifted off the card */}
-        <path d={RIBBON} fill="none" stroke="rgba(150,167,102,0.5)" strokeWidth="45" strokeLinecap="round" />
+        {/* Ribbon: a soft pale arc, lifted off the card */}
         <path
           d={RIBBON}
           fill="none"
           stroke="url(#vw-ribbon)"
-          strokeWidth="40"
+          strokeWidth="42"
           strokeLinecap="round"
-          style={{ filter: 'drop-shadow(0 9px 16px rgba(0,0,0,0.55))' }}
+          style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))' }}
         />
 
-        {/* Clean (right) — crisp white ink riding the ribbon up */}
         <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" fontWeight={500} dominantBaseline="middle" fill="url(#vw-clean)" style={{ letterSpacing: '0.1px' }}>
           <textPath ref={cleanPathRef} href="#vw-path" startOffset="0">
             {CLEAN.repeat(REPEAT)}
           </textPath>
         </text>
 
-        {/* Hidden single units — measured so each loop shifts by exactly one repeat. */}
         <text ref={rawMeasureRef} fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" visibility="hidden" x={-9999} style={{ letterSpacing: '0.2px' }}>
           {RAW}
         </text>
@@ -200,13 +189,15 @@ export function VoiceSlingers() {
         <AnimatePresence mode="wait">
           <motion.div
             key={fix}
-            initial={reduced ? false : { opacity: 0, y: 8, scale: 0.95 }}
+            initial={reduced ? false : { opacity: 0, y: 12, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduced ? undefined : { opacity: 0, y: -8, scale: 0.95 }}
-            transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-1.5 rounded-full bg-olive py-1.5 pl-2 pr-3.5 text-[12px] font-semibold text-[#16180d] shadow-[0_14px_30px_-10px_rgba(150,167,102,0.55)]"
+            exit={reduced ? undefined : { opacity: 0, y: -12, scale: 0.94 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#0d0d0d]/90 py-1.5 pl-1.5 pr-3.5 text-[12px] font-medium text-ink shadow-[0_16px_36px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md"
           >
-            <Active className="h-3.5 w-3.5" strokeWidth={2.8} />
+            <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-white/10">
+              <Active className="h-3 w-3 text-ink" strokeWidth={2.6} />
+            </span>
             {FIXES[fix].label}
           </motion.div>
         </AnimatePresence>
@@ -215,16 +206,19 @@ export function VoiceSlingers() {
       {/* The Nivora voice node — a live waveform lozenge the flow passes through. */}
       <div className="absolute left-1/2 top-[83%] -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
-          {/* breathing accent dots */}
           <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
           <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
           <Dot className="-bottom-2 -left-2" delay="1.1s" reduced={reduced} />
 
-          <div className="relative flex h-[56px] w-[120px] items-center justify-center gap-[3px] overflow-hidden rounded-[16px] border border-white/25 bg-[#0d0d0d]/75 px-4 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md">
+          <motion.div
+            animate={reduced ? undefined : { scale: [1, 1.04, 1] }}
+            transition={reduced ? undefined : { duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative flex h-[54px] w-[138px] items-center justify-center gap-[3px] overflow-hidden rounded-full border border-white/30 bg-[#0d0d0d]/80 px-6 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md"
+          >
             {BARS.map((h, i) => (
               <span
                 key={i}
-                className="w-[2.5px] rounded-full bg-gradient-to-b from-white to-olive"
+                className="w-[2.5px] rounded-full bg-gradient-to-b from-white to-white/35"
                 style={
                   {
                     height: `${Math.round(h * BAR_TRACK)}px`,
@@ -237,7 +231,7 @@ export function VoiceSlingers() {
                 }
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
