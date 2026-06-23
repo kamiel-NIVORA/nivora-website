@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Reveal } from '@/components/animations/Reveal'
 import { PostCard } from '@/components/PostCard'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
 
@@ -52,6 +53,13 @@ export function BlogIndex() {
             </Reveal>
           ))}
         </div>
+
+        {/* Newsletter */}
+        <Reveal delay={0.1}>
+          <div className="mt-20">
+            <NewsletterSignup source="blog" />
+          </div>
+        </Reveal>
       </section>
     </main>
   )

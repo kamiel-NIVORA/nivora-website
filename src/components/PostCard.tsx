@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { Avatar } from '@/components/ui/Avatar'
+import { Avatar, authorPhoto } from '@/components/ui/Avatar'
 import type { Post } from '@/data/posts'
 
-/** Blog card: cover → title → byline (avatar · author · date). Shared by the
- *  homepage teaser and the blog index so both stay identical. */
+/** Blog card: cover → title → excerpt → byline (avatar · author · date). Shared
+ *  by the homepage teaser and the blog index so both stay identical. */
 export function PostCard({ post }: { post: Post }) {
   return (
     <Link to={`/blog/${post.slug}`} className="group flex h-full flex-col">
@@ -20,8 +20,12 @@ export function PostCard({ post }: { post: Post }) {
         {post.title}
       </h3>
 
-      <div className="mt-3 flex items-center gap-2 text-[13px] text-faint">
-        <Avatar name={post.author} />
+      {post.excerpt && (
+        <p className="mt-2.5 line-clamp-2 text-[14.5px] leading-relaxed text-faint">{post.excerpt}</p>
+      )}
+
+      <div className="mt-auto flex items-center gap-2 pt-4 text-[13px] text-faint">
+        <Avatar name={post.author} src={authorPhoto(post.author)} />
         <span className="text-ink-soft/80">{post.author}</span>
         <span className="text-dim">·</span>
         <span>{post.date}</span>

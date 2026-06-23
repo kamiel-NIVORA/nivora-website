@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
-import { Avatar } from '@/components/ui/Avatar'
+import { Avatar, authorPhoto } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
@@ -64,7 +64,7 @@ export function BlogPost() {
 
           <Reveal mode="mount" delay={0.08}>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[13px]">
-              <Avatar name={post.author} size="md" />
+              <Avatar name={post.author} src={authorPhoto(post.author)} size="md" />
               <span className="text-ink-soft">{post.author}</span>
               <span className="text-dim">·</span>
               <span className="text-faint">{post.category}</span>
