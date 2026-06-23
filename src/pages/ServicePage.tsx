@@ -13,6 +13,8 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
+import { ServiceIntro } from '@/components/ui/ServiceIntro'
+import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -27,6 +29,20 @@ import {
 } from '@/data/serviceContent'
 
 const ease = [0.16, 1, 0.3, 1] as const
+
+/** Intro keywords: name the pain, then the resolution. Short, on the nose. */
+const INTRO_WORDS: Record<ServiceSlug, string[]> = {
+  'app-design': ['Outgrown.', 'Rebuilt.', 'Yours.'],
+  'local-ai': ['Exposed.', 'Private.', 'Yours.'],
+  aios: ['Scattered.', 'Connected.', 'One.'],
+  'ai-consulting': ['Hyped.', 'Proven.', 'Clear.'],
+}
+
+/** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
+function phaseWord(title: string): string {
+  const w = title.replace(/^We\s+/i, '').split(' ')[0]
+  return w.charAt(0).toUpperCase() + w.slice(1)
+}
 
 /* ──────────────────────────────────────────────────────────────────────────
    Service page · scenic, image-led, home-page branding
@@ -49,23 +65,26 @@ export function ServicePage() {
   if (!content || !meta) return <Navigate to="/" replace />
 
   return (
-    <main
-      className="relative w-full overflow-x-clip bg-bg"
-      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
-    >
-      <Hero content={content} meta={meta} />
-      <Statement content={content} />
-      <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
-      <Problem content={content} />
-      <Solution content={content} meta={meta} />
-      <Capabilities content={content} meta={meta} />
-      <WhyUs content={content} meta={meta} />
-      <Process content={content} />
-      <RoiBand meta={meta} />
-      <FitFaq content={content} />
-      <FinalCta content={content} meta={meta} />
-      <OtherServices current={meta.slug} />
-    </main>
+    <ServiceIntro words={INTRO_WORDS[meta.slug]} accent={meta.accent} storageKey={`nivora-intro-${meta.slug}`}>
+      <main
+        className="relative w-full overflow-x-clip bg-bg"
+        style={{ ['--accent' as string]: meta.accent } as CSSProperties}
+      >
+        <Hero content={content} meta={meta} />
+        <Statement content={content} />
+        <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+        <Problem content={content} />
+        <Solution content={content} meta={meta} />
+        <Capabilities content={content} meta={meta} />
+        <Preview meta={meta} />
+        <WhyUs content={content} meta={meta} />
+        <Process content={content} meta={meta} />
+        <RoiBand meta={meta} />
+        <FitFaq content={content} />
+        <FinalCta content={content} meta={meta} />
+        <OtherServices current={meta.slug} />
+      </main>
+    </ServiceIntro>
   )
 }
 
@@ -121,25 +140,28 @@ function GlassCard({ children, className }: { children: ReactNode; className?: s
   )
 }
 
-/** A rounded, hairline-framed scenic photo panel with a soft accent glow. */
-function ImageFrame({
-  src,
-  accent,
-  className,
-}: {
-  src: string
-  accent: string
-  className?: string
-}) {
+/** A framed looping animation (GIF). The black-and-white clip is tinted toward
+ *  the service accent so the page carries real colour, not just grey. */
+function AnimFrame({ src, accent, className }: { src: string; accent: string; className?: string }) {
   return (
-    <div className={cn('relative overflow-hidden rounded-[24px] border border-line bg-[#070709]', className)}>
-      <img src={src} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+    <div className={cn('relative isolate overflow-hidden rounded-[24px] border border-line bg-[#070709]', className)}>
+      <video
+        src={src}
+        aria-hidden
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* colorize the white motion toward the accent (white × accent = accent, black stays black) */}
+      <div className="absolute inset-0 mix-blend-multiply" style={{ background: accent, opacity: 0.82 }} />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(80% 70% at 50% 30%, ${accent}26, transparent 72%)` }}
+        style={{ background: `radial-gradient(60% 60% at 50% 45%, ${accent}33, transparent 72%)` }}
       />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070709]/85 via-[#070709]/15 to-transparent" />
       <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
     </div>
@@ -253,7 +275,7 @@ function Statement({ content }: { content: ServiceContent }) {
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <Eyebrow>The problem</Eyebrow>
@@ -287,7 +309,7 @@ function Problem({ content }: { content: ServiceContent }) {
 
 function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-28">
           <Reveal>
@@ -299,7 +321,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <ImageFrame src={meta.heroImage} accent={meta.accent} className="mt-8 aspect-[5/4]" />
+            <AnimFrame src={meta.anim} accent={meta.accent} className="mt-8 aspect-[5/4]" />
           </Reveal>
         </div>
 
@@ -343,7 +365,7 @@ function Capabilities({ content, meta }: { content: ServiceContent; meta: Servic
     'lg:col-start-7 lg:col-span-6 lg:row-start-3',
   ]
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="max-w-2xl">
         <Reveal>
           <Eyebrow>{content.capabilities.title}</Eyebrow>
@@ -399,9 +421,39 @@ function Capabilities({ content, meta }: { content: ServiceContent; meta: Servic
 
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
+function Preview({ meta }: { meta: ServiceMeta }) {
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <Eyebrow>Preview</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            Made for the screens your team lives in.
+          </h2>
+        </Reveal>
+      </div>
+      <Reveal delay={0.1}>
+        <div className="relative mx-auto mt-12 max-w-3xl">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-8 rounded-[40px] blur-[64px]"
+            style={{ background: meta.accent, opacity: 0.16 }}
+          />
+          <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]">
+            <img src={meta.mockup} alt="" loading="lazy" className="block w-full" />
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative w-full overflow-hidden py-24 lg:py-32">
+    <section className="relative w-full overflow-hidden py-20 lg:py-28">
       <ParallaxImage src={meta.photo} range={['-10%', '10%']} />
       <div className="absolute inset-0 bg-bg/80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
@@ -441,9 +493,9 @@ function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }
 
 /* Process · numbered step cards, no rails ───────────────────────────────────── */
 
-function Process({ content }: { content: ServiceContent }) {
+function Process({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <Eyebrow>How we work</Eyebrow>
@@ -455,16 +507,11 @@ function Process({ content }: { content: ServiceContent }) {
         </Reveal>
       </div>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {content.process.steps.map((s, i) => (
-          <Reveal key={s.label} delay={i * 0.08}>
-            <GlassCard className="h-full">
-              <span className="font-serif text-[40px] leading-none text-[var(--accent)]/70 lg:text-[46px]">{s.label}</span>
-              <h3 className="mt-5 text-[18px] font-semibold tracking-tight text-ink">{s.title}</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-faint">{s.body}</p>
-            </GlassCard>
-          </Reveal>
-        ))}
+      <div className="mt-16">
+        <ProcessTimeline
+          accent={meta.accent}
+          steps={content.process.steps.map((s) => ({ phase: phaseWord(s.title), title: s.title, body: s.body }))}
+        />
       </div>
     </section>
   )
@@ -511,7 +558,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <Reveal>
         <h2 className="max-w-2xl font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
           {content.audience.title}
@@ -609,7 +656,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
 function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative grid w-full place-items-center overflow-hidden px-6 py-32 lg:py-44">
+    <section className="relative grid w-full place-items-center overflow-hidden px-6 py-24 lg:py-36">
       <ParallaxImage src={meta.photo} range={['-8%', '8%']} />
       <div className="absolute inset-0 bg-black/40" />
       <div

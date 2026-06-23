@@ -79,8 +79,12 @@ export interface ServiceMeta {
   tile: string
   /** Sharp, premium image behind the hero (scenic or abstract, served from /public). Must NOT be a home-page image. */
   heroImage: string
-  /** Second premium image, used for the pinned scroll-reveal, the why-us band, and the final CTA. */
+  /** Calm nature photo, used full-screen in the pinned scroll-reveal, the why-us band, and the final CTA. */
   photo: string
+  /** Looping B&W tech animation (muted MP4 in /public) shown in the solution section, e.g. AIOS = a brain forming. */
+  anim: string
+  /** Device mockup (GIF/JPG in /public) shown in the product-preview band. */
+  mockup: string
   /** Looping muted hero-backdrop video name under /media (black bg, blends via screen). */
   heroVideo: string
   /** Looping muted section/feature video name under /media. */
@@ -104,7 +108,9 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-appdesign.png',
     tile: '/service-appdesign.png',
     heroImage: '/bg-waves.jpg',
-    photo: '/IMG_0647.JPG',
+    photo: '/nature-appdesign.jpg',
+    anim: '/anim-appdesign.mp4',
+    mockup: '/mockup-appdesign.jpg',
     heroVideo: 'brain',
     sectionVideo: 'network',
     accent: '#d07a54',
@@ -115,7 +121,9 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-localai.png',
     tile: '/service-localai.png',
     heroImage: '/bg-peak-mono.jpg',
-    photo: '/IMG_0716.JPG',
+    photo: '/nature-localai.jpg',
+    anim: '/anim-localai.mp4',
+    mockup: '/mockup-localai.jpg',
     heroVideo: 'orb',
     sectionVideo: 'marble',
     accent: '#6691a3',
@@ -126,7 +134,9 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-aios.png',
     tile: '/service-aios.png',
     heroImage: '/IMG_0683.JPG',
-    photo: '/IMG_0479.JPG',
+    photo: '/nature-aios.jpg',
+    anim: '/anim-aios.mp4',
+    mockup: '/mockup-aios.jpg',
     heroVideo: 'orbit',
     sectionVideo: 'cluster',
     accent: '#bda96d',
@@ -137,7 +147,9 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-consulting.png',
     tile: '/service-consulting.png',
     heroImage: '/IMG_0640.JPG',
-    photo: '/IMG_0718.JPG',
+    photo: '/nature-consulting.jpg',
+    anim: '/anim-consulting.mp4',
+    mockup: '/mockup-consulting.jpg',
     heroVideo: 'spark',
     sectionVideo: 'terrain',
     accent: '#96a766',
