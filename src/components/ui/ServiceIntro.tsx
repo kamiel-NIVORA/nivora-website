@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { AnimatePresence, animate, motion, useMotionValue, useTransform } from 'framer-motion'
+import { useLenis } from 'lenis/react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
 /**
@@ -23,6 +24,7 @@ export function ServiceIntro({
   children: ReactNode
 }) {
   const reduced = usePrefersReducedMotion()
+  const lenis = useLenis()
   const [phase, setPhase] = useState<'intro' | 'reveal' | 'done'>('intro')
   const [index, setIndex] = useState(0)
 
@@ -34,6 +36,21 @@ export function ServiceIntro({
   useEffect(() => {
     if (reduced) setPhase('done')
   }, [reduced])
+
+  // Freeze the page while the curtain is up. Without this the wheel scrolls the
+  // hidden page behind the intro, so it lifts to reveal the middle of the page
+  // instead of the hero. Hold at the top, then hand scrolling back when done.
+  const locked = !reduced && phase !== 'done'
+  useEffect(() => {
+    if (!locked) return
+    if (lenis) lenis.stop()
+    else document.body.style.overflow = 'hidden'
+    window.scrollTo(0, 0)
+    return () => {
+      if (lenis) lenis.start()
+      else document.body.style.overflow = ''
+    }
+  }, [locked, lenis])
 
   // Cycle the keywords slowly so they are readable, hold the last a beat longer.
   useEffect(() => {

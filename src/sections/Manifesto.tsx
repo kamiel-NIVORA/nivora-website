@@ -1,7 +1,7 @@
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
 
 /** Aerial field photo — lives in /public, served from the site root. */
-const IMAGE = '/IMG_0743.jpg'
+const IMAGE = '/IMG_0743.webp'
 
 const COPY =
   'Every hour your team spends on repetitive work is an hour we can reclaim. With software you use tomorrow, or a system we build from scratch.'

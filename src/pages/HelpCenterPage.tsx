@@ -178,7 +178,7 @@ function ChatCard({ onTalkToHuman }: { onTalkToHuman: () => void }) {
         <div className="flex shrink-0 items-center justify-between gap-3 border-b border-line px-5 py-4 sm:px-6">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-line bg-white/[0.04]">
-              <img src="/nivora-mark.png" alt="Nivora" className="h-5 w-5 object-contain" />
+              <img src="/nivora-mark.webp" alt="Nivora" className="h-5 w-5 object-contain" />
             </span>
             <span className="flex flex-col">
               <span className="text-[14px] font-medium text-ink">Nivora Assistant</span>
@@ -246,7 +246,7 @@ function GreetingState({ reduced, onPick }: { reduced: boolean; onPick: (q: stri
   return (
     <div className="flex min-h-full flex-col items-center justify-center px-2 text-center">
       <span className="flex h-12 w-12 items-center justify-center rounded-[16px] border border-line bg-white/[0.04]">
-        <img src="/nivora-mark.png" alt="Nivora" className="h-6 w-6 object-contain" />
+        <img src="/nivora-mark.webp" alt="Nivora" className="h-6 w-6 object-contain" />
       </span>
       <h3 className="mt-5 font-serif text-[22px] tracking-[-0.01em] text-ink">How can we help?</h3>
       <p className="mx-auto mt-2.5 max-w-sm text-[13.5px] leading-relaxed text-faint">
@@ -302,7 +302,7 @@ function Message({
   return (
     <div className={cn('border-l-2 pl-4', isError ? 'border-terracotta/40' : 'border-olive/40')}>
       <div className="flex gap-2.5">
-        <img src="/nivora-mark.png" alt="" className="mt-[5px] h-3.5 w-3.5 shrink-0 object-contain opacity-90" />
+        <img src="/nivora-mark.webp" alt="" className="mt-[5px] h-3.5 w-3.5 shrink-0 object-contain opacity-90" />
         <div className="min-w-0 flex-1">
           <AssistantProse content={message.content} animating={animating} reduced={reduced} isError={isError} />
           {isError && (
@@ -538,7 +538,7 @@ function SendButton({ canSend, busy, onClick }: { canSend: boolean; busy: boolea
         <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-olive/30 border-t-olive" />
       ) : (
         <img
-          src="/nivora-mark.png"
+          src="/nivora-mark.webp"
           alt=""
           className="h-3.5 w-3.5 object-contain transition-transform duration-200 group-hover/send:-translate-y-0.5 group-hover/send:translate-x-0.5"
         />

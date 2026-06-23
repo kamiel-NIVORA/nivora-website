@@ -428,7 +428,7 @@ function Founder() {
             />
             <div className="relative overflow-hidden rounded-[28px] border border-line">
               <img
-                src="/founder-kamiel.jpg"
+                src="/founder-kamiel.webp"
                 alt="Kamiel Niville, founder of Nivora"
                 className="aspect-[4/5] w-full object-cover object-[center_22%]"
               />

@@ -10,7 +10,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
  * One looping progress value (0 → 1) drives the timeline.
  */
 
-const BOX_LOGO = '/box-logo.png'
+const BOX_LOGO = '/box-logo.webp'
 
 type App = {
   name: string

@@ -36,17 +36,24 @@ const fadeUp: Variants = {
 export function Hero() {
   return (
     <section id="top" className="relative min-h-[100svh] w-full overflow-hidden">
-      {/* Background image — Nivora landscape, generated with Nano Banana Pro */}
-      <img
-        src="/images/hero-nivora.png"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      {/* Background, lifted onto its own GPU layer (translateZ) so the headline's
+          blur-reveal animation never forces it to repaint, that repaint was the
+          faint flicker on entry. */}
+      <div className="absolute inset-0 [transform:translateZ(0)] [backface-visibility:hidden]">
+        {/* Nivora landscape, generated with Nano Banana Pro */}
+        <img
+          src="/images/hero-nivora.webp"
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-      {/* Overlays: darken top for nav, fade bottom into page */}
-      <div className="absolute inset-0 bg-black/25" />
-      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/50 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-bg via-bg/70 to-transparent" />
+        {/* Overlays: darken top for nav, fade bottom into page */}
+        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/50 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-bg via-bg/70 to-transparent" />
+      </div>
 
       {/* Content */}
       <motion.div

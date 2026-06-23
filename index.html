@@ -17,6 +17,8 @@
       content="Nivora designs AI systems and software built specifically for how you operate. No buzzwords. No bloat. Just intelligent tools that make your business work better, faster, smarter."
     />
     <meta property="og:type" content="website" />
+    <!-- Hero background: fetch in parallel with the bundle so it's ready before first paint (no pop-in). -->
+    <link rel="preload" as="image" href="/images/hero-nivora.webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

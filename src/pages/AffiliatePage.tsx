@@ -8,7 +8,7 @@ import { useContactModal } from '@/components/contact/ContactModal'
 const ease = [0.16, 1, 0.3, 1] as const
 
 /** Full-bleed scenic peak, so the page lives in the same world as the home page. */
-const HERO_IMG = '/IMG_0694.JPG'
+const HERO_IMG = '/IMG_0694.webp'
 
 /** The three plain facts, modelled on a clear affiliate page but in our voice. */
 const FACTS = [
@@ -40,12 +40,12 @@ const STEPS = [
 /** The two apps the program is for. Copy matches the public, coming-soon framing. */
 const APPS = [
   {
-    logo: '/box-logo.png',
+    logo: '/box-logo.webp',
     name: 'Box',
     line: 'All your communication, brought together in one place.',
   },
   {
-    logo: '/voice-logo.png',
+    logo: '/voice-logo.webp',
     name: 'Voice',
     line: 'Speech to text, tuned to your voice and your writing.',
   },

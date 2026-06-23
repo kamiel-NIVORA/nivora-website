@@ -13,10 +13,10 @@ import { cn } from '@/lib/utils'
 type Slide = { img: string; tagline: string }
 
 const SLIDES: Slide[] = [
-  { img: '/service-appdesign.png', tagline: 'Your idea, your app' },
-  { img: '/service-localai.png', tagline: 'Own AI, own data' },
-  { img: '/service-aios.png', tagline: 'Your company, automated' },
-  { img: '/service-consulting.png', tagline: 'Where AI actually fits' },
+  { img: '/service-appdesign.webp', tagline: 'Your idea, your app' },
+  { img: '/service-localai.webp', tagline: 'Own AI, own data' },
+  { img: '/service-aios.webp', tagline: 'Your company, automated' },
+  { img: '/service-consulting.webp', tagline: 'Where AI actually fits' },
 ]
 
 /** Zelfde trage, zachte curve als de hero-reveal. */
@@ -85,7 +85,7 @@ export function ServicesShowcase() {
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
       {/* dromerige wolken-wallpaper */}
-      <img src="/IMG_0702.JPG" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <img src="/IMG_0702.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
       {/* zachte lichte wash zodat de donkere tekst leesbaar blijft */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/25 via-transparent to-white/10" />
 

@@ -15,7 +15,7 @@ import MacOSDock, { type DockApp } from '@/components/ui/MacOSDock'
 import { cn } from '@/lib/utils'
 
 /** Soft luminous backdrop — placeholder, swap for the final art later. */
-const GLOW = '/IMG_0683.JPG'
+const GLOW = '/IMG_0683.webp'
 
 /**
  * Our Products — a bento of the Nivora tools.
@@ -226,7 +226,7 @@ function BoxCard() {
       {/* Text */}
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <AppLogo src="/box-logo.png" />
+          <AppLogo src="/box-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
           <ComingSoon />
         </div>
@@ -258,7 +258,7 @@ function VoiceCard() {
       {/* Label — anchored top-left, above the node, ribbon and correction pills */}
       <div className="relative z-[1]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <AppLogo src="/voice-logo.png" />
+          <AppLogo src="/voice-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
           <ComingSoon />
         </div>
@@ -297,8 +297,8 @@ const DOCK_APPS: DockApp[] = [
   { id: 'calculator', name: 'Calculator', icon: 'https://cdn.jim-nielsen.com/macos/1024/calculator-2021-04-29.png?rf=1024' },
   { id: 'terminal', name: 'Terminal', icon: 'https://cdn.jim-nielsen.com/macos/1024/terminal-2021-06-03.png?rf=1024' },
   { id: 'notes', name: 'Notes', icon: 'https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024' },
-  { id: 'box', name: 'Box by Nivora', icon: '/box-logo.png' },
-  { id: 'voice', name: 'Voice by Nivora', icon: '/voice-logo.png' },
+  { id: 'box', name: 'Box by Nivora', icon: '/box-logo.webp' },
+  { id: 'voice', name: 'Voice by Nivora', icon: '/voice-logo.webp' },
   { id: 'safari', name: 'Safari', icon: 'https://cdn.jim-nielsen.com/macos/1024/safari-2021-06-02.png?rf=1024' },
   { id: 'photos', name: 'Photos', icon: 'https://cdn.jim-nielsen.com/macos/1024/photos-2021-05-28.png?rf=1024' },
   { id: 'music', name: 'Music', icon: 'https://cdn.jim-nielsen.com/macos/1024/music-2021-05-25.png?rf=1024' },

@@ -11,7 +11,7 @@ const MotionLink = motion.create(Link)
 
 /** Soft luminous backdrop — lives in /public, served from the site root.
  *  Clean B&W peak; kept SHARP in the gaps, blurred only through the glass cards. */
-const GLOW = '/bg-peak-stars.jpg'
+const GLOW = '/bg-peak-stars.webp'
 const GLOW_W = 1199
 const GLOW_H = 750
 /** object-position used by BOTH the sharp band image and the per-card blurred copy,

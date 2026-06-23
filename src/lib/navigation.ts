@@ -15,15 +15,15 @@ export type NavItem = {
 }
 
 export const PRODUCTS: NavItem[] = [
-  { title: 'Box', desc: 'All your communication, brought together in one place.', href: '/#features', img: '/box-logo.png', comingSoon: true },
-  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: '/#features', img: '/voice-logo.png', comingSoon: true },
+  { title: 'Box', desc: 'All your communication, brought together in one place.', href: '/#features', img: '/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: '/#features', img: '/voice-logo.webp', comingSoon: true },
 ]
 
 export const SERVICES: NavItem[] = [
-  { title: 'App Design', desc: 'Custom apps built around your idea.', href: '/services/app-design', img: '/service-appdesign.png' },
-  { title: 'Local AI', desc: 'Secure AI on your own servers or ours.', href: '/services/local-ai', img: '/service-localai.png' },
-  { title: 'AIOS', desc: 'A custom AI operating system for your company.', href: '/services/aios', img: '/service-aios.png' },
-  { title: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.', href: '/services/ai-consulting', img: '/service-consulting.png' },
+  { title: 'App Design', desc: 'Custom apps built around your idea.', href: '/services/app-design', img: '/service-appdesign.webp' },
+  { title: 'Local AI', desc: 'Secure AI on your own servers or ours.', href: '/services/local-ai', img: '/service-localai.webp' },
+  { title: 'AIOS', desc: 'A custom AI operating system for your company.', href: '/services/aios', img: '/service-aios.webp' },
+  { title: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.', href: '/services/ai-consulting', img: '/service-consulting.webp' },
 ]
 
 export const COMPANY_PRIMARY: NavItem[] = [

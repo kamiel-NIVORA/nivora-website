@@ -13,8 +13,8 @@ import { motion, useInView } from 'framer-motion'
 type Notif = { app: string; logo: string; blurb: string }
 
 const NOTIFS: Notif[] = [
-  { app: 'Box', logo: '/box-logo.png', blurb: 'All your communication in one place.' },
-  { app: 'Voice', logo: '/voice-logo.png', blurb: 'Speech-to-text, tuned to your voice.' },
+  { app: 'Box', logo: '/box-logo.webp', blurb: 'All your communication in one place.' },
+  { app: 'Voice', logo: '/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
 ]
 
 /** Houdt de echte tijd bij (HH:MM) — ververst elke 15s. */
@@ -76,15 +76,12 @@ export function NotificationStack() {
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
-      {/* dark grain wallpaper. The source is small, so show the WHOLE frame (zoomed out =
-          downscaled = crisp) over a soft blurred copy that fills the panel edges, so it reads
-          as one calm texture instead of an enlarged, soft close-up. */}
+      {/* dark grain wallpaper — zoomed to fill the whole frame, like an Apple lockscreen. */}
       <img
-        src="/products-bg.jpg"
-        aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+        src="/products-bg.webp"
+        alt=""
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
-      <img src="/products-bg.jpg" alt="" className="absolute inset-0 h-full w-full object-contain" />
       {/* leesbaarheid: lichte verdonkering achter de meldingen (beeld is al donker) */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/15" />
 

@@ -229,37 +229,47 @@ export function Navbar() {
         </motion.nav>
 
         {/* Dropdown — rendered OUTSIDE the nav so its backdrop-filter samples the page
-            directly (same frosted blur as the scrolled bar), on a static, un-animated layer. */}
-        {active && (
-          <div
-            className="absolute left-0 right-0 top-full hidden justify-center pt-2 lg:flex"
-            onMouseEnter={cancelClose}
-            onMouseLeave={closeSoon}
-          >
-            <div className="relative">
-              {/* Static frosted-glass layer — identical blur to the bar */}
-              <div className="absolute inset-0 rounded-[20px] border border-line bg-black/55 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl" />
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            directly (same frosted blur as the scrolled bar). It unfolds from the bar
+            on hover and folds back smoothly on leave; switching menus keeps the panel
+            up and only slides its contents. */}
+        <AnimatePresence>
+          {active && (
+            <motion.div
+              key="nav-dropdown"
+              initial={{ opacity: 0, y: 4, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.97 }}
+              transition={{ duration: 0.22, ease }}
+              style={{ transformOrigin: 'top center' }}
+              className="absolute left-0 right-0 top-full hidden justify-center pt-2 lg:flex"
+              onMouseEnter={cancelClose}
+              onMouseLeave={closeSoon}
+            >
+              <div className="relative">
+                {/* Static frosted-glass layer — identical blur to the bar */}
+                <div className="absolute inset-0 rounded-[20px] border border-line bg-black/55 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-              {/* Animated content on top of the blur */}
-              <div className="relative overflow-hidden p-2.5">
-                <AnimatePresence mode="popLayout" custom={dir} initial={false}>
-                  <motion.div
-                    key={active}
-                    custom={dir}
-                    variants={slide}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.28, ease }}
-                  >
-                    <PanelContent active={active} onSelect={() => setActive(null)} />
-                  </motion.div>
-                </AnimatePresence>
+                {/* Animated content on top of the blur */}
+                <div className="relative overflow-hidden p-2.5">
+                  <AnimatePresence mode="popLayout" custom={dir} initial={false}>
+                    <motion.div
+                      key={active}
+                      custom={dir}
+                      variants={slide}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.28, ease }}
+                    >
+                      <PanelContent active={active} onSelect={() => setActive(null)} />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
