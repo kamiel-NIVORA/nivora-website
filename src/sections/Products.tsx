@@ -55,7 +55,7 @@ export function Products() {
       <div className="relative mx-auto w-full max-w-[1480px] px-6">
         <SectionHeading
           title="Our Products"
-          subtitle="Intelligent software, built by Nivora and ready from day one. Pick the tool that fits the way you already work."
+          subtitle="Intelligent software, built by Nivora. Box and Voice are coming soon, join the waiting list to be first in line when they launch."
         />
 
         <div
@@ -86,7 +86,7 @@ export function Products() {
             <MobileCard />
           </BentoCard>
 
-          {/* ── Voice — wide black hero, one clean wave ── */}
+          {/* ── Voice — wide black hero, the speech-to-clean-copy flow ── */}
           <BentoCard
             progress={progress}
             dx={30}
@@ -95,7 +95,7 @@ export function Products() {
             dark
             href="/waitlist?product=voice"
             ariaLabel="Voice, join the waiting list"
-            className="lg:col-start-7 lg:col-span-6 lg:row-start-1"
+            className="min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <VoiceCard />
           </BentoCard>
@@ -130,12 +130,12 @@ export function Products() {
   )
 }
 
-/* ──────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────
    Card shell — converge-on-scroll wrapper, glass or black, with the same
    frosted gloss the service cards use. When `href` is set the whole card is a
    link to the waiting list: an overlay anchor sits under the (pointer-events
    transparent) content, and any real button inside re-enables its own clicks.
-   ────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────────────── */
 function BentoCard({
   progress,
   dx = 0,
@@ -193,7 +193,7 @@ function BentoCard({
   )
 }
 
-/* Small shared bits ──────────────────────────────────────── */
+/* Small shared bits ──────────────────────────────────────────── */
 function ComingSoon() {
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
@@ -215,7 +215,7 @@ function AppLogo({ src }: { src: string }) {
   )
 }
 
-/* ── Card 1 · Box ─────────────────────────────────────────── */
+/* ── Card 1 · Box ──────────────────────────────────────────── */
 function BoxCard() {
   return (
     <>
@@ -245,24 +245,25 @@ function BoxCard() {
   )
 }
 
-/* ── Card 2 · Voice — wide hero with flowing-text slingers ───────────────── */
+/* ── Card 2 · Voice — wide hero with the speech-to-clean-copy flow ────────── */
 function VoiceCard() {
   return (
-    <div className="relative flex h-full flex-col">
-      {/* Full-bleed slingers — escape the card padding, clipped to its corners */}
+    <div className="relative h-full">
+      {/* Full-bleed flow + node — escape the card padding, clipped to its corners */}
       <div className="pointer-events-none absolute -inset-7 overflow-hidden rounded-[28px] lg:-inset-8">
         <VoiceSlingers />
-        {/* Soft corner scrim so the label reads cleanly over the faint streams */}
-        <div className="absolute inset-0 bg-[radial-gradient(62%_82%_at_0%_0%,rgba(10,10,10,0.94),rgba(10,10,10,0.4)_42%,transparent_66%)]" />
+        {/* Bottom scrim so the label reads cleanly under the streams */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(10,10,10,0.96),rgba(10,10,10,0.55)_24%,transparent_52%)]" />
       </div>
 
-      <div className="relative z-[1] max-w-sm">
+      {/* Label — anchored bottom-left, clear of the node and the correction pills */}
+      <div className="relative z-[1] flex h-full flex-col justify-end">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/voice-logo.png" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
           <ComingSoon />
         </div>
-        <p className="mt-3 text-[14px] leading-relaxed text-faint">
+        <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-faint">
           Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.
         </p>
       </div>
@@ -270,7 +271,7 @@ function VoiceCard() {
   )
 }
 
-/* ── Card 3 · Made for mobile (empty phone-bottom frame) ──────────────── */
+/* ── Card 3 · Made for mobile (empty phone-bottom frame) ────────────────── */
 function MobileCard() {
   return (
     <>
@@ -291,7 +292,7 @@ function MobileCard() {
   )
 }
 
-/* ── Card 4 · Made for desktop (empty browser-window frame) ───────────── */
+/* ── Card 4 · Made for desktop (empty browser-window frame) ─────────────── */
 function DesktopCard() {
   return (
     <>
