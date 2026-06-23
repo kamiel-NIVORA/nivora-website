@@ -4,12 +4,13 @@ import { ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
-import { POSTS } from '@/data/posts'
+import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
 
 export function BlogPost() {
   const { slug } = useParams()
-  const post = POSTS.find((p) => p.slug === slug)
+  const { posts, loaded } = usePosts()
+  const post = posts.find((p) => p.slug === slug)
 
   // Per-post SEO: set the tab title and meta description, then restore on leave.
   useEffect(() => {
@@ -28,6 +29,15 @@ export function BlogPost() {
   }, [post])
 
   if (!post) {
+    // Still waiting on the live posts (e.g. a freshly published one not in the
+    // bundled set yet) — show a quiet loading state before deciding it's a 404.
+    if (!loaded) {
+      return (
+        <main className="mx-auto flex min-h-[70vh] w-full max-w-[760px] items-center justify-center px-6">
+          <span className="text-sm text-faint">Loading…</span>
+        </main>
+      )
+    }
     return (
       <main className="mx-auto flex min-h-[70vh] w-full max-w-[760px] flex-col items-center justify-center px-6 text-center">
         <h1 className="font-serif text-3xl text-ink">Article not found</h1>

@@ -1,14 +1,18 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Reveal } from '@/components/animations/Reveal'
 import { PostCard } from '@/components/PostCard'
-import { POSTS } from '@/data/posts'
+import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
 
-const CATEGORIES = ['View All', ...Array.from(new Set(POSTS.map((p) => p.category)))]
-
 export function BlogIndex() {
+  const { posts: all } = usePosts()
   const [active, setActive] = useState('View All')
-  const posts = active === 'View All' ? POSTS : POSTS.filter((p) => p.category === active)
+
+  const categories = useMemo(
+    () => ['View All', ...Array.from(new Set(all.map((p) => p.category)))],
+    [all],
+  )
+  const posts = active === 'View All' ? all : all.filter((p) => p.category === active)
 
   return (
     <main>
@@ -23,7 +27,7 @@ export function BlogIndex() {
         {/* Category filters */}
         <Reveal delay={0.08}>
           <div className="mt-8 flex flex-wrap gap-2">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActive(cat)}
