@@ -125,16 +125,17 @@ function Hero() {
   const { open } = useContactModal()
   return (
     <section className="relative flex min-h-[92svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32">
-      {/* Scenic peak */}
-      <img src={HERO_IMG} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-center" />
-      {/* Legibility: even darken, a soft scrim under the text, and fades top and bottom */}
-      <div className="absolute inset-0 bg-black/55" />
+      {/* Scenic peak, framed a little lower so the sharp summit sits up out of view */}
+      <img src={HERO_IMG} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[50%_72%]" />
+      {/* Vertical darken: lighter over the mountain up top, heavier toward the text below */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/45 to-black/70" />
+      {/* Soft scrim right behind the headline for crisp white type */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(72% 56% at 50% 54%, rgba(0,0,0,0.5), transparent 78%)' }}
+        style={{ background: 'radial-gradient(70% 48% at 50% 50%, rgba(0,0,0,0.5), transparent 78%)' }}
       />
-      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/50 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-bg via-bg/75 to-transparent" />
 
       <motion.div
