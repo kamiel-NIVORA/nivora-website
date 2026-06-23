@@ -1,145 +1,235 @@
-import { useEffect, useRef } from 'react'
-import { animate, useInView } from 'framer-motion'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { AnimatePresence, animate, motion, useInView } from 'framer-motion'
+import { Check, Sparkles, type LucideIcon } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
-/**
- * Voice card visual — ONE clean wave.
- *
- * A single ribbon of words flows across the whole card on a gentle wave. On the
- * left it reads loose and dim (raw speech); it fades as it passes behind the
- * Nivora mark at the centre, then emerges bright and clean on the right (polished
- * copy). Speech in, clean writing out, through Nivora.
- *
- * The flow is real text on an SVG path, scrolled by animating `startOffset`. It
- * loops with no seam because it shifts by exactly one MEASURED repeat-unit
- * length (measured only after the web font loads, so cold paints don't bake in a
- * jump). Idles off-screen (`useInView`) and respects `prefers-reduced-motion`.
- */
+/** CSS style that also carries custom properties (e.g. --bar-min). */
+type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
-const NIVORA_MARK = '/nivora-mark-dark.png'
+/**
+ * Voice card visual — speech in, clean writing out.
+ *
+ * Raw dictation streams in from the LEFT: dim, lowercase, full of stutters and
+ * filler ("the the", "um", no punctuation). It flows along a gentle wave into a
+ * live waveform node at the centre and emerges on the RIGHT as bright, clean,
+ * properly punctuated copy. Small pills pop above the node naming each fix
+ * Nivora just made (removed a repeat, fixed grammar, added punctuation, ...).
+ *
+ * The two streams are real text on one SVG path, scrolled by animating
+ * `startOffset`. Each loops seamlessly by shifting exactly one MEASURED repeat
+ * unit (measured only after the web font loads, so cold paints don't bake in a
+ * jump), and both move at the same pixel speed so the flow reads as one motion.
+ * The whole thing idles off-screen and respects prefers-reduced-motion.
+ */
 
 const VB_W = 1000
 const VB_H = 420
 
-/* One smooth wave, run past both edges so the text dissolves into the fades. */
-const WAVE = 'M -180 206 C 70 138 250 138 430 206 S 720 296 850 222 S 1090 150 1180 208'
+/* One gentle, even wave through the node at (500, 210) — no lumps, easy to read. */
+const WAVE = 'M -120 210 C 150 172 300 172 500 210 S 850 248 1120 210'
 
-/* The repeating line — clean sentences; the fill gradient does the raw→polished
-   feel, so the same words read dim on the left and crisp on the right. */
-const UNIT =
-  "Send the recap to the team.   Add a follow-up for Friday.   Confirm the deadline.   Share yesterday's notes.   "
-const REPEAT = 6
-const FONT_SIZE = 21
-const DURATION = 30
+/* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
+const RAW =
+  "so um i think their going to handle the the first part but i'm not totally sure   also i told the team the new timeline   "
+/* Clean copy (right): grammar fixed, filler and repeat gone, real punctuation. */
+const CLEAN =
+  "So, I think they're going to handle the first part, but I'm not totally sure. Also, I told the team the new timeline is set.   "
+
+const REPEAT = 3
+const FONT_SIZE = 20
+const SPEED = 26 // px/second — both streams share it, so the flow reads as one motion
+
+/* The fixes Nivora calls out, popping above the node in turn. */
+const FIXES: { icon: LucideIcon; label: string }[] = [
+  { icon: Check, label: 'Removed filler' },
+  { icon: Check, label: 'Removed repetition' },
+  { icon: Check, label: 'Fixed grammar' },
+  { icon: Check, label: 'Added punctuation' },
+  { icon: Sparkles, label: 'Polished the copy' },
+]
+
+/* Equaliser profile — taller in the middle so the resting node reads as a voice. */
+const BARS = [0.34, 0.5, 0.42, 0.66, 0.82, 0.58, 0.94, 0.72, 1, 0.72, 0.94, 0.58, 0.82, 0.66, 0.42, 0.5, 0.34]
+const BAR_TRACK = 26 // px, the tallest a bar can reach inside the pill
 
 export function VoiceSlingers() {
   const reduced = usePrefersReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
-  const textPathRef = useRef<SVGTextPathElement>(null)
-  const measureRef = useRef<SVGTextElement>(null)
+  const rawPathRef = useRef<SVGTextPathElement>(null)
+  const cleanPathRef = useRef<SVGTextPathElement>(null)
+  const rawMeasureRef = useRef<SVGTextElement>(null)
+  const cleanMeasureRef = useRef<SVGTextElement>(null)
   const inView = useInView(rootRef, { amount: 0.3 })
+  const [fix, setFix] = useState(0)
 
+  // ── Flowing text — measure each repeat unit against the real font, then loop ──
   useEffect(() => {
-    const tp = textPathRef.current
-    const measure = measureRef.current
-    if (!tp || !measure) return
+    const streams = [
+      { tp: rawPathRef.current, m: rawMeasureRef.current },
+      { tp: cleanPathRef.current, m: cleanMeasureRef.current },
+    ]
+    if (streams.some((s) => !s.tp || !s.m)) return
 
-    let controls: ReturnType<typeof animate> | undefined
+    let controls: ReturnType<typeof animate>[] = []
     let cancelled = false
 
-    // (Re)measure against the real font, then (re)start — idempotent. Measuring
-    // only after the web font is in use keeps the loop seamless; a fallback
-    // measurement would make the shift miss one repeat period and jump.
+    // (Re)measure + (re)start — idempotent. Shifting by exactly one MEASURED unit
+    // keeps the loop seamless; measuring only once the web font is live avoids a
+    // cold-paint jump. startOffset runs -unit → 0 so glyphs travel rightward:
+    // raw flows in from the left and dissolves at the node, clean flows out right.
     const apply = () => {
       if (cancelled) return
-      controls?.stop()
-      const unitLen = measure.getComputedTextLength()
-      if (!unitLen) return
-      if (reduced || !inView) {
-        tp.setAttribute('startOffset', String(-unitLen / 2))
-        return
+      controls.forEach((c) => c.stop())
+      controls = []
+      for (const { tp, m } of streams) {
+        const unit = m!.getComputedTextLength()
+        if (!unit) continue
+        if (reduced || !inView) {
+          tp!.setAttribute('startOffset', String(-unit / 2))
+          continue
+        }
+        controls.push(
+          animate(-unit, 0, {
+            duration: unit / SPEED,
+            ease: 'linear',
+            repeat: Infinity,
+            onUpdate: (v) => tp!.setAttribute('startOffset', String(v)),
+          }),
+        )
       }
-      controls = animate(0, -unitLen, {
-        duration: DURATION,
-        ease: 'linear',
-        repeat: Infinity,
-        onUpdate: (v) => tp.setAttribute('startOffset', String(v)),
-      })
     }
 
     const fonts = document.fonts
-    if (fonts?.load) {
-      fonts.load(`${FONT_SIZE}px "Inter"`).then(apply, apply)
-    } else {
-      apply()
-    }
+    if (fonts?.load) fonts.load(`${FONT_SIZE}px "Inter"`).then(apply, apply)
+    else apply()
 
     return () => {
       cancelled = true
-      controls?.stop()
+      controls.forEach((c) => c.stop())
     }
   }, [reduced, inView])
 
-  const repeated = UNIT.repeat(REPEAT)
+  // ── Cycle the correction pills while the card is on screen ──
+  useEffect(() => {
+    if (reduced || !inView) return
+    const id = window.setInterval(() => setFix((f) => (f + 1) % FIXES.length), 2400)
+    return () => window.clearInterval(id)
+  }, [reduced, inView])
+
+  const Active = FIXES[fix].icon
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden">
-      {/* Soft focal glow behind the node so it lifts off the wave. */}
+      {/* Soft olive focal glow so the node lifts off the wave. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[210px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(150,167,102,0.18),transparent)] blur-[2px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[220px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(150,167,102,0.16),transparent)] blur-[2px]"
       />
 
+      {/* The flowing transcript */}
       <svg
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+        className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_right,transparent,black_11%,black_89%,transparent)]"
         aria-hidden
       >
         <defs>
-          {/* Raw + dim on the left, dips into the node, crisp + bright on the right. */}
-          <linearGradient id="voice-wave-grad" gradientUnits="userSpaceOnUse" x1="120" y1="0" x2="880" y2="0">
-            <stop offset="0" stopColor="#ffffff" stopOpacity="0.26" />
-            <stop offset="0.34" stopColor="#ffffff" stopOpacity="0.16" />
-            <stop offset="0.47" stopColor="#ffffff" stopOpacity="0.07" />
-            <stop offset="0.6" stopColor="#ffffff" stopOpacity="0.45" />
-            <stop offset="0.78" stopColor="#ffffff" stopOpacity="0.82" />
-            <stop offset="1" stopColor="#ffffff" stopOpacity="0.92" />
+          {/* Raw — dim grey, fades out just before the node. */}
+          <linearGradient id="vw-raw" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
+            <stop offset="0" stopColor="#9a9a9a" stopOpacity="0" />
+            <stop offset="0.1" stopColor="#9a9a9a" stopOpacity="0.34" />
+            <stop offset="0.34" stopColor="#8f8f8f" stopOpacity="0.3" />
+            <stop offset="0.44" stopColor="#8f8f8f" stopOpacity="0" />
+          </linearGradient>
+          {/* Clean — emerges from the node with a brief olive cue, then bright white. */}
+          <linearGradient id="vw-clean" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
+            <stop offset="0.55" stopColor="#96a766" stopOpacity="0" />
+            <stop offset="0.6" stopColor="#cfe0a8" stopOpacity="0.85" />
+            <stop offset="0.66" stopColor="#ffffff" stopOpacity="0.96" />
+            <stop offset="0.9" stopColor="#ffffff" stopOpacity="0.96" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
         </defs>
 
-        <path id="voice-wave-path" d={WAVE} fill="none" />
-        <text
-          fontSize={FONT_SIZE}
-          dominantBaseline="middle"
-          fill="url(#voice-wave-grad)"
-          style={{ letterSpacing: '0.2px' }}
-        >
-          <textPath ref={textPathRef} href="#voice-wave-path" startOffset="0">
-            {repeated}
+        <path id="vw-path" d={WAVE} fill="none" />
+
+        <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" dominantBaseline="middle" fill="url(#vw-raw)" style={{ letterSpacing: '0.2px' }}>
+          <textPath ref={rawPathRef} href="#vw-path" startOffset="0">
+            {RAW.repeat(REPEAT)}
+          </textPath>
+        </text>
+        <text fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" dominantBaseline="middle" fill="url(#vw-clean)" style={{ letterSpacing: '0.1px' }}>
+          <textPath ref={cleanPathRef} href="#vw-path" startOffset="0">
+            {CLEAN.repeat(REPEAT)}
           </textPath>
         </text>
 
-        {/* Hidden single unit — measured so the loop shifts by exactly one repeat. */}
-        <text
-          ref={measureRef}
-          fontSize={FONT_SIZE}
-          visibility="hidden"
-          x={-9999}
-          style={{ letterSpacing: '0.2px' }}
-        >
-          {UNIT}
+        {/* Hidden single units — measured so each loop shifts by exactly one repeat. */}
+        <text ref={rawMeasureRef} fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" visibility="hidden" x={-9999} style={{ letterSpacing: '0.2px' }}>
+          {RAW}
+        </text>
+        <text ref={cleanMeasureRef} fontSize={FONT_SIZE} fontFamily="Inter, sans-serif" visibility="hidden" x={-9999} style={{ letterSpacing: '0.1px' }}>
+          {CLEAN}
         </text>
       </svg>
 
-      {/* The Nivora node — the wave passes behind it. */}
+      {/* Correction pill — one fix at a time, just above the node. */}
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-[88px] justify-center">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={fix}
+            initial={reduced ? false : { opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduced ? undefined : { opacity: 0, y: -8, scale: 0.95 }}
+            transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-line-strong bg-[#0d0d0d]/90 py-1.5 pl-1.5 pr-3 text-[12px] font-medium text-ink shadow-[0_12px_30px_-12px_rgba(0,0,0,0.8)] backdrop-blur-md"
+          >
+            <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-olive/15">
+              <Active className="h-3 w-3 text-olive" strokeWidth={2.6} />
+            </span>
+            {FIXES[fix].label}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* The Nivora voice node — a live waveform pill the flow passes through. */}
       <div className="absolute inset-0 grid place-items-center">
-        <span
-          className="grid h-16 w-16 place-items-center rounded-full bg-white shadow-[0_18px_44px_-10px_rgba(0,0,0,0.7)] ring-1 ring-black/5"
-        >
-          <img src={NIVORA_MARK} alt="" className="h-[26px] w-auto" />
-        </span>
+        <div className="relative">
+          {/* breathing accent dots */}
+          <Dot className="-left-3 -top-2" delay="0s" reduced={reduced} />
+          <Dot className="-right-2 -top-3" delay="0.6s" reduced={reduced} />
+          <Dot className="-bottom-2 -right-3" delay="1.1s" reduced={reduced} />
+
+          <div className="relative flex h-[58px] w-[110px] items-center justify-center gap-[3px] overflow-hidden rounded-[18px] border border-line-strong bg-[#0d0d0d]/85 px-4 shadow-[0_20px_46px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md">
+            {BARS.map((h, i) => (
+              <span
+                key={i}
+                className="w-[2.5px] rounded-full bg-gradient-to-b from-white to-olive"
+                style={
+                  {
+                    height: `${Math.round(h * BAR_TRACK)}px`,
+                    transformOrigin: 'center',
+                    '--bar-min': 0.4,
+                    ...(reduced
+                      ? { transform: 'scaleY(0.7)' }
+                      : { animation: `voiceBar ${(1.1 + (i % 3) * 0.22).toFixed(2)}s ease-in-out ${(i * 0.08).toFixed(2)}s infinite` }),
+                  } as VarStyle
+                }
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
+  )
+}
+
+function Dot({ className, delay, reduced }: { className?: string; delay: string; reduced: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={`absolute h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.8)] ${className ?? ''}`}
+      style={reduced ? { opacity: 0.6 } : { animation: `voiceDot 2.6s ease-in-out ${delay} infinite` }}
+    />
   )
 }

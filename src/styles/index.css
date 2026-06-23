@@ -91,3 +91,15 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+
+/* Voice card — live waveform bar (a single equaliser tick). */
+@keyframes voiceBar {
+  0%, 100% { transform: scaleY(var(--bar-min, 0.34)); }
+  50% { transform: scaleY(1); }
+}
+
+/* Voice card — the tiny accent dots that breathe around the node. */
+@keyframes voiceDot {
+  0%, 100% { opacity: 0.2; transform: scale(0.7); }
+  50% { opacity: 0.85; transform: scale(1); }
+}
