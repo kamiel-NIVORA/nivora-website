@@ -103,7 +103,7 @@ export const POSTS: Post[] = [
     author: 'Kamiel Niville',
     date: 'May 22, 2026',
     image: '/images/blog-local-peak.jpg',
-    imagePosition: 'center 28%',
+    imagePosition: 'center 16%',
     coverLabel: 'Local AI',
     excerpt:
       'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',

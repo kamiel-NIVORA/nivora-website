@@ -64,7 +64,8 @@ export function BlogPost() {
           </Reveal>
         </header>
 
-        {/* Cover — optional object-position lift, plus a glass label or app-icon chips */}
+        {/* Cover — optional object-position lift, a big centered serif label
+            (brand-cover style), and/or app-icon chips at the bottom corners. */}
         <Reveal mode="mount" delay={0.12}>
           <div className="relative mt-12 overflow-hidden rounded-3xl border border-line">
             <img
@@ -74,12 +75,21 @@ export function BlogPost() {
               style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
             />
 
-            {(post.coverLabel || post.coverIcons) && (
+            {/* Centered serif label, like the magazine-cover marks */}
+            {post.coverLabel && (
+              <div className="pointer-events-none absolute inset-0 grid place-items-center">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_56%_48%_at_50%_50%,rgba(0,0,0,0.34),transparent_70%)]" />
+                <span className="relative px-6 text-center font-serif text-[44px] leading-none tracking-[0.01em] text-white/95 [text-shadow:0_2px_22px_rgba(0,0,0,0.55)] sm:text-[64px] lg:text-[76px]">
+                  {post.coverLabel}
+                </span>
+              </div>
+            )}
+
+            {/* App-icon chips, one per bottom corner */}
+            {post.coverIcons && (
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5">
-                {/* left slot */}
                 <div className="flex">
-                  {post.coverLabel && <CoverChip>{post.coverLabel}</CoverChip>}
-                  {post.coverIcons?.[0] && (
+                  {post.coverIcons[0] && (
                     <CoverChip>
                       <img
                         src={post.coverIcons[0].src}
@@ -90,9 +100,8 @@ export function BlogPost() {
                     </CoverChip>
                   )}
                 </div>
-                {/* right slot */}
                 <div className="flex">
-                  {post.coverIcons?.[1] && (
+                  {post.coverIcons[1] && (
                     <CoverChip>
                       <img
                         src={post.coverIcons[1].src}
