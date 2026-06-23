@@ -10,6 +10,7 @@ import { BlogIndex } from '@/pages/BlogIndex'
 import { BlogPost } from '@/pages/BlogPost'
 import { MediaKit } from '@/pages/MediaKit'
 import { WaitlistPage } from '@/pages/WaitlistPage'
+import { AffiliatePage } from '@/pages/AffiliatePage'
 import { HelpCenterPage } from '@/pages/HelpCenterPage'
 import { LegalPage } from '@/pages/LegalPage'
 import { TERMS, PRIVACY } from '@/data/legal'
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/media" element={<MediaKit />} />
             <Route path="/waitlist" element={<WaitlistPage />} />
+            <Route path="/affiliate" element={<AffiliatePage />} />
             <Route path="/help" element={<HelpCenterPage />} />
             <Route path="/terms" element={<LegalPage doc={TERMS} />} />
             <Route path="/privacy" element={<LegalPage doc={PRIVACY} />} />

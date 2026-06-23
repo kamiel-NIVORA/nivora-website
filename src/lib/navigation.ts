@@ -30,7 +30,7 @@ export const COMPANY_PRIMARY: NavItem[] = [
   { title: 'About Us', desc: 'Learn more about our story and team.', href: '/about', iconImg: '/icon-about.png' },
   { title: 'Customer Stories', desc: "See how we've helped our clients succeed.", href: '/#contact', iconImg: '/icon-stories.png' },
   { title: 'Partnerships', desc: 'Collaborate with us for mutual growth.', href: '/#contact', iconImg: '/icon-partnerships.png' },
-  { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/#contact', iconImg: '/icon-affiliate.png' },
+  { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/affiliate', iconImg: '/icon-affiliate.png', comingSoon: true },
 ]
 
 export const RESOURCES: NavItem[] = [

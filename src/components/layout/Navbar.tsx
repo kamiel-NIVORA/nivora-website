@@ -212,7 +212,10 @@ export function Navbar() {
               ))}
               <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Company</p>
               {COMPANY_PRIMARY.map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">
+                  {l.title}
+                  {l.comingSoon && <ComingSoonTag />}
+                </a>
               ))}
               <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Resources</p>
               {RESOURCES.map((l) => (
