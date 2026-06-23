@@ -1,3 +1,17 @@
+/**
+ * Blog content for Nivora Works.
+ *
+ * A post body is an ordered list of blocks. A plain string is a paragraph; the
+ * object forms add a subheading, a pull quote, or an inline image. Rendering
+ * lives in `src/pages/BlogPost.tsx`. House voice: calm, plain-spoken, no hype,
+ * and no em-dashes in copy (Kamiel's hard preference).
+ */
+export type PostBlock =
+  | string
+  | { h2: string }
+  | { quote: string }
+  | { image: string; alt: string; caption?: string }
+
 export type Post = {
   slug: string
   title: string
@@ -6,61 +20,100 @@ export type Post = {
   date: string
   image: string
   excerpt: string
-  body: string[]
+  body: PostBlock[]
 }
 
 export const AUTHOR_ROLE = 'Founder'
 
 export const POSTS: Post[] = [
   {
-    slug: 'why-most-companies-need-less-ai',
-    title: 'Why most companies need less AI, not more.',
-    category: 'Perspective',
+    slug: 'meet-box-and-voice',
+    title: 'Meet Box and Voice, the first two apps from Nivora.',
+    category: 'Product',
     author: 'Kamiel Niville',
-    date: 'Jun 12, 2026',
-    image: '/images/2S9MZkkrhQhX1BXE7eQesdMNEk.jpg',
+    date: 'Jun 20, 2026',
+    image: '/images/blog-box-voice-launch.jpg',
     excerpt:
-      'The pressure to adopt AI is everywhere. The honest answer is that most businesses need a smaller, sharper set of systems, not a longer list of tools.',
+      'After months of building quietly, we are ready to introduce the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text.',
     body: [
-      'Almost every founder we talk to feels the same quiet pressure. Everyone else seems to be moving on AI, so they should too. That pressure rarely leads to good decisions. It leads to a pile of trials, half-used subscriptions, and tools nobody really owns.',
-      'We start from the opposite question. Not what AI can do, but what in your business is actually worth changing. Most of the time the answer is short. A handful of repetitive tasks, one or two slow handoffs, a place where information keeps getting lost. Fix those and the rest can stay exactly as it is.',
-      'Less AI, done properly, beats more AI bolted on. A system that one person understands and trusts will get used every day. A platform that promises everything tends to get used by no one.',
-      'So before we build anything, we map where the real cost sits. If a tool does not save money, time, or mistakes, we say so and we leave it out. That is the part most vendors skip.',
-      'The goal is not to make your company look modern. It is to make it work better, with the smallest set of systems that does the job.',
+      'We have been quiet for a while, and that was on purpose. Building software you actually want to open every day takes longer than building something that just demos well. We wanted the first thing you see from us to be the real thing, not a mockup with the rough edges hidden. So here it is. The first two apps in the Nivora suite are Box and Voice.',
+      { h2: 'Box: every message in one calm place' },
+      'Most of us lose small pieces of the day to the same problem. A question comes in over email, the follow-up lands in chat, and the actual decision happens in a DM you forgot to check. Box pulls all of it into one inbox. Email, chat, and direct messages, read and sorted and answered in a single place, without jumping between five tabs to keep one conversation straight.',
+      'It is built to feel quiet. No badges screaming for attention, no inbox that resets your focus every time you blink. You open it, you see what genuinely needs you, you reply, and you close it again. That is the whole idea.',
+      { h2: 'Voice: say it once, get clean copy' },
+      'Voice is speech to text that pays attention to two things at the same time. How you talk, and how you write. You dictate a message, a note, or a first draft, and it comes back as finished copy in your own voice, not a wall of run-on transcription you then have to rewrite. Say it once and move on with your day.',
+      {
+        quote:
+          'We are not trying to add more apps to your day. We are trying to take a few away.',
+      },
+      'That line sits behind everything we make. Box replaces the tab-hopping. Voice replaces the retyping. Both are designed to disappear into your work instead of demanding a place in it. If you ever notice them less, we have done the job right.',
+      { h2: 'Both are coming soon, and the waiting list goes first' },
+      'Box and Voice are in the final stretch before launch, and they will land on iPhone, Mac, Android, and Windows. The fastest way to get them the day they are ready, and to help shape the last round of details, is the waiting list. Everyone on it gets first access.',
+      'It is also where we share the real updates before anywhere else, the honest behind-the-scenes kind, not the polished announcements. If you want to follow how this comes together, join the list and come along early. We would love to have you there from the start.',
     ],
   },
   {
-    slug: 'private-by-design',
-    title: 'Private by design: AI that runs inside your business, not someone else’s cloud.',
-    category: 'Systems',
+    slug: 'how-the-ai-is-actually-going',
+    title: 'How our AI is actually going, in plain words.',
+    category: 'Progress',
     author: 'Kamiel Niville',
-    date: 'May 28, 2026',
-    image: '/images/9jP0u7kHdIoe1HYaQgRX1MKRqE.jpg',
+    date: 'Jun 6, 2026',
+    image: '/images/blog-ai-progress.jpg',
     excerpt:
-      'Your data is part of your business. We build AI systems that run on infrastructure you control, so what is yours stays yours.',
+      'An honest progress update from inside the build. What is working now, what we changed our minds about, and why the quiet, unglamorous parts are the ones we are proudest of.',
     body: [
-      'When you send your documents, customer records, and internal chat to a third-party AI service, you are trusting that company with the core of your business. For a lot of work that trade is fine. For sensitive operations it is not.',
-      'We design AI systems that run inside your business. Your AIOS sits on your own hardware, or in a private environment you control. The data never leaves, the models answer from your own knowledge, and access stays in your hands.',
-      'Private does not mean primitive. Local models have become strong enough to handle real work: reading contracts, drafting replies, searching years of internal files in seconds. The difference is that none of it is logged on a server you cannot see.',
-      'It also means you are not tied to one provider’s pricing or roadmap. The system is yours. If a better model arrives, we swap it in. If a rule changes, we adjust it. You are never waiting on someone else’s release notes.',
-      'Build it once, inside your own walls, and you get the upside of AI without handing over the thing that makes your company yours.',
+      'People ask us how the AI side is going more than almost anything else, so we want to answer it properly, without the usual fog. No grand claims, no roadmap theatre. Just where things actually stand right now.',
+      { h2: 'The models got good enough, quietly' },
+      'A year ago, running capable AI close to your own data meant giving something up on quality. That is no longer true. The models we build on can read a long contract, search years of internal files, and draft a careful reply, and they do it fast enough to feel instant. The leap happened without much noise, and it quietly changed what we are able to promise you.',
+      {
+        image: '/images/blog-ai-hand.jpg',
+        alt: 'A human hand reaching toward a hand formed from points of light',
+        caption:
+          'The gap between what people expect from AI and what it can quietly do has closed faster than most of us planned for.',
+      },
+      'What that means in practice is simple. A lot of the things we used to describe as coming soon are now just things the software does. That is a good place to be standing.',
+      { h2: 'We spent more time on trust than on features' },
+      'If we are honest about where the hours went, it was not into piling on more. It went into making the system explain itself. Showing where an answer came from, making it easy to correct, and making sure nothing surprising happens behind your back. A clever feature you do not trust gets used once. A plain one you do trust gets used every day. We optimised hard for the second kind.',
+      {
+        quote:
+          'The quiet parts, the ones nobody puts in a demo, are the parts that decide whether a system survives its first month with a real team.',
+      },
+      'So a lot of our recent work looks unremarkable from the outside. Better handling when a request is unclear. Clearer limits on what the system will and will not do. Faster answers on smaller hardware. None of it makes a flashy screenshot. All of it is why the people testing early builds keep coming back.',
+      { h2: 'What is next' },
+      'The near-term goal has not changed. We want a system that one person can fully understand and rely on, that runs close to your business, and that gets sharper every month without you lifting a finger. We are closer to that than we have ever been, and the pace is picking up rather than slowing down.',
+      'We will keep sharing these updates as they happen, the real ones rather than the tidy ones. If you want them first, the waiting list is the best seat in the house.',
     ],
   },
   {
-    slug: 'value-before-you-commit',
-    title: 'How we show the value of a build before you commit.',
-    category: 'Approach',
+    slug: 'why-we-are-betting-on-local',
+    title: 'Why we are betting on local, the AI that lives inside your business.',
+    category: 'Local',
     author: 'Kamiel Niville',
-    date: 'May 9, 2026',
-    image: '/images/89dxBkhlY82YRVjvzzxceldnL0.jpg',
+    date: 'May 22, 2026',
+    image: '/images/blog-local-peak.jpg',
     excerpt:
-      'No one should sign off on a system they have not seen work. We prove the value on a small, real slice first, then build.',
+      'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',
     body: [
-      'A custom build is a real investment, and most of the risk lives at the start, before anyone knows if the idea holds up. So we move that moment forward. Before a full project, we show you the value on a small, real slice of your work.',
-      'That usually means taking one concrete task you already do and building a working version of the system around it. Not a slide, not a demo with fake data. Your data, your process, running.',
-      'You get to see the output, push on it, and decide with evidence in front of you. If it clearly helps, we scope the full build from there. If it does not, you have lost a small step instead of a large one.',
-      'This is how we take the pressure out of the decision. You are never betting on a promise. You are looking at something that already works and choosing whether to make it bigger.',
-      'We would rather earn the next step than sell the whole thing up front. That is also how we end up building only what matters.',
+      'Almost every AI tool you can buy today works the same way. Your words, your files, and your customers’ details get sent off to a server somewhere, processed there, and sent back. For plenty of tasks that is perfectly fine. But the more we build, the more convinced we become that the real opportunity sits in the other direction. We call it local, and we think it is where a lot of this is quietly heading.',
+      { h2: 'What local actually means' },
+      'Local AI runs inside your own walls. The model lives on hardware you control, your data never leaves it, and the answers come from your own knowledge instead of a shared cloud. Nothing gets logged on a server you cannot see. Your information stays exactly where it already is, which is with you.',
+      'For a long time that came with a catch. Local meant slower, smaller, and noticeably worse. That trade is mostly gone now. Models you can run privately have become strong enough for real work. Reading documents, drafting replies, searching everything you have ever written in seconds. You no longer have to choose between private and capable.',
+      {
+        image: '/images/blog-local-horizon.jpg',
+        alt: 'A lone figure standing on a wide beach, facing the open sea',
+        caption:
+          'Owning the system you depend on changes how it feels to use it. The horizon is yours, not rented.',
+      },
+      { h2: 'Why this matters more than it sounds' },
+      'When the AI lives with you, a few things shift at once. Your data stops being a liability you handed to a third party. Your costs stop being tied to someone else’s per-message pricing. And your system stops being something that can change or vanish because a provider updated their roadmap. You own the thing you rely on, end to end.',
+      {
+        quote:
+          'Private should not mean primitive. The whole point is to get the upside of AI without giving away the thing that makes your company yours.',
+      },
+      'There is a strategic edge here too. The work you do, the knowledge you have built, the way you speak to your customers, all of it becomes something only your system understands and only you can reach. That is hard to copy. It compounds quietly, month after month, the way a real advantage should.',
+      { h2: 'Where we are taking it' },
+      'This is the part of Nivora we are most excited about, and the part we are investing in hardest. We do not see local AI as a niche for the privacy-obsessed. We see it as the sensible default for any business that takes its own data seriously. The mountain is big and we are early on it, which is exactly why we like the view.',
+      'We will keep writing about what we learn as we climb. If local is something you have quietly been wondering about, join the waiting list and follow along. This one is going to be worth watching from the start.',
     ],
   },
 ]

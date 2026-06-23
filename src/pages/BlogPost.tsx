@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
@@ -8,6 +9,22 @@ import { POSTS } from '@/data/posts'
 export function BlogPost() {
   const { slug } = useParams()
   const post = POSTS.find((p) => p.slug === slug)
+
+  // Per-post SEO: set the tab title and meta description, then restore on leave.
+  useEffect(() => {
+    if (!post) return
+    const prevTitle = document.title
+    document.title = `${post.title} · Nivora`
+
+    const meta = document.querySelector('meta[name="description"]')
+    const prevDesc = meta?.getAttribute('content') ?? null
+    meta?.setAttribute('content', post.excerpt)
+
+    return () => {
+      document.title = prevTitle
+      if (meta && prevDesc !== null) meta.setAttribute('content', prevDesc)
+    }
+  }, [post])
 
   if (!post) {
     return (
@@ -53,14 +70,56 @@ export function BlogPost() {
           </div>
         </Reveal>
 
-        {/* Body */}
+        {/* Body — plain strings are paragraphs; objects add headings, pull
+            quotes, and inline images. */}
         <Reveal mode="mount" delay={0.16} className="mx-auto mt-12 max-w-[680px]">
           <div className="flex flex-col gap-6">
-            {post.body.map((para, i) => (
-              <p key={i} className="text-[17px] leading-[1.8] text-muted sm:text-[18px]">
-                {para}
-              </p>
-            ))}
+            {post.body.map((block, i) => {
+              if (typeof block === 'string') {
+                return (
+                  <p key={i} className="text-[17px] leading-[1.8] text-muted sm:text-[18px]">
+                    {block}
+                  </p>
+                )
+              }
+              if ('h2' in block) {
+                return (
+                  <h2
+                    key={i}
+                    className="mt-4 font-serif text-[26px] leading-[1.2] tracking-[-0.01em] text-ink sm:text-[30px]"
+                  >
+                    {block.h2}
+                  </h2>
+                )
+              }
+              if ('quote' in block) {
+                return (
+                  <blockquote
+                    key={i}
+                    className="my-2 border-l-2 border-line-strong pl-5 font-serif text-[22px] leading-[1.4] tracking-[-0.01em] text-ink sm:text-[26px]"
+                  >
+                    {block.quote}
+                  </blockquote>
+                )
+              }
+              return (
+                <figure key={i} className="my-2">
+                  <div className="overflow-hidden rounded-2xl border border-line">
+                    <img
+                      src={block.image}
+                      alt={block.alt}
+                      loading="lazy"
+                      className="aspect-[16/9] w-full object-cover"
+                    />
+                  </div>
+                  {block.caption && (
+                    <figcaption className="mt-3 text-center text-[13.5px] leading-relaxed text-faint">
+                      {block.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              )
+            })}
           </div>
         </Reveal>
 
