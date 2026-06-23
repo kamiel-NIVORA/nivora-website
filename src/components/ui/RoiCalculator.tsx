@@ -66,12 +66,10 @@ const INPUTS: Input[] = [
 function Slider({
   input,
   value,
-  accent,
   onChange,
 }: {
   input: Input
   value: number
-  accent: string
   onChange: (n: number) => void
 }) {
   const pct = ((value - input.min) / (input.max - input.min)) * 100
@@ -98,14 +96,14 @@ function Slider({
           '[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white',
           'focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-white/70',
         )}
-        style={{ background: `linear-gradient(to right, ${accent} ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
+        style={{ background: `linear-gradient(to right, rgba(245,245,245,0.9) ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
       />
       {input.help && <p className="mt-2 text-[11.5px] leading-relaxed text-dim">{input.help}</p>}
     </div>
   )
 }
 
-export function RoiCalculator({ accent }: { accent: string }) {
+export function RoiCalculator() {
   const [values, setValues] = useState<Record<string, number>>(() =>
     Object.fromEntries(INPUTS.map((i) => [i.key, i.default])),
   )
@@ -128,12 +126,6 @@ export function RoiCalculator({ accent }: { accent: string }) {
       ref={ref}
       className="relative overflow-hidden rounded-[28px] border border-line bg-white/[0.025] p-7 backdrop-blur-md sm:p-9 lg:p-11"
     >
-      {/* one accent glow, behind the counter only */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-[10%] top-0 h-[420px] w-[420px] rounded-full blur-[120px]"
-        style={{ background: accent, opacity: 0.1 }}
-      />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
       <div className="relative grid gap-10 lg:grid-cols-[5fr_6fr] lg:gap-14">
@@ -168,7 +160,6 @@ export function RoiCalculator({ accent }: { accent: string }) {
               key={input.key}
               input={input}
               value={values[input.key]}
-              accent={accent}
               onChange={(n) => setValues((v) => ({ ...v, [input.key]: n }))}
             />
           ))}

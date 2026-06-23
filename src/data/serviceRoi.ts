@@ -8,9 +8,8 @@ import type { ServiceSlug } from './serviceContent'
  * table every year. We don't name a price here, we just put a real number next
  * to the cost of doing nothing.
  *
- * AI Consulting is deliberately absent: its value is the plan and the proof
- * before you spend, not hours clawed back, so it shows no calculator. A service
- * with no entry here simply skips the ROI band.
+ * Only AIOS shows the calculator now (it is where the tool-switching cost is
+ * most concrete). Any service with no entry here simply skips the ROI band.
  */
 
 export type RoiFraming = {
@@ -20,16 +19,8 @@ export type RoiFraming = {
 }
 
 export const SERVICE_ROI: Partial<Record<ServiceSlug, RoiFraming>> = {
-  'app-design': {
-    eyebrow: 'The cost of doing nothing',
-    framing:
-      'Put in your own numbers and see what the manual work is quietly costing you, every single year.',
-  },
-  'local-ai': {
-    eyebrow: 'The cost of doing nothing',
-    framing:
-      'See what your team spends, year after year, on the repetitive work a private assistant could take off their plate.',
-  },
+  // Only AIOS shows the calculator (Kamiel, 2026-06-23). App Design and Local AI
+  // no longer show it; AI Consulting never did.
   aios: {
     eyebrow: 'The cost of doing nothing',
     framing:

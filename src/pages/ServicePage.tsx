@@ -65,7 +65,7 @@ export function ServicePage() {
   if (!content || !meta) return <Navigate to="/" replace />
 
   return (
-    <ServiceIntro words={INTRO_WORDS[meta.slug]} accent={meta.accent} storageKey={`nivora-intro-${meta.slug}`}>
+    <ServiceIntro words={INTRO_WORDS[meta.slug]} accent={meta.accent}>
       <main
         className="relative w-full overflow-x-clip bg-bg"
         style={{ ['--accent' as string]: meta.accent } as CSSProperties}
@@ -140,11 +140,12 @@ function GlassCard({ children, className }: { children: ReactNode; className?: s
   )
 }
 
-/** A framed looping animation (GIF). The black-and-white clip is tinted toward
- *  the service accent so the page carries real colour, not just grey. */
-function AnimFrame({ src, accent, className }: { src: string; accent: string; className?: string }) {
+/** A looping animation that melts into the page. The clips are white-on-black,
+ *  so mix-blend-screen drops the black and only the luminous motion reads over
+ *  the dark page, its edges masked into the background (no hard box). */
+function AnimFrame({ src, className }: { src: string; className?: string }) {
   return (
-    <div className={cn('relative isolate overflow-hidden rounded-[24px] border border-line bg-[#070709]', className)}>
+    <div className={cn('relative overflow-hidden', className)}>
       <video
         src={src}
         aria-hidden
@@ -153,17 +154,9 @@ function AnimFrame({ src, accent, className }: { src: string; accent: string; cl
         muted
         playsInline
         preload="metadata"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(72%_72%_at_50%_46%,#000_48%,transparent_92%)] [-webkit-mask-image:radial-gradient(72%_72%_at_50%_46%,#000_48%,transparent_92%)]"
+        style={{ mixBlendMode: 'screen' }}
       />
-      {/* colorize the white motion toward the accent (white × accent = accent, black stays black) */}
-      <div className="absolute inset-0 mix-blend-multiply" style={{ background: accent, opacity: 0.82 }} />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 60% at 50% 45%, ${accent}33, transparent 72%)` }}
-      />
-      <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[24px] ring-1 ring-inset ring-white/[0.06]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
     </div>
   )
 }
@@ -321,7 +314,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <AnimFrame src={meta.anim} accent={meta.accent} className="mt-8 aspect-[5/4]" />
+            <AnimFrame src={meta.anim} className="mt-8 aspect-[5/4]" />
           </Reveal>
         </div>
 
@@ -543,7 +536,7 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
         </div>
         <Reveal delay={0.1}>
           <div className="mt-12">
-            <RoiCalculator accent={meta.accent} />
+            <RoiCalculator />
           </div>
         </Reveal>
       </div>

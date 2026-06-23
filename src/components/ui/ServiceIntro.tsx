@@ -16,12 +16,10 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 export function ServiceIntro({
   words,
   accent,
-  storageKey,
   children,
 }: {
   words: string[]
   accent: string
-  storageKey: string
   children: ReactNode
 }) {
   const reduced = usePrefersReducedMotion()
@@ -31,26 +29,19 @@ export function ServiceIntro({
   const progress = useMotionValue(0)
   const curtainY = useTransform(progress, [0, 1], ['0%', '-116%'])
 
-  // Reduced motion or already-seen → skip straight to the page.
+  // Reduced motion → skip straight to the page. Otherwise it always plays on
+  // landing a service page, slow enough to read.
   useEffect(() => {
-    if (reduced) {
-      setPhase('done')
-      return
-    }
-    try {
-      if (sessionStorage.getItem(storageKey) === 'seen') setPhase('done')
-    } catch {
-      /* private mode — just play it */
-    }
-  }, [reduced, storageKey])
+    if (reduced) setPhase('done')
+  }, [reduced])
 
-  // Cycle the keywords, hold the last one a beat longer, then reveal.
+  // Cycle the keywords slowly so they are readable, hold the last a beat longer.
   useEffect(() => {
     if (phase !== 'intro') return
     const isLast = index >= words.length - 1
     const t = window.setTimeout(
       () => (isLast ? setPhase('reveal') : setIndex((i) => i + 1)),
-      isLast ? 620 : 460,
+      isLast ? 1150 : 950,
     )
     return () => window.clearTimeout(t)
   }, [phase, index, words.length])
@@ -59,19 +50,12 @@ export function ServiceIntro({
   useEffect(() => {
     if (phase !== 'reveal') return
     const controls = animate(progress, 1, {
-      duration: 1.05,
+      duration: 1.3,
       ease: [0.85, 0, 0.15, 1],
-      onComplete: () => {
-        try {
-          sessionStorage.setItem(storageKey, 'seen')
-        } catch {
-          /* ignore */
-        }
-        setPhase('done')
-      },
+      onComplete: () => setPhase('done'),
     })
     return () => controls.stop()
-  }, [phase, progress, storageKey])
+  }, [phase, progress])
 
   const current = words[Math.min(index, words.length - 1)]
 
