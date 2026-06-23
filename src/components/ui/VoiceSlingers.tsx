@@ -8,19 +8,19 @@ type VarStyle = CSSProperties & Record<`--${string}`, string | number>
 
 /**
  * Voice card visual — speech in, clean writing out (Wispr-style ribbon).
- * Raw dim speech bends down from the upper-left into a live waveform node, then
- * rides a soft pale ribbon up to the upper-right as crisp, clean copy. Above the
- * node, correction nudges strike the raw token through and name the fix.
+ * Raw dim speech comes in flat on the left, through a live waveform node, then
+ * rides a pale ribbon up to the upper-right as clean copy. Above the node, a
+ * correction nudge strikes the wrong word in a little phrase and names the fix.
  */
 
 const VB_W = 1000
 const VB_H = 420
 
-/* A valley: raw text bends down from the upper-LEFT into the node at the bottom
-   centre, then the clean copy sweeps up to the upper-RIGHT. Both sides bend up. */
+/* Raw text comes in flatter on the LEFT (a gentle, clean approach into the node
+   at the bottom centre), then the clean copy sweeps up to the upper-RIGHT. */
 const WAVE =
-  'M -120 196 C 150 258 340 318 500 334 C 672 320 802 232 922 166 C 1012 124 1096 106 1190 96'
-const RIBBON = 'M 500 334 C 672 320 802 232 922 166 C 1012 124 1096 106 1190 96'
+  'M -120 300 C 170 322 360 332 500 338 C 672 326 802 238 922 168 C 1012 126 1096 108 1190 98'
+const RIBBON = 'M 500 338 C 672 326 802 238 922 168 C 1012 126 1096 108 1190 98'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
 const RAW =
@@ -31,15 +31,16 @@ const CLEAN =
 
 const REPEAT = 3
 const FONT_SIZE = 20
-const SPEED = 88 // px/second — both streams share it, so the flow reads as one motion
+const SPEED = 104 // px/second — both streams share it, so the flow reads as one motion
 
-/* Wispr-style correction nudges: the raw token gets struck through, then the fix
-   label lands. They cycle slowly so each one reads clearly. */
-const CORRECTIONS: { token: string; label: string }[] = [
-  { token: 'umm', label: 'Removed filler' },
-  { token: 'the the', label: 'Removed repetition' },
-  { token: 'their', label: 'Fixed grammar' },
-  { token: 'you know', label: 'Removed filler' },
+/* Wispr-style correction nudges: a little phrase, the wrong word strikes
+   through in place, then the fix label lands. Cycles slowly so each reads. */
+const CORRECTIONS: { pre: string; strike: string; post: string; label: string }[] = [
+  { pre: 'so', strike: 'umm', post: 'i think', label: 'Removed filler' },
+  { pre: 'told the', strike: 'the', post: 'team', label: 'Removed repetition' },
+  { pre: 'i think', strike: 'their', post: 'going', label: 'Fixed grammar' },
+  { pre: 'be ready', strike: 'like', post: 'soon', label: 'Removed filler' },
+  { pre: 'is it ready', strike: '', post: '', label: 'Added question mark' },
 ]
 
 /* Equaliser profile — taller in the middle so the resting node reads as a voice. */
@@ -171,7 +172,7 @@ export function VoiceSlingers() {
         </text>
       </svg>
 
-      {/* Wispr-style nudge — the raw token strikes through, then the fix lands. */}
+      {/* Wispr-style nudge — a little phrase, the wrong word strikes through, then the fix lands. */}
       <div className="pointer-events-none absolute inset-x-0 top-[50%] flex -translate-y-1/2 justify-center">
         <AnimatePresence mode="wait">
           <motion.div
@@ -182,22 +183,40 @@ export function VoiceSlingers() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-[#171717]/95 px-4 py-2.5 text-[14px] font-semibold text-white shadow-[0_20px_44px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
           >
-            <span className="relative font-medium text-white/55">
-              {c.token}
-              <motion.span
-                aria-hidden
-                initial={reduced ? false : { scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.3, duration: 0.4, ease: 'easeOut' }}
-                style={{ originX: 0 }}
-                className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/75"
-              />
+            <span className="font-medium text-white/45">
+              {c.pre}
+              {c.strike ? (
+                <>
+                  {' '}
+                  <span className="relative text-white/45">
+                    {c.strike}
+                    <motion.span
+                      aria-hidden
+                      initial={reduced ? false : { scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: 0.35, duration: 0.4, ease: 'easeOut' }}
+                      style={{ originX: 0 }}
+                      className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-white/75"
+                    />
+                  </span>
+                  {c.post ? <>{' '}{c.post}</> : null}
+                </>
+              ) : (
+                <motion.span
+                  initial={reduced ? false : { opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.35, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-white"
+                >
+                  ?
+                </motion.span>
+              )}
             </span>
             <motion.span
               initial={reduced ? false : { opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.62, duration: 0.3 }}
-              className="inline-flex items-center gap-1.5"
+              transition={{ delay: 0.68, duration: 0.3 }}
+              className="inline-flex items-center gap-1.5 text-white"
             >
               <span className="grid h-[20px] w-[20px] place-items-center rounded-full bg-white/15">
                 <Check className="h-3.5 w-3.5 text-white" strokeWidth={2.8} />

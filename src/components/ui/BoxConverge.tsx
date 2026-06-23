@@ -4,11 +4,10 @@ import { Check } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
 /**
- * Box card visual — clean, no photo. Every channel you already use (Gmail,
- * Outlook, WhatsApp, Instagram, Facebook, X) pops in on their own tiles, then
- * glides to the centre and resolves into one icon: Box, with a small
- * "All in one inbox" pop-up. One looping progress value (0 → 1) drives the whole
- * timeline so it glides and the loop seam is invisible.
+ * Box card visual — clean, no photo, no tiles. Every channel you already use
+ * (Gmail, Outlook, WhatsApp, Instagram, Facebook) pops in as a bare logo, glides
+ * to the centre and resolves into one icon: Box, with a small "All in one inbox"
+ * pop-up. One looping progress value (0 → 1) drives the timeline.
  */
 
 const BOX_LOGO = '/box-logo.png'
@@ -61,17 +60,9 @@ const APPS: App[] = [
     name: 'Facebook',
     fill: '#1877F2',
     path: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z',
-    sx: -64,
-    sy: 116,
-    appearAt: 0.24,
-  },
-  {
-    name: 'X',
-    fill: '#0a0a0a',
-    path: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
-    sx: 70,
+    sx: 0,
     sy: 122,
-    appearAt: 0.3,
+    appearAt: 0.24,
   },
 ]
 
@@ -94,16 +85,11 @@ function Glyph({ app, className }: { app: App; className?: string }) {
   )
 }
 
-/** White app tile (the resting "home-screen" look). */
+/** The channel logo on its own — no frame, just the clean mark with a soft lift. */
 function Tile({ app, className }: { app: App; className?: string }) {
   return (
-    <div
-      className={
-        'grid h-12 w-12 place-items-center rounded-[14px] bg-white shadow-[0_10px_26px_rgba(0,0,0,0.45)] ring-1 ring-black/5 ' +
-        (className ?? '')
-      }
-    >
-      <Glyph app={app} className="h-[27px] w-[27px]" />
+    <div className={'grid place-items-center ' + (className ?? '')}>
+      <Glyph app={app} className="h-11 w-11 drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)]" />
     </div>
   )
 }
@@ -156,7 +142,7 @@ export function BoxConverge() {
           {APPS.map((app) => (
             <div
               key={app.name}
-              className="pointer-events-none absolute opacity-70"
+              className="pointer-events-none absolute opacity-80"
               style={{ transform: `translate(${app.sx}px, ${app.sy}px)` }}
             >
               <Tile app={app} />
