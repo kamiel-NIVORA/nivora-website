@@ -330,7 +330,7 @@ function PhoneNotifications() {
     // Bottom-anchored stack low on the white widget — below the mark, above the buttons
     <div
       ref={ref}
-      className="absolute inset-x-[11%] top-[34%] bottom-[40%] flex flex-col justify-end gap-[5%]"
+      className="absolute inset-x-[9%] top-[35%] bottom-[40%] flex flex-col justify-end gap-[4.5%]"
     >
       {PHONE_NOTIFS.slice(0, shown).map((n) => (
         <PhoneNotif key={n.name} {...n} />
