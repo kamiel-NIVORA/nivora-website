@@ -40,6 +40,8 @@ export function RippleButton({
   onClick,
   target,
   rel,
+  type,
+  disabled,
 }: {
   children: React.ReactNode
   href?: string
@@ -48,8 +50,11 @@ export function RippleButton({
   onClick?: (e: React.MouseEvent) => void
   target?: string
   rel?: string
+  /** When set, renders a real <button> (e.g. a form submit) instead of an <a>. */
+  type?: 'submit' | 'button'
+  disabled?: boolean
 }) {
-  const ref = useRef<HTMLAnchorElement>(null)
+  const ref = useRef<HTMLElement>(null)
   const [ripple, setRipple] = useState<Ripple | null>(null)
   const [hovered, setHovered] = useState(false)
   const { surface, text, layer, fill } = VARIANTS[variant]
@@ -65,34 +70,33 @@ export function RippleButton({
     }
   }
 
-  return (
-    <a
-      ref={ref}
-      href={href}
-      target={target}
-      rel={rel}
-      onClick={onClick}
-      className={cn(
-        'relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full px-4 text-[13px] font-medium transition-[color] duration-500',
-        surface,
-        text,
-        className,
-      )}
-      onMouseEnter={(e) => {
-        if (hovered || !ref.current) return
-        setHovered(true)
-        setRipple({ ...at(e), key: Date.now() })
-      }}
-      onMouseLeave={(e) => {
-        setHovered(false)
-        if (!ref.current) return
-        setRipple({ ...at(e), key: Date.now(), isLeaving: true })
-      }}
-      onMouseMove={(e) => {
-        if (!ref.current || !hovered) return
-        setRipple((prev) => (prev ? { ...prev, ...at(e) } : null))
-      }}
-    >
+  const classes = cn(
+    'relative inline-flex h-9 items-center justify-center overflow-hidden rounded-full px-4 text-[13px] font-medium transition-[color] duration-500',
+    surface,
+    text,
+    disabled && 'cursor-not-allowed opacity-70',
+    className,
+  )
+
+  const hover = {
+    onMouseEnter: (e: React.MouseEvent) => {
+      if (hovered || !ref.current) return
+      setHovered(true)
+      setRipple({ ...at(e), key: Date.now() })
+    },
+    onMouseLeave: (e: React.MouseEvent) => {
+      setHovered(false)
+      if (!ref.current) return
+      setRipple({ ...at(e), key: Date.now(), isLeaving: true })
+    },
+    onMouseMove: (e: React.MouseEvent) => {
+      if (!ref.current || !hovered) return
+      setRipple((prev) => (prev ? { ...prev, ...at(e) } : null))
+    },
+  }
+
+  const inner = (
+    <>
       {layer && <span className={cn('pointer-events-none absolute inset-0 z-0 rounded-full', layer)} />}
       <span className="relative z-[2]">{children}</span>
       <AnimatePresence>
@@ -119,6 +123,35 @@ export function RippleButton({
           />
         )}
       </AnimatePresence>
+    </>
+  )
+
+  if (type) {
+    return (
+      <button
+        ref={ref as React.RefObject<HTMLButtonElement>}
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        className={classes}
+        {...hover}
+      >
+        {inner}
+      </button>
+    )
+  }
+
+  return (
+    <a
+      ref={ref as React.RefObject<HTMLAnchorElement>}
+      href={href}
+      target={target}
+      rel={rel}
+      onClick={onClick}
+      className={classes}
+      {...hover}
+    >
+      {inner}
     </a>
   )
 }
