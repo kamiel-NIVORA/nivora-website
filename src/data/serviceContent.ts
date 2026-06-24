@@ -115,7 +115,9 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     heroImage: '/bg-waves.webp',
     photo: '/nature-appdesign.webp',
     anim: '/anim-appdesign.mp4',
-    mockup: '/mockup-appdesign.webp',
+    // Brand-neutral device shot (shared with AIOS). The previous asset was a
+    // third-party stock template still showing its vendor branding.
+    mockup: '/mockup-aios.webp',
     heroVideo: 'brain',
     sectionVideo: 'network',
     accent: '#f5f5f5',
