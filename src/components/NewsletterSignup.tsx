@@ -127,11 +127,11 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                 >
                   <motion.span
                     aria-hidden
-                    className="grid h-12 w-12 place-items-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft shadow-[0_0_30px_rgba(150,167,102,0.16)]"
+                    className="inline-flex text-ink drop-shadow-[0_0_22px_rgba(255,255,255,0.22)]"
                     animate={reduced ? undefined : { y: [0, -3, 0] }}
                     transition={reduced ? undefined : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                   >
-                    <Mail className="h-[22px] w-[22px]" strokeWidth={1.6} />
+                    <Mail className="h-8 w-8" strokeWidth={1.5} />
                   </motion.span>
 
                   <h2 className="mt-5 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
