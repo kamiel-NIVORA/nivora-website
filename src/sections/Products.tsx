@@ -9,7 +9,7 @@ import {
 } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, QrCode, X } from 'lucide-react'
+import { ArrowRight, X } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -288,7 +288,7 @@ function PhoneNotifications() {
 
   return (
     // The slot sits low on the white widget — below the mark, above the buttons
-    <div className="absolute left-1/2 top-[50%] h-[10.5%] w-[72%] -translate-x-1/2">
+    <div className="absolute left-1/2 top-[52%] h-[10.5%] w-[72%] -translate-x-1/2">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={i}
@@ -323,21 +323,22 @@ function MobileCard() {
     <div className="relative h-full">
       {/* Big glossy phone — bleeds past the card edges, feathered into the glass.
           @container lets the on-screen banner scale with the phone, not the page. */}
-      <div className="pointer-events-none absolute inset-x-0 -bottom-10 z-0 mx-auto w-[94%] max-w-[300px] [container-type:inline-size] left-1/2 -translate-x-1/2">
+      <div className="pointer-events-none absolute inset-x-0 -bottom-[150px] z-0 mx-auto w-[140%] max-w-[400px] [container-type:inline-size] left-1/2 -translate-x-1/2">
         <img
           src="/product-phone.webp"
           alt="The Nivora suite on iPhone"
-          className="w-full select-none object-contain [mask-image:radial-gradient(92%_74%_at_50%_50%,#000_52%,transparent_100%)] [-webkit-mask-image:radial-gradient(92%_74%_at_50%_50%,#000_52%,transparent_100%)]"
+          className="w-full select-none object-contain [mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)] [-webkit-mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)]"
           loading="lazy"
           draggable={false}
         />
         {/* Glossy screen reflection — a soft diagonal sheen across the glass */}
-        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.16)_4%,transparent_34%)] [mask-image:radial-gradient(92%_74%_at_50%_50%,#000_52%,transparent_100%)] [-webkit-mask-image:radial-gradient(92%_74%_at_50%_50%,#000_52%,transparent_100%)]" />
+        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.16)_4%,transparent_34%)] [mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)] [-webkit-mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)]" />
         <PhoneNotifications />
       </div>
 
-      {/* Top scrim — keeps the title + subtitle clean over the faded phone top */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[44%] bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
+      {/* Top scrim — escapes the card padding so it covers the phone's faded top,
+          turning the clock into a clean dark area behind the title + subtitle */}
+      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[135px] bg-gradient-to-b from-black from-[35%] via-black/20 via-[55%] to-transparent" />
 
       {/* Title — sits at the top, clear of the phone screen below */}
       <div className="relative z-[2]">
@@ -395,7 +396,6 @@ function StoreButton({
   onClick,
   href,
   label,
-  backdrop,
 }: {
   glyph: ReactNode
   line1: string
@@ -403,21 +403,18 @@ function StoreButton({
   onClick?: () => void
   href?: string
   label: string
-  /** Optional layer rendered behind the content, clipped to the tile. */
-  backdrop?: ReactNode
 }) {
   const inner = (
     <>
-      {backdrop}
-      <span className="relative z-[1] text-ink-soft transition-colors group-hover/btn:text-ink">{glyph}</span>
-      <span className="relative z-[1] leading-tight">
+      <span className="text-ink-soft transition-colors group-hover/btn:text-ink">{glyph}</span>
+      <span className="leading-tight">
         <span className="block text-[11px] text-faint">{line1}</span>
         <span className="block text-[13px] font-medium text-ink">{line2}</span>
       </span>
     </>
   )
   const cls =
-    'group/btn relative flex h-full flex-col justify-between overflow-hidden rounded-[18px] border border-white/10 bg-[#0d0d0d] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-colors hover:border-white/25 hover:bg-[#121212]'
+    'group/btn flex h-full flex-col justify-between rounded-[18px] border border-white/10 bg-[#0d0d0d] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-colors hover:border-white/25 hover:bg-[#121212]'
 
   if (href) {
     return (
@@ -430,30 +427,6 @@ function StoreButton({
     <button type="button" onClick={onClick} aria-label={label} className={cls}>
       {inner}
     </button>
-  )
-}
-
-/** Wraps a store glyph so it softly fades + scales back in whenever the Box/Voice
- *  tab changes — a calm cue that the buttons now point at the other app. */
-function SwitchGlyph({
-  tabKey,
-  delay = 0,
-  children,
-}: {
-  tabKey: string
-  delay?: number
-  children: ReactNode
-}) {
-  return (
-    <motion.span
-      key={tabKey}
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay }}
-      className="inline-flex"
-    >
-      {children}
-    </motion.span>
   )
 }
 
@@ -478,13 +451,16 @@ function DownloadCard() {
         <ProductTabs value={tab} onChange={setTab} />
       </div>
 
-      <div className="mt-5 grid flex-1 grid-cols-3 gap-2.5">
+      {/* The whole button block softly fades back in on a Box/Voice switch */}
+      <motion.div
+        key={tab}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-5 grid flex-1 grid-cols-3 gap-2.5"
+      >
         <StoreButton
-          glyph={
-            <SwitchGlyph tabKey={tab}>
-              <img src="/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />
-            </SwitchGlyph>
-          }
+          glyph={<img src="/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
           line1="Open"
           line2="App Store"
           href={`/waitlist?product=${tab}`}
@@ -492,13 +468,11 @@ function DownloadCard() {
         />
         <StoreButton
           glyph={
-            <SwitchGlyph tabKey={tab} delay={0.06}>
-              <img
-                src="/store-googleplay.svg"
-                alt=""
-                className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
-              />
-            </SwitchGlyph>
+            <img
+              src="/store-googleplay.svg"
+              alt=""
+              className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
+            />
           }
           line1="Open"
           line2="Google Play"
@@ -507,28 +481,22 @@ function DownloadCard() {
         />
         <StoreButton
           glyph={
-            <SwitchGlyph tabKey={tab} delay={0.12}>
-              <QrCode className="h-[30px] w-[30px]" strokeWidth={1.3} />
-            </SwitchGlyph>
+            <video
+              src="/store-burst.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-hidden
+              className="h-9 w-9 object-cover [mask-image:radial-gradient(closest-side,#000_48%,transparent)] [-webkit-mask-image:radial-gradient(closest-side,#000_48%,transparent)]"
+            />
           }
           line1="Scan"
           line2="to download"
           onClick={() => setScanOpen(true)}
           label={`Scan a QR code to open ${appName} on your phone`}
-          backdrop={
-            <span aria-hidden className="pointer-events-none absolute inset-0 z-0">
-              <video
-                src="/store-burst.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute left-1/2 top-1/2 h-[150%] w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-[0.45] [mask-image:radial-gradient(60%_60%_at_50%_50%,#000_22%,transparent_72%)] [-webkit-mask-image:radial-gradient(60%_60%_at_50%_50%,#000_22%,transparent_72%)]"
-              />
-            </span>
-          }
         />
-      </div>
+      </motion.div>
 
       <ScanSheet open={scanOpen} onClose={() => setScanOpen(false)} />
     </>
