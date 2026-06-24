@@ -32,7 +32,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 /** Intro keywords: name the pain, then the resolution. Short, on the nose. */
 const INTRO_WORDS: Record<ServiceSlug, string[]> = {
-  'app-design': ['Custom software.', 'Built for you.', 'Owned by you.'],
+  'app-design': ['Your idea.', 'Built properly.', 'Owned by you.'],
   'local-ai': ['Real AI.', 'Kept private.', 'Owned by you.'],
   aios: ['Too many tools.', 'One system.', 'Owned by you.'],
   'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
@@ -87,6 +87,7 @@ export function ServicePage() {
         <Solution content={content} meta={meta} />
         {meta.objectImage && <BrandObject meta={meta} />}
         <Capabilities content={content} />
+        {meta.slug === 'app-design' && <AppShowcase />}
         {meta.slug !== 'ai-consulting' && <Preview meta={meta} />}
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
@@ -136,16 +137,16 @@ function ParallaxImage({
   )
 }
 
-/** A glass card, the page's single repeated surface. */
+/** A solid dark card, the page's single repeated surface. */
 function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-[22px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-7 backdrop-blur-md',
+        'relative overflow-hidden rounded-[22px] border border-line bg-surface p-7',
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       {children}
     </div>
   )
@@ -442,6 +443,68 @@ function Capabilities({ content }: { content: ServiceContent }) {
   )
 }
 
+/* App Design showcase · two visual moments unique to that service ────────────── */
+
+function AppShowcase() {
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-12 lg:py-20">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Copy */}
+        <div>
+          <Reveal>
+            <Eyebrow>Crafted, not assembled</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              Every screen designed with intention.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
+              From the icon to the last interaction, we design the whole thing. The apps people
+              come back to have a visual language no template ever gave them.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* Style board */}
+        <Reveal y={28} delay={0.08}>
+          <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 blur-[70px]"
+              style={{ background: 'radial-gradient(55% 50% at 50% 42%, rgba(245,245,245,0.08), transparent 75%)' }}
+            />
+            <img
+              src="/showcase-appdesign.jpg"
+              alt=""
+              loading="lazy"
+              className="relative mx-auto block w-full max-w-[440px] rounded-[24px] shadow-[0_32px_80px_rgba(0,0,0,0.7)] [mask-image:radial-gradient(82%_82%_at_50%_50%,#000_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(82%_82%_at_50%_50%,#000_68%,transparent_100%)]"
+            />
+          </div>
+        </Reveal>
+      </div>
+
+      {/* Icon grid strip */}
+      <Reveal delay={0.14}>
+        <div className="relative mx-auto mt-14 max-w-md">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[50px]"
+            style={{ background: 'radial-gradient(60% 60% at 50% 50%, rgba(245,245,245,0.06), transparent 80%)' }}
+          />
+          <img
+            src="/icons-appdesign.jpg"
+            alt=""
+            loading="lazy"
+            className="relative block w-full rounded-[20px] shadow-[0_20px_60px_rgba(0,0,0,0.6)] [mask-image:radial-gradient(70%_70%_at_50%_50%,#000_56%,transparent_100%)] [-webkit-mask-image:radial-gradient(70%_70%_at_50%_50%,#000_56%,transparent_100%)]"
+          />
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function Preview({ meta }: { meta: ServiceMeta }) {
@@ -633,6 +696,13 @@ function FitFaq({ content }: { content: ServiceContent }) {
             >
               reach a person
             </button>
+            {' '}or visit the{' '}
+            <Link
+              to="/help"
+              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+            >
+              Help Center
+            </Link>
             .
           </p>
         </Reveal>
