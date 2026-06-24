@@ -1,13 +1,15 @@
-import { useRef, type ReactNode, type SVGProps } from 'react'
+import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react'
 import {
+  AnimatePresence,
   motion,
   useScroll,
   useSpring,
   useTransform,
   type MotionValue,
 } from 'framer-motion'
+import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, Lock } from 'lucide-react'
+import { ArrowRight, X } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -101,25 +103,23 @@ export function Products() {
             <VoiceCard />
           </BentoCard>
 
-          {/* ── Made for desktop — wide glass card with the live macOS dock ── */}
+          {/* ── Made for desktop — glass card with the live macOS dock ── */}
           <BentoCard
             progress={progress}
             dy={40}
             start={0.16}
-            className="lg:col-start-4 lg:col-span-6 lg:row-start-2"
+            className="lg:col-start-4 lg:col-span-5 lg:row-start-2"
           >
             <DesktopCard />
           </BentoCard>
 
-          {/* ── Download — small glass card, locked until launch ── */}
+          {/* ── Download — glass card with the three store buttons ── */}
           <BentoCard
             progress={progress}
             dx={32}
             dy={36}
             start={0.2}
-            href="/waitlist"
-            ariaLabel="Download, join the waiting list"
-            className="lg:col-start-10 lg:col-span-3 lg:row-start-2"
+            className="lg:col-start-9 lg:col-span-4 lg:row-start-2"
           >
             <DownloadCard />
           </BentoCard>
@@ -270,16 +270,65 @@ function VoiceCard() {
   )
 }
 
-/* ── Card 3 · Made for mobile (empty phone-bottom frame) ────────────────── */
+/* ── Card 3 · Made for mobile — phone in hand, live "Coming soon" notifications ── */
+const PHONE_NOTIFS = [
+  { src: '/box-logo.webp', name: 'Box' },
+  { src: '/voice-logo.webp', name: 'Voice' },
+]
+
+/** A single lock-screen notification that cycles between the two apps:
+ *  the current one slides up and out, the next rises in from below. */
+function PhoneNotifications() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % PHONE_NOTIFS.length), 2600)
+    return () => clearInterval(t)
+  }, [])
+
+  return (
+    <div className="absolute left-1/2 top-[40%] h-[15%] w-[62%] -translate-x-1/2 overflow-hidden">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.div
+          key={i}
+          initial={{ y: '120%', opacity: 0 }}
+          animate={{ y: '0%', opacity: 1 }}
+          exit={{ y: '-120%', opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 360, damping: 32 }}
+          className="absolute inset-0 flex items-center gap-2 rounded-[14px] border border-white/12 bg-[#0b0b0b]/80 px-2.5 shadow-[0_8px_22px_-10px_rgba(0,0,0,0.85)] backdrop-blur-md"
+        >
+          <img
+            src={PHONE_NOTIFS[i].src}
+            alt=""
+            className="h-[58%] w-auto shrink-0 rounded-[7px] border border-white/10 object-cover"
+          />
+          <div className="min-w-0 leading-none">
+            <p className="truncate text-[8px] font-semibold text-ink">{PHONE_NOTIFS[i].name}</p>
+            <p className="mt-[3px] truncate text-[7px] text-faint">Coming soon</p>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function MobileCard() {
   return (
     <>
-      <div className="relative flex-1 overflow-hidden rounded-[14px] border border-line bg-white/[0.02]">
-        <div className="absolute -bottom-3 left-1/2 top-6 w-[58%] max-w-[150px] -translate-x-1/2 rounded-t-[26px] border border-b-0 border-line bg-gradient-to-b from-white/[0.06] to-transparent" />
-        <div className="absolute bottom-2.5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-white/15" />
+      <div className="relative flex-1 overflow-hidden">
+        {/* Phone in hand, anchored to the bottom so it bleeds off and reads big */}
+        <div className="absolute inset-x-0 -bottom-6 mx-auto w-[82%] max-w-[210px]">
+          <img
+            src="/product-phone-hand.webp"
+            alt="The Nivora suite on iPhone"
+            className="w-full select-none object-contain"
+            loading="lazy"
+            draggable={false}
+          />
+          <PhoneNotifications />
+        </div>
       </div>
 
-      <div className="pt-5">
+      <div className="relative pt-5">
         <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">
           Made for mobile
         </h3>
@@ -325,39 +374,143 @@ function DesktopCard() {
   )
 }
 
-/* ── Card 5 · Download (locked until launch — lock only, no caption) ──────── */
-const PLATFORMS: { name: string; Glyph: (p: SVGProps<SVGSVGElement>) => ReactNode }[] = [
-  { name: 'iPhone', Glyph: AppleGlyph },
-  { name: 'Mac', Glyph: AppleGlyph },
-  { name: 'Android', Glyph: AndroidGlyph },
-  { name: 'Windows', Glyph: WindowsGlyph },
-]
+/* ── Card 5 · Download — App Store, Google Play and a scan-to-mobile button ── */
+/** One soft-black store tile: glyph top-left, two-line label bottom-left. */
+function StoreButton({
+  glyph,
+  line1,
+  line2,
+  onClick,
+  href,
+  label,
+}: {
+  glyph: ReactNode
+  line1: string
+  line2: string
+  onClick?: () => void
+  href?: string
+  label: string
+}) {
+  const inner = (
+    <>
+      <span className="text-ink-soft transition-colors group-hover/btn:text-ink">{glyph}</span>
+      <span className="leading-tight">
+        <span className="block text-[11px] text-faint">{line1}</span>
+        <span className="block text-[13px] font-medium text-ink">{line2}</span>
+      </span>
+    </>
+  )
+  const cls =
+    'group/btn flex h-full flex-col justify-between rounded-[18px] border border-white/10 bg-[#0d0d0d] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-colors hover:border-white/25 hover:bg-[#121212]'
+
+  if (href) {
+    return (
+      <Link to={href} aria-label={label} className={cls}>
+        {inner}
+      </Link>
+    )
+  }
+  return (
+    <button type="button" onClick={onClick} aria-label={label} className={cls}>
+      {inner}
+    </button>
+  )
+}
 
 function DownloadCard() {
+  const [scanOpen, setScanOpen] = useState(false)
+
+  // Close the scan sheet on Escape
+  useEffect(() => {
+    if (!scanOpen) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setScanOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [scanOpen])
+
   return (
     <>
       <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
 
-      {/* Platform rack — blurred + dimmed, with just a clean lock badge over it */}
-      <div className="relative mt-5 flex-1">
-        <div className="grid h-full grid-cols-2 gap-2.5 opacity-40 blur-[2px]">
-          {PLATFORMS.map(({ name, Glyph }) => (
-            <div
-              key={name}
-              className="flex items-center justify-center rounded-[14px] border border-line bg-white/[0.03]"
-            >
-              <Glyph className="h-[22px] w-[22px] text-ink-soft" />
-            </div>
-          ))}
-        </div>
-
-        <div className="absolute inset-0 grid place-items-center">
-          <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/80 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md">
-            <Lock className="h-[18px] w-[18px]" strokeWidth={1.8} />
-          </span>
-        </div>
+      <div className="mt-5 grid flex-1 grid-cols-3 gap-2.5">
+        <StoreButton
+          glyph={<AppleGlyph className="h-[22px] w-[22px]" />}
+          line1="Open"
+          line2="App Store"
+          href="/waitlist?product=ios"
+          label="Open the App Store, join the waiting list"
+        />
+        <StoreButton
+          glyph={<GooglePlayGlyph className="h-[22px] w-[22px]" />}
+          line1="Open"
+          line2="Google Play"
+          href="/waitlist?product=android"
+          label="Open Google Play, join the waiting list"
+        />
+        <StoreButton
+          glyph={<ScanGlyph />}
+          line1="Scan"
+          line2="to download"
+          onClick={() => setScanOpen(true)}
+          label="Scan a QR code to open Nivora on your phone"
+        />
       </div>
+
+      <ScanSheet open={scanOpen} onClose={() => setScanOpen(false)} />
     </>
+  )
+}
+
+/* Scan popup — a real QR that opens the mobile site when scanned.
+   Rendered through a portal so it escapes the card's transform + overflow clip
+   and covers the full viewport. */
+function ScanSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (typeof document === 'undefined') return null
+  return createPortal(
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[120] grid place-items-center p-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Scan to download"
+            initial={{ scale: 0.94, y: 10, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.96, y: 6, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+            className="relative w-full max-w-[320px] rounded-[28px] border border-line-strong bg-[#0b0b0b] p-7 text-center shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full border border-line text-faint transition-colors hover:border-line-strong hover:text-ink"
+            >
+              <X className="h-4 w-4" strokeWidth={1.8} />
+            </button>
+
+            <div className="mx-auto w-fit rounded-[20px] bg-white p-4">
+              <img src="/qr-download.webp" alt="QR code to open Nivora on your phone" className="h-44 w-44" />
+            </div>
+
+            <h4 className="mt-5 font-serif text-[22px] leading-none tracking-[-0.01em] text-ink">
+              Scan to download
+            </h4>
+            <p className="mt-2.5 text-[13px] leading-relaxed text-faint">
+              Point your phone camera at the code to open Nivora on mobile and join the waiting list.
+            </p>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body,
   )
 }
 
@@ -370,18 +523,21 @@ function AppleGlyph(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-function WindowsGlyph(props: SVGProps<SVGSVGElement>) {
+function GooglePlayGlyph(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+      <path d="M3.6 1.83a1.5 1.5 0 0 0-.49 1.1v18.14c0 .46.19.86.49 1.1l.06.05L13.8 12.07v-.14L3.66 1.78l-.06.05zM17.17 15.44l-3.37-3.37v-.14l3.37-3.37.08.04 3.99 2.27c1.14.65 1.14 1.7 0 2.35l-3.99 2.27-.08-.05zM17.25 15.39 13.8 11.93 3.6 22.17c.38.4 1 .45 1.7.06l11.95-6.84M5.3 1.71c-.7-.4-1.32-.34-1.7.06L13.8 12.07l3.45-3.46L5.3 1.71z" />
     </svg>
   )
 }
 
-function AndroidGlyph(props: SVGProps<SVGSVGElement>) {
+/** Dot-matrix QR-ish glyph for the "Scan to download" tile. */
+function ScanGlyph() {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M17.523 15.341c-.551 0-.999-.448-.999-.999s.448-.999.999-.999.999.448.999.999-.448.999-.999.999m-11.046 0c-.551 0-.999-.448-.999-.999s.448-.999.999-.999.999.448.999.999-.448.999-.999.999m11.405-6.02l1.997-3.459a.416.416 0 00-.152-.568.416.416 0 00-.568.152l-2.022 3.503C15.59 8.244 13.853 7.851 12 7.851s-3.59.393-5.137 1.099L4.841 5.447a.416.416 0 00-.568-.152.416.416 0 00-.152.568l1.997 3.459C2.689 11.187.343 14.659 0 18.761h24c-.343-4.102-2.689-7.574-6.118-9.42" />
-    </svg>
+    <span
+      aria-hidden
+      className="block h-[22px] w-[22px] [background-image:radial-gradient(circle,currentColor_1px,transparent_1.5px)] [background-position:0_0] [background-size:3.2px_3.2px]"
+    />
   )
 }
+
