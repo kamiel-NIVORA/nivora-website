@@ -33,9 +33,17 @@ const ease = [0.16, 1, 0.3, 1] as const
 /** Intro keywords: name the pain, then the resolution. Short, on the nose. */
 const INTRO_WORDS: Record<ServiceSlug, string[]> = {
   'app-design': ['Your idea.', 'Built properly.', 'Owned by you.'],
-  'local-ai': ['Real AI.', 'Kept private.', 'Owned by you.'],
+  'local-ai': ['Your hardware.', 'No cloud.', 'Owned by you.'],
   aios: ['Too many tools.', 'One system.', 'Owned by you.'],
   'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
+}
+
+/** Per-service headline for the mockup preview band. Empty string = section hidden. */
+const PREVIEW_HEADLINE: Record<ServiceSlug, string> = {
+  'app-design': 'Made for the screens your team lives in.',
+  'local-ai': 'Your assistant. On your hardware. Answering only to you.',
+  aios: 'One system. Every screen your business runs on.',
+  'ai-consulting': '',
 }
 
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
@@ -85,10 +93,11 @@ export function ServicePage() {
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
+        {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
         <Capabilities content={content} />
         {meta.slug === 'app-design' && <AppShowcase />}
-        {meta.slug !== 'ai-consulting' && <Preview meta={meta} />}
+        <Preview meta={meta} />
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
         <RoiBand meta={meta} />
@@ -222,6 +231,68 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
               className="relative mx-auto block w-full max-w-[440px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)]"
             />
           </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Privacy band · four architecture facts, Local AI only ─────────────────────── */
+
+/** Four architecture-level privacy facts. Only shown for Local AI. */
+function PrivacyBand({ meta }: { meta: ServiceMeta }) {
+  const facts = [
+    {
+      label: 'No cloud API',
+      body: 'Every prompt runs inside your infrastructure. Nothing touches OpenAI, Azure, or any third-party model.',
+    },
+    {
+      label: 'On your hardware',
+      body: 'The models run on servers you control, not infrastructure rented from someone else.',
+    },
+    {
+      label: 'Full audit trail',
+      body: 'A complete record of who asked what, when, and what was answered. Compliance-ready from day one.',
+    },
+    {
+      label: 'Owned outright',
+      body: 'The system, the models, the configuration. Yours to keep, move, or hand to another team.',
+    },
+  ]
+
+  return (
+    <section className="relative w-full overflow-hidden border-y border-line py-20 lg:py-28">
+      <ParallaxImage src="/bg-peak-mono.webp" range={['-6%', '6%']} />
+      <div className="absolute inset-0 bg-bg/88" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `radial-gradient(60% 60% at 50% 40%, ${meta.accent}0f, transparent 70%)` }}
+      />
+
+      <div className="relative mx-auto w-full max-w-[1100px] px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <Reveal>
+            <Eyebrow>Private by architecture</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <p className="mt-5 font-serif text-[26px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.24]">
+              Everything your team asks. Everything they receive. None of it leaves this building.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {facts.map((f, i) => (
+            <Reveal key={f.label} delay={i * 0.06}>
+              <GlassCard className="h-full">
+                <h3 className="font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink">{f.label}</h3>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-faint">{f.body}</p>
+              </GlassCard>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -508,6 +579,8 @@ function AppShowcase() {
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function Preview({ meta }: { meta: ServiceMeta }) {
+  const headline = PREVIEW_HEADLINE[meta.slug]
+  if (!headline) return null
   return (
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
@@ -516,7 +589,7 @@ function Preview({ meta }: { meta: ServiceMeta }) {
         </Reveal>
         <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            Made for the screens your team lives in.
+            {headline}
           </h2>
         </Reveal>
       </div>

@@ -128,7 +128,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     icon: '/icon-localai.png',
     tile: '/service-localai.webp',
     heroImage: '/bg-peak-mono.webp',
-    photo: '/nature-localai.webp',
+    photo: '/bg-dunes-blue.jpg',
     anim: '/anim-localai.mp4',
     mockup: '/mockup-localai.webp',
     objectImage: '/local-private-folder.webp',
