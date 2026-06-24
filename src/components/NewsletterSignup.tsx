@@ -127,19 +127,19 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                 >
                   <motion.span
                     aria-hidden
-                    className="grid h-14 w-14 place-items-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft shadow-[0_0_34px_rgba(150,167,102,0.18)]"
-                    animate={reduced ? undefined : { y: [0, -6, 0] }}
+                    className="grid h-12 w-12 place-items-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft shadow-[0_0_30px_rgba(150,167,102,0.16)]"
+                    animate={reduced ? undefined : { y: [0, -3, 0] }}
                     transition={reduced ? undefined : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                   >
-                    <Mail className="h-6 w-6" strokeWidth={1.6} />
+                    <Mail className="h-[22px] w-[22px]" strokeWidth={1.6} />
                   </motion.span>
 
-                  <h2 className="mt-7 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
+                  <h2 className="mt-5 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
                     Never miss what AI can do
                   </h2>
                   <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
-                    The automations we ship, the hours they save, and where AI is genuinely
-                    worth it for your business. Quietly useful, never a sales pitch.
+                    The tools we ship, the hours they save, and where AI is genuinely worth it
+                    for your business. Quietly useful, never a sales pitch.
                   </p>
 
                   <form onSubmit={onSubmit} noValidate className="mt-9 w-full max-w-[480px]">
