@@ -16,6 +16,10 @@
  * so the existing streaming reader in helpChat.ts understands it with no changes.
  */
 
+// Edge runtime injects env vars on `process.env` at runtime; declare it so the
+// build typechecks without @types/node.
+declare const process: { env: Record<string, string | undefined> }
+
 export const config = { runtime: 'edge' }
 
 /* Model lives on the Anthropic API key from the Nivora system. Bump here when a
@@ -28,6 +32,7 @@ const MAX_TOKENS = 768
 const MAX_HISTORY = 14 // keep the last N turns only
 const MAX_CHARS = 4000 // per-message clamp, stops abuse / runaway payloads
 const TEMPERATURE = 0.35
+const UPSTREAM_TIMEOUT_MS = 28000 // never let the upstream call hang the request
 
 /* Browser-origin allowlist. A soft gate that stops casual cross-site abuse of
    the key; same-origin requests from the site always pass. */
@@ -183,7 +188,8 @@ function transformAnthropicStream(upstream: ReadableStream<Uint8Array>): Readabl
             }
           }
         }
-      } catch {
+      } catch (err) {
+        console.error('help-chat: stream error', String(err))
         finish(controller)
         controller.close()
       }
@@ -208,7 +214,10 @@ export default async function handler(req: Request): Promise<Response> {
   if (!hostAllowed(req)) return jsonResponse({ error: 'Forbidden' }, 403)
 
   const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey) return jsonResponse({ error: 'The assistant is not configured yet.' }, 503)
+  if (!apiKey) {
+    console.error('help-chat: ANTHROPIC_API_KEY is not set')
+    return jsonResponse({ error: 'The assistant is not configured yet.' }, 503)
+  }
 
   let body: unknown
   try {
@@ -220,12 +229,16 @@ export default async function handler(req: Request): Promise<Response> {
   const messages = sanitize((body as { messages?: unknown })?.messages)
   if (!messages.length) return jsonResponse({ error: 'No messages provided.' }, 400)
 
+  // Hard timeout so a slow/stuck upstream can never hang the function for 300s.
+  const ctrl = new AbortController()
+  const timeout = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS)
+
   let upstream: Response
   try {
     upstream = await fetch(ANTHROPIC_URL, {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
+        'x-api-key': apiKey.trim(),
         'anthropic-version': ANTHROPIC_VERSION,
         'content-type': 'application/json',
       },
@@ -237,12 +250,19 @@ export default async function handler(req: Request): Promise<Response> {
         messages,
         stream: true,
       }),
+      signal: ctrl.signal,
     })
-  } catch {
+  } catch (err) {
+    clearTimeout(timeout)
+    console.error('help-chat: fetch to anthropic failed', String(err))
     return jsonResponse({ error: 'Could not reach the assistant.' }, 502)
   }
+  // Headers are in; the stream itself may run longer than the timeout, so clear it.
+  clearTimeout(timeout)
 
   if (!upstream.ok || !upstream.body) {
+    const detail = await upstream.text().catch(() => '')
+    console.error('help-chat: anthropic returned', upstream.status, detail.slice(0, 400))
     return jsonResponse({ error: 'The assistant is unavailable right now.' }, 502)
   }
 
@@ -251,7 +271,6 @@ export default async function handler(req: Request): Promise<Response> {
     headers: {
       'content-type': 'text/event-stream; charset=utf-8',
       'cache-control': 'no-cache, no-transform',
-      connection: 'keep-alive',
     },
   })
 }
