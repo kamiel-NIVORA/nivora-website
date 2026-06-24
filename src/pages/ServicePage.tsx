@@ -38,14 +38,6 @@ const INTRO_WORDS: Record<ServiceSlug, string[]> = {
   'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
 }
 
-/** Per-service headline for the mockup preview band. Empty string = section hidden. */
-const PREVIEW_HEADLINE: Record<ServiceSlug, string> = {
-  'app-design': 'Shipped and in the wild, on every screen.',
-  'local-ai': 'Your assistant. On your hardware. Answering only to you.',
-  aios: 'One system. Every screen your business runs on.',
-  'ai-consulting': '',
-}
-
 /** App types shown in the vertical marquee on the App Design statement section. */
 const APP_TYPES = [
   'Consumer Apps',
@@ -119,8 +111,6 @@ export function ServicePage() {
         {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
-        {meta.slug === 'local-ai' && <OpenModelsBand />}
-        <Preview meta={meta} />
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
         <RoiBand meta={meta} />
@@ -133,15 +123,6 @@ export function ServicePage() {
 }
 
 /* Shared bits ─────────────────────────────────────────────────────────────── */
-
-function Eyebrow({ children }: { children: ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-faint">
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-      {children}
-    </span>
-  )
-}
 
 /** A scenic photo that drifts gently against the scroll. Always covers its box. */
 function ParallaxImage({
@@ -169,7 +150,6 @@ function ParallaxImage({
   )
 }
 
-/** A solid dark card, the page's single repeated surface. */
 function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
@@ -223,9 +203,6 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
         {/* Copy — complements the words baked into the object */}
         <div className="order-2 lg:order-1">
           <Reveal>
-            <Eyebrow>Private by design</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
             <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               Yours to keep. Private to the core.
             </h2>
@@ -298,9 +275,6 @@ function PrivacyBand({ meta }: { meta: ServiceMeta }) {
       <div className="relative mx-auto w-full max-w-[1100px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <Eyebrow>Private by architecture</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
             <p className="mt-5 font-serif text-[26px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.24]">
               Everything your team asks. Everything they receive. None of it leaves this building.
             </p>
@@ -360,10 +334,6 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <motion.div variants={heroFade}>
-          <Eyebrow>{content.hero.eyebrow}</Eyebrow>
-        </motion.div>
-
         <h1 className="mt-6 font-serif text-[38px] leading-[1.05] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[66px] lg:leading-[1.03]">
           {content.hero.headline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
@@ -432,9 +402,6 @@ function Problem({ content }: { content: ServiceContent }) {
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>The problem</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             {content.problem.title}
           </h2>
@@ -467,9 +434,6 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
       <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-28">
           <Reveal>
-            <Eyebrow>What we build</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.05}>
             <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               {content.solution.title}
             </h2>
@@ -510,14 +474,11 @@ function Capabilities({ content }: { content: ServiceContent }) {
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>What you get</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             {content.capabilities.title}
           </h2>
         </Reveal>
-        <Reveal delay={0.1}>
+        <Reveal delay={0.06}>
           <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
         </Reveal>
       </div>
@@ -600,14 +561,11 @@ function AppCapabilities({ content }: { content: ServiceContent }) {
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>What you get</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             {content.capabilities.title}
           </h2>
         </Reveal>
-        <Reveal delay={0.1}>
+        <Reveal delay={0.06}>
           <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
         </Reveal>
       </div>
@@ -779,9 +737,6 @@ function ComparisonBand() {
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>Cloud AI vs Local AI</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             The difference is not just where the data goes. It is who controls every part of the chain.
           </h2>
@@ -851,91 +806,7 @@ function ComparisonBand() {
   )
 }
 
-/* Open models trust strip · local-ai only ───────────────────────────────────── */
-
-const OPEN_MODELS = [
-  { name: 'Llama 3', by: 'Meta' },
-  { name: 'Mistral', by: 'Mistral AI' },
-  { name: 'Gemma', by: 'Google' },
-  { name: 'Phi', by: 'Microsoft' },
-  { name: 'Qwen', by: 'Alibaba' },
-  { name: 'DeepSeek', by: 'DeepSeek AI' },
-]
-
-function OpenModelsBand() {
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 lg:py-20">
-      <div className="rounded-[22px] border border-line bg-white/[0.02] px-7 py-8 lg:px-10 lg:py-10">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
-          <div className="shrink-0 lg:max-w-[280px]">
-            <Reveal>
-              <Eyebrow>Models we deploy</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <p className="mt-4 font-serif text-[22px] leading-[1.25] tracking-[-0.01em] text-ink lg:text-[24px]">
-                Best-in-class open models. Running entirely on your hardware.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
-                We select and deploy the models that fit your tasks and infrastructure. Capable, open, and private by design.
-              </p>
-            </Reveal>
-          </div>
-          <div className="flex flex-1 flex-wrap gap-3">
-            {OPEN_MODELS.map((m, i) => (
-              <Reveal key={m.name} delay={i * 0.05}>
-                <div className="flex items-center gap-3 rounded-2xl border border-line bg-white/[0.03] px-5 py-3.5 transition-colors hover:border-line-strong hover:bg-white/[0.05]">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-white/[0.06] text-[11px] font-bold tracking-wider text-ink-soft">
-                    {m.name.charAt(0)}
-                  </span>
-                  <div>
-                    <span className="block text-[14px] font-semibold text-ink">{m.name}</span>
-                    <span className="block text-[11px] text-dim">{m.by}</span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
-
-function Preview({ meta }: { meta: ServiceMeta }) {
-  const headline = PREVIEW_HEADLINE[meta.slug]
-  if (!headline) return null
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <Eyebrow>Preview</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {headline}
-          </h2>
-        </Reveal>
-      </div>
-      <Reveal delay={0.1}>
-        <div className="relative mx-auto mt-12 max-w-3xl">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -inset-8 rounded-[40px] blur-[64px]"
-            style={{ background: meta.accent, opacity: 0.16 }}
-          />
-          <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]">
-            <img src={meta.mockup} alt="" loading="lazy" className="block w-full" />
-            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-          </div>
-        </div>
-      </Reveal>
-    </section>
-  )
-}
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
@@ -953,9 +824,6 @@ function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }
       <div className="relative mx-auto w-full max-w-[1100px] px-6">
         <div className="max-w-2xl">
           <Reveal>
-            <Eyebrow>Why Nivora</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
             <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               {content.differentiators.title}
             </h2>
@@ -984,9 +852,6 @@ function Process({ content, meta }: { content: ServiceContent; meta: ServiceMeta
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <Eyebrow>How we work</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06}>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             {content.process.title}
           </h2>
@@ -1019,9 +884,6 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
       <div className="relative mx-auto w-full max-w-[1200px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <Eyebrow>{config.eyebrow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
             <p className="mt-5 font-serif text-[24px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
               {config.framing}
             </p>
