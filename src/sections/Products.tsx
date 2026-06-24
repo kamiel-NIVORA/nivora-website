@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
-  AnimatePresence,
   motion,
+  useInView,
   useScroll,
   useSpring,
   useTransform,
@@ -76,13 +76,11 @@ export function Products() {
             <BoxCard />
           </BentoCard>
 
-          {/* ── Made for mobile — glass card, top middle ── */}
+          {/* ── Made for mobile — glass card; the two notifications are the links ── */}
           <BentoCard
             progress={progress}
             dy={-26}
             start={0.1}
-            href="/waitlist"
-            ariaLabel="Made for mobile, join the waiting list"
             className="lg:col-start-4 lg:col-span-3 lg:row-start-1"
           >
             <MobileCard />
@@ -269,50 +267,76 @@ function VoiceCard() {
   )
 }
 
-/* ── Card 3 · Made for mobile — big glossy phone, live "Coming soon" banner ── */
+/* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/box-logo.webp', name: 'Box', body: 'Coming soon to your pocket' },
-  { src: '/voice-logo.webp', name: 'Voice', body: 'Coming soon to your pocket' },
+  { src: '/box-logo.webp', name: 'Box', body: 'All your inboxes, one place', href: '/waitlist?product=box' },
+  { src: '/voice-logo.webp', name: 'Voice', body: 'Speech to text, your voice', href: '/waitlist?product=voice' },
 ]
 
-/** One realistic lock-screen notification that cycles between the two apps:
- *  the current one slides up and out, the next rises in from below. */
+/** A single glossy notification — a button to the waiting list. Styled to match
+ *  the NotificationStack in the Features section (frosted glass, inner sheen). */
+function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: '60%', scale: 0.94, filter: 'blur(6px)' }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      transition={{ type: 'spring', stiffness: 230, damping: 30, mass: 0.9 }}
+    >
+      <Link
+        to={href}
+        aria-label={`${name}, coming soon, join the waiting list`}
+        className="pointer-events-auto flex items-center gap-[5.5%] rounded-[24%/42%] border border-white/70 bg-white/55 px-[6%] py-[4.5%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
+        style={{
+          boxShadow:
+            'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 12px 26px -8px rgba(0,0,0,0.42)',
+        }}
+      >
+        <img
+          src={src}
+          alt=""
+          className="aspect-square h-[clamp(20px,16cqw,32px)] shrink-0 rounded-[26%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
+        />
+        <div className="min-w-0 flex-1 leading-none">
+          <div className="flex items-baseline justify-between gap-1">
+            <span className="truncate text-[clamp(8px,3cqw,13px)] font-semibold text-[#0c0c0c]">
+              {name}
+            </span>
+            <span className="shrink-0 text-[clamp(6px,2.1cqw,9px)] text-black/40">now</span>
+          </div>
+          <p className="mt-[5%] truncate text-[clamp(7px,2.5cqw,11px)] text-black/55">
+            <span className="font-semibold text-black/75">Coming soon</span> · {body}
+          </p>
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
+
+/** Plays once when scrolled into view: Box drops in, then Voice rises in
+ *  beneath it, pushing Box up, and the sequence settles. No loop. */
 function PhoneNotifications() {
-  const [i, setI] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, amount: 0.5 })
+  const [shown, setShown] = useState(0)
+
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % PHONE_NOTIFS.length), 2700)
-    return () => clearInterval(t)
-  }, [])
-  const n = PHONE_NOTIFS[i]
+    if (!inView) return
+    const timers = PHONE_NOTIFS.map((_, idx) =>
+      window.setTimeout(() => setShown(idx + 1), 500 + idx * 900),
+    )
+    return () => timers.forEach((t) => clearTimeout(t))
+  }, [inView])
 
   return (
-    // The slot sits on the white widget — below the mark, above the buttons
-    <div className="absolute left-1/2 top-[44%] h-[12%] w-[74%] -translate-x-1/2">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.div
-          key={i}
-          initial={{ y: '135%', opacity: 0, scale: 0.96 }}
-          animate={{ y: '0%', opacity: 1, scale: 1 }}
-          exit={{ y: '-135%', opacity: 0, scale: 0.96 }}
-          transition={{ type: 'spring', stiffness: 340, damping: 30 }}
-          className="absolute inset-0 flex items-center gap-[5%] rounded-[24%/34%] border border-black/[0.06] bg-white/75 px-[5.5%] shadow-[0_12px_26px_-8px_rgba(0,0,0,0.45)] backdrop-blur-xl"
-        >
-          <img
-            src={n.src}
-            alt=""
-            className="aspect-square h-[62%] shrink-0 rounded-[26%] border border-black/5 object-cover shadow-sm"
-          />
-          <div className="min-w-0 flex-1 leading-none">
-            <div className="flex items-baseline justify-between gap-1">
-              <p className="truncate text-[clamp(8px,2.7cqw,12px)] font-semibold text-[#101010]">
-                {n.name}
-              </p>
-              <span className="shrink-0 text-[clamp(6px,2cqw,9px)] text-black/40">now</span>
-            </div>
-            <p className="mt-[6%] truncate text-[clamp(7px,2.3cqw,10px)] text-black/55">{n.body}</p>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+    // Bottom-anchored stack on the white widget — sits high, a little narrow
+    <div
+      ref={ref}
+      className="absolute inset-x-[19%] top-[18%] bottom-[44%] flex flex-col justify-end gap-[6%]"
+    >
+      {PHONE_NOTIFS.slice(0, shown).map((n) => (
+        <PhoneNotif key={n.name} {...n} />
+      ))}
     </div>
   )
 }
@@ -327,24 +351,24 @@ function MobileCard() {
         <img
           src="/product-phone.webp"
           alt="The Nivora suite on iPhone"
-          className="w-full select-none object-contain [mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)]"
+          className="w-full select-none object-contain [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)]"
           loading="lazy"
           draggable={false}
         />
         {/* Glossy screen reflection — a soft diagonal sheen across the glass */}
-        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.18)_2%,transparent_30%)] [mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)]" />
+        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.18)_2%,transparent_30%)] [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)]" />
         <PhoneNotifications />
       </div>
 
       {/* Soft scrim so the title + subtitle stay crisp over the phone's faded top */}
-      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[120px] bg-gradient-to-b from-black/70 via-black/25 to-transparent" />
+      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[140px] bg-gradient-to-b from-black/90 via-black/45 to-transparent" />
 
       {/* Title — sits at the top, clear of the phone screen below */}
       <div className="relative z-[2]">
         <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">
           Made for mobile
         </h3>
-        <p className="mt-2 max-w-[18rem] text-[13px] leading-relaxed text-faint">
+        <p className="mt-2 max-w-[18rem] text-[13px] leading-relaxed text-muted">
           The whole suite in your pocket. Native and quietly out of the way.
         </p>
       </div>
