@@ -320,6 +320,15 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
       <ParallaxImage src={meta.heroImage} range={['-6%', '6%']} />
       {/* Overlays: darken for the nav, fade the foot into the page */}
       <div className="absolute inset-0 bg-black/30" />
+      {/* Centered scrim so the headline stays legible over bright scenic photos */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(78% 60% at 50% 46%, rgba(0,0,0,0.5), rgba(0,0,0,0.18) 58%, transparent 78%)',
+        }}
+      />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-black/55 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[44vh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
       <div
