@@ -142,11 +142,12 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                   </motion.span>
 
                   <h2 className="mt-5 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
-                    Never miss what AI can do
+                    Stop worrying about AI
                   </h2>
                   <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
-                    The tools we ship, the hours they save, and where AI is genuinely worth it
-                    for your business. Quietly useful, never a sales pitch.
+                    We weigh up what AI can genuinely do for a business like yours, cut through the
+                    noise, and keep you posted on what actually matters. You stay in the loop,
+                    without the hype.
                   </p>
 
                   <form onSubmit={onSubmit} noValidate className="mt-9 w-full max-w-[480px]">
