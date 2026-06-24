@@ -184,7 +184,7 @@ function ChatHeader({
     <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3.5 sm:px-6">
       <div className="flex items-center gap-3">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-white/[0.08] bg-white/[0.04]">
-          <img src="/nivora-mark.webp" alt="Nivora" className="h-5 w-5 object-contain" />
+          <img src="/brand/nivora-mark.webp" alt="Nivora" className="h-5 w-5 object-contain" />
         </span>
         <span className="flex flex-col">
           <span className="text-[14px] font-medium text-ink">Nivora Assistant</span>
@@ -242,7 +242,7 @@ function Greeting({ reduced, onPick }: { reduced: boolean; onPick: (q: string) =
         transition={{ delay: 0.05, duration: 0.5, ease }}
         className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-signal/25 bg-signal/[0.07] shadow-[0_0_30px_-6px_rgba(229,72,77,0.5)]"
       >
-        <img src="/nivora-mark.webp" alt="Nivora" className="h-7 w-7 object-contain" />
+        <img src="/brand/nivora-mark.webp" alt="Nivora" className="h-7 w-7 object-contain" />
       </motion.span>
       <motion.h3
         initial={reduced ? false : { opacity: 0, y: 14 }}
@@ -322,7 +322,7 @@ function Message({
       className="flex gap-3"
     >
       <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-white/[0.04]">
-        <img src="/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
+        <img src="/brand/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
       </span>
       <div className="min-w-0 flex-1">
         <div
@@ -463,7 +463,7 @@ function ThinkingIndicator({ reduced }: { reduced: boolean }) {
   return (
     <div className="flex gap-3">
       <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-white/[0.04]">
-        <img src="/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
+        <img src="/brand/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
       </span>
       <div className="flex items-center gap-2 pt-1.5">
         <motion.span
