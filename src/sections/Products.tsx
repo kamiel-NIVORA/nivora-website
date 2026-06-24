@@ -287,8 +287,8 @@ function PhoneNotifications() {
   const n = PHONE_NOTIFS[i]
 
   return (
-    // The slot sits low on the white widget — below the mark, above the buttons
-    <div className="absolute left-1/2 top-[52%] h-[10.5%] w-[72%] -translate-x-1/2">
+    // The slot sits on the white widget — below the mark, above the buttons
+    <div className="absolute left-1/2 top-[44%] h-[12%] w-[74%] -translate-x-1/2">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={i}
@@ -321,24 +321,24 @@ function PhoneNotifications() {
 function MobileCard() {
   return (
     <div className="relative h-full">
-      {/* Big glossy phone — bleeds past the card edges, feathered into the glass.
+      {/* The lower phone — widget, banner and buttons — anchored at the bottom and
+          feathered at top + bottom so it melts into the card (no hard cut, no clock).
           @container lets the on-screen banner scale with the phone, not the page. */}
-      <div className="pointer-events-none absolute inset-x-0 -bottom-[150px] z-0 mx-auto w-[140%] max-w-[400px] [container-type:inline-size] left-1/2 -translate-x-1/2">
+      <div className="pointer-events-none absolute inset-x-0 -bottom-2 z-0 mx-auto w-[94%] max-w-[324px] [container-type:inline-size] left-1/2 -translate-x-1/2">
         <img
           src="/product-phone.webp"
           alt="The Nivora suite on iPhone"
-          className="w-full select-none object-contain [mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)] [-webkit-mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)]"
+          className="w-full select-none object-contain [mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)]"
           loading="lazy"
           draggable={false}
         />
         {/* Glossy screen reflection — a soft diagonal sheen across the glass */}
-        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.16)_4%,transparent_34%)] [mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)] [-webkit-mask-image:radial-gradient(96%_82%_at_50%_54%,#000_62%,transparent_100%)]" />
+        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.18)_2%,transparent_30%)] [mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_12%,#000_86%,transparent_100%)]" />
         <PhoneNotifications />
       </div>
 
-      {/* Top scrim — escapes the card padding so it covers the phone's faded top,
-          turning the clock into a clean dark area behind the title + subtitle */}
-      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[135px] bg-gradient-to-b from-black from-[35%] via-black/20 via-[55%] to-transparent" />
+      {/* Soft scrim so the title + subtitle stay crisp over the phone's faded top */}
+      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[120px] bg-gradient-to-b from-black/70 via-black/25 to-transparent" />
 
       {/* Title — sits at the top, clear of the phone screen below */}
       <div className="relative z-[2]">
