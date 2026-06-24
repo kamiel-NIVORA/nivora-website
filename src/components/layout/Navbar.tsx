@@ -238,7 +238,7 @@ export function Navbar() {
 
             {/* Right: actions */}
             <div className="hidden items-center gap-2.5 lg:flex">
-              <RippleButton variant="ghost" href="/#contact">Contact Us</RippleButton>
+              <RippleButton variant="ghost" href="/contact">Contact Us</RippleButton>
               <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Book a call</RippleButton>
             </div>
 

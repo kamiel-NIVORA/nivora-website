@@ -23,8 +23,13 @@ const COLUMNS = [
   {
     title: 'Contact',
     links: [
+      { label: 'Contact', href: '/contact' },
       { label: 'kamiel@nivoraworks.com', href: 'mailto:kamiel@nivoraworks.com' },
       { label: '+32 489 00 77 37', href: 'tel:+32489007737' },
+      {
+        label: 'Brugge, België',
+        href: 'https://www.google.com/maps/search/?api=1&query=Julius%20en%20Maurits%20Sabbestraat%2015%2C%208000%20Brugge',
+      },
     ],
   },
 ]

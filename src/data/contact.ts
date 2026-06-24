@@ -12,6 +12,14 @@ export const CONTACT = {
  */
 export const BOOKING_URL = 'https://booking.nivoraworks.com'
 
+/** Nivora's home base, shown on the contact page with a map. */
+export const ADDRESS = {
+  line1: 'Julius en Maurits Sabbestraat 15',
+  line2: '8000 Brugge, België',
+  region: 'Available across West-Vlaanderen',
+  mapQuery: 'Julius en Maurits Sabbestraat 15, 8000 Brugge',
+} as const
+
 export type SocialLink = { label: string; href: string; path: string }
 
 export const SOCIAL_LINKS: SocialLink[] = [

@@ -1,10 +1,8 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { useContactModal } from '@/components/contact/ContactModal'
 import { BOOKING_URL } from '@/data/contact'
 
 export function FinalCTA() {
-  const { open } = useContactModal()
   return (
     <section id="contact" className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 py-28 lg:py-36">
       <div className="relative z-10 flex flex-col items-center text-center">
@@ -30,15 +28,7 @@ export function FinalCTA() {
             >
               Book a strategy call
             </RippleButton>
-            <RippleButton
-              variant="ghost"
-              href="#contact"
-              className="h-12 px-6 text-[15px]"
-              onClick={(e) => {
-                e.preventDefault()
-                open()
-              }}
-            >
+            <RippleButton variant="ghost" href="/contact" className="h-12 px-6 text-[15px]">
               Contact us
             </RippleButton>
           </div>
