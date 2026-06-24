@@ -7,9 +7,8 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion'
-import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, X } from 'lucide-react'
+import { ArrowRight, Lock, QrCode } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -387,118 +386,76 @@ function DesktopCard() {
   )
 }
 
-/* ── Card 5 · Download — App Store, Google Play and a scan-to-mobile button ── */
+/* ── Card 5 · Download — locked until launch; Box/Voice picks the waiting list ── */
 /** One soft-black store tile: glyph top-left, two-line label bottom-left. */
-function StoreButton({
-  glyph,
-  line1,
-  line2,
-  onClick,
-  href,
-  label,
-}: {
-  glyph: ReactNode
-  line1: string
-  line2: string
-  onClick?: () => void
-  href?: string
-  label: string
-}) {
-  const inner = (
-    <>
-      <span className="text-ink-soft transition-colors group-hover/btn:text-ink">{glyph}</span>
+function RackTile({ glyph, line1, line2 }: { glyph: ReactNode; line1: string; line2: string }) {
+  return (
+    <div className="flex h-full flex-col justify-between rounded-[18px] border border-white/10 bg-[#0d0d0d] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+      <span className="text-ink-soft">{glyph}</span>
       <span className="leading-tight">
         <span className="block text-[11px] text-faint">{line1}</span>
         <span className="block text-[13px] font-medium text-ink">{line2}</span>
       </span>
-    </>
-  )
-  const cls =
-    'group/btn flex h-full flex-col justify-between rounded-[18px] border border-white/10 bg-[#0d0d0d] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-colors hover:border-white/25 hover:bg-[#121212]'
-
-  if (href) {
-    return (
-      <Link to={href} aria-label={label} className={cls}>
-        {inner}
-      </Link>
-    )
-  }
-  return (
-    <button type="button" onClick={onClick} aria-label={label} className={cls}>
-      {inner}
-    </button>
+    </div>
   )
 }
 
 function DownloadCard() {
-  const [scanOpen, setScanOpen] = useState(false)
   const [tab, setTab] = useState<'box' | 'voice'>('box')
   const appName = tab === 'box' ? 'Box' : 'Voice'
 
-  // Close the scan sheet on Escape
-  useEffect(() => {
-    if (!scanOpen) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setScanOpen(false)
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [scanOpen])
-
   return (
     <>
-      {/* Title + Box / Voice switch — the store buttons follow the chosen app */}
+      {/* Title + Box / Voice switch — the lock leads to the chosen app's waiting list */}
       <div className="flex items-center justify-between gap-3">
         <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
         <ProductTabs value={tab} onChange={setTab} />
       </div>
 
-      {/* The whole button block softly fades back in on a Box/Voice switch */}
-      <motion.div
-        key={tab}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-5 grid flex-1 grid-cols-3 gap-2.5"
-      >
-        <StoreButton
-          glyph={<img src="/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
-          line1="Open"
-          line2="App Store"
-          href={`/waitlist?product=${tab}`}
-          label={`Get ${appName} on the App Store, join the waiting list`}
-        />
-        <StoreButton
-          glyph={
-            <img
-              src="/store-googleplay.svg"
-              alt=""
-              className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
-            />
-          }
-          line1="Open"
-          line2="Google Play"
-          href={`/waitlist?product=${tab}`}
-          label={`Get ${appName} on Google Play, join the waiting list`}
-        />
-        <StoreButton
-          glyph={
-            <video
-              src="/store-burst.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              aria-hidden
-              className="h-9 w-9 object-cover [mask-image:radial-gradient(closest-side,#000_48%,transparent)] [-webkit-mask-image:radial-gradient(closest-side,#000_48%,transparent)]"
-            />
-          }
-          line1="Scan"
-          line2="to download"
-          onClick={() => setScanOpen(true)}
-          label={`Scan a QR code to open ${appName} on your phone`}
-        />
-      </motion.div>
+      {/* Store rack — dimmed + blurred behind a lock; the apps are not out yet */}
+      <div className="relative mt-5 flex-1">
+        <motion.div
+          key={tab}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 0.4, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden
+          className="pointer-events-none grid h-full grid-cols-3 gap-2.5 blur-[2px]"
+        >
+          <RackTile
+            glyph={<img src="/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
+            line1="Open"
+            line2="App Store"
+          />
+          <RackTile
+            glyph={
+              <img
+                src="/store-googleplay.svg"
+                alt=""
+                className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
+              />
+            }
+            line1="Open"
+            line2="Google Play"
+          />
+          <RackTile
+            glyph={<QrCode className="h-[30px] w-[30px]" strokeWidth={1.3} />}
+            line1="Scan"
+            line2="to download"
+          />
+        </motion.div>
 
-      <ScanSheet open={scanOpen} onClose={() => setScanOpen(false)} />
+        {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
+        <Link
+          to={`/waitlist?product=${tab}`}
+          aria-label={`${appName} downloads are coming soon, join the waiting list`}
+          className="group/lock absolute inset-0 grid place-items-center rounded-[14px]"
+        >
+          <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/85 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md transition-transform duration-300 group-hover/lock:scale-105">
+            <Lock className="h-[18px] w-[18px]" strokeWidth={1.8} />
+          </span>
+        </Link>
+      </div>
     </>
   )
 }
@@ -538,57 +495,5 @@ function ProductTabs({
   )
 }
 
-/* Scan popup — a real QR that opens the mobile site when scanned.
-   Rendered through a portal so it escapes the card's transform + overflow clip
-   and covers the full viewport. */
-function ScanSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  if (typeof document === 'undefined') return null
-  return createPortal(
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="fixed inset-0 z-[120] grid place-items-center p-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Scan to download"
-            initial={{ scale: 0.94, y: 10, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{ scale: 0.96, y: 6, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-            className="relative w-full max-w-[320px] rounded-[28px] border border-line-strong bg-[#0b0b0b] p-7 text-center shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
-          >
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full border border-line text-faint transition-colors hover:border-line-strong hover:text-ink"
-            >
-              <X className="h-4 w-4" strokeWidth={1.8} />
-            </button>
-
-            <div className="mx-auto w-fit rounded-[20px] bg-white p-4">
-              <img src="/qr-download.webp" alt="QR code to open Nivora on your phone" className="h-44 w-44" />
-            </div>
-
-            <h4 className="mt-5 font-serif text-[22px] leading-none tracking-[-0.01em] text-ink">
-              Scan to download
-            </h4>
-            <p className="mt-2.5 text-[13px] leading-relaxed text-faint">
-              Point your phone camera at the code to open Nivora on mobile and join the waiting list.
-            </p>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body,
-  )
-}
 
 
