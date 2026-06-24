@@ -57,7 +57,7 @@ export function Products() {
       <div className="relative mx-auto w-full max-w-[1480px] px-6">
         <SectionHeading
           title="Our Products"
-          subtitle="Intelligent software, built by Nivora. Box and Voice are coming soon, join the waiting list to be first in line when they launch."
+          subtitle="Intelligent software, built by Nivora. Box and Voice are coming soon, leave your details to get notified the moment they launch."
         />
 
         <div
@@ -70,7 +70,7 @@ export function Products() {
             dx={-44}
             dark
             href="/waitlist?product=box"
-            ariaLabel="Box, join the waiting list"
+            ariaLabel="Box, get notified at launch"
             className="min-h-[460px] lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2 lg:min-h-0"
           >
             <BoxCard />
@@ -94,7 +94,7 @@ export function Products() {
             start={0.06}
             dark
             href="/waitlist?product=voice"
-            ariaLabel="Voice, join the waiting list"
+            ariaLabel="Voice, get notified at launch"
             className="min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <VoiceCard />
@@ -233,7 +233,7 @@ function BoxCard() {
         {/* Presentational — the whole card is already the link, so this just
             reads as the call to action (avoids a duplicate keyboard tab stop). */}
         <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
-          Join the waiting list
+          Get notified at launch
           <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
         </span>
       </div>
@@ -269,8 +269,8 @@ function VoiceCard() {
 
 /* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/box-logo.webp', name: 'Box', body: 'All your inboxes, one place', href: '/waitlist?product=box' },
-  { src: '/voice-logo.webp', name: 'Voice', body: 'Speech to text, your voice', href: '/waitlist?product=voice' },
+  { src: '/box-logo.webp', name: 'Box', body: 'one calm inbox', href: '/waitlist?product=box' },
+  { src: '/voice-logo.webp', name: 'Voice', body: 'speech to text', href: '/waitlist?product=voice' },
 ]
 
 /** A single glossy notification — a button to the waiting list. Styled to match
@@ -285,8 +285,8 @@ function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
     >
       <Link
         to={href}
-        aria-label={`${name}, coming soon, join the waiting list`}
-        className="pointer-events-auto flex items-center gap-[5.5%] rounded-[24%/42%] border border-white/70 bg-white/55 px-[6%] py-[4.5%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
+        aria-label={`${name}, coming soon, get notified at launch`}
+        className="pointer-events-auto flex items-center gap-[4.5%] rounded-[26%/44%] border border-white/70 bg-white/55 px-[5%] py-[3.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
         style={{
           boxShadow:
             'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 12px 26px -8px rgba(0,0,0,0.42)',
@@ -295,16 +295,14 @@ function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
         <img
           src={src}
           alt=""
-          className="aspect-square h-[clamp(20px,16cqw,32px)] shrink-0 rounded-[26%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
+          className="aspect-square h-[clamp(17px,13cqw,27px)] shrink-0 rounded-[26%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
         />
         <div className="min-w-0 flex-1 leading-none">
           <div className="flex items-baseline justify-between gap-1">
-            <span className="truncate text-[clamp(8px,3cqw,13px)] font-semibold text-[#0c0c0c]">
-              {name}
-            </span>
-            <span className="shrink-0 text-[clamp(6px,2.1cqw,9px)] text-black/40">now</span>
+            <span className="text-[clamp(8px,2.8cqw,12px)] font-semibold text-[#0c0c0c]">{name}</span>
+            <span className="shrink-0 text-[clamp(6px,2cqw,9px)] text-black/40">now</span>
           </div>
-          <p className="mt-[5%] truncate text-[clamp(7px,2.5cqw,11px)] text-black/55">
+          <p className="mt-[4%] whitespace-nowrap text-[clamp(6.5px,2.3cqw,10px)] text-black/55">
             <span className="font-semibold text-black/75">Coming soon</span> · {body}
           </p>
         </div>
@@ -329,10 +327,10 @@ function PhoneNotifications() {
   }, [inView])
 
   return (
-    // Bottom-anchored stack on the white widget — sits high, a little narrow
+    // Bottom-anchored stack low on the white widget — below the mark, above the buttons
     <div
       ref={ref}
-      className="absolute inset-x-[19%] top-[18%] bottom-[44%] flex flex-col justify-end gap-[6%]"
+      className="absolute inset-x-[11%] top-[34%] bottom-[40%] flex flex-col justify-end gap-[5%]"
     >
       {PHONE_NOTIFS.slice(0, shown).map((n) => (
         <PhoneNotif key={n.name} {...n} />
@@ -472,7 +470,7 @@ function DownloadCard() {
         {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
         <Link
           to={`/waitlist?product=${tab}`}
-          aria-label={`${appName} downloads are coming soon, join the waiting list`}
+          aria-label={`${appName} downloads are coming soon, get notified at launch`}
           className="group/lock absolute inset-0 grid place-items-center rounded-[14px]"
         >
           <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/85 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md transition-transform duration-300 group-hover/lock:scale-105">
