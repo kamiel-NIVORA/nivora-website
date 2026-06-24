@@ -7,3 +7,7 @@ dist-ssr
 .vercel
 *.tsbuildinfo
 assets-source/
+.env*
+
+# Unused public assets, kept locally for reference, not deployed
+_unused-assets/

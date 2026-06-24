@@ -211,7 +211,7 @@ export function Navbar() {
           <div className="flex items-center justify-between">
             {/* Left: logo */}
             <a href="/" className="flex items-center pl-1" aria-label="Nivora works home">
-              <img src="/nivora-logo.png" alt="Nivora" className="h-[22px] w-auto" />
+              <img src="/brand/nivora-logo.png" alt="Nivora" className="h-[22px] w-auto" />
             </a>
 
             {/* Center: links */}

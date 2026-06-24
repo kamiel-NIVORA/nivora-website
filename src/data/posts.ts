@@ -56,7 +56,7 @@ export const POSTS: Post[] = [
     category: 'Product',
     author: 'Kamiel Niville',
     date: 'Jun 20, 2026',
-    image: '/images/blog-box-voice-launch.webp',
+    image: '/blog/blog-box-voice-launch.webp',
     excerpt:
       'After months of building quietly, here are the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text. They are almost ready, and the waiting list goes first.',
     body: [
@@ -83,7 +83,7 @@ export const POSTS: Post[] = [
     category: 'Progress',
     author: 'Kamiel Niville',
     date: 'Jun 6, 2026',
-    image: '/images/blog-ai-progress.webp',
+    image: '/blog/blog-ai-progress.webp',
     excerpt:
       'An honest progress update from inside the build. What is working now, what we changed our minds about, and why the quiet, unglamorous parts are the ones we are proudest of.',
     body: [
@@ -91,7 +91,7 @@ export const POSTS: Post[] = [
       { h2: 'The models got good enough, quietly' },
       'A year ago, running capable AI close to your own data meant giving something up on quality. That is no longer true. The models we build on can read a long contract, search years of internal files, and draft a careful reply, and they do it fast enough to feel instant. The leap happened without much noise, and it quietly changed what we are able to promise you.',
       {
-        image: '/images/blog-ai-hand.webp',
+        image: '/blog/blog-ai-hand.webp',
         alt: 'A human hand reaching toward a hand formed from points of light',
         caption:
           'The gap between what people expect from AI and what it can quietly do has closed faster than most of us planned for.',
@@ -115,7 +115,7 @@ export const POSTS: Post[] = [
     category: 'Local',
     author: 'Kamiel Niville',
     date: 'May 22, 2026',
-    image: '/images/blog-local-peak.webp',
+    image: '/blog/blog-local-peak.webp',
     excerpt:
       'Most AI sends your data to someone else’s cloud. We think the bigger opportunity is the opposite. AI that runs on hardware you own, where what is yours stays yours.',
     body: [
@@ -124,7 +124,7 @@ export const POSTS: Post[] = [
       'Local AI runs inside your own walls. The model lives on hardware you control, your data never leaves it, and the answers come from your own knowledge instead of a shared cloud. Nothing gets logged on a server you cannot see. Your information stays exactly where it already is, which is with you.',
       'For a long time that came with a catch. Local meant slower, smaller, and noticeably worse. That trade is mostly gone now. Models you can run privately have become strong enough for real work. Reading documents, drafting replies, searching everything you have ever written in seconds. You no longer have to choose between private and capable.',
       {
-        image: '/images/blog-local-horizon.webp',
+        image: '/blog/blog-local-horizon.webp',
         alt: 'A lone figure standing on a wide beach, facing the open sea',
         caption:
           'Owning the system you depend on changes how it feels to use it. The horizon is yours, not rented.',

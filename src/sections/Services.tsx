@@ -11,7 +11,7 @@ const MotionLink = motion.create(Link)
 
 /** Soft luminous backdrop — lives in /public, served from the site root.
  *  Clean B&W peak; kept SHARP in the gaps, blurred only through the glass cards. */
-const GLOW = '/bg-peak-stars.webp'
+const GLOW = '/backgrounds/bg-peak-stars.webp'
 const GLOW_W = 1199
 const GLOW_H = 750
 /** object-position used by BOTH the sharp band image and the per-card blurred copy,
@@ -21,10 +21,10 @@ const POS_Y = 0.46
 
 /** Per-service line icons (white glyphs, no frame), keyed by service title. */
 const ICONS: Record<string, string> = {
-  'App Design': '/icon-appdesign.png',
-  'Local AI': '/icon-localai.png',
-  AIOS: '/icon-aios.png',
-  'AI Consulting': '/icon-consulting.png',
+  'App Design': '/services/icon-appdesign.png',
+  'Local AI': '/services/icon-localai.png',
+  AIOS: '/services/icon-aios.png',
+  'AI Consulting': '/services/icon-consulting.png',
 }
 
 /**

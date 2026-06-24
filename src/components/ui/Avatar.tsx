@@ -13,7 +13,7 @@ function initials(name: string) {
 /** Real portraits for known authors. Any byline with this name renders the photo
  *  instead of the monogram, so the homepage, blog index and post pages all match. */
 const AVATARS: Record<string, string> = {
-  'Kamiel Niville': '/founder-kamiel.webp',
+  'Kamiel Niville': '/about/founder-kamiel.webp',
 }
 
 /** Small avatar used in blog bylines: the author's photo when we have one,

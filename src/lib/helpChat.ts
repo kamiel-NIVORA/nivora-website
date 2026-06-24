@@ -29,8 +29,10 @@
  * function and point HELP_CHAT_ENDPOINT at that instead.
  */
 
-/** Your chat endpoint. Leave empty ('') to use the built-in local assistant. */
-export const HELP_CHAT_ENDPOINT = ''
+/** Your chat endpoint. Leave empty ('') to use the built-in local assistant.
+ *  Points at the secure Edge function in /api/help-chat.ts, which holds the
+ *  Anthropic key server-side and streams the reply back. */
+export const HELP_CHAT_ENDPOINT = '/api/help-chat'
 
 /** Extra request headers (e.g. { Authorization: 'Bearer ...' }). */
 export const HELP_CHAT_HEADERS: Record<string, string> = {}
@@ -50,6 +52,49 @@ export type SendOptions = {
   signal?: AbortSignal
   /** Called with each new chunk of text as it streams in. */
   onToken?: (chunk: string) => void
+}
+
+/* ── Call-to-action directive ────────────────────────────────────────────────
+   The assistant may end a reply with a hidden `[[cta: token, token]]` line. The
+   page strips it from the visible text and renders the tokens as buttons. Only
+   the tokens below are honoured; anything else is ignored. */
+
+export const CTA_TOKENS = [
+  'book_call',
+  'contact',
+  'waitlist',
+  'about',
+  'service:app-design',
+  'service:local-ai',
+  'service:aios',
+  'service:ai-consulting',
+] as const
+
+export type CtaToken = (typeof CTA_TOKENS)[number]
+
+const CTA_FULL_RE = /\n*\s*\[\[\s*cta\s*:\s*([^\]]*?)\]\]\s*$/i
+/* A still-streaming, not-yet-closed directive, e.g. "...\n[[cta: bo" or "[[c". */
+const CTA_PARTIAL_RE = /\n*\s*\[\[\s*(?:c(?:t(?:a(?::[^\]]*)?)?)?)?\s*$/i
+
+/**
+ * Split an assistant reply into its visible text and any trailing
+ * `[[cta: ...]]` directive. While the directive is still arriving token by
+ * token, the partial fragment is hidden so it never flashes on screen.
+ */
+export function splitCta(content: string): { text: string; tokens: CtaToken[] } {
+  const full = content.match(CTA_FULL_RE)
+  if (full) {
+    const tokens = full[1]
+      .split(',')
+      .map((t) => t.trim().toLowerCase())
+      .filter((t): t is CtaToken => (CTA_TOKENS as readonly string[]).includes(t))
+    return { text: content.slice(0, full.index).trimEnd(), tokens }
+  }
+  const partial = content.match(CTA_PARTIAL_RE)
+  if (partial && partial.index !== undefined && partial[0].includes('[[')) {
+    return { text: content.slice(0, partial.index).trimEnd(), tokens: [] }
+  }
+  return { text: content, tokens: [] }
 }
 
 /** True once a real endpoint has been configured. */

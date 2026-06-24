@@ -118,7 +118,7 @@ export function MediaKit() {
         {/* Soft on-brand landscape, faded into the dark */}
         <div className="pointer-events-none absolute inset-0">
           <img
-            src="/images/hero-nivora.webp"
+            src="/home/hero-nivora.webp"
             alt=""
             className="h-full w-full object-cover opacity-30"
           />

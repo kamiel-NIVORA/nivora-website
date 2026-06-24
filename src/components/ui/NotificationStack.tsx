@@ -13,8 +13,8 @@ import { motion, useInView } from 'framer-motion'
 type Notif = { app: string; logo: string; blurb: string }
 
 const NOTIFS: Notif[] = [
-  { app: 'Box', logo: '/box-logo.webp', blurb: 'All your communication in one place.' },
-  { app: 'Voice', logo: '/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
+  { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.' },
+  { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
 ]
 
 /** Houdt de echte tijd bij (HH:MM) — ververst elke 15s. */
@@ -78,7 +78,7 @@ export function NotificationStack() {
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
       {/* dark grain wallpaper — zoomed to fill the whole frame, like an Apple lockscreen. */}
       <img
-        src="/products-bg.webp"
+        src="/products/products-bg.webp"
         alt=""
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />

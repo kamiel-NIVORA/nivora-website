@@ -27,10 +27,10 @@ const LINKEDIN_PATH =
 
 /** Per-service line icons (white glyphs), keyed by service title. */
 const SERVICE_ICONS: Record<string, string> = {
-  'App Design': '/icon-appdesign.png',
-  'Local AI': '/icon-localai.png',
-  AIOS: '/icon-aios.png',
-  'AI Consulting': '/icon-consulting.png',
+  'App Design': '/services/icon-appdesign.png',
+  'Local AI': '/services/icon-localai.png',
+  AIOS: '/services/icon-aios.png',
+  'AI Consulting': '/services/icon-consulting.png',
 }
 
 /** The three promises we make to every client. They tie products and services together. */
@@ -428,7 +428,7 @@ function Founder() {
             />
             <div className="relative overflow-hidden rounded-[28px] border border-line">
               <img
-                src="/founder-kamiel.webp"
+                src="/about/founder-kamiel.webp"
                 alt="Kamiel Niville, founder of Nivora"
                 className="aspect-[4/5] w-full object-cover object-[center_22%]"
               />

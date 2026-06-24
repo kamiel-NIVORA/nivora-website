@@ -27,6 +27,12 @@
   --color-steel: #6691a3;
   --color-brown: #7a6243;
 
+  /* ── Signal red — the one bright accent, reserved for the Help Center
+       (headline, chat frame glow, send action). Used nowhere else. ── */
+  --color-signal: #e5484d;
+  --color-signal-soft: #ff6b62;
+  --color-signal-deep: #b5302f;
+
   /* ── Type families ── */
   --font-sans: "Inter", "Inter Placeholder", sans-serif;
   --font-serif: "Hedvig Letters Serif", "Hedvig Letters Serif Placeholder", serif;
@@ -107,4 +113,11 @@
 @keyframes voiceDot {
   0%, 100% { opacity: 0.2; transform: scale(0.7); }
   50% { opacity: 0.85; transform: scale(1); }
+}
+
+/* Help Center — reading-shimmer on the assistant's "thinking" label
+   (echoes the Nivora AIOS chat). */
+@keyframes helpShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }

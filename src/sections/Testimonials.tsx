@@ -9,31 +9,31 @@ type Card =
 const CARDS: Card[] = [
   {
     kind: 'quote',
-    bg: '/images/s8GPxlDcxupng4c3ToZpTaaLQ.webp',
-    avatar: '/images/34CHRdTurlCbv7kCKIQR4GZmcI.webp',
+    bg: '/testimonials/s8GPxlDcxupng4c3ToZpTaaLQ.webp',
+    avatar: '/testimonials/34CHRdTurlCbv7kCKIQR4GZmcI.webp',
     name: 'James Gowley',
     role: 'CEO · NeoRick',
     quote:
       'This tool transformed how we do research. We can scan, generate summaries, and deliver insights in a fraction of the time.',
   },
   { kind: 'logo', name: 'NeoRick', Icon: Sparkle },
-  { kind: 'portrait', image: '/images/Ksud8CvJrW8EBKK6UADg7okcqg.webp', name: 'Marcus Lee', role: 'Head of Research' },
+  { kind: 'portrait', image: '/testimonials/Ksud8CvJrW8EBKK6UADg7okcqg.webp', name: 'Marcus Lee', role: 'Head of Research' },
   {
     kind: 'quote',
-    bg: '/images/gdn7G7rY1qzcykNXS1rYUKGlGM.webp',
-    avatar: '/images/NE97Dd8nYnoAtbGouH0WCRgyOM.webp',
+    bg: '/testimonials/gdn7G7rY1qzcykNXS1rYUKGlGM.webp',
+    avatar: '/testimonials/NE97Dd8nYnoAtbGouH0WCRgyOM.webp',
     name: 'Thomas Aspen',
     role: 'CTO · Analyx',
     quote:
       'The AI research analyst helps our team scan information quickly, making strategic decisions easier and far more data-driven and accurate.',
   },
-  { kind: 'portrait', image: '/images/MKA7INDXm9nEkdIrbzOYK7fJ4A.webp', name: 'Sara Müller', role: 'Operations Lead' },
+  { kind: 'portrait', image: '/testimonials/MKA7INDXm9nEkdIrbzOYK7fJ4A.webp', name: 'Sara Müller', role: 'Operations Lead' },
   { kind: 'logo', name: 'Colfare', Icon: Aperture },
-  { kind: 'portrait', image: '/images/rxBNYoypQWFpaC9BMn51oDYSs8.webp', name: 'Elena Park', role: 'Data Analyst' },
+  { kind: 'portrait', image: '/testimonials/rxBNYoypQWFpaC9BMn51oDYSs8.webp', name: 'Elena Park', role: 'Data Analyst' },
   {
     kind: 'quote',
-    bg: '/images/oJMn0JMIXRyu0NZ9cSstBe6B9Q.webp',
-    avatar: '/images/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
+    bg: '/testimonials/oJMn0JMIXRyu0NZ9cSstBe6B9Q.webp',
+    avatar: '/testimonials/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
     name: 'Aria Patel',
     role: 'Founder · Colfare',
     quote:

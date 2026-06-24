@@ -51,12 +51,12 @@ const APP_TYPES = [
 
 /** Image shown per capability index on the App Design accordion. */
 const APP_CAPABILITY_IMAGES = [
-  '/showcase-appdesign.jpg',
-  '/service-appdesign.webp',
-  '/icons-appdesign.jpg',
-  '/service-appdesign.webp',
-  '/showcase-appdesign.jpg',
-  '/service-appdesign.webp',
+  '/services/showcase-appdesign.jpg',
+  '/services/service-appdesign.webp',
+  '/services/icons-appdesign.jpg',
+  '/services/service-appdesign.webp',
+  '/services/showcase-appdesign.jpg',
+  '/services/service-appdesign.webp',
 ]
 
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
@@ -262,7 +262,7 @@ function PrivacyBand({ meta }: { meta: ServiceMeta }) {
 
   return (
     <section className="relative w-full overflow-hidden border-y border-line py-20 lg:py-28">
-      <ParallaxImage src="/bg-peak-mono.webp" range={['-6%', '6%']} />
+      <ParallaxImage src="/backgrounds/bg-peak-mono.webp" range={['-6%', '6%']} />
       <div className="absolute inset-0 bg-bg/88" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
@@ -654,7 +654,7 @@ function AppShowcase() {
         <Reveal delay={0.06}>
           <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
             <img
-              src="/showcase-appdesign.jpg"
+              src="/services/showcase-appdesign.jpg"
               alt=""
               loading="lazy"
               className="block w-full object-cover"
@@ -672,7 +672,7 @@ function AppShowcase() {
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
               <img
-                src="/icons-appdesign.jpg"
+                src="/services/icons-appdesign.jpg"
                 alt=""
                 loading="lazy"
                 className="block w-full"

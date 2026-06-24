@@ -16,7 +16,7 @@ import MacOSDock, { type DockApp } from '@/components/ui/MacOSDock'
 import { cn } from '@/lib/utils'
 
 /** Soft luminous backdrop — placeholder, swap for the final art later. */
-const GLOW = '/IMG_0683.webp'
+const GLOW = '/products/IMG_0683.webp'
 
 /**
  * Our Products — a bento of the Nivora tools.
@@ -223,7 +223,7 @@ function BoxCard() {
       {/* Text */}
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <AppLogo src="/box-logo.webp" />
+          <AppLogo src="/products/box-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
           <ComingSoon />
         </div>
@@ -255,7 +255,7 @@ function VoiceCard() {
       {/* Label — anchored top-left, above the node, ribbon and correction pills */}
       <div className="relative z-[1]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <AppLogo src="/voice-logo.webp" />
+          <AppLogo src="/products/voice-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
           <ComingSoon />
         </div>
@@ -269,8 +269,8 @@ function VoiceCard() {
 
 /* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/box-logo.webp', name: 'Box', body: 'one calm inbox', href: '/waitlist?product=box' },
-  { src: '/voice-logo.webp', name: 'Voice', body: 'speech to text', href: '/waitlist?product=voice' },
+  { src: '/products/box-logo.webp', name: 'Box', body: 'one calm inbox', href: '/waitlist?product=box' },
+  { src: '/products/voice-logo.webp', name: 'Voice', body: 'speech to text', href: '/waitlist?product=voice' },
 ]
 
 /** A single glossy notification — a button to the waiting list. Styled to match
@@ -347,7 +347,7 @@ function MobileCard() {
           @container lets the on-screen banner scale with the phone, not the page. */}
       <div className="pointer-events-none absolute inset-x-0 -bottom-2 z-0 mx-auto w-[94%] max-w-[324px] [container-type:inline-size] left-1/2 -translate-x-1/2">
         <img
-          src="/product-phone.webp"
+          src="/products/product-phone.webp"
           alt="The Nivora suite on iPhone"
           className="w-full select-none object-contain [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)]"
           loading="lazy"
@@ -380,8 +380,8 @@ const DOCK_APPS: DockApp[] = [
   { id: 'calculator', name: 'Calculator', icon: 'https://cdn.jim-nielsen.com/macos/1024/calculator-2021-04-29.png?rf=1024' },
   { id: 'terminal', name: 'Terminal', icon: 'https://cdn.jim-nielsen.com/macos/1024/terminal-2021-06-03.png?rf=1024' },
   { id: 'notes', name: 'Notes', icon: 'https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024' },
-  { id: 'box', name: 'Box by Nivora', icon: '/box-logo.webp' },
-  { id: 'voice', name: 'Voice by Nivora', icon: '/voice-logo.webp' },
+  { id: 'box', name: 'Box by Nivora', icon: '/products/box-logo.webp' },
+  { id: 'voice', name: 'Voice by Nivora', icon: '/products/voice-logo.webp' },
   { id: 'safari', name: 'Safari', icon: 'https://cdn.jim-nielsen.com/macos/1024/safari-2021-06-02.png?rf=1024' },
   { id: 'photos', name: 'Photos', icon: 'https://cdn.jim-nielsen.com/macos/1024/photos-2021-05-28.png?rf=1024' },
   { id: 'music', name: 'Music', icon: 'https://cdn.jim-nielsen.com/macos/1024/music-2021-05-25.png?rf=1024' },
@@ -445,14 +445,14 @@ function DownloadCard() {
           className="pointer-events-none grid h-full grid-cols-3 gap-2.5 blur-[2px]"
         >
           <RackTile
-            glyph={<img src="/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
+            glyph={<img src="/products/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
             line1="Open"
             line2="App Store"
           />
           <RackTile
             glyph={
               <img
-                src="/store-googleplay.svg"
+                src="/products/store-googleplay.svg"
                 alt=""
                 className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
               />

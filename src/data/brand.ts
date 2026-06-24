@@ -118,28 +118,28 @@ export const LOGOS: LogoAsset[] = [
   {
     name: 'Primary wordmark',
     desc: 'The full Nivora lockup — mark plus wordmark. The default everywhere.',
-    src: '/nivora-logo.png',
+    src: '/brand/nivora-logo.png',
     surface: 'dark',
     filename: 'nivora-wordmark-light.png',
   },
   {
     name: 'Arrow mark — light',
     desc: 'The standalone growth mark for tight spaces, avatars and favicons.',
-    src: '/nivora-mark.webp',
+    src: '/brand/nivora-mark.webp',
     surface: 'dark',
     filename: 'nivora-mark-light.png',
   },
   {
     name: 'Arrow mark — dark',
     desc: 'The mark in black, for light backgrounds and printed material.',
-    src: '/nivora-mark-dark.webp',
+    src: '/brand/nivora-mark-dark.webp',
     surface: 'light',
     filename: 'nivora-mark-dark.png',
   },
   {
     name: 'App icon',
     desc: 'Rounded app/touch icon for mobile, bookmarks and store listings.',
-    src: '/icon-app.webp',
+    src: '/brand/icon-app.webp',
     surface: 'dark',
     filename: 'nivora-app-icon.png',
   },
@@ -179,12 +179,12 @@ export const PHOTO_PRINCIPLES = [
 export type GalleryShot = { src: string; caption: string; span?: 'wide' | 'tall' }
 
 export const PHOTO_GALLERY: GalleryShot[] = [
-  { src: '/images/hero-nivora.webp', caption: 'Hero — misty ridges at dawn', span: 'wide' },
-  { src: '/images/2S9MZkkrhQhX1BXE7eQesdMNEk.webp', caption: 'Cover — labelled "24M"' },
-  { src: '/images/89dxBkhlY82YRVjvzzxceldnL0.webp', caption: 'Cover — labelled "REPORT #127"' },
-  { src: '/images/landscape-ridges.webp', caption: 'Open ridges, generous sky' },
-  { src: '/cta-landscape.webp', caption: 'Lone subject, deep green field' },
-  { src: '/IMG_0743.webp', caption: 'Aerial field texture', span: 'tall' },
+  { src: '/home/hero-nivora.webp', caption: 'Hero — misty ridges at dawn', span: 'wide' },
+  { src: '/brand/2S9MZkkrhQhX1BXE7eQesdMNEk.webp', caption: 'Cover — labelled "24M"' },
+  { src: '/brand/89dxBkhlY82YRVjvzzxceldnL0.webp', caption: 'Cover — labelled "REPORT #127"' },
+  { src: '/brand/landscape-ridges.webp', caption: 'Open ridges, generous sky' },
+  { src: '/home/cta-landscape.webp', caption: 'Lone subject, deep green field' },
+  { src: '/home/IMG_0743.webp', caption: 'Aerial field texture', span: 'tall' },
 ]
 
 export const PHOTO_PROMPTS: PhotoPrompt[] = [
@@ -210,10 +210,10 @@ export const PHOTO_PROMPTS: PhotoPrompt[] = [
 
 /* ── Downloadable asset bundle (used by "Download all") ── */
 export const ALL_ASSETS: string[] = [
-  '/nivora-logo.png',
-  '/nivora-mark.webp',
-  '/nivora-mark-dark.webp',
-  '/icon-app.webp',
+  '/brand/nivora-logo.png',
+  '/brand/nivora-mark.webp',
+  '/brand/nivora-mark-dark.webp',
+  '/brand/icon-app.webp',
   '/favicon.png',
 ]
 

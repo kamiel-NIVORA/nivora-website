@@ -42,7 +42,7 @@ export function Hero() {
       <div className="absolute inset-0 [transform:translateZ(0)] [backface-visibility:hidden]">
         {/* Nivora landscape, generated with Nano Banana Pro */}
         <img
-          src="/images/hero-nivora.webp"
+          src="/home/hero-nivora.webp"
           alt=""
           fetchPriority="high"
           decoding="async"

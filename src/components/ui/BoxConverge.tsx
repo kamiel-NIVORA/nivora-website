@@ -10,7 +10,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
  * One looping progress value (0 → 1) drives the timeline.
  */
 
-const BOX_LOGO = '/box-logo.webp'
+const BOX_LOGO = '/products/box-logo.webp'
 
 type App = {
   name: string
@@ -23,12 +23,12 @@ type App = {
 }
 
 const APPS: App[] = [
-  { name: 'Gmail', icon: '/box-icons/gmail.svg', sx: -84, sy: -110, appearAt: 0.0 },
-  { name: 'Outlook', icon: '/box-icons/outlook.svg', sx: 84, sy: -106, appearAt: 0.06 },
-  { name: 'WhatsApp', icon: '/box-icons/whatsapp.svg', sx: -104, sy: 8, appearAt: 0.12 },
-  { name: 'Instagram', icon: '/box-icons/instagram.svg', sx: 104, sy: 12, appearAt: 0.18 },
-  { name: 'Facebook', icon: '/box-icons/facebook.svg', sx: -66, sy: 118, appearAt: 0.24 },
-  { name: 'X', icon: '/box-icons/x.svg', sx: 66, sy: 122, appearAt: 0.3 },
+  { name: 'Gmail', icon: '/products/box-icons/gmail.svg', sx: -84, sy: -110, appearAt: 0.0 },
+  { name: 'Outlook', icon: '/products/box-icons/outlook.svg', sx: 84, sy: -106, appearAt: 0.06 },
+  { name: 'WhatsApp', icon: '/products/box-icons/whatsapp.svg', sx: -104, sy: 8, appearAt: 0.12 },
+  { name: 'Instagram', icon: '/products/box-icons/instagram.svg', sx: 104, sy: 12, appearAt: 0.18 },
+  { name: 'Facebook', icon: '/products/box-icons/facebook.svg', sx: -66, sy: 118, appearAt: 0.24 },
+  { name: 'X', icon: '/products/box-icons/x.svg', sx: 66, sy: 122, appearAt: 0.3 },
 ]
 
 /** The channel logo on its own — no frame, just the clean mark with a soft lift. */
