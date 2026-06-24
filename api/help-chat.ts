@@ -1,14 +1,16 @@
 /**
- * Help Center chat — secure server-side endpoint (Vercel Edge Function).
+ * Help Center chat — secure server-side endpoint (Vercel Node Serverless Function).
  *
  * The browser never sees the API key. The Help Center page POSTs the running
  * conversation here; this function adds the Nivora system prompt + guard rails,
  * calls Anthropic (the same model family the Nivora AIOS runs on), and streams
  * the reply straight back token by token.
  *
+ * Runs on the Node runtime (NOT Edge): the Edge runtime could not reliably reach
+ * api.anthropic.com and hung. Node's networking is solid for this.
+ *
  * Wire-up:
- *   - Set ANTHROPIC_API_KEY in the Vercel project env (and .env.local for dev).
- *     The key lives in the Nivora system settings (the AIOS Anthropic key).
+ *   - Set ANTHROPIC_API_KEY in the Vercel project env (the AIOS Anthropic key).
  *   - The client (src/lib/helpChat.ts) points HELP_CHAT_ENDPOINT at /api/help-chat.
  *
  * It speaks the OpenAI-style SSE shape on the way out
@@ -16,14 +18,11 @@
  * so the existing streaming reader in helpChat.ts understands it with no changes.
  */
 
-// Edge runtime injects env vars on `process.env` at runtime; declare it so the
-// build typechecks without @types/node.
+// Node globals, declared so the function typechecks without @types/node.
 declare const process: { env: Record<string, string | undefined> }
 
-export const config = { runtime: 'edge' }
+export const config = { maxDuration: 30 }
 
-/* Model lives on the Anthropic API key from the Nivora system. Bump here when a
-   newer Claude ships; Haiku is fast + cheap + sharp, right for a help assistant. */
 const MODEL = process.env.HELP_CHAT_MODEL || 'claude-haiku-4-5'
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages'
 const ANTHROPIC_VERSION = '2023-06-01'
@@ -32,7 +31,6 @@ const MAX_TOKENS = 768
 const MAX_HISTORY = 14 // keep the last N turns only
 const MAX_CHARS = 4000 // per-message clamp, stops abuse / runaway payloads
 const TEMPERATURE = 0.35
-const UPSTREAM_TIMEOUT_MS = 28000 // never let the upstream call hang the request
 
 /* Browser-origin allowlist. A soft gate that stops casual cross-site abuse of
    the key; same-origin requests from the site always pass. */
@@ -102,15 +100,32 @@ Rules for the cta line: only include it when a button is clearly useful, never m
 ... A short call is the quickest way to get you a real number.
 [[cta: book_call, service:local-ai]]`
 
-function jsonResponse(body: unknown, status: number, extraHeaders: Record<string, string> = {}): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8', ...extraHeaders },
-  })
+type AnyReq = {
+  method?: string
+  headers: Record<string, string | string[] | undefined>
+  body?: unknown
+  [Symbol.asyncIterator]?: () => AsyncIterator<unknown>
+}
+type AnyRes = {
+  statusCode: number
+  setHeader: (k: string, v: string) => void
+  write: (chunk: string) => void
+  end: (chunk?: string) => void
 }
 
-function hostAllowed(req: Request): boolean {
-  const origin = req.headers.get('origin') || req.headers.get('referer')
+function sendJson(res: AnyRes, status: number, obj: unknown): void {
+  res.statusCode = status
+  res.setHeader('content-type', 'application/json; charset=utf-8')
+  res.end(JSON.stringify(obj))
+}
+
+function header(req: AnyReq, name: string): string {
+  const v = req.headers[name]
+  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '')
+}
+
+function hostAllowed(req: AnyReq): boolean {
+  const origin = header(req, 'origin') || header(req, 'referer')
   if (!origin) return true // non-browser / same-origin without Origin header, allow
   try {
     const host = new URL(origin).hostname
@@ -118,6 +133,19 @@ function hostAllowed(req: Request): boolean {
   } catch {
     return false
   }
+}
+
+/** Vercel usually parses JSON bodies onto req.body; fall back to reading the raw stream. */
+async function readBody(req: AnyReq): Promise<unknown> {
+  if (req.body !== undefined && req.body !== null && req.body !== '') {
+    return typeof req.body === 'string' ? JSON.parse(req.body) : req.body
+  }
+  let raw = ''
+  // req is an async-iterable Readable in the Node runtime.
+  for await (const chunk of req as AsyncIterable<unknown>) {
+    raw += typeof chunk === 'string' ? chunk : String(chunk)
+  }
+  return raw ? JSON.parse(raw) : {}
 }
 
 type InMessage = { role?: unknown; content?: unknown }
@@ -133,105 +161,36 @@ function sanitize(raw: unknown): { role: 'user' | 'assistant'; content: string }
     if (!role || !content) continue
     cleaned.push({ role, content })
   }
-  // Anthropic requires the first message to be a user turn.
   while (cleaned.length && cleaned[0].role !== 'user') cleaned.shift()
   return cleaned.slice(-MAX_HISTORY)
 }
 
-/** Turn Anthropic's SSE into the OpenAI-style SSE the client already reads. */
-function transformAnthropicStream(upstream: ReadableStream<Uint8Array>): ReadableStream<Uint8Array> {
-  const decoder = new TextDecoder()
-  const encoder = new TextEncoder()
-  let buffer = ''
-  let done = false
-
-  const sendText = (controller: ReadableStreamDefaultController<Uint8Array>, text: string) => {
-    if (!text) return
-    const payload = JSON.stringify({ choices: [{ delta: { content: text } }] })
-    controller.enqueue(encoder.encode(`data: ${payload}\n\n`))
-  }
-  const finish = (controller: ReadableStreamDefaultController<Uint8Array>) => {
-    if (done) return
-    done = true
-    controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-  }
-
-  const reader = upstream.getReader()
-
-  return new ReadableStream<Uint8Array>({
-    async pull(controller) {
-      try {
-        const { value, done: streamDone } = await reader.read()
-        if (streamDone) {
-          finish(controller)
-          controller.close()
-          return
-        }
-        buffer += decoder.decode(value, { stream: true })
-        const records = buffer.split('\n\n')
-        buffer = records.pop() ?? ''
-        for (const record of records) {
-          for (const line of record.split('\n')) {
-            const trimmed = line.trim()
-            if (!trimmed.startsWith('data:')) continue
-            const data = trimmed.slice(5).trim()
-            if (!data || data === '[DONE]') continue
-            try {
-              const evt = JSON.parse(data)
-              if (evt?.type === 'content_block_delta' && evt?.delta?.type === 'text_delta') {
-                sendText(controller, evt.delta.text ?? '')
-              } else if (evt?.type === 'message_stop') {
-                finish(controller)
-              }
-            } catch {
-              /* ignore keep-alives / non-JSON pings */
-            }
-          }
-        }
-      } catch (err) {
-        console.error('help-chat: stream error', String(err))
-        finish(controller)
-        controller.close()
-      }
-    },
-    cancel() {
-      void reader.cancel()
-    },
-  })
-}
-
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: AnyReq, res: AnyRes): Promise<void> {
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'access-control-allow-methods': 'POST, OPTIONS',
-        'access-control-allow-headers': 'content-type',
-      },
-    })
+    res.statusCode = 204
+    res.setHeader('access-control-allow-methods', 'POST, OPTIONS')
+    res.setHeader('access-control-allow-headers', 'content-type')
+    res.end()
+    return
   }
-  if (req.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405)
-  if (!hostAllowed(req)) return jsonResponse({ error: 'Forbidden' }, 403)
+  if (req.method !== 'POST') return sendJson(res, 405, { error: 'Method not allowed' })
+  if (!hostAllowed(req)) return sendJson(res, 403, { error: 'Forbidden' })
 
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     console.error('help-chat: ANTHROPIC_API_KEY is not set')
-    return jsonResponse({ error: 'The assistant is not configured yet.' }, 503)
+    return sendJson(res, 503, { error: 'The assistant is not configured yet.' })
   }
 
   let body: unknown
   try {
-    body = await req.json()
+    body = await readBody(req)
   } catch {
-    return jsonResponse({ error: 'Invalid request body.' }, 400)
+    return sendJson(res, 400, { error: 'Invalid request body.' })
   }
 
   const messages = sanitize((body as { messages?: unknown })?.messages)
-  if (!messages.length) return jsonResponse({ error: 'No messages provided.' }, 400)
-
-  // Hard timeout so a slow/stuck upstream can never hang the function for 300s.
-  const ctrl = new AbortController()
-  const timeout = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS)
+  if (!messages.length) return sendJson(res, 400, { error: 'No messages provided.' })
 
   let upstream: Response
   try {
@@ -250,27 +209,59 @@ export default async function handler(req: Request): Promise<Response> {
         messages,
         stream: true,
       }),
-      signal: ctrl.signal,
     })
   } catch (err) {
-    clearTimeout(timeout)
     console.error('help-chat: fetch to anthropic failed', String(err))
-    return jsonResponse({ error: 'Could not reach the assistant.' }, 502)
+    return sendJson(res, 502, { error: 'Could not reach the assistant.' })
   }
-  // Headers are in; the stream itself may run longer than the timeout, so clear it.
-  clearTimeout(timeout)
 
   if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => '')
     console.error('help-chat: anthropic returned', upstream.status, detail.slice(0, 400))
-    return jsonResponse({ error: 'The assistant is unavailable right now.' }, 502)
+    return sendJson(res, 502, { error: 'The assistant is unavailable right now.' })
   }
 
-  return new Response(transformAnthropicStream(upstream.body), {
-    status: 200,
-    headers: {
-      'content-type': 'text/event-stream; charset=utf-8',
-      'cache-control': 'no-cache, no-transform',
-    },
-  })
+  res.statusCode = 200
+  res.setHeader('content-type', 'text/event-stream; charset=utf-8')
+  res.setHeader('cache-control', 'no-cache, no-transform')
+
+  const reader = upstream.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+
+  const emit = (text: string) => {
+    if (!text) return
+    res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\n\n`)
+  }
+
+  try {
+    for (;;) {
+      const { value, done } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      const records = buffer.split('\n\n')
+      buffer = records.pop() ?? ''
+      for (const record of records) {
+        for (const line of record.split('\n')) {
+          const trimmed = line.trim()
+          if (!trimmed.startsWith('data:')) continue
+          const data = trimmed.slice(5).trim()
+          if (!data || data === '[DONE]') continue
+          try {
+            const evt = JSON.parse(data)
+            if (evt?.type === 'content_block_delta' && evt?.delta?.type === 'text_delta') {
+              emit(evt.delta.text ?? '')
+            }
+          } catch {
+            /* ignore keep-alives / pings */
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error('help-chat: stream error', String(err))
+  }
+
+  res.write('data: [DONE]\n\n')
+  res.end()
 }
