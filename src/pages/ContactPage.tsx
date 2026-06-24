@@ -7,7 +7,7 @@ import { CONTACT, ADDRESS, SOCIAL_LINKS } from '@/data/contact'
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS.mapQuery)}`
 const MAP_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS.mapQuery)}&z=15&output=embed`
 
-/** A single tappable contact tile (email / phone / location). */
+/** A single contact tile (email / phone / location). */
 function ContactCard({
   icon: Icon,
   label,
@@ -25,20 +25,25 @@ function ContactCard({
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      className="group flex items-center gap-4 rounded-[20px] border border-line bg-white/[0.02] p-5 transition-colors hover:border-line-strong hover:bg-white/[0.04]"
+      className="group flex flex-col gap-5 rounded-[22px] border border-line bg-gradient-to-b from-white/[0.045] to-white/[0.01] p-6 transition-all duration-300 hover:border-line-strong hover:from-white/[0.07]"
     >
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft">
-        <Icon className="h-[20px] w-[20px]" strokeWidth={1.6} />
-      </span>
-      <span className="flex min-w-0 flex-col">
-        <span className="text-[11px] uppercase tracking-[0.1em] text-faint">{label}</span>
+      <div className="flex items-center justify-between">
+        <span className="grid h-12 w-12 place-items-center rounded-2xl border border-line bg-white/[0.04] text-ink-soft">
+          <Icon className="h-5 w-5" strokeWidth={1.6} />
+        </span>
+        <ArrowUpRight
+          className="h-4 w-4 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink-soft"
+          strokeWidth={1.8}
+        />
+      </div>
+      <div>
+        <p className="text-[11px] uppercase tracking-[0.12em] text-faint">{label}</p>
         {lines.map((l, i) => (
-          <span key={i} className={i === 0 ? 'text-[15px] text-ink' : 'text-[13px] text-faint'}>
+          <p key={i} className={i === 0 ? 'mt-1.5 text-[15px] text-ink' : 'text-[13px] text-faint'}>
             {l}
-          </span>
+          </p>
         ))}
-      </span>
-      <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-dim transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink-soft" strokeWidth={1.8} />
+      </div>
     </a>
   )
 }
@@ -55,27 +60,24 @@ export function ContactPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative mx-auto w-full max-w-[1100px] px-6 pb-16 pt-36 lg:pt-44">
+      <section className="relative mx-auto w-full max-w-[1000px] px-6 pb-14 pt-36 text-center lg:pt-44">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-24 -z-10 mx-auto h-[420px] w-[520px] max-w-full rounded-full bg-olive/10 blur-[130px]"
+          className="pointer-events-none absolute inset-x-0 top-20 -z-10 mx-auto h-[460px] w-[560px] max-w-full rounded-full bg-olive/10 blur-[140px]"
         />
         <Reveal mode="mount">
-          <span className="label-mono text-dim">Contact</span>
-        </Reveal>
-        <Reveal mode="mount" delay={0.05}>
-          <h1 className="mt-4 max-w-2xl font-serif text-[40px] leading-[1.04] tracking-[-0.02em] text-ink sm:text-[56px] lg:text-[64px]">
+          <h1 className="mx-auto max-w-3xl font-serif text-[46px] leading-[1.02] tracking-[-0.02em] text-ink sm:text-[64px] lg:text-[78px]">
             Let's talk.
           </h1>
         </Reveal>
-        <Reveal mode="mount" delay={0.1}>
-          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-faint sm:text-[16px]">
+        <Reveal mode="mount" delay={0.06}>
+          <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-faint sm:text-[16px]">
             Tell us the challenge, or the idea you can't get built. Book a call, or reach us
             directly, we usually reply within a day.
           </p>
         </Reveal>
-        <Reveal mode="mount" delay={0.15}>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+        <Reveal mode="mount" delay={0.12}>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <BookCallButton className="h-12 px-6 text-[15px]">Book a call</BookCallButton>
             <a
               href={`mailto:${CONTACT.email}`}
@@ -87,74 +89,82 @@ export function ContactPage() {
         </Reveal>
       </section>
 
-      {/* Details + map */}
-      <section className="relative mx-auto w-full max-w-[1100px] px-6 pb-28 lg:pb-36">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {/* Left: contact tiles */}
-          <div className="flex flex-col gap-4">
-            <Reveal>
-              <ContactCard icon={Mail} label="Email" lines={[CONTACT.email]} href={`mailto:${CONTACT.email}`} />
-            </Reveal>
-            <Reveal delay={0.06}>
-              <ContactCard icon={Phone} label="Phone" lines={[CONTACT.phoneDisplay]} href={CONTACT.phoneHref} />
-            </Reveal>
-            <Reveal delay={0.12}>
-              <ContactCard
-                icon={MapPin}
-                label="Studio"
-                lines={[ADDRESS.line1, ADDRESS.line2, ADDRESS.region]}
-                href={MAPS_LINK}
-                external
-              />
-            </Reveal>
-
-            {/* Socials */}
-            <Reveal delay={0.18}>
-              <div className="mt-2 flex items-center gap-3">
-                {SOCIAL_LINKS.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    className="grid h-11 w-11 place-items-center rounded-full border border-line bg-white/[0.02] text-ink-soft/70 transition-colors hover:bg-white/[0.06] hover:text-ink"
-                  >
-                    <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="currentColor" aria-hidden="true">
-                      <path d={s.path} />
-                    </svg>
-                  </a>
-                ))}
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Right: map */}
-          <Reveal delay={0.1} className="min-h-[340px] lg:min-h-0">
-            <div className="relative h-full min-h-[340px] overflow-hidden rounded-[28px] border border-line bg-white/[0.02]">
-              <iframe
-                title="Nivora locatie, Brugge"
-                src={MAP_EMBED}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 h-full w-full border-0 [filter:invert(0.92)_hue-rotate(180deg)_saturate(0.75)_brightness(0.95)]"
-              />
-              {/* Address chip over the map */}
-              <a
-                href={MAPS_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-2xl border border-line-strong bg-[#0b0b0b]/85 px-4 py-3 backdrop-blur-md transition-colors hover:bg-[#0b0b0b]/95"
-              >
-                <MapPin className="h-4 w-4 shrink-0 text-ink-soft" strokeWidth={1.7} />
-                <span className="min-w-0 flex-1 truncate text-[13px] text-ink-soft">
-                  {ADDRESS.line1}, {ADDRESS.line2}
-                </span>
-                <span className="shrink-0 text-[12px] text-faint">Route</span>
-              </a>
-            </div>
+      {/* Contact tiles */}
+      <section className="mx-auto w-full max-w-[1100px] px-6">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Reveal>
+            <ContactCard icon={Mail} label="Email" lines={[CONTACT.email]} href={`mailto:${CONTACT.email}`} />
+          </Reveal>
+          <Reveal delay={0.06}>
+            <ContactCard icon={Phone} label="Phone" lines={[CONTACT.phoneDisplay]} href={CONTACT.phoneHref} />
+          </Reveal>
+          <Reveal delay={0.12}>
+            <ContactCard
+              icon={MapPin}
+              label="Studio"
+              lines={[ADDRESS.line1, ADDRESS.line2]}
+              href={MAPS_LINK}
+              external
+            />
           </Reveal>
         </div>
+
+        {/* Socials */}
+        <Reveal delay={0.16}>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            {SOCIAL_LINKS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="grid h-11 w-11 place-items-center rounded-full border border-line bg-white/[0.02] text-ink-soft/70 transition-colors hover:bg-white/[0.06] hover:text-ink"
+              >
+                <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="currentColor" aria-hidden="true">
+                  <path d={s.path} />
+                </svg>
+              </a>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Big dark map */}
+      <section className="mx-auto w-full max-w-[1100px] px-6 pb-28 pt-10 lg:pb-36">
+        <Reveal>
+          <div className="relative h-[380px] overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a] sm:h-[460px]">
+            <iframe
+              title="Nivora studio, Brugge"
+              src={MAP_EMBED}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0 [filter:invert(0.92)_hue-rotate(180deg)_brightness(0.95)_contrast(0.95)]"
+            />
+            {/* Edge feather + hairline so the light map blends into the dark page */}
+            <div className="pointer-events-none absolute inset-0 rounded-[32px] shadow-[inset_0_0_80px_30px_rgba(6,6,6,0.55)]" />
+            <div className="pointer-events-none absolute inset-0 rounded-[32px] ring-1 ring-inset ring-white/[0.06]" />
+
+            {/* Address / route chip */}
+            <a
+              href={MAPS_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group absolute inset-x-4 bottom-4 flex items-center gap-3 rounded-2xl border border-line-strong bg-[#0b0b0b]/85 px-4 py-3.5 backdrop-blur-md transition-colors hover:bg-[#0b0b0b]/95 sm:inset-x-auto sm:left-5 sm:max-w-sm"
+            >
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line bg-white/[0.04] text-ink-soft">
+                <MapPin className="h-[18px] w-[18px]" strokeWidth={1.7} />
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="text-[13px] text-ink">{ADDRESS.line1}</span>
+                <span className="text-[12px] text-faint">{ADDRESS.line2}</span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1 text-[12px] text-faint transition-colors group-hover:text-ink">
+                Route <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
+              </span>
+            </a>
+          </div>
+        </Reveal>
       </section>
     </main>
   )
