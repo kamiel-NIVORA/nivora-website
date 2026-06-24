@@ -9,7 +9,7 @@ import {
 } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, X } from 'lucide-react'
+import { ArrowRight, QrCode, X } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -428,6 +428,8 @@ function StoreButton({
 
 function DownloadCard() {
   const [scanOpen, setScanOpen] = useState(false)
+  const [tab, setTab] = useState<'box' | 'voice'>('box')
+  const appName = tab === 'box' ? 'Box' : 'Voice'
 
   // Close the scan sheet on Escape
   useEffect(() => {
@@ -439,15 +441,19 @@ function DownloadCard() {
 
   return (
     <>
-      <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
+      {/* Title + Box / Voice switch — the store buttons follow the chosen app */}
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
+        <ProductTabs value={tab} onChange={setTab} />
+      </div>
 
       <div className="mt-5 grid flex-1 grid-cols-3 gap-2.5">
         <StoreButton
           glyph={<img src="/store-apple.svg" alt="" className="h-[22px] w-[22px] object-contain" />}
           line1="Open"
           line2="App Store"
-          href="/waitlist?product=ios"
-          label="Open the App Store, join the waiting list"
+          href={`/waitlist?product=${tab}`}
+          label={`Get ${appName} on the App Store, join the waiting list`}
         />
         <StoreButton
           glyph={
@@ -459,20 +465,55 @@ function DownloadCard() {
           }
           line1="Open"
           line2="Google Play"
-          href="/waitlist?product=android"
-          label="Open Google Play, join the waiting list"
+          href={`/waitlist?product=${tab}`}
+          label={`Get ${appName} on Google Play, join the waiting list`}
         />
         <StoreButton
-          glyph={<ScanGlyph />}
+          glyph={<QrCode className="h-[22px] w-[22px]" strokeWidth={1.4} />}
           line1="Scan"
           line2="to download"
           onClick={() => setScanOpen(true)}
-          label="Scan a QR code to open Nivora on your phone"
+          label={`Scan a QR code to open ${appName} on your phone`}
         />
       </div>
 
       <ScanSheet open={scanOpen} onClose={() => setScanOpen(false)} />
     </>
+  )
+}
+
+/** Box / Voice segmented switch with a white pill that glides between tabs. */
+function ProductTabs({
+  value,
+  onChange,
+}: {
+  value: 'box' | 'voice'
+  onChange: (v: 'box' | 'voice') => void
+}) {
+  return (
+    <div className="relative inline-flex shrink-0 rounded-full border border-line bg-white/[0.03] p-0.5">
+      {(['box', 'voice'] as const).map((p) => (
+        <button
+          key={p}
+          type="button"
+          onClick={() => onChange(p)}
+          aria-pressed={value === p}
+          className={cn(
+            'relative rounded-full px-3 py-1 text-[12px] font-medium capitalize transition-colors duration-200',
+            value === p ? 'text-[#0a0a0a]' : 'text-faint hover:text-ink',
+          )}
+        >
+          {value === p && (
+            <motion.span
+              layoutId="download-tab-pill"
+              className="absolute inset-0 rounded-full bg-white"
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            />
+          )}
+          <span className="relative z-[1]">{p}</span>
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -529,13 +570,4 @@ function ScanSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   )
 }
 
-/** Dot-matrix QR-ish glyph for the "Scan to download" tile. */
-function ScanGlyph() {
-  return (
-    <span
-      aria-hidden
-      className="block h-[22px] w-[22px] [background-image:radial-gradient(circle,currentColor_1px,transparent_1.5px)] [background-position:0_0] [background-size:3.2px_3.2px]"
-    />
-  )
-}
 
