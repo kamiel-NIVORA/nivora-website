@@ -11,6 +11,8 @@ export type PostBlock =
   | { h2: string }
   | { quote: string }
   | { image: string; alt: string; caption?: string }
+  /** Inline call to action, e.g. a link to the waiting list. */
+  | { cta: { label: string; href: string } }
 
 /** A logo/photo placed on the cover. x/y/size are percentages of the cover box
  *  (set by the AIOS cover editor); legacy icons without them lay out as a row. */
@@ -50,15 +52,15 @@ export const AUTHOR_ROLE = 'Founder'
 export const POSTS: Post[] = [
   {
     slug: 'meet-box-and-voice',
-    title: 'Meet Box and Voice, the first two apps from Nivora.',
+    title: 'Box and Voice, the first two apps from Nivora.',
     category: 'Product',
     author: 'Kamiel Niville',
     date: 'Jun 20, 2026',
     image: '/images/blog-box-voice-launch.webp',
     excerpt:
-      'After months of building quietly, we are ready to introduce the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text.',
+      'After months of building quietly, here are the first two apps in the Nivora suite. Box brings every message into one calm inbox. Voice turns the way you talk into clean, finished text. They are almost ready, and the waiting list goes first.',
     body: [
-      'We have been quiet for a while, and that was on purpose. Building software you actually want to open every day takes longer than building something that just demos well. We wanted the first thing you see from us to be the real thing, not a mockup with the rough edges hidden. So here it is. The first two apps in the Nivora suite are Box and Voice.',
+      'We have been quiet for a while, and that was on purpose. Building software you actually want to open every day takes longer than building something that just demos well. We wanted the first thing you see from us to be the real thing, not a mockup with the rough edges hidden. So here is where we are. The first two apps in the Nivora suite are Box and Voice, and they are almost ready.',
       { h2: 'Box: every message in one calm place' },
       'Most of us lose small pieces of the day to the same problem. A question comes in over email, the follow-up lands in chat, and the actual decision happens in a DM you forgot to check. Box pulls all of it into one inbox. Email, chat, and direct messages, read and sorted and answered in a single place, without jumping between five tabs to keep one conversation straight.',
       'It is built to feel quiet. No badges screaming for attention, no inbox that resets your focus every time you blink. You open it, you see what genuinely needs you, you reply, and you close it again. That is the whole idea.',
@@ -69,9 +71,10 @@ export const POSTS: Post[] = [
           'We are not trying to add more apps to your day. We are trying to take a few away.',
       },
       'That line sits behind everything we make. Box replaces the tab-hopping. Voice replaces the retyping. Both are designed to disappear into your work instead of demanding a place in it. If you ever notice them less, we have done the job right.',
-      { h2: 'Both are coming soon, and the waiting list goes first' },
-      'Box and Voice are in the final stretch before launch, and they will land on iPhone, Mac, Android, and Windows. The fastest way to get them the day they are ready, and to help shape the last round of details, is the waiting list. Everyone on it gets first access.',
-      'It is also where we share the real updates before anywhere else, the honest behind-the-scenes kind, not the polished announcements. If you want to follow how this comes together, join the list and come along early. We would love to have you there from the start.',
+      { h2: 'Not out yet, and the waiting list goes first' },
+      'Box and Voice are in the final stretch before launch, and they will land on iPhone, Mac, Android, and Windows. They are not available to download yet, so the one thing you can do today is claim your spot. The fastest way to get them the day they are ready, and to help shape the last round of details, is the waiting list. Everyone on it gets first access.',
+      'It is also where we share the real updates before anywhere else, the honest behind-the-scenes kind, not the polished announcements. If you want to follow how this comes together, join the list and come along early.',
+      { cta: { label: 'Get notified at launch', href: '/waitlist' } },
     ],
   },
   {
@@ -135,7 +138,8 @@ export const POSTS: Post[] = [
       'There is a strategic edge here too. The work you do, the knowledge you have built, the way you speak to your customers, all of it becomes something only your system understands and only you can reach. That is hard to copy. It compounds quietly, month after month, the way a real advantage should.',
       { h2: 'Where we are taking it' },
       'This is the part of Nivora we are most excited about, and the part we are investing in hardest. We do not see local AI as a niche for the privacy-obsessed. We see it as the sensible default for any business that takes its own data seriously. The mountain is big and we are early on it, which is exactly why we like the view.',
-      'We will keep writing about what we learn as we climb. If local is something you have quietly been wondering about, join the waiting list and follow along. This one is going to be worth watching from the start.',
+      'We will keep writing about what we learn as we climb. Box and Voice, the first apps built on this thinking, are almost here. If local is something you have quietly been wondering about, join the waiting list and follow along from the start.',
+      { cta: { label: 'Get notified at launch', href: '/waitlist' } },
     ],
   },
 ]
