@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   AnimatePresence,
   motion,
@@ -443,14 +443,20 @@ function DownloadCard() {
 
       <div className="mt-5 grid flex-1 grid-cols-3 gap-2.5">
         <StoreButton
-          glyph={<AppleGlyph className="h-[22px] w-[22px]" />}
+          glyph={<img src="/store-apple.svg" alt="" className="h-[22px] w-[22px] object-contain" />}
           line1="Open"
           line2="App Store"
           href="/waitlist?product=ios"
           label="Open the App Store, join the waiting list"
         />
         <StoreButton
-          glyph={<GooglePlayGlyph className="h-[22px] w-[22px]" />}
+          glyph={
+            <img
+              src="/store-googleplay.svg"
+              alt=""
+              className="h-[22px] w-[22px] object-contain [filter:grayscale(1)_brightness(1.7)]"
+            />
+          }
           line1="Open"
           line2="Google Play"
           href="/waitlist?product=android"
@@ -520,23 +526,6 @@ function ScanSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
       )}
     </AnimatePresence>,
     document.body,
-  )
-}
-
-/* ── Monochrome platform glyphs (white, never the logo colours) ─────────── */
-function AppleGlyph(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98C13.87.71 15.21.01 16.315 0c.03.13.05.28.05.43zM20.93 17.14c-.03.07-.46 1.58-1.52 3.12-.94 1.34-1.94 2.71-3.43 2.71-1.52 0-1.9-.88-3.63-.88-1.7 0-2.3.91-3.67.91-1.38 0-2.33-1.26-3.43-2.8C3.96 18.38 2.92 15.57 2.92 12.92c0-4.28 2.8-6.55 5.55-6.55 1.45 0 2.68.95 3.6.95.86 0 2.22-1.01 3.9-1.01.61 0 2.89.06 4.37 2.19-.13.09-2.38 1.37-2.38 4.19 0 3.26 2.85 4.42 2.95 4.45z" />
-    </svg>
-  )
-}
-
-function GooglePlayGlyph(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M3.6 1.83a1.5 1.5 0 0 0-.49 1.1v18.14c0 .46.19.86.49 1.1l.06.05L13.8 12.07v-.14L3.66 1.78l-.06.05zM17.17 15.44l-3.37-3.37v-.14l3.37-3.37.08.04 3.99 2.27c1.14.65 1.14 1.7 0 2.35l-3.99 2.27-.08-.05zM17.25 15.39 13.8 11.93 3.6 22.17c.38.4 1 .45 1.7.06l11.95-6.84M5.3 1.71c-.7-.4-1.32-.34-1.7.06L13.8 12.07l3.45-3.46L5.3 1.71z" />
-    </svg>
   )
 }
 
