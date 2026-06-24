@@ -118,6 +118,8 @@ export function ServicePage() {
         {meta.objectImage && <BrandObject meta={meta} />}
         {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
+        {meta.slug === 'local-ai' && <ComparisonBand />}
+        {meta.slug === 'local-ai' && <OpenModelsBand />}
         <Preview meta={meta} />
         <WhyUs content={content} meta={meta} />
         <Process content={content} meta={meta} />
@@ -731,6 +733,170 @@ function AppShowcase() {
               </p>
             </div>
           </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Cloud vs Local comparison · only for local-ai ─────────────────────────────── */
+
+const COMPARISON_ROWS = [
+  {
+    label: 'Where your data goes',
+    cloud: 'Third-party servers. Once sent, out of your control.',
+    local: 'Your servers or hardware we manage. Never leaves your perimeter.',
+  },
+  {
+    label: 'Compliance proof',
+    cloud: 'A promise in a terms document. Hard to verify under scrutiny.',
+    local: 'Architectural: the data cannot leave, plus a full audit trail.',
+  },
+  {
+    label: 'Model control',
+    cloud: 'The provider decides what changes and when, without asking you.',
+    local: 'You control every update. New models deployed on your terms.',
+  },
+  {
+    label: 'Pricing',
+    cloud: 'Per-seat, per-month. Grows every time your team does.',
+    local: 'One deployment. No recurring fee per user, ever.',
+  },
+  {
+    label: 'Outage exposure',
+    cloud: 'If their API goes down, your team waits.',
+    local: 'Runs on your hardware. Independent of any third-party uptime.',
+  },
+  {
+    label: 'How your data is used',
+    cloud: 'Terms may allow use for training or product improvement.',
+    local: 'Used only by you. For nothing and nobody else.',
+  },
+]
+
+function ComparisonBand() {
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <Eyebrow>Cloud AI vs Local AI</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            The difference is not just where the data goes. It is who controls every part of the chain.
+          </h2>
+        </Reveal>
+      </div>
+
+      <div className="mt-14 grid gap-3 lg:grid-cols-2">
+        {/* Cloud AI column */}
+        <div className="rounded-[22px] border border-line bg-white/[0.01] p-6 lg:p-8">
+          <div className="mb-7 flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04]">
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-faint" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+              </svg>
+            </span>
+            <div>
+              <span className="block text-[15px] font-semibold text-faint">Cloud AI</span>
+              <span className="block text-[12px] text-dim">ChatGPT, Copilot, Gemini and others</span>
+            </div>
+          </div>
+          <div className="flex flex-col divide-y divide-line/50">
+            {COMPARISON_ROWS.map((row) => (
+              <div key={row.label} className="flex items-start gap-3 py-4">
+                <svg viewBox="0 0 16 16" className="mt-0.5 h-4 w-4 shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
+                </svg>
+                <div>
+                  <span className="block text-[13px] font-medium text-faint">{row.label}</span>
+                  <span className="block text-[13px] leading-relaxed text-dim">{row.cloud}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Local AI column */}
+        <div className="relative overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 lg:p-8">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="mb-7 flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.08]">
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <rect x="2" y="2" width="20" height="8" rx="2" />
+                <rect x="2" y="14" width="20" height="8" rx="2" />
+                <line x1="6" y1="6" x2="6.01" y2="6" />
+                <line x1="6" y1="18" x2="6.01" y2="18" />
+              </svg>
+            </span>
+            <div>
+              <span className="block text-[15px] font-semibold text-ink">Local AI by Nivora</span>
+              <span className="block text-[12px] text-faint">Installed on infrastructure you control</span>
+            </div>
+          </div>
+          <div className="flex flex-col divide-y divide-line/50">
+            {COMPARISON_ROWS.map((row) => (
+              <div key={row.label} className="flex items-start gap-3 py-4">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2.2} />
+                <div>
+                  <span className="block text-[13px] font-medium text-ink">{row.label}</span>
+                  <span className="block text-[13px] leading-relaxed text-ink-soft/80">{row.local}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Open models trust strip · local-ai only ───────────────────────────────────── */
+
+const OPEN_MODELS = [
+  { name: 'Llama 3', by: 'Meta' },
+  { name: 'Mistral', by: 'Mistral AI' },
+  { name: 'Gemma', by: 'Google' },
+  { name: 'Phi', by: 'Microsoft' },
+  { name: 'Qwen', by: 'Alibaba' },
+  { name: 'DeepSeek', by: 'DeepSeek AI' },
+]
+
+function OpenModelsBand() {
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 lg:py-20">
+      <div className="rounded-[22px] border border-line bg-white/[0.02] px-7 py-8 lg:px-10 lg:py-10">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-14">
+          <div className="shrink-0 lg:max-w-[280px]">
+            <Reveal>
+              <Eyebrow>Models we deploy</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <p className="mt-4 font-serif text-[22px] leading-[1.25] tracking-[-0.01em] text-ink lg:text-[24px]">
+                Best-in-class open models. Running entirely on your hardware.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
+                We select and deploy the models that fit your tasks and infrastructure. Capable, open, and private by design.
+              </p>
+            </Reveal>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-3">
+            {OPEN_MODELS.map((m, i) => (
+              <Reveal key={m.name} delay={i * 0.05}>
+                <div className="flex items-center gap-3 rounded-2xl border border-line bg-white/[0.03] px-5 py-3.5 transition-colors hover:border-line-strong hover:bg-white/[0.05]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-white/[0.06] text-[11px] font-bold tracking-wider text-ink-soft">
+                    {m.name.charAt(0)}
+                  </span>
+                  <div>
+                    <span className="block text-[14px] font-semibold text-ink">{m.name}</span>
+                    <span className="block text-[11px] text-dim">{m.by}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
