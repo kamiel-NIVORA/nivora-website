@@ -13,7 +13,6 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
-import { ServiceIntro } from '@/components/ui/ServiceIntro'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
@@ -29,14 +28,6 @@ import {
 } from '@/data/serviceContent'
 
 const ease = [0.16, 1, 0.3, 1] as const
-
-/** Intro keywords: name the pain, then the resolution. Short, on the nose. */
-const INTRO_WORDS: Record<ServiceSlug, string[]> = {
-  'app-design': ['Your idea.', 'Built properly.', 'Owned by you.'],
-  'local-ai': ['Your hardware.', 'No cloud.', 'Owned by you.'],
-  aios: ['Too many tools.', 'One system.', 'Owned by you.'],
-  'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
-}
 
 /** App types shown in the vertical marquee on the App Design statement section. */
 const APP_TYPES = [
@@ -96,29 +87,27 @@ export function ServicePage() {
   if (!content || !meta) return <Navigate to="/" replace />
 
   return (
-    <ServiceIntro words={INTRO_WORDS[meta.slug]} accent={meta.accent}>
-      <main
-        className="relative w-full overflow-x-clip bg-bg"
-        style={{ ['--accent' as string]: meta.accent } as CSSProperties}
-      >
-        <Hero content={content} meta={meta} />
-        {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
-        <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
-        <Problem content={content} />
-        <Solution content={content} meta={meta} />
-        {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
-        {meta.objectImage && <BrandObject meta={meta} />}
-        {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
-        {meta.slug === 'app-design' && <AppShowcase />}
-        {meta.slug === 'local-ai' && <ComparisonBand />}
-        <WhyUs content={content} meta={meta} />
-        <Process content={content} meta={meta} />
-        <RoiBand meta={meta} />
-        <FitFaq content={content} />
-        <FinalCta content={content} meta={meta} />
-        <OtherServices current={meta.slug} />
-      </main>
-    </ServiceIntro>
+    <main
+      className="relative w-full overflow-x-clip bg-bg"
+      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
+    >
+      <Hero content={content} meta={meta} />
+      {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
+      <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+      <Problem content={content} />
+      <Solution content={content} meta={meta} />
+      {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
+      {meta.objectImage && <BrandObject meta={meta} />}
+      {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
+      {meta.slug === 'app-design' && <AppShowcase />}
+      {meta.slug === 'local-ai' && <ComparisonBand />}
+      <WhyUs content={content} meta={meta} />
+      <Process content={content} meta={meta} />
+      <RoiBand meta={meta} />
+      <FitFaq content={content} />
+      <FinalCta content={content} meta={meta} />
+      <OtherServices current={meta.slug} />
+    </main>
   )
 }
 
