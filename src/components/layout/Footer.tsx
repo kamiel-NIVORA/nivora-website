@@ -11,6 +11,7 @@ const COLUMNS = [
       ...toLinks(COMPANY_PRIMARY),
       { label: 'Blog', href: '/blog' },
       { label: 'Brand Kit', href: '/media' },
+      { label: 'Help Center', href: '/help' },
     ],
   },
   {
@@ -23,11 +24,10 @@ const COLUMNS = [
   {
     title: 'Contact',
     links: [
-      { label: 'Contact', href: '/contact' },
       { label: 'kamiel@nivoraworks.com', href: 'mailto:kamiel@nivoraworks.com' },
       { label: '+32 489 00 77 37', href: 'tel:+32489007737' },
       {
-        label: 'Brugge, België',
+        label: 'Brugge, Belgium',
         href: 'https://www.google.com/maps/search/?api=1&query=Julius%20en%20Maurits%20Sabbestraat%2015%2C%208000%20Brugge',
       },
     ],
@@ -67,7 +67,7 @@ export function Footer() {
         {/* Top: brand + columns */}
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           {/* Nivora arrow mark */}
-          <img src="/nivora-mark.webp" alt="Nivora" className="w-28 max-w-full shrink-0 opacity-75" />
+          <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-28 max-w-full shrink-0 opacity-75" />
 
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 md:w-auto md:flex-1 md:max-w-[900px] md:pl-12">
             {COLUMNS.map((col) => (

@@ -15,28 +15,27 @@ export type NavItem = {
 }
 
 export const PRODUCTS: NavItem[] = [
-  { title: 'Box', desc: 'All your communication, brought together in one place.', href: '/#features', img: '/box-logo.webp', comingSoon: true },
-  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: '/#features', img: '/voice-logo.webp', comingSoon: true },
+  { title: 'Box', desc: 'All your communication, brought together in one place.', href: '/#features', img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: '/#features', img: '/products/voice-logo.webp', comingSoon: true },
 ]
 
 export const SERVICES: NavItem[] = [
-  { title: 'App Design', desc: 'Custom apps built around your idea.', href: '/services/app-design', img: '/service-appdesign.webp' },
-  { title: 'Local AI', desc: 'Secure AI on your own servers or ours.', href: '/services/local-ai', img: '/service-localai.webp' },
-  { title: 'AIOS', desc: 'A custom AI operating system for your company.', href: '/services/aios', img: '/service-aios.webp' },
-  { title: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.', href: '/services/ai-consulting', img: '/service-consulting.webp' },
+  { title: 'App Design', desc: 'Custom apps built around your idea.', href: '/services/app-design', img: '/services/service-appdesign.webp' },
+  { title: 'Local AI', desc: 'Secure AI on your own servers or ours.', href: '/services/local-ai', img: '/services/service-localai.webp' },
+  { title: 'AIOS', desc: 'A custom AI operating system for your company.', href: '/services/aios', img: '/services/service-aios.webp' },
+  { title: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.', href: '/services/ai-consulting', img: '/services/service-consulting.webp' },
 ]
 
 export const COMPANY_PRIMARY: NavItem[] = [
-  { title: 'About Us', desc: 'Learn more about our story and team.', href: '/about', iconImg: '/icon-about.png' },
-  { title: 'Customer Stories', desc: "See how we've helped our clients succeed.", href: '/#contact', iconImg: '/icon-stories.png' },
-  { title: 'Partnerships', desc: 'Collaborate with us for mutual growth.', href: '/#contact', iconImg: '/icon-partnerships.png' },
-  { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/affiliate', iconImg: '/icon-affiliate.png', comingSoon: true },
+  { title: 'About Us', desc: 'Learn more about our story and team.', href: '/about', iconImg: '/nav/icon-about.png' },
+  { title: 'Partnerships', desc: 'Agencies, consultants and builders, work with us.', href: '/partnership', iconImg: '/nav/icon-partnerships.png' },
+  { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/affiliate', iconImg: '/nav/icon-affiliate.png', comingSoon: true },
 ]
 
 export const RESOURCES: NavItem[] = [
-  { title: 'Media', desc: 'Logos, colours and the full brand kit.', href: '/media', iconImg: '/icon-media.png' },
+  { title: 'Media', desc: 'Logos, colours and the full brand kit.', href: '/media', iconImg: '/nav/icon-media.png' },
   { title: 'Blog', desc: 'Insights, updates and ideas.', href: '/blog', Icon: Leaf },
-  { title: 'Terms of Service', desc: 'The rules for using Nivora.', href: '/terms', iconImg: '/icon-terms.png' },
-  { title: 'Privacy Policy', desc: 'How we handle and protect your data.', href: '/privacy', iconImg: '/icon-privacy.png' },
+  { title: 'Terms of Service', desc: 'The rules for using Nivora.', href: '/terms', iconImg: '/nav/icon-terms.png' },
+  { title: 'Privacy Policy', desc: 'How we handle and protect your data.', href: '/privacy', iconImg: '/nav/icon-privacy.png' },
   { title: 'Help Center', desc: 'Ask our assistant or reach a person.', href: '/help', Icon: HelpCircle },
 ]

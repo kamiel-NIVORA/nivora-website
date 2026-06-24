@@ -20,6 +20,7 @@ const WaitlistPage = lazy(() => import('@/pages/WaitlistPage').then((m) => ({ de
 const AffiliatePage = lazy(() => import('@/pages/AffiliatePage').then((m) => ({ default: m.AffiliatePage })))
 const HelpCenterPage = lazy(() => import('@/pages/HelpCenterPage').then((m) => ({ default: m.HelpCenterPage })))
 const ContactPage = lazy(() => import('@/pages/ContactPage').then((m) => ({ default: m.ContactPage })))
+const PartnershipPage = lazy(() => import('@/pages/PartnershipPage').then((m) => ({ default: m.PartnershipPage })))
 const LegalPage = lazy(() => import('@/pages/LegalPage').then((m) => ({ default: m.LegalPage })))
 const NewsletterConfirmed = lazy(() => import('@/pages/NewsletterConfirmed').then((m) => ({ default: m.NewsletterConfirmed })))
 const Unsubscribed = lazy(() => import('@/pages/Unsubscribed').then((m) => ({ default: m.Unsubscribed })))
@@ -49,6 +50,7 @@ export default function App() {
               <Route path="/affiliate" element={<AffiliatePage />} />
               <Route path="/help" element={<HelpCenterPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/partnership" element={<PartnershipPage />} />
               <Route path="/newsletter/confirmed" element={<NewsletterConfirmed />} />
               <Route path="/unsubscribed" element={<Unsubscribed />} />
               <Route path="/terms" element={<LegalPage doc={TERMS} />} />
