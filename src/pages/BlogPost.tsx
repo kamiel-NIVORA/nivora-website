@@ -6,6 +6,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { BlogCover } from '@/components/BlogCover'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
+import { BOOKING_URL } from '@/data/contact'
 import { usePost } from '@/lib/blog'
 
 export function BlogPost() {
@@ -136,7 +137,7 @@ export function BlogPost() {
             </Link>
           </Button>
           <Button variant="dark" asChild>
-            <a href="/#contact">Book a call</a>
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Book a call</a>
           </Button>
         </div>
       </article>

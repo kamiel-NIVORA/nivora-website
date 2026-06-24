@@ -6,12 +6,11 @@ export const CONTACT = {
 } as const
 
 /**
- * Public scheduler link (your own Calendly / Cal.com).
- * Empty until it exists — while empty, every "Book a strategy call" button
- * falls back to opening the contact modal. Paste the URL here once and all the
- * service-page CTAs point to your scheduler automatically.
+ * Public scheduler link — the Nivora booking page (the booking system that runs
+ * on the Nivora platform). Every "Book a call" / "Book a strategy call" button
+ * points here. If emptied, the buttons fall back to the contact modal.
  */
-export const BOOKING_URL = ''
+export const BOOKING_URL = 'https://booking.nivoraworks.com'
 
 export type SocialLink = { label: string; href: string; path: string }
 

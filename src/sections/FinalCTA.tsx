@@ -1,6 +1,7 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { BOOKING_URL } from '@/data/contact'
 
 export function FinalCTA() {
   const { open } = useContactModal()
@@ -22,12 +23,10 @@ export function FinalCTA() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <RippleButton
               variant="solid"
-              href="#contact"
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="h-12 px-6 text-[15px]"
-              onClick={(e) => {
-                e.preventDefault()
-                open()
-              }}
             >
               Book a strategy call
             </RippleButton>

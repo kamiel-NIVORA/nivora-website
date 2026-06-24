@@ -1,5 +1,6 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
+import { BOOKING_URL } from '@/data/contact'
 
 /** Closing call to action shown at the bottom of the blog index and post pages. */
 export function BlogCTA() {
@@ -19,7 +20,7 @@ export function BlogCTA() {
         </Reveal>
         <Reveal delay={0.12}>
           <div className="mt-8">
-            <RippleButton href="/#contact" className="h-12 px-6 text-[15px]">
+            <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="h-12 px-6 text-[15px]">
               Book a call
             </RippleButton>
           </div>

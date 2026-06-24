@@ -12,6 +12,7 @@ import {
   type NavItem as Item,
 } from '@/lib/navigation'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { BOOKING_URL } from '@/data/contact'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -70,21 +71,35 @@ function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   )
 }
 
-/* Short clickable line under the panel — opens the contact popup. */
+/* Short clickable line under the panel. "Book ..." labels go to the Nivora
+   booking page; "Get in touch" opens the contact popup. */
 function InterestedRow({ label, onSelect }: { label: string; onSelect?: () => void }) {
   const { open } = useContactModal()
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        onSelect?.()
-        open()
-      }}
-      className="group/c mt-2.5 inline-flex items-center gap-1.5 px-3 text-[13px]"
-    >
+  const isBooking = label.toLowerCase().startsWith('book')
+  const cls = 'group/c mt-2.5 inline-flex items-center gap-1.5 px-3 text-[13px]'
+  const inner = (
+    <>
       <span className="text-faint">Interested?</span>
       <span className="font-medium text-ink transition-colors group-hover/c:text-white">{label}</span>
       <ArrowRight className="h-3.5 w-3.5 text-ink transition-transform duration-200 group-hover/c:translate-x-0.5" strokeWidth={1.8} />
+    </>
+  )
+  if (isBooking && BOOKING_URL) {
+    return (
+      <a
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => onSelect?.()}
+        className={cls}
+      >
+        {inner}
+      </a>
+    )
+  }
+  return (
+    <button type="button" onClick={() => { onSelect?.(); open() }} className={cls}>
+      {inner}
     </button>
   )
 }
@@ -224,7 +239,7 @@ export function Navbar() {
             {/* Right: actions */}
             <div className="hidden items-center gap-2.5 lg:flex">
               <RippleButton variant="ghost" href="/#contact">Contact Us</RippleButton>
-              <RippleButton href="/#contact">Book a call</RippleButton>
+              <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Book a call</RippleButton>
             </div>
 
             {/* Mobile toggle */}
@@ -260,7 +275,7 @@ export function Navbar() {
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
               <Button size="sm" className="mt-2" asChild>
-                <a href="/#contact" onClick={() => setOpen(false)}>Book a call</a>
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Book a call</a>
               </Button>
             </div>
           )}
