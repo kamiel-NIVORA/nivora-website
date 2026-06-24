@@ -279,30 +279,30 @@ function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: '60%', scale: 0.94, filter: 'blur(6px)' }}
+      initial={{ opacity: 0, y: '55%', scale: 0.96, filter: 'blur(5px)' }}
       animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-      transition={{ type: 'spring', stiffness: 230, damping: 30, mass: 0.9 }}
+      transition={{ type: 'spring', stiffness: 140, damping: 26, mass: 1.1 }}
     >
       <Link
         to={href}
         aria-label={`${name}, coming soon, get notified at launch`}
-        className="pointer-events-auto flex items-center gap-[4.5%] rounded-[26%/44%] border border-white/70 bg-white/55 px-[5%] py-[3.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
+        className="pointer-events-auto flex items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
         style={{
           boxShadow:
-            'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 12px 26px -8px rgba(0,0,0,0.42)',
+            'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 10px 22px -8px rgba(0,0,0,0.4)',
         }}
       >
         <img
           src={src}
           alt=""
-          className="aspect-square h-[clamp(17px,13cqw,27px)] shrink-0 rounded-[26%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
+          className="aspect-square h-[clamp(15px,11cqw,22px)] shrink-0 rounded-[24%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
         />
         <div className="min-w-0 flex-1 leading-none">
           <div className="flex items-baseline justify-between gap-1">
-            <span className="text-[clamp(8px,2.8cqw,12px)] font-semibold text-[#0c0c0c]">{name}</span>
-            <span className="shrink-0 text-[clamp(6px,2cqw,9px)] text-black/40">now</span>
+            <span className="text-[clamp(8px,2.7cqw,12px)] font-semibold text-[#0c0c0c]">{name}</span>
+            <span className="shrink-0 text-[clamp(6px,1.9cqw,9px)] text-black/40">now</span>
           </div>
-          <p className="mt-[4%] whitespace-nowrap text-[clamp(6.5px,2.3cqw,10px)] text-black/55">
+          <p className="mt-[2.5%] whitespace-nowrap text-[clamp(6.5px,2.2cqw,10px)] text-black/55">
             <span className="font-semibold text-black/75">Coming soon</span> · {body}
           </p>
         </div>
@@ -321,7 +321,7 @@ function PhoneNotifications() {
   useEffect(() => {
     if (!inView) return
     const timers = PHONE_NOTIFS.map((_, idx) =>
-      window.setTimeout(() => setShown(idx + 1), 500 + idx * 900),
+      window.setTimeout(() => setShown(idx + 1), 650 + idx * 1250),
     )
     return () => timers.forEach((t) => clearTimeout(t))
   }, [inView])
