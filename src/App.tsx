@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { ReactLenis } from 'lenis/react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useParams } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollManager } from '@/components/ScrollManager'
@@ -24,6 +24,12 @@ const LegalPage = lazy(() => import('@/pages/LegalPage').then((m) => ({ default:
 const NewsletterConfirmed = lazy(() => import('@/pages/NewsletterConfirmed').then((m) => ({ default: m.NewsletterConfirmed })))
 const Unsubscribed = lazy(() => import('@/pages/Unsubscribed').then((m) => ({ default: m.Unsubscribed })))
 
+/* Force a fresh ServicePage mount per slug so the intro animation replays on every service. */
+function ServiceRoute() {
+  const { slug } = useParams<{ slug: string }>()
+  return <ServicePage key={slug} />
+}
+
 export default function App() {
   return (
     <ReactLenis root>
@@ -35,7 +41,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
-              <Route path="/services/:slug" element={<ServicePage />} />
+              <Route path="/services/:slug" element={<ServiceRoute />} />
               <Route path="/blog" element={<BlogIndex />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/media" element={<MediaKit />} />
