@@ -11,7 +11,7 @@
  * reads to published posts only.
  */
 import { useEffect, useState } from 'react'
-import { POSTS, type Post } from '@/data/posts'
+import { POSTS, type Post, type PostBlock } from '@/data/posts'
 
 const SUPABASE_URL =
   (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? 'https://agpjxjujzjzasgizpphz.supabase.co'
@@ -37,23 +37,52 @@ type Row = {
   cover_icons: unknown
 }
 
+/**
+ * public/ was reorganized into per-feature folders (2026-06), so the flat
+ * pre-reorg files (e.g. /box-logo.webp, /images/blog-*.webp) no longer ship.
+ * Posts authored in the AIOS can still carry those old paths in the database,
+ * which then render as broken images. Remap the known legacy locations to the
+ * new folders at read time, so a stale path in the DB can never break the blog
+ * again, whatever the source data holds.
+ */
+const LEGACY_ASSET_PATHS: Record<string, string> = {
+  '/box-logo.webp': '/products/box-logo.webp',
+  '/voice-logo.webp': '/products/voice-logo.webp',
+}
+
+function fixAssetPath(src: string): string {
+  if (!src) return src
+  if (LEGACY_ASSET_PATHS[src]) return LEGACY_ASSET_PATHS[src]
+  // Blog imagery moved from the flat root / old /images folder into /blog.
+  const blog = src.match(/^\/(?:images\/)?(blog-[\w-]+\.[a-z0-9]+)$/i)
+  if (blog) return `/blog/${blog[1]}`
+  return src
+}
+
+function fixBlock(block: PostBlock): PostBlock {
+  return block && typeof block === 'object' && 'image' in block
+    ? { ...block, image: fixAssetPath(block.image) }
+    : block
+}
+
 function mapRow(r: Row): Post {
+  const coverIcons = (r.cover_icons as Post['coverIcons']) ?? undefined
   return {
     slug: r.slug,
     title: r.title,
     category: r.category,
     author: r.author,
     date: r.date ?? '',
-    image: r.image ?? '',
+    image: fixAssetPath(r.image ?? ''),
     excerpt: r.excerpt ?? '',
-    body: Array.isArray(r.body) ? (r.body as Post['body']) : [],
+    body: Array.isArray(r.body) ? (r.body as Post['body']).map(fixBlock) : [],
     imagePosition: r.image_position ?? undefined,
     coverLabel: r.cover_label ?? undefined,
     coverOcclude: r.cover_occlude ?? undefined,
     coverLabelY: r.cover_label_y ?? undefined,
     coverLabelX: r.cover_label_x ?? undefined,
     coverLabelSize: typeof r.cover_label_size === 'number' ? r.cover_label_size : undefined,
-    coverIcons: (r.cover_icons as Post['coverIcons']) ?? undefined,
+    coverIcons: coverIcons?.map((ic) => ({ ...ic, src: fixAssetPath(ic.src) })),
   }
 }
 
