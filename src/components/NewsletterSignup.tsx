@@ -86,9 +86,17 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.05 }}
-                    className="grid h-14 w-14 place-items-center rounded-full border border-olive/30 bg-olive/15 text-olive shadow-[0_0_30px_rgba(150,167,102,0.4)]"
+                    className="relative grid h-14 w-14 place-items-center rounded-full border border-white/25 bg-white/[0.07] text-white shadow-[0_0_30px_rgba(255,255,255,0.18)] backdrop-blur-sm"
                   >
-                    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden>
+                    {/* One-shot white ring that expands and fades on success */}
+                    <motion.span
+                      aria-hidden
+                      className="absolute inset-0 rounded-full border border-white/40"
+                      initial={{ scale: 0.85, opacity: 0.7 }}
+                      animate={{ scale: 1.9, opacity: 0 }}
+                      transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
+                    />
+                    <svg viewBox="0 0 24 24" fill="none" className="relative h-6 w-6" aria-hidden>
                       <motion.path
                         d="M5 12.5l4.2 4.2L19 7"
                         stroke="currentColor"
@@ -117,8 +125,8 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                       </>
                     ) : (
                       <>
-                        Thanks, <span className="text-ink-soft">{email.trim()}</span> is in. We will be in
-                        touch when we ship something worth it.
+                        From now on, <span className="text-ink-soft">{email.trim()}</span> never misses what
+                        matters in AI. We send the signal, never the noise.
                       </>
                     )}
                   </p>
