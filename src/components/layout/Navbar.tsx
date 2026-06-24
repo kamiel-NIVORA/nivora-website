@@ -112,6 +112,43 @@ function PanelContent({ active, onSelect }: { active: string; onSelect?: () => v
   )
 }
 
+/* Slim launch announcement that floats above the bar and points at the waitlist.
+ *  Dismissible, and the choice is remembered so it stays out of the way. */
+function LaunchBanner() {
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    setShow(localStorage.getItem('nivora.launchBanner.dismissed') !== '1')
+  }, [])
+
+  if (!show) return null
+
+  return (
+    <div className="mx-auto mb-2 flex w-full max-w-[1200px] items-stretch gap-2">
+      <a
+        href="/waitlist"
+        className="group flex flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-[12.5px] text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
+      >
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
+        <span className="hidden sm:inline">Box and Voice are coming.</span>
+        <span className="font-medium text-ink">Get notified at launch</span>
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
+      </a>
+      <button
+        type="button"
+        aria-label="Dismiss"
+        onClick={() => {
+          localStorage.setItem('nivora.launchBanner.dismissed', '1')
+          setShow(false)
+        }}
+        className="flex w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-black/55 text-faint backdrop-blur-xl transition-colors hover:text-ink"
+      >
+        <X className="h-4 w-4" strokeWidth={1.8} />
+      </button>
+    </div>
+  )
+}
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -143,6 +180,7 @@ export function Navbar() {
 
   return (
     <div className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
+      <LaunchBanner />
       <div className="relative mx-auto w-full max-w-[1200px]">
         <motion.nav
           initial={false}

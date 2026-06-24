@@ -249,7 +249,7 @@ function matchLocalReply(text: string, history: ChatMessage[]): string {
   }
 
   if (has('box', 'voice', 'product', 'download', 'waitlist', 'early access', 'launch', 'beta')) {
-    return `Box and Voice are our two products, and both are launching soon. Box brings all your communication into one place, Voice is speech to text tuned to how you write. You can join the waiting list to get early access the moment they go live.`
+    return `Box and Voice are our two products, and both are launching soon. Box brings all your communication into one place, Voice is speech to text tuned to how you write. Leave your details on the waitlist and we'll notify you the moment they go live.`
   }
 
   if (has('contact', 'human', 'person', 'talk', 'call', 'email', 'phone', 'reach', 'speak', 'someone')) {

@@ -60,7 +60,7 @@ const FEATURES: Feature[] = [
     body: 'Intelligent software built by Nivora, ready to use from day one. Pick the tool that fits your workflow and start immediately. No setup complexity, no lengthy onboarding.',
     notifications: true,
     comingSoon: true,
-    cta: 'Join the waiting list',
+    cta: 'Get notified at launch',
     href: '/waitlist',
     secondaryCta: 'Zie meer',
     secondaryHref: '#products',

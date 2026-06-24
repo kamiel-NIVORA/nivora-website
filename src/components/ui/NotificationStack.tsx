@@ -31,7 +31,7 @@ function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
   return (
     <motion.a
       href="#contact"
-      aria-label={`${app} — coming soon, join the waiting list`}
+      aria-label={`${app}, coming soon, get notified at launch`}
       layout
       initial={{ opacity: 0, y: 34, scale: 0.965, filter: 'blur(6px)' }}
       animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}

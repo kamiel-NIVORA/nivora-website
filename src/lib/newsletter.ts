@@ -21,6 +21,9 @@ export type SubscribeResult = {
 export async function subscribe(input: {
   email: string
   name?: string
+  /** Optional phone number, captured on the waitlist so we can reach people who
+   *  prefer a text over an email. Sent to the backend alongside the email. */
+  phone?: string
   product?: string
   /** Overrides the derived source, e.g. 'newsletter:home' so the AIOS can see
    *  where a lead came in from. Falls back to the product / generic website tag. */
@@ -33,6 +36,7 @@ export async function subscribe(input: {
       body: JSON.stringify({
         email: input.email.trim(),
         name: input.name?.trim() || undefined,
+        phone: input.phone?.trim() || undefined,
         product: input.product || undefined,
         source: input.source || (input.product ? `website:${input.product}` : 'website'),
       }),
