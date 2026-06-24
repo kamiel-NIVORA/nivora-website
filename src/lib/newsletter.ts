@@ -17,6 +17,9 @@ export async function subscribe(input: {
   email: string
   name?: string
   product?: string
+  /** Overrides the derived source, e.g. 'newsletter:home' so the AIOS can see
+   *  where a lead came in from. Falls back to the product / generic website tag. */
+  source?: string
 }): Promise<SubscribeResult> {
   try {
     const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
@@ -26,7 +29,7 @@ export async function subscribe(input: {
         email: input.email.trim(),
         name: input.name?.trim() || undefined,
         product: input.product || undefined,
-        source: input.product ? `website:${input.product}` : 'website',
+        source: input.source || (input.product ? `website:${input.product}` : 'website'),
       }),
     })
     const data = await res.json().catch(() => ({}))

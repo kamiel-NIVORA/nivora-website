@@ -5,6 +5,7 @@ import { Reveal } from '@/components/animations/Reveal'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { BlogCover } from '@/components/BlogCover'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePost } from '@/lib/blog'
 
 export function BlogPost() {
@@ -139,6 +140,8 @@ export function BlogPost() {
           </Button>
         </div>
       </article>
+
+      <NewsletterSignup source="blog-post" />
     </main>
   )
 }

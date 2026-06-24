@@ -5,6 +5,7 @@ import { Services } from '@/sections/Services'
 import { Products } from '@/sections/Products'
 import { Blog } from '@/sections/Blog'
 import { FinalCTA } from '@/sections/FinalCTA'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 
 export function Home() {
   return (
@@ -15,6 +16,7 @@ export function Home() {
       <Services />
       <Products />
       <Blog />
+      <NewsletterSignup source="home" />
       <FinalCTA />
     </main>
   )

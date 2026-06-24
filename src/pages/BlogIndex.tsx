@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Reveal } from '@/components/animations/Reveal'
 import { PostCard } from '@/components/PostCard'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePosts } from '@/lib/blog'
 import { cn } from '@/lib/utils'
 
@@ -49,6 +50,8 @@ export function BlogIndex() {
           ))}
         </div>
       </section>
+
+      <NewsletterSignup source="blog-index" />
     </main>
   )
 }
