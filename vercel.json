@@ -1,4 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/nivora-api/:path*",
+      "destination": "https://nivora-api.srv938837.hstgr.cloud/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

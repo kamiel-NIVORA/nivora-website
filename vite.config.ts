@@ -10,6 +10,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    // Same-origin proxy to the Nivora API in dev (mirrors the vercel.json
+    // rewrite), so the newsletter signup is never blocked by CORS.
+    proxy: {
+      '/nivora-api': {
+        target: 'https://nivora-api.srv938837.hstgr.cloud',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p) => p.replace(/^\/nivora-api/, ''),
+      },
+    },
+  },
   build: {
     rollupOptions: {
       output: {

@@ -26,6 +26,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
   const [already, setAlready] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const reduced = usePrefersReducedMotion()
 
@@ -44,6 +45,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
       return
     }
     setAlready(res.status === 'already_subscribed')
+    setEmailSent(res.emailSent === true)
     setDone(true)
   }
 
@@ -100,7 +102,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                     </svg>
                   </motion.span>
                   <h2 className="mt-7 font-serif text-[28px] leading-[1.12] tracking-[-0.02em] text-ink sm:text-[34px]">
-                    {already ? "You're already in" : 'Check your inbox'}
+                    {already ? "You're already in" : emailSent ? 'Check your inbox' : "You're on the list"}
                   </h2>
                   <p className="mx-auto mt-3.5 max-w-md text-[15px] leading-relaxed text-faint">
                     {already ? (
@@ -108,10 +110,15 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         We already have <span className="text-ink-soft">{email.trim()}</span>. You are on the
                         list, nothing more to do.
                       </>
-                    ) : (
+                    ) : emailSent ? (
                       <>
                         We sent a confirmation link to{' '}
                         <span className="text-ink-soft">{email.trim()}</span>. Click it once and you are in.
+                      </>
+                    ) : (
+                      <>
+                        Thanks, <span className="text-ink-soft">{email.trim()}</span> is in. We will be in
+                        touch when we ship something worth it.
                       </>
                     )}
                   </p>
