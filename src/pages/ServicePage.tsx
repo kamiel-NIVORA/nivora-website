@@ -40,11 +40,32 @@ const INTRO_WORDS: Record<ServiceSlug, string[]> = {
 
 /** Per-service headline for the mockup preview band. Empty string = section hidden. */
 const PREVIEW_HEADLINE: Record<ServiceSlug, string> = {
-  'app-design': 'Made for the screens your team lives in.',
+  'app-design': 'Shipped and in the wild, on every screen.',
   'local-ai': 'Your assistant. On your hardware. Answering only to you.',
   aios: 'One system. Every screen your business runs on.',
   'ai-consulting': '',
 }
+
+/** App types shown in the vertical marquee on the App Design statement section. */
+const APP_TYPES = [
+  'Consumer Apps',
+  'Business Tools',
+  'Internal Software',
+  'Brand Products',
+  'Complex Builds',
+  'Mobile Apps',
+  'Web Platforms',
+]
+
+/** Image shown per capability index on the App Design accordion. */
+const APP_CAPABILITY_IMAGES = [
+  '/showcase-appdesign.jpg',
+  '/mockup-appdesign.webp',
+  '/icons-appdesign.jpg',
+  '/mockup-appdesign.webp',
+  '/showcase-appdesign.jpg',
+  '/mockup-appdesign.webp',
+]
 
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
 function phaseWord(title: string): string {
@@ -89,13 +110,13 @@ export function ServicePage() {
         style={{ ['--accent' as string]: meta.accent } as CSSProperties}
       >
         <Hero content={content} meta={meta} />
-        <Statement content={content} />
+        {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
-        <Capabilities content={content} />
+        {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
         <Preview meta={meta} />
         <WhyUs content={content} meta={meta} />
@@ -514,64 +535,204 @@ function Capabilities({ content }: { content: ServiceContent }) {
   )
 }
 
-/* App Design showcase · two visual moments unique to that service ────────────── */
+/* App Design: vertical marquee statement — replaces the generic chips version ─── */
 
-function AppShowcase() {
+function AppStatement({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-12 lg:py-20">
-      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Copy */}
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
+      <div className="grid items-center gap-16 lg:grid-cols-[1fr_220px]">
+        {/* Left: statement + chips */}
         <div>
           <Reveal>
-            <Eyebrow>Crafted, not assembled</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              Every screen designed with intention.
-            </h2>
+            <p className="font-serif text-[27px] leading-[1.38] tracking-[-0.015em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.34]">
+              {content.intro.statement}
+            </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
-              From the icon to the last interaction, we design the whole thing. The apps people
-              come back to have a visual language no template ever gave them.
-            </p>
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              {content.intro.chips.map((chip) => (
+                <span
+                  key={chip}
+                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.04] px-4 py-2 text-[13px] text-ink-soft/90"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+                  {chip}
+                </span>
+              ))}
+            </div>
           </Reveal>
         </div>
 
-        {/* Style board */}
-        <Reveal y={28} delay={0.08}>
-          <div className="relative">
+        {/* Right: vertical marquee of app types */}
+        <div className="relative hidden h-56 overflow-hidden lg:block">
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b from-bg to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-bg to-transparent" />
+          {[0, 1].map((copy) => (
             <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 blur-[70px]"
-              style={{ background: 'radial-gradient(55% 50% at 50% 42%, rgba(245,245,245,0.08), transparent 75%)' }}
-            />
+              key={copy}
+              aria-hidden={copy === 1}
+              style={{ animation: 'marquee-vertical 16s linear infinite' }}
+            >
+              {APP_TYPES.map((type) => (
+                <div
+                  key={type}
+                  className="border-b border-line/50 py-2.5 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink/30"
+                >
+                  {type}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* App Design: accordion capabilities + sticky image preview ──────────────────── */
+
+function AppCapabilities({ content }: { content: ServiceContent }) {
+  const [activeIdx, setActiveIdx] = useState(0)
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <Eyebrow>What you get</Eyebrow>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {content.capabilities.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
+        </Reveal>
+      </div>
+
+      <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-14">
+        {/* Left: accordion list */}
+        <div className="flex flex-col">
+          {content.capabilities.items.map((it, i) => (
+            <button
+              key={it.title}
+              type="button"
+              onClick={() => setActiveIdx(i)}
+              className="group flex items-start gap-5 border-b border-line py-5 text-left first:border-t"
+            >
+              <span className={cn('shrink-0 font-serif text-[14px] tabular-nums transition-colors duration-200', activeIdx === i ? 'text-ink/60' : 'text-dim')}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className={cn('text-[17px] font-semibold tracking-tight transition-colors duration-200', activeIdx === i ? 'text-ink' : 'text-muted')}>
+                  {it.title}
+                </div>
+                <AnimatePresence initial={false}>
+                  {activeIdx === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-2 text-[14px] leading-relaxed text-faint">{it.body}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              <span className={cn('shrink-0 text-[20px] font-light transition-all duration-300', activeIdx === i ? 'rotate-45 text-ink' : 'text-dim')}>
+                +
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Right: sticky image preview (desktop only) */}
+        <div className="hidden lg:block">
+          <div className="sticky top-28">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIdx}
+                initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.7)]"
+                style={{ aspectRatio: '4/3' }}
+              >
+                <img
+                  src={APP_CAPABILITY_IMAGES[activeIdx]}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070709]/50 to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* App Design showcase · editorial two-column image grid ─────────────────────── */
+
+function AppShowcase() {
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
+      <Reveal>
+        <p className="mx-auto mb-10 max-w-2xl text-center font-serif text-[24px] leading-[1.28] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
+          Every screen designed with intention. Every icon a statement.
+        </p>
+      </Reveal>
+
+      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+        {/* Style board — main feature */}
+        <Reveal delay={0.06}>
+          <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
             <img
               src="/showcase-appdesign.jpg"
               alt=""
               loading="lazy"
-              className="relative mx-auto block w-full max-w-[440px] rounded-[24px] shadow-[0_32px_80px_rgba(0,0,0,0.7)] [mask-image:radial-gradient(82%_82%_at_50%_50%,#000_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(82%_82%_at_50%_50%,#000_68%,transparent_100%)]"
+              className="block w-full object-cover"
             />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070709]/70 to-transparent" />
+            <div className="absolute bottom-5 left-5">
+              <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/40">Style Board</span>
+            </div>
           </div>
         </Reveal>
-      </div>
 
-      {/* Icon grid strip */}
-      <Reveal delay={0.14}>
-        <div className="relative mx-auto mt-14 max-w-md">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 blur-[50px]"
-            style={{ background: 'radial-gradient(60% 60% at 50% 50%, rgba(245,245,245,0.06), transparent 80%)' }}
-          />
-          <img
-            src="/icons-appdesign.jpg"
-            alt=""
-            loading="lazy"
-            className="relative block w-full rounded-[20px] shadow-[0_20px_60px_rgba(0,0,0,0.6)] [mask-image:radial-gradient(70%_70%_at_50%_50%,#000_56%,transparent_100%)] [-webkit-mask-image:radial-gradient(70%_70%_at_50%_50%,#000_56%,transparent_100%)]"
-          />
+        {/* Right column: icons + copy card */}
+        <div className="flex flex-col gap-4">
+          <Reveal delay={0.1}>
+            <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+              <img
+                src="/icons-appdesign.jpg"
+                alt=""
+                loading="lazy"
+                className="block w-full"
+              />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+            </div>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <div className="rounded-[20px] border border-line bg-surface p-6">
+              <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
+                Crafted, not assembled.
+              </p>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
+                From the icon to the last interaction, we design the whole thing.
+                The apps people open every day have a visual language no template ever gave them.
+              </p>
+            </div>
+          </Reveal>
         </div>
-      </Reveal>
+      </div>
     </section>
   )
 }

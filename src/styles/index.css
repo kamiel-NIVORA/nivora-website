@@ -92,6 +92,11 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
 /* Voice card — live waveform bar (a single equaliser tick). */
 @keyframes voiceBar {
   0%, 100% { transform: scaleY(var(--bar-min, 0.34)); }
