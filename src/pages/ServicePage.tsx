@@ -60,11 +60,11 @@ const APP_TYPES = [
 /** Image shown per capability index on the App Design accordion. */
 const APP_CAPABILITY_IMAGES = [
   '/showcase-appdesign.jpg',
-  '/mockup-appdesign.webp',
+  '/service-appdesign.webp',
   '/icons-appdesign.jpg',
-  '/mockup-appdesign.webp',
+  '/service-appdesign.webp',
   '/showcase-appdesign.jpg',
-  '/mockup-appdesign.webp',
+  '/service-appdesign.webp',
 ]
 
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
