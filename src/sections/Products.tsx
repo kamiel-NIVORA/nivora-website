@@ -270,40 +270,47 @@ function VoiceCard() {
   )
 }
 
-/* ── Card 3 · Made for mobile — phone in hand, live "Coming soon" notifications ── */
+/* ── Card 3 · Made for mobile — big glossy phone, live "Coming soon" banner ── */
 const PHONE_NOTIFS = [
-  { src: '/box-logo.webp', name: 'Box' },
-  { src: '/voice-logo.webp', name: 'Voice' },
+  { src: '/box-logo.webp', name: 'Box', body: 'Coming soon to your pocket' },
+  { src: '/voice-logo.webp', name: 'Voice', body: 'Coming soon to your pocket' },
 ]
 
-/** A single lock-screen notification that cycles between the two apps:
+/** One realistic lock-screen notification that cycles between the two apps:
  *  the current one slides up and out, the next rises in from below. */
 function PhoneNotifications() {
   const [i, setI] = useState(0)
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % PHONE_NOTIFS.length), 2600)
+    const t = setInterval(() => setI((v) => (v + 1) % PHONE_NOTIFS.length), 2700)
     return () => clearInterval(t)
   }, [])
+  const n = PHONE_NOTIFS[i]
 
   return (
-    <div className="absolute left-1/2 top-[40%] h-[15%] w-[62%] -translate-x-1/2 overflow-hidden">
+    // The slot sits at the clock/widget seam, glued to the screen
+    <div className="absolute left-1/2 top-[35.5%] h-[11.5%] w-[72%] -translate-x-1/2">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={i}
-          initial={{ y: '120%', opacity: 0 }}
-          animate={{ y: '0%', opacity: 1 }}
-          exit={{ y: '-120%', opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 360, damping: 32 }}
-          className="absolute inset-0 flex items-center gap-2 rounded-[14px] border border-white/12 bg-[#0b0b0b]/80 px-2.5 shadow-[0_8px_22px_-10px_rgba(0,0,0,0.85)] backdrop-blur-md"
+          initial={{ y: '130%', opacity: 0, scale: 0.96 }}
+          animate={{ y: '0%', opacity: 1, scale: 1 }}
+          exit={{ y: '-130%', opacity: 0, scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 340, damping: 30 }}
+          className="absolute inset-0 flex items-center gap-[5%] rounded-[22%/30%] border border-white/60 bg-white/72 px-[5%] shadow-[0_10px_22px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md"
         >
           <img
-            src={PHONE_NOTIFS[i].src}
+            src={n.src}
             alt=""
-            className="h-[58%] w-auto shrink-0 rounded-[7px] border border-white/10 object-cover"
+            className="aspect-square h-[62%] shrink-0 rounded-[26%] border border-black/5 object-cover shadow-sm"
           />
-          <div className="min-w-0 leading-none">
-            <p className="truncate text-[8px] font-semibold text-ink">{PHONE_NOTIFS[i].name}</p>
-            <p className="mt-[3px] truncate text-[7px] text-faint">Coming soon</p>
+          <div className="min-w-0 flex-1 leading-none">
+            <div className="flex items-baseline justify-between gap-1">
+              <p className="truncate text-[clamp(8px,2.7cqw,12px)] font-semibold text-[#101010]">
+                {n.name}
+              </p>
+              <span className="shrink-0 text-[clamp(6px,2cqw,9px)] text-black/40">now</span>
+            </div>
+            <p className="mt-[6%] truncate text-[clamp(7px,2.3cqw,10px)] text-black/55">{n.body}</p>
           </div>
         </motion.div>
       </AnimatePresence>
@@ -313,30 +320,32 @@ function PhoneNotifications() {
 
 function MobileCard() {
   return (
-    <>
-      <div className="relative flex-1 overflow-hidden">
-        {/* Phone in hand, anchored to the bottom so it bleeds off and reads big */}
-        <div className="absolute inset-x-0 -bottom-6 mx-auto w-[82%] max-w-[210px]">
-          <img
-            src="/product-phone-hand.webp"
-            alt="The Nivora suite on iPhone"
-            className="w-full select-none object-contain"
-            loading="lazy"
-            draggable={false}
-          />
-          <PhoneNotifications />
-        </div>
-      </div>
-
-      <div className="relative pt-5">
+    <div className="relative h-full">
+      {/* Title — sits at the top, over the feathered top of the phone */}
+      <div className="relative z-[2]">
         <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">
           Made for mobile
         </h3>
-        <p className="mt-2 text-[13px] leading-relaxed text-faint">
+        <p className="mt-2 max-w-[18rem] text-[13px] leading-relaxed text-faint">
           The whole suite in your pocket. Native and quietly out of the way.
         </p>
       </div>
-    </>
+
+      {/* Big glossy phone — bleeds past the card edges, feathered into the glass.
+          @container lets the on-screen banner scale with the phone, not the page. */}
+      <div className="pointer-events-none absolute inset-x-0 -bottom-10 z-[1] mx-auto w-[94%] max-w-[300px] [container-type:inline-size] left-1/2 -translate-x-1/2">
+        <img
+          src="/product-phone.webp"
+          alt="The Nivora suite on iPhone"
+          className="w-full select-none object-contain [mask-image:radial-gradient(86%_72%_at_50%_43%,#000_56%,transparent_100%)] [-webkit-mask-image:radial-gradient(86%_72%_at_50%_43%,#000_56%,transparent_100%)]"
+          loading="lazy"
+          draggable={false}
+        />
+        {/* Glossy screen reflection — a soft diagonal sheen across the glass */}
+        <div className="pointer-events-none absolute inset-0 mix-blend-screen [background:linear-gradient(128deg,rgba(255,255,255,0.16)_4%,transparent_34%)] [mask-image:radial-gradient(86%_72%_at_50%_43%,#000_56%,transparent_100%)] [-webkit-mask-image:radial-gradient(86%_72%_at_50%_43%,#000_56%,transparent_100%)]" />
+        <PhoneNotifications />
+      </div>
+    </div>
   )
 }
 
