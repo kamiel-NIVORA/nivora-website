@@ -130,11 +130,21 @@ export function BlogPost() {
               }
               return (
                 <figure key={i} className="my-2">
-                  <div className="overflow-hidden rounded-2xl border border-line">
+                  <div className={block.feather ? '' : 'overflow-hidden rounded-2xl border border-line'}>
                     <img
                       src={block.image}
                       alt={block.alt}
                       loading="lazy"
+                      style={
+                        block.feather
+                          ? {
+                              WebkitMaskImage:
+                                'radial-gradient(115% 115% at 50% 50%, #000 58%, transparent 100%)',
+                              maskImage:
+                                'radial-gradient(115% 115% at 50% 50%, #000 58%, transparent 100%)',
+                            }
+                          : undefined
+                      }
                       className="aspect-[16/9] w-full object-cover"
                     />
                   </div>

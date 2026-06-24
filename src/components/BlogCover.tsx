@@ -34,6 +34,7 @@ export function BlogCover({ post, variant = 'card' }: { post: Post; variant?: 'c
           src={post.image}
           alt={post.title}
           loading={hero ? undefined : 'lazy'}
+          style={post.imagePosition ? { objectPosition: post.imagePosition } : undefined}
           className={cn(
             'h-full w-full object-cover',
             !hero &&

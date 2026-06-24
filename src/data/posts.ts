@@ -10,7 +10,7 @@ export type PostBlock =
   | string
   | { h2: string }
   | { quote: string }
-  | { image: string; alt: string; caption?: string }
+  | { image: string; alt: string; caption?: string; feather?: boolean }
   /** Inline call to action, e.g. a link to the waiting list. */
   | { cta: { label: string; href: string } }
 
