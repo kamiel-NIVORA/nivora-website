@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { useContactModal } from '@/components/contact/ContactModal'
+import { RippleButton } from '@/components/ui/RippleButton'
 import { cn } from '@/lib/utils'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -41,7 +41,6 @@ const FAQ: { q: string; a: string }[] = [
  * the last objections right before the ask.
  */
 export function Faq() {
-  const { open } = useContactModal()
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
@@ -87,17 +86,14 @@ export function Faq() {
       </div>
 
       <Reveal delay={0.1}>
-        <p className="mt-10 text-center text-[14px] leading-relaxed text-faint">
-          Still have a question?{' '}
-          <button
-            type="button"
-            onClick={open}
-            className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
-          >
-            reach a person
-          </button>
-          .
-        </p>
+        <div className="mt-10 flex flex-col items-center gap-3.5">
+          <p className="text-center text-[14px] leading-relaxed text-faint">
+            Still have a question?
+          </p>
+          <RippleButton variant="ghost" href="/help" className="h-11 px-5 text-sm">
+            Visit the Help Center
+          </RippleButton>
+        </div>
       </Reveal>
     </section>
   )
