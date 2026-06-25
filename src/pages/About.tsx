@@ -111,11 +111,7 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <motion.span variants={heroFade} className="label-mono">
-          About Nivora
-        </motion.span>
-
-        <h1 className="mt-6 font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
+        <h1 className="font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
           {HERO_HEADLINE.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
