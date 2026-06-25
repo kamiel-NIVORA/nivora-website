@@ -294,13 +294,15 @@ export function Navbar() {
               exit={{ opacity: 0, y: 4, scale: 0.97 }}
               transition={{ duration: 0.22, ease }}
               style={{ transformOrigin: 'top center' }}
-              className="absolute left-0 right-0 top-full hidden justify-center pt-2 lg:flex"
+              className="absolute left-0 right-0 top-full hidden justify-center pt-2 transform-gpu [backface-visibility:hidden] lg:flex"
               onMouseEnter={cancelClose}
               onMouseLeave={closeSoon}
             >
               <div className="relative">
-                {/* Static frosted-glass layer — identical blur to the bar */}
-                <div className="absolute inset-0 rounded-[20px] border border-line bg-black/55 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl" />
+                {/* Solid panel — fully opaque so the hero never shows through, and no
+                    backdrop-filter to recompute during the open animation (that was
+                    the faint glitch/flicker). */}
+                <div className="absolute inset-0 rounded-[20px] border border-line bg-[#0c0d10] shadow-[0_24px_70px_rgba(0,0,0,0.55)]" />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
                 {/* Animated content on top of the blur */}
