@@ -27,11 +27,8 @@
   --color-steel: #6691a3;
   --color-brown: #7a6243;
 
-  /* ── Signal red — the one bright accent, reserved for the Help Center
-       (headline, chat frame glow, send action). Used nowhere else. ── */
-  --color-signal: #e5484d;
-  --color-signal-soft: #ff6b62;
-  --color-signal-deep: #b5302f;
+  /* ── No bright accent token here: the Help Center now matches the Nivora AIOS chat,
+       which is monochrome (white on near-black), so no extra brand colour is needed. ── */
 
   /* ── Type families ── */
   --font-sans: "Inter", "Inter Placeholder", sans-serif;

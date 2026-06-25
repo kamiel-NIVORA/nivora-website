@@ -30,8 +30,8 @@
  */
 
 /** Your chat endpoint. Leave empty ('') to use the built-in local assistant.
- *  Points at the secure Edge function in /api/help-chat.ts, which holds the
- *  Anthropic key server-side and streams the reply back. */
+ *  Points at /api/help-chat, which holds a simple OpenAI API key server-side
+ *  and streams the reply back. */
 export const HELP_CHAT_ENDPOINT = '/api/help-chat'
 
 /** Extra request headers (e.g. { Authorization: 'Bearer ...' }). */
@@ -136,6 +136,12 @@ export async function sendHelpMessage(
     }),
     signal: opts.signal,
   })
+
+  // The brain is not configured yet (no OpenAI key server-side): fall back to
+  // the built-in local assistant instead of surfacing an error.
+  if (res.status === 503) {
+    return localAssistantReply(history, opts)
+  }
 
   if (!res.ok) {
     throw new Error(`Chat request failed (${res.status})`)

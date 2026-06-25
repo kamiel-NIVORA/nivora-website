@@ -4,7 +4,7 @@
  * Ported from the Nivora AIOS chat so replies read the same way: clean
  * paragraphs and lists, **bold**, _italic_, `code`, and [links](url). No
  * headings, tables or fenced code, those do not belong in a chat reply. Links
- * carry the Help Center's red underline accent.
+ * carry a subtle white underline accent.
  */
 import type { ReactNode } from 'react'
 
@@ -48,7 +48,7 @@ function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
           key={`${keyPrefix}-${k++}`}
           href={href}
           {...(internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
-          className="font-medium text-ink underline decoration-signal/50 underline-offset-2 transition-colors hover:decoration-signal"
+          className="font-medium text-ink underline decoration-white/30 underline-offset-2 transition-colors hover:decoration-white/60"
         >
           {m[7]}
         </a>,
@@ -60,7 +60,7 @@ function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
           href={matched}
           target="_blank"
           rel="noopener noreferrer"
-          className="break-all font-medium text-ink underline decoration-signal/50 underline-offset-2 transition-colors hover:decoration-signal"
+          className="break-all font-medium text-ink underline decoration-white/30 underline-offset-2 transition-colors hover:decoration-white/60"
         >
           {matched}
         </a>,
@@ -85,7 +85,7 @@ export function renderChatMarkdown(content: string): ReactNode {
     out.push(
       <ListTag
         key={`l-${out.length}`}
-        className={`${ordered ? 'list-decimal' : 'list-disc'} my-1 space-y-1 pl-5 marker:text-signal/70`}
+        className={`${ordered ? 'list-decimal' : 'list-disc'} my-1 space-y-1 pl-5 marker:text-white/40`}
       >
         {items.map((it, idx) => (
           <li key={idx}>{renderInline(it, `li-${out.length}-${idx}`)}</li>

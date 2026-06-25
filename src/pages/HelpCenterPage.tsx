@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { ArrowUp, ArrowUpRight, CalendarClock, RefreshCw, RotateCw, type LucideIcon } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
+import { ChatBackdrop } from '@/components/help/ChatBackdrop'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { cn } from '@/lib/utils'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
@@ -43,15 +44,13 @@ export function HelpCenterPage() {
 
   return (
     <main className="relative w-full overflow-hidden bg-bg">
-      {/* Ambient red wash — the one place on the site the signal colour lives. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[680px]"
-        style={{
-          background:
-            'radial-gradient(60% 70% at 50% 0%, rgba(229,72,77,0.13), transparent 70%), radial-gradient(40% 50% at 50% 40%, rgba(229,72,77,0.05), transparent 75%)',
-        }}
-      />
+      {/* Moving dot-matrix backdrop, echoing the AIOS chat. Monochrome, no red. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[1000px]">
+        <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,transparent_0%,rgba(6,6,6,0.6)_70%,#060606_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
+      </div>
 
       <section className="relative z-10 mx-auto flex w-full max-w-[920px] flex-col items-center px-5 pb-6 pt-28 sm:px-6 lg:pt-32">
         <HelpHeader reduced={reduced} />
@@ -63,7 +62,7 @@ export function HelpCenterPage() {
   )
 }
 
-/* Header — just "Help Center", in red. No tall hero. ─────────────────────────*/
+/* Header — just "Help Center", clean white serif. No tall hero. ──────────────*/
 
 const headWrap: Variants = {
   hidden: {},
@@ -91,7 +90,7 @@ function HelpHeader({ reduced }: { reduced: boolean }) {
           <motion.span
             key={i}
             variants={headWord}
-            className="mr-[0.22em] inline-block bg-gradient-to-br from-signal-soft via-signal to-signal-deep bg-clip-text text-transparent last:mr-0"
+            className="mr-[0.22em] inline-block bg-gradient-to-br from-white via-ink to-ink-soft bg-clip-text text-transparent last:mr-0"
           >
             {w}
           </motion.span>
@@ -125,18 +124,11 @@ function ChatPanel({ reduced }: { reduced: boolean }) {
   return (
     <Reveal mode="mount" className="w-full">
       <div className="relative w-full">
-        {/* Soft red bloom hugging the frame */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-[28px] opacity-70"
-          style={{ background: 'radial-gradient(80% 60% at 50% 0%, rgba(229,72,77,0.16), transparent 70%)' }}
-        />
-
         <div className="relative flex h-[66svh] min-h-[540px] flex-col overflow-hidden rounded-[26px] border border-white/[0.08] bg-gradient-to-b from-white/[0.055] to-white/[0.015] shadow-[0_40px_120px_-30px_rgba(0,0,0,0.85)] backdrop-blur-2xl sm:h-[64svh] lg:max-h-[760px]">
-          {/* Top hairline, faintly red */}
+          {/* Top hairline, soft white */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px bg-gradient-to-r from-transparent via-signal/40 to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
           />
 
           <ChatHeader reduced={reduced} hasMessages={!empty} onReset={reset} />
@@ -209,7 +201,7 @@ function ChatHeader({
         )}
         <Link
           to="/contact"
-          className="flex h-8 items-center gap-1.5 rounded-full border border-signal/30 bg-signal/[0.08] px-3 text-[12.5px] font-medium text-ink transition-colors hover:border-signal/50 hover:bg-signal/[0.14]"
+          className="flex h-8 items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] px-3 text-[12.5px] font-medium text-ink transition-colors hover:border-white/25 hover:bg-white/[0.08]"
         >
           Talk to the team
           <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
@@ -220,7 +212,7 @@ function ChatHeader({
 }
 
 function OnlineDot({ reduced }: { reduced: boolean }) {
-  const cls = 'h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_6px_rgba(150,167,102,0.7)]'
+  const cls = 'h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.6)]'
   if (reduced) return <span className={cls} />
   return (
     <motion.span
@@ -240,7 +232,7 @@ function Greeting({ reduced, onPick }: { reduced: boolean; onPick: (q: string) =
         initial={reduced ? false : { opacity: 0, y: -12 }}
         animate={reduced ? undefined : { opacity: 1, y: 0 }}
         transition={{ delay: 0.05, duration: 0.5, ease }}
-        className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-signal/25 bg-signal/[0.07] shadow-[0_0_30px_-6px_rgba(229,72,77,0.5)]"
+        className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/[0.12] bg-white/[0.05] shadow-[0_0_30px_-6px_rgba(255,255,255,0.25)]"
       >
         <img src="/brand/nivora-mark.webp" alt="Nivora" className="h-7 w-7 object-contain" />
       </motion.span>
@@ -272,7 +264,7 @@ function Greeting({ reduced, onPick }: { reduced: boolean; onPick: (q: string) =
             key={p}
             type="button"
             onClick={() => onPick(p)}
-            className="inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-[13px] text-faint transition-all duration-200 hover:-translate-y-px hover:border-signal/40 hover:bg-signal/[0.08] hover:text-ink"
+            className="inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-[13px] text-faint transition-all duration-200 hover:-translate-y-px hover:border-white/20 hover:bg-white/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
           >
             {p}
           </button>
@@ -305,7 +297,7 @@ function Message({
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="flex justify-end"
       >
-        <div className="max-w-[80%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-[#e9e9ea] px-4 py-2.5 text-[14.5px] leading-6 text-[#0a0a0a]">
+        <div className="max-w-[80%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-white px-4 py-2.5 text-[14.5px] leading-6 text-[#0a0a0a]">
           {message.content}
         </div>
       </motion.div>
@@ -329,8 +321,8 @@ function Message({
           className={cn(
             'rounded-2xl rounded-bl-md border px-4 py-3 text-[15px] leading-[1.7]',
             isError
-              ? 'border-signal/30 bg-signal/[0.06] text-faint'
-              : 'border-white/[0.07] bg-white/[0.03] text-ink-soft',
+              ? 'border-white/[0.1] bg-white/[0.04] text-faint'
+              : 'border-white/[0.07] bg-white/[0.04] text-ink-soft',
           )}
         >
           <div className="space-y-0.5">
@@ -368,7 +360,7 @@ function Caret() {
   return (
     <motion.span
       aria-hidden
-      className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[2px] rounded-full bg-signal align-middle"
+      className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[2px] rounded-full bg-white align-middle"
       animate={{ opacity: [1, 0.25, 1] }}
       transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
     />
@@ -416,10 +408,10 @@ function CtaButton({ spec }: { spec: CtaSpec }) {
   const Icon: LucideIcon = spec.kind === 'book' ? CalendarClock : ArrowUpRight
 
   const base =
-    'group inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all duration-200'
+    'group inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg'
   const cls = spec.primary
-    ? cn(base, 'bg-signal text-white hover:bg-signal-deep')
-    : cn(base, 'border border-signal/30 bg-signal/[0.08] text-ink hover:border-signal/50 hover:bg-signal/[0.14]')
+    ? cn(base, 'bg-white text-[#0a0a0a] hover:bg-white/90')
+    : cn(base, 'border border-white/[0.12] bg-white/[0.04] text-ink hover:border-white/25 hover:bg-white/[0.08]')
 
   const inner = (
     <>
@@ -467,7 +459,7 @@ function ThinkingIndicator({ reduced }: { reduced: boolean }) {
       </span>
       <div className="flex items-center gap-2 pt-1.5">
         <motion.span
-          className="h-1.5 w-1.5 rounded-full bg-signal shadow-[0_0_7px_rgba(229,72,77,0.8)]"
+          className="h-2 w-2 rounded-[2px] bg-white/80"
           animate={reduced ? undefined : { opacity: [0.3, 1, 0.3] }}
           transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -529,11 +521,11 @@ function Composer({ onSend, busy, reduced }: { onSend: (text: string) => void; b
 
   return (
     <div className="shrink-0 px-3 pb-4 pt-2 sm:px-5">
-      <div className="group relative flex items-end gap-2 rounded-[20px] border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] px-3 py-2 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-2xl transition-all duration-300 focus-within:border-signal/40">
-        {/* Red focus glow */}
+      <div className="group relative flex items-end gap-2 rounded-[20px] border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] px-3 py-2 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-2xl transition-all duration-300 focus-within:border-white/[0.18]">
+        {/* Soft white focus glow */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-[20px] bg-[radial-gradient(70%_140%_at_50%_0%,rgba(229,72,77,0.14),transparent_70%)] opacity-0 transition-opacity duration-300 group-focus-within:opacity-100"
+          className="pointer-events-none absolute -inset-px rounded-[20px] bg-[radial-gradient(70%_140%_at_50%_0%,rgba(255,255,255,0.06),transparent_70%)] opacity-0 transition-opacity duration-300 group-focus-within:opacity-100"
         />
         <div className="relative flex-1">
           <textarea
@@ -553,7 +545,7 @@ function Composer({ onSend, busy, reduced }: { onSend: (text: string) => void; b
               }
             }}
             aria-label="Message the Nivora assistant"
-            className="relative z-[1] block max-h-36 w-full resize-none bg-transparent py-1.5 text-[15px] leading-7 text-ink caret-[#e5484d] outline-none"
+            className="relative z-[1] block max-h-36 w-full resize-none bg-transparent py-1.5 text-[15px] leading-7 text-ink caret-white outline-none"
           />
           {value.length === 0 && (
             <div className="pointer-events-none absolute inset-0 flex items-start py-1.5">
@@ -599,14 +591,14 @@ function SendButton({ canSend, busy, onClick }: { canSend: boolean; busy: boolea
       whileHover={canSend ? { scale: 1.05 } : undefined}
       whileTap={canSend ? { scale: 0.96 } : undefined}
       className={cn(
-        'relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-200',
+        'relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
         canSend
-          ? 'bg-signal text-white shadow-[0_6px_20px_-6px_rgba(229,72,77,0.8)] hover:bg-signal-deep'
-          : 'bg-white/[0.05] text-faint',
+          ? 'bg-white text-[#0a0a0a] shadow-[0_6px_20px_-6px_rgba(255,255,255,0.5)] hover:bg-white/90'
+          : 'bg-white/[0.06] text-faint',
       )}
     >
       {busy ? (
-        <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-white/30 border-t-white" />
+        <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-[#0a0a0a]/30 border-t-[#0a0a0a]" />
       ) : (
         <ArrowUp className="h-[18px] w-[18px]" strokeWidth={2.1} />
       )}
@@ -632,7 +624,7 @@ function PeopleRow() {
             <a
               href={BOOKING_URL || '#'}
               {...(BOOKING_URL ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-signal px-6 text-[15px] font-medium text-white shadow-[0_14px_40px_-12px_rgba(229,72,77,0.85)] transition-colors hover:bg-signal-deep"
+              className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-medium text-[#0a0a0a] shadow-[0_14px_40px_-12px_rgba(255,255,255,0.4)] transition-colors hover:bg-white/90"
             >
               <CalendarClock className="h-[18px] w-[18px]" strokeWidth={1.8} />
               Book a call
