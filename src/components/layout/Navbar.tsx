@@ -281,9 +281,11 @@ export function Navbar() {
           )}
         </motion.nav>
 
-        {/* Dropdown — rendered OUTSIDE the nav so its backdrop-filter samples the page
-            directly (same frosted blur as the scrolled bar). It unfolds from the bar
-            on hover and folds back smoothly on leave; switching menus keeps the panel
+        {/* Dropdown — rendered OUTSIDE the nav. The panel is an intentional SOLID
+            surface: no backdrop-filter, no frosted blur. The earlier see-through blur
+            recomputed during the open animation and caused a hover flicker, so it was
+            removed on purpose. Do NOT reintroduce backdrop-blur here. It unfolds from
+            the bar on hover and folds back on leave; switching menus keeps the panel
             up and only slides its contents. */}
         <AnimatePresence>
           {active && (
@@ -305,7 +307,7 @@ export function Navbar() {
                 <div className="absolute inset-0 rounded-[20px] border border-line bg-[#0c0d10] shadow-[0_24px_70px_rgba(0,0,0,0.55)]" />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-                {/* Animated content on top of the blur */}
+                {/* Animated content on top of the solid panel */}
                 <div className="relative overflow-hidden p-2.5">
                   <AnimatePresence mode="popLayout" custom={dir} initial={false}>
                     <motion.div
