@@ -281,33 +281,33 @@ export function Navbar() {
           )}
         </motion.nav>
 
-        {/* Dropdown — rendered OUTSIDE the nav. The panel is an intentional SOLID
-            surface: no backdrop-filter, no frosted blur. The earlier see-through blur
-            recomputed during the open animation and caused a hover flicker, so it was
-            removed on purpose. Do NOT reintroduce backdrop-blur here. It unfolds from
-            the bar on hover and folds back on leave; switching menus keeps the panel
-            up and only slides its contents. */}
+        {/* Dropdown — rendered OUTSIDE the nav so its backdrop-filter samples the page
+            directly, giving the same frosted glass as the scrolled bar. The open
+            animation fades + slides only (NO scale): scaling a backdrop-filter layer is
+            what made it recompute mid-animation and flicker, so keep it scale-free and
+            the glass stays smooth. Switching menus keeps the panel up and only slides
+            its contents. */}
         <AnimatePresence>
           {active && (
             <motion.div
               key="nav-dropdown"
-              initial={{ opacity: 0, y: 4, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 4, scale: 0.97 }}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.22, ease }}
-              style={{ transformOrigin: 'top center' }}
               className="absolute left-0 right-0 top-full hidden justify-center pt-2 transform-gpu [backface-visibility:hidden] lg:flex"
               onMouseEnter={cancelClose}
               onMouseLeave={closeSoon}
             >
               <div className="relative">
-                {/* Solid panel — fully opaque so the hero never shows through, and no
-                    backdrop-filter to recompute during the open animation (that was
-                    the faint glitch/flicker). */}
-                <div className="absolute inset-0 rounded-[20px] border border-line bg-[#0c0d10] shadow-[0_24px_70px_rgba(0,0,0,0.55)]" />
+                {/* Frosted glass — identical blur to the scrolled bar, so the hero
+                    shows through softly (the glossy look). Because the wrapper no
+                    longer scales, the backdrop-filter doesn't recompute mid-animation,
+                    which is what removes the old flicker. */}
+                <div className="absolute inset-0 rounded-[20px] border border-line bg-black/55 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl" />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[20px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-                {/* Animated content on top of the solid panel */}
+                {/* Animated content on top of the glass */}
                 <div className="relative overflow-hidden p-2.5">
                   <AnimatePresence mode="popLayout" custom={dir} initial={false}>
                     <motion.div
