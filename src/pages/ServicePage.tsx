@@ -290,6 +290,7 @@ export function ServicePage() {
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
+        <ProductShowcase content={content} meta={meta} />
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
         {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
@@ -414,6 +415,86 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
               loading="lazy"
               style={{ y }}
               className="relative mx-auto block w-full max-w-[440px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)]"
+            />
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Product showcase · the real product floating on the page's own black. Generalises
+   the BrandObject pattern to any service with a product shot (e.g. AIOS on an iPad):
+   a headline, one line, and the top outcomes as proof. Self-gates per slug. */
+const SHOWCASE_IMG: Partial<Record<ServiceSlug, string>> = {
+  aios: '/services/mockup-aios-ipad.png',
+}
+const SHOWCASE_COPY: Record<Lang, Partial<Record<ServiceSlug, { title: string; body: string; alt: string }>>> = {
+  en: {
+    aios: {
+      title: 'One system your team actually opens.',
+      body: 'This is AIOS on a real workflow. Your CRM, projects, operations and knowledge in one place, with AI doing the work across all of it, not a chatbot bolted on the side.',
+      alt: 'The Nivora AIOS interface running on an iPad.',
+    },
+  },
+  nl: {
+    aios: {
+      title: 'Eén systeem dat uw team echt opent.',
+      body: 'Dit is AIOS op een echte workflow. Uw CRM, projecten, operations en kennis op één plek, met AI die er echt werk in doet, geen chatbot ernaast geplakt.',
+      alt: 'De Nivora AIOS-interface op een iPad.',
+    },
+  },
+}
+
+function ProductShowcase({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+  const { lang } = useLang()
+  const img = SHOWCASE_IMG[meta.slug]
+  const copy = SHOWCASE_COPY[lang][meta.slug]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['6%', '-6%'])
+  if (!img || !copy) return null
+  const outcomes = content.solution.outcomes.slice(0, 3)
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="order-2 lg:order-1">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              {copy.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
+              {copy.body}
+            </p>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <ul className="mt-7 space-y-3">
+              {outcomes.map((o) => (
+                <li key={o} className="flex items-start gap-3 text-[15px] text-ink-soft">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2} />
+                  <span>{o}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+
+        <div ref={ref} className="relative order-1 lg:order-2">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: `radial-gradient(52% 46% at 50% 44%, ${meta.accent}1f, transparent 72%)` }}
+          />
+          <Reveal y={32}>
+            <motion.img
+              src={img}
+              alt={copy.alt}
+              loading="lazy"
+              style={{ y }}
+              className="relative mx-auto block w-full max-w-[520px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)]"
             />
           </Reveal>
         </div>

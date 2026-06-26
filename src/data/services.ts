@@ -279,7 +279,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     hero: {
       eyebrow: 'AIOS, Your AI Operating System',
       headline: 'One system to run your whole company, with AI doing the work inside it.',
-      subhead: 'AIOS is a custom AI-native ERP built around how you actually operate. Your CRM, projects, ops, and knowledge, connected, with AI acting across all of it.',
+      subhead: 'One custom system built around how you actually operate. Your CRM, projects, operations and knowledge, connected, with AI doing the work across all of it.',
       primaryCta: 'Book a strategy call',
       secondaryCta: 'Contact us',
     },
@@ -739,7 +739,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     hero: {
       eyebrow: 'AIOS, uw AI-besturingssysteem',
       headline: 'Eén systeem om uw hele bedrijf op te draaien, met AI die het werk erin doet.',
-      subhead: 'AIOS is een AI-native ERP op maat, gebouwd rond hoe u echt werkt. Uw CRM, projecten, operations en kennis, met elkaar verbonden, met AI die over alles heen handelt.',
+      subhead: 'Eén systeem op maat, gebouwd rond hoe u echt werkt. Uw CRM, projecten, operations en kennis, met elkaar verbonden, met AI die er het werk in doet.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
     },
