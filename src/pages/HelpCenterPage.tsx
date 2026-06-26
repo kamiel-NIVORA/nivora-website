@@ -36,9 +36,8 @@ const COPY = {
   en: {
     docTitle: 'Help Center · Nivora',
     heroTitle: 'How can we help?',
-    heroAsk1: 'Ask our Nivora assistant anything.',
-    heroAsk2: 'Rather reach us directly?',
-    contact: 'Get in touch',
+    heroAsk: 'Ask our Nivora assistant anything, or',
+    contact: 'get in touch',
     placeholder: 'Ask a question or give Nivora a command...',
     typing: 'Nivora is answering, wait or press stop...',
     experts: 'Experts',
@@ -60,9 +59,8 @@ const COPY = {
   nl: {
     docTitle: 'Helpcentrum · Nivora',
     heroTitle: 'Hoe kunnen we helpen?',
-    heroAsk1: 'Vraag gerust alles aan onze Nivora-assistent.',
-    heroAsk2: 'Liever rechtstreeks contact met ons?',
-    contact: 'Neem contact op',
+    heroAsk: 'Vraag alles aan onze Nivora-assistent, of',
+    contact: 'neem contact op',
     placeholder: 'Stel een vraag of geef een commando aan Nivora...',
     typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
     experts: 'Experts',
@@ -177,21 +175,20 @@ export function HelpCenterPage() {
                 >
                   {t.heroTitle}
                 </motion.h1>
-                <motion.div
+                <motion.p
                   initial={reduced ? false : { opacity: 0, y: 8 }}
                   animate={reduced ? undefined : { opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="flex flex-col items-center gap-1 text-[14.5px] leading-snug text-faint"
+                  className="max-w-xl text-balance text-[15px] leading-relaxed text-faint sm:text-[16px]"
                 >
-                  <span>{t.heroAsk1}</span>
-                  <span>{t.heroAsk2}</span>
+                  {t.heroAsk}{' '}
                   <Link
                     to="/contact"
-                    className="mt-1 font-medium text-ink underline-offset-4 transition-colors hover:text-white hover:underline"
+                    className="font-medium text-ink underline-offset-4 transition-colors hover:text-white hover:underline"
                   >
                     {t.contact}
                   </Link>
-                </motion.div>
+                </motion.p>
               </motion.div>
             )}
 
