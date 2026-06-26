@@ -36,6 +36,8 @@ const COPY = {
   en: {
     docTitle: 'Help Center · Nivora',
     heroTitle: 'How can we help?',
+    heroAsk: 'Ask anything',
+    contact: 'Contact',
     placeholder: 'Ask a question or give Nivora a command...',
     typing: 'Nivora is answering, wait or press stop...',
     experts: 'Experts',
@@ -57,6 +59,8 @@ const COPY = {
   nl: {
     docTitle: 'Helpcentrum · Nivora',
     heroTitle: 'Hoe kunnen we helpen?',
+    heroAsk: 'Vraag gerust alles',
+    contact: 'Contact',
     placeholder: 'Stel een vraag of geef een commando aan Nivora...',
     typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
     experts: 'Experts',
@@ -158,7 +162,7 @@ export function HelpCenterPage() {
           >
             {empty && (
               <motion.div
-                className="flex flex-col items-center text-center"
+                className="flex flex-col items-center gap-3.5 text-center"
                 initial={reduced ? false : { opacity: 0, y: 18 }}
                 animate={reduced ? undefined : { opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease }}
@@ -171,6 +175,21 @@ export function HelpCenterPage() {
                 >
                   {t.heroTitle}
                 </motion.h1>
+                <motion.p
+                  initial={reduced ? false : { opacity: 0, y: 8 }}
+                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="flex items-center gap-2.5 text-[14.5px]"
+                >
+                  <span className="text-faint">{t.heroAsk}</span>
+                  <span className="text-dim">·</span>
+                  <Link
+                    to="/contact"
+                    className="text-ink-soft underline-offset-4 transition-colors hover:text-white hover:underline"
+                  >
+                    {t.contact}
+                  </Link>
+                </motion.p>
               </motion.div>
             )}
 
