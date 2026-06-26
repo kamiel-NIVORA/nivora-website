@@ -286,11 +286,11 @@ export function ServicePage() {
         style={{ ['--accent' as string]: meta.accent } as CSSProperties}
       >
         <Hero content={content} meta={meta} />
-        {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
+        <WhatYouGet meta={meta} />
+        {meta.slug === 'app-design' && <AppStatement content={content} />}
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
-        <ProductShowcase content={content} meta={meta} />
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
         {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
@@ -426,59 +426,81 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
 /* Product showcase · the real product floating on the page's own black. Generalises
    the BrandObject pattern to any service with a product shot (e.g. AIOS on an iPad):
    a headline, one line, and the top outcomes as proof. Self-gates per slug. */
-const SHOWCASE_IMG: Partial<Record<ServiceSlug, string>> = {
-  aios: '/services/mockup-aios-ipad.png',
+const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string }> = {
+  'app-design': { video: '/media/network.mp4' },
+  'local-ai': { video: '/media/mesh.mp4' },
+  aios: { img: '/services/mockup-aios-ipad.png', alt: 'The Nivora AIOS interface on an iPad.' },
+  'ai-consulting': { video: '/media/threads.mp4' },
 }
-const SHOWCASE_COPY: Record<Lang, Partial<Record<ServiceSlug, { title: string; body: string; alt: string }>>> = {
+const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: string; body: string }>> = {
   en: {
+    'app-design': {
+      eyebrow: 'What we build',
+      title: "The app you've been picturing, built for real.",
+      body: 'Designed and built end to end, in your brand, never a template with new colours. You own the code, the design files and the data.',
+    },
+    'local-ai': {
+      eyebrow: 'What we build',
+      title: 'The same AI, inside your own walls.',
+      body: 'Capable models running on hardware you control. Every prompt and document stays in your building, nothing leaves for a public cloud.',
+    },
     aios: {
+      eyebrow: 'What we build',
       title: 'One system your team actually opens.',
-      body: 'This is AIOS on a real workflow. Your CRM, projects, operations and knowledge in one place, with AI doing the work across all of it, not a chatbot bolted on the side.',
-      alt: 'The Nivora AIOS interface running on an iPad.',
+      body: 'This is AIOS on a real workflow. Your CRM, projects, operations and knowledge in one place, with AI doing the work across all of it.',
+    },
+    'ai-consulting': {
+      eyebrow: 'What you get',
+      title: 'Know what to build before you spend a cent.',
+      body: 'We find where AI actually pays off, prove it with a small pilot, and hand you a ranked roadmap. No tool to sell, so the advice stays honest.',
     },
   },
   nl: {
+    'app-design': {
+      eyebrow: 'Wat we bouwen',
+      title: 'De app die u voor ogen heeft, echt gebouwd.',
+      body: 'Van begin tot eind ontworpen en gebouwd, in uw huisstijl, nooit een template met andere kleuren. U bezit de code, de ontwerpbestanden en de data.',
+    },
+    'local-ai': {
+      eyebrow: 'Wat we bouwen',
+      title: 'Dezelfde AI, binnen uw eigen muren.',
+      body: 'Krachtige modellen op hardware die u beheert. Elke prompt en elk document blijft in uw gebouw, niets gaat naar een publieke cloud.',
+    },
     aios: {
+      eyebrow: 'Wat we bouwen',
       title: 'Eén systeem dat uw team echt opent.',
-      body: 'Dit is AIOS op een echte workflow. Uw CRM, projecten, operations en kennis op één plek, met AI die er echt werk in doet, geen chatbot ernaast geplakt.',
-      alt: 'De Nivora AIOS-interface op een iPad.',
+      body: 'Dit is AIOS op een echte workflow. Uw CRM, projecten, operations en kennis op één plek, met AI die er het werk in doet.',
+    },
+    'ai-consulting': {
+      eyebrow: 'Wat u krijgt',
+      title: 'Weet wat u moet bouwen, voor u een euro uitgeeft.',
+      body: 'We zoeken waar AI echt loont, bewijzen het met een kleine pilot, en geven u een geprioriteerde roadmap. Geen tool te verkopen, dus eerlijk advies.',
     },
   },
 }
 
-function ProductShowcase({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+function WhatYouGet({ meta }: { meta: ServiceMeta }) {
   const { lang } = useLang()
-  const img = SHOWCASE_IMG[meta.slug]
+  const asset = SHOWCASE[meta.slug]
   const copy = SHOWCASE_COPY[lang][meta.slug]
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['6%', '-6%'])
-  if (!img || !copy) return null
-  const outcomes = content.solution.outcomes.slice(0, 3)
 
   return (
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 lg:order-1">
           <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{copy.eyebrow}</p>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-4 font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
               {copy.title}
             </h2>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
-              {copy.body}
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <ul className="mt-7 space-y-3">
-              {outcomes.map((o) => (
-                <li key={o} className="flex items-start gap-3 text-[15px] text-ink-soft">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2} />
-                  <span>{o}</span>
-                </li>
-              ))}
-            </ul>
+          <Reveal delay={0.12}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{copy.body}</p>
           </Reveal>
         </div>
 
@@ -488,15 +510,21 @@ function ProductShowcase({ content, meta }: { content: ServiceContent; meta: Ser
             className="pointer-events-none absolute inset-0 blur-[90px]"
             style={{ background: `radial-gradient(52% 46% at 50% 44%, ${meta.accent}1f, transparent 72%)` }}
           />
-          <Reveal y={32}>
-            <motion.img
-              src={img}
-              alt={copy.alt}
-              loading="lazy"
-              style={{ y }}
-              className="relative mx-auto block w-full max-w-[520px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)]"
-            />
-          </Reveal>
+          {asset.img ? (
+            <Reveal y={32}>
+              <motion.img
+                src={asset.img}
+                alt={asset.alt ?? ''}
+                loading="lazy"
+                style={{ y }}
+                className="relative mx-auto block w-full max-w-[520px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_68%,transparent_100%)]"
+              />
+            </Reveal>
+          ) : asset.video ? (
+            <Reveal y={24}>
+              <AnimFrame src={asset.video} className="relative mx-auto aspect-square w-full max-w-[460px]" />
+            </Reveal>
+          ) : null}
         </div>
       </div>
     </section>
@@ -630,31 +658,6 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
 
 /* Statement ─────────────────────────────────────────────────────────────────── */
 
-function Statement({ content }: { content: ServiceContent }) {
-  return (
-    <section className="relative mx-auto w-full max-w-[900px] px-6 py-24 text-center lg:py-32">
-      <Reveal>
-        <p className="font-serif text-[27px] leading-[1.38] tracking-[-0.015em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.34]">
-          {content.intro.statement}
-        </p>
-      </Reveal>
-      <Reveal delay={0.1}>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5">
-          {content.intro.chips.map((chip) => (
-            <span
-              key={chip}
-              className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.04] px-4 py-2 text-[13px] text-ink-soft/90"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-              {chip}
-            </span>
-          ))}
-        </div>
-      </Reveal>
-    </section>
-  )
-}
-
 /* Problem · clean cards, no rails ───────────────────────────────────────────── */
 
 function Problem({ content }: { content: ServiceContent }) {
@@ -675,8 +678,7 @@ function Problem({ content }: { content: ServiceContent }) {
         {content.problem.points.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.08}>
             <GlassCard className="h-full">
-              <span className="font-serif text-[40px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-5 text-[18px] font-semibold tracking-tight text-ink">{p.title}</h3>
+              <h3 className="text-[18px] font-semibold tracking-tight text-ink">{p.title}</h3>
               <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{p.body}</p>
             </GlassCard>
           </Reveal>
