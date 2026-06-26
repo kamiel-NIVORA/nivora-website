@@ -44,12 +44,10 @@ const SERVICES_NL: NavItem[] = [
 /* ── Company ── */
 const COMPANY_PRIMARY_EN: NavItem[] = [
   { title: 'About Us', desc: 'Learn more about our story and team.', href: '/about', iconImg: '/nav/icon-about.png' },
-  { title: 'Partnerships', desc: 'Agencies, consultants and builders, work with us.', href: '/partnership', iconImg: '/nav/icon-partnerships.png' },
   { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/affiliate', iconImg: '/nav/icon-affiliate.png', comingSoon: true },
 ]
 const COMPANY_PRIMARY_NL: NavItem[] = [
   { title: 'Over ons', desc: 'Lees meer over ons verhaal en ons team.', href: '/about', iconImg: '/nav/icon-about.png' },
-  { title: 'Partnerships', desc: 'Bureaus, consultants en bouwers, werk met ons samen.', href: '/partnership', iconImg: '/nav/icon-partnerships.png' },
   { title: 'Affiliate', desc: 'Verdien door Nivora aan te bevelen bij anderen.', href: '/affiliate', iconImg: '/nav/icon-affiliate.png', comingSoon: true },
 ]
 
