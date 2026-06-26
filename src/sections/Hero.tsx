@@ -1,5 +1,6 @@
 import { motion, type Variants } from 'framer-motion'
 import { RippleButton } from '@/components/ui/RippleButton'
+import { BOOKING_URL } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -9,12 +10,14 @@ const COPY = {
   en: {
     headlineLines: ['Intelligent systems', 'for ambitious companies.'],
     sub: 'Every company feels the pressure to do more with AI. Nivora builds only what genuinely helps your business, and shows you the value before you commit.',
-    cta: 'Contact us',
+    bookCall: 'Book a call',
+    contact: 'Contact us',
   },
   nl: {
     headlineLines: ['Intelligente systemen', 'voor ambitieuze bedrijven.'],
     sub: 'Elk bedrijf voelt de druk om meer te doen met AI. Nivora bouwt alleen wat uw bedrijf echt vooruithelpt, en laat u de waarde zien voordat u zich vastlegt.',
-    cta: 'Neem contact op',
+    bookCall: 'Boek een gesprek',
+    contact: 'Neem contact op',
   },
 } as const
 
@@ -99,10 +102,18 @@ export function Hero() {
           {t.sub}
         </motion.p>
 
-        <motion.div variants={fadeUp} className="mt-9">
-          {/* Witte knop met het ripple-hover-effect (zoals de nav-CTA). */}
-          <RippleButton href="#contact" className="h-11 px-6 text-[14px]">
-            {t.cta}
+        <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <RippleButton
+            variant="solid"
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-12 px-7 text-[15px]"
+          >
+            {t.bookCall}
+          </RippleButton>
+          <RippleButton variant="ghost" href="/contact" className="h-12 px-7 text-[15px]">
+            {t.contact}
           </RippleButton>
         </motion.div>
       </motion.div>

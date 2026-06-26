@@ -223,7 +223,7 @@ function Hero() {
         src={PEAK_IMG}
         alt=""
         aria-hidden
-        className="absolute inset-0 h-full w-full object-cover object-[50%_38%] opacity-90"
+        className="absolute inset-0 h-full w-full object-cover object-[50%_22%] opacity-90"
       />
       {/* Even darken so the line art reads but the type stays crisp */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/35 to-black/80" />
@@ -391,8 +391,8 @@ function GiftBlock() {
   return (
     <section className="relative w-full px-6 pb-8 lg:pb-12">
       <div className="relative mx-auto w-full max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-[32px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.015]">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="relative overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a]">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
 
           <div className="relative grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1fr] lg:gap-16 lg:p-16">
             {/* Copy */}
@@ -481,8 +481,8 @@ function Apps() {
               <div className="mt-6">
                 <RippleButton
                   href={`/waitlist?product=${a.name.toLowerCase()}`}
-                  variant="ghost"
-                  className="h-10 gap-2 px-5 text-sm"
+                  variant="solid"
+                  className="h-11 gap-2 px-6 text-[14px]"
                 >
                   {t.joinWaitlist}
                   <ArrowRight className="h-4 w-4" strokeWidth={1.8} />

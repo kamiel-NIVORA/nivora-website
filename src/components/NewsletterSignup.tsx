@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { subscribe } from '@/lib/newsletter'
@@ -98,8 +97,16 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
   return (
     <section className={cn('relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-20', className)}>
       <Reveal>
-        <div className="relative overflow-hidden rounded-[32px] border border-line bg-gradient-to-b from-white/[0.05] to-white/[0.012] px-6 py-16 text-center sm:px-12 sm:py-20 lg:py-24">
-          {/* Centered aurora + two softly breathing accent glows for some life */}
+        <div className="relative overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a] px-6 py-16 text-center sm:px-12 sm:py-20 lg:py-24">
+          {/* Dithered texture background, kept dark so the copy stays crisp */}
+          <img
+            src="/newsletter-bg.gif"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.38]"
+          />
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/60" />
+          {/* Two softly breathing accent glows for some life */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-[340px] w-[680px] max-w-full rounded-full bg-olive/[0.07] blur-[130px]"
@@ -189,16 +196,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   className="flex flex-col items-center"
                 >
-                  <motion.span
-                    aria-hidden
-                    className="inline-flex text-ink drop-shadow-[0_0_22px_rgba(255,255,255,0.22)]"
-                    animate={reduced ? undefined : { y: [0, -3, 0] }}
-                    transition={reduced ? undefined : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <Mail className="h-8 w-8" strokeWidth={1.5} />
-                  </motion.span>
-
-                  <h2 className="mt-5 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
+                  <h2 className="max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
                     {t.formTitle}
                   </h2>
                   <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
