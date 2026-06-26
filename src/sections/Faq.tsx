@@ -5,35 +5,76 @@ import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const FAQ: { q: string; a: string }[] = [
-  {
-    q: 'What exactly does Nivora do?',
-    a: 'Two things. We build and install custom AI systems for your business, from private AI inside your own infrastructure to custom apps and complete ERP systems. And we make our own software, Box and Voice, that you can use directly. Either way, it is shaped around how you already work.',
+const COPY = {
+  en: {
+    title: 'Questions, answered',
+    subtitle: 'The things people usually want to know before they reach out.',
+    stillHaveQuestion: 'Still have a question?',
+    visitHelp: 'Visit the Help Center',
+    faq: [
+      {
+        q: 'What exactly does Nivora do?',
+        a: 'Two things. We build and install custom AI systems for your business, from private AI inside your own infrastructure to custom apps and complete ERP systems. And we make our own software, Box and Voice, that you can use directly. Either way, it is shaped around how you already work.',
+      },
+      {
+        q: 'Do I need to be technical to work with you?',
+        a: 'No. You bring the problem, or the idea you cannot get built, and we handle the rest, from design to building to installing it inside your tools. You stay in plain language the whole way.',
+      },
+      {
+        q: 'How do you charge?',
+        a: 'It depends on the work, so we never quote blind. We first show you what a project is worth on your own numbers, then agree a price. You see the value before you commit, not after.',
+      },
+      {
+        q: 'Is my data safe with private AI?',
+        a: 'Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems we build are fully yours to keep.',
+      },
+      {
+        q: 'When do Box and Voice launch?',
+        a: 'They are coming soon. Join the waiting list and you will be the first to know the moment they are live, with early access before the public launch.',
+      },
+      {
+        q: 'How do we get started?',
+        a: 'Book a short strategy call. We listen to the challenge, show you what is worth doing, and prove the value before any build begins.',
+      },
+    ],
   },
-  {
-    q: 'Do I need to be technical to work with you?',
-    a: 'No. You bring the problem, or the idea you cannot get built, and we handle the rest, from design to building to installing it inside your tools. You stay in plain language the whole way.',
+  nl: {
+    title: 'Vragen, beantwoord',
+    subtitle: 'De dingen die mensen meestal willen weten voor ze contact opnemen.',
+    stillHaveQuestion: 'Nog een vraag?',
+    visitHelp: 'Ga naar het Helpcentrum',
+    faq: [
+      {
+        q: 'Wat doet Nivora precies?',
+        a: 'Twee dingen. We bouwen en installeren AI-systemen op maat voor uw bedrijf, van private AI binnen uw eigen infrastructuur tot apps op maat en complete ERP-systemen. En we maken onze eigen software, Box en Voice, die u meteen kunt gebruiken. Hoe dan ook, het wordt gevormd rond hoe u vandaag al werkt.',
+      },
+      {
+        q: 'Moet ik technisch zijn om met u samen te werken?',
+        a: 'Nee. U brengt het probleem, of het idee dat u niet gebouwd krijgt, en wij regelen de rest, van ontwerp tot bouw tot het installeren binnen uw tools. U blijft de hele weg in gewone taal.',
+      },
+      {
+        q: 'Hoe bepaalt u uw prijs?',
+        a: 'Het hangt af van het werk, dus we geven nooit een blinde prijs. We tonen u eerst wat een project waard is op basis van uw eigen cijfers, en spreken dan een prijs af. U ziet de waarde voordat u zich vastlegt, niet erna.',
+      },
+      {
+        q: 'Zijn mijn gegevens veilig met private AI?',
+        a: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die we bouwen blijven volledig van u.',
+      },
+      {
+        q: 'Wanneer lanceren Box en Voice?',
+        a: 'Ze komen binnenkort. Schrijf u in op de wachtlijst en u bent de eerste die het weet zodra ze live zijn, met vroege toegang nog voor de publieke lancering.',
+      },
+      {
+        q: 'Hoe gaan we van start?',
+        a: 'Boek een kort strategiegesprek. We luisteren naar de uitdaging, tonen u wat de moeite waard is, en bewijzen de waarde voordat er ook maar iets gebouwd wordt.',
+      },
+    ],
   },
-  {
-    q: 'How do you charge?',
-    a: 'It depends on the work, so we never quote blind. We first show you what a project is worth on your own numbers, then agree a price. You see the value before you commit, not after.',
-  },
-  {
-    q: 'Is my data safe with private AI?',
-    a: 'Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems we build are fully yours to keep.',
-  },
-  {
-    q: 'When do Box and Voice launch?',
-    a: 'They are coming soon. Join the waiting list and you will be the first to know the moment they are live, with early access before the public launch.',
-  },
-  {
-    q: 'How do we get started?',
-    a: 'Book a short strategy call. We listen to the challenge, show you what is worth doing, and prove the value before any build begins.',
-  },
-]
+} as const
 
 /**
  * Homepage FAQ — the same accordion language used on the service pages, but with
@@ -41,17 +82,16 @@ const FAQ: { q: string; a: string }[] = [
  * the last objections right before the ask.
  */
 export function Faq() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
     <section id="faq" className="relative mx-auto w-full max-w-[1200px] px-6 py-24 lg:py-28">
-      <SectionHeading
-        title="Questions, answered"
-        subtitle="The things people usually want to know before they reach out."
-      />
+      <SectionHeading title={t.title} subtitle={t.subtitle} />
 
       <div className="mx-auto mt-14 flex w-full max-w-[760px] flex-col gap-3">
-        {FAQ.map((item, i) => {
+        {t.faq.map((item, i) => {
           const isOpen = openIdx === i
           return (
             <Reveal key={item.q} delay={(i % 4) * 0.04}>
@@ -88,10 +128,10 @@ export function Faq() {
       <Reveal delay={0.1}>
         <div className="mt-10 flex flex-col items-center gap-3.5">
           <p className="text-center text-[14px] leading-relaxed text-faint">
-            Still have a question?
+            {t.stillHaveQuestion}
           </p>
           <RippleButton variant="ghost" href="/help" className="h-11 px-5 text-sm">
-            Visit the Help Center
+            {t.visitHelp}
           </RippleButton>
         </div>
       </Reveal>

@@ -4,7 +4,21 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { SERVICES, type NavItem } from '@/lib/navigation'
+import { getServices, type NavItem } from '@/lib/navigation'
+import { useLang } from '@/i18n'
+
+const COPY = {
+  en: {
+    title: 'Our Services',
+    subtitle: 'Tell us the challenge. We design, build, and install exactly what your business needs.',
+    learnMore: 'Learn more',
+  },
+  nl: {
+    title: 'Onze diensten',
+    subtitle: 'Vertel ons de uitdaging. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
+    learnMore: 'Lees meer',
+  },
+} as const
 
 /** Card is a motion-wrapped router Link so the tilt works and navigation is client-side. */
 const MotionLink = motion.create(Link)
@@ -40,14 +54,14 @@ const ICONS: Record<string, string> = {
  */
 export function Services() {
   const bandRef = useRef<HTMLDivElement>(null)
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const services = getServices(lang)
 
   return (
     <section id="services" className="relative w-full overflow-hidden py-28 lg:py-36">
       <div className="relative mx-auto w-full max-w-[1400px] px-6">
-        <SectionHeading
-          title="Our Services"
-          subtitle="Tell us the challenge. We design, build, and install exactly what your business needs."
-        />
+        <SectionHeading title={t.title} subtitle={t.subtitle} />
 
         {/* Cards band. The sharp peak backdrop is confined to EXACTLY this row
             (overflow-hidden), so it never bleeds up into the heading above. */}
@@ -65,9 +79,9 @@ export function Services() {
 
           {/* Four free-standing cards, lifted above the backdrop */}
           <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {SERVICES.map((s, i) => (
+            {services.map((s, i) => (
               <Reveal key={s.title} delay={(i % 4) * 0.08}>
-                <ServiceCard service={s} index={i + 1} bandRef={bandRef} />
+                <ServiceCard service={s} index={i + 1} bandRef={bandRef} learnMore={t.learnMore} />
               </Reveal>
             ))}
           </div>
@@ -97,10 +111,12 @@ function ServiceCard({
   service,
   index,
   bandRef,
+  learnMore,
 }: {
   service: NavItem
   index: number
   bandRef: RefObject<HTMLDivElement | null>
+  learnMore: string
 }) {
   const { title, desc, href } = service
   const icon = ICONS[title]
@@ -214,7 +230,7 @@ function ServiceCard({
             <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
           )}
           <span className="mt-4 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-white/[0.06] px-4 text-[13px] font-medium text-ink-soft transition-colors group-hover:bg-white/[0.10]">
-            Learn more
+            {learnMore}
             <ArrowRight
               className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
               strokeWidth={1.8}

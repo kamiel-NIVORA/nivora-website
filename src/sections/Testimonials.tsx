@@ -1,45 +1,90 @@
 import { Aperture, Hexagon, Sparkle } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import { useLang } from '@/i18n'
 
 type Card =
   | { kind: 'quote'; bg: string; avatar: string; name: string; role: string; quote: string }
   | { kind: 'portrait'; image: string; name: string; role: string }
   | { kind: 'logo'; name: string; Icon: typeof Hexagon }
 
-const CARDS: Card[] = [
-  {
-    kind: 'quote',
-    bg: '/testimonials/s8GPxlDcxupng4c3ToZpTaaLQ.webp',
-    avatar: '/testimonials/34CHRdTurlCbv7kCKIQR4GZmcI.webp',
-    name: 'James Gowley',
-    role: 'CEO · NeoRick',
-    quote:
-      'This tool transformed how we do research. We can scan, generate summaries, and deliver insights in a fraction of the time.',
+const COPY = {
+  en: {
+    title: 'Hear from customers like you',
+    subtitle: 'Discover what brought them to us, what they tried before, and how they work today.',
+    cards: [
+      {
+        kind: 'quote',
+        bg: '/testimonials/s8GPxlDcxupng4c3ToZpTaaLQ.webp',
+        avatar: '/testimonials/34CHRdTurlCbv7kCKIQR4GZmcI.webp',
+        name: 'James Gowley',
+        role: 'CEO · NeoRick',
+        quote:
+          'This tool transformed how we do research. We can scan, generate summaries, and deliver insights in a fraction of the time.',
+      },
+      { kind: 'logo', name: 'NeoRick', Icon: Sparkle },
+      { kind: 'portrait', image: '/testimonials/Ksud8CvJrW8EBKK6UADg7okcqg.webp', name: 'Marcus Lee', role: 'Head of Research' },
+      {
+        kind: 'quote',
+        bg: '/testimonials/gdn7G7rY1qzcykNXS1rYUKGlGM.webp',
+        avatar: '/testimonials/NE97Dd8nYnoAtbGouH0WCRgyOM.webp',
+        name: 'Thomas Aspen',
+        role: 'CTO · Analyx',
+        quote:
+          'The AI research analyst helps our team scan information quickly, making strategic decisions easier and far more data-driven and accurate.',
+      },
+      { kind: 'portrait', image: '/testimonials/MKA7INDXm9nEkdIrbzOYK7fJ4A.webp', name: 'Sara Müller', role: 'Operations Lead' },
+      { kind: 'logo', name: 'Colfare', Icon: Aperture },
+      { kind: 'portrait', image: '/testimonials/rxBNYoypQWFpaC9BMn51oDYSs8.webp', name: 'Elena Park', role: 'Data Analyst' },
+      {
+        kind: 'quote',
+        bg: '/testimonials/oJMn0JMIXRyu0NZ9cSstBe6B9Q.webp',
+        avatar: '/testimonials/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
+        name: 'Aria Patel',
+        role: 'Founder · Colfare',
+        quote:
+          'We replaced three tools with one workspace. Everything our analysts need now lives in a single, calm place.',
+      },
+    ] as Card[],
   },
-  { kind: 'logo', name: 'NeoRick', Icon: Sparkle },
-  { kind: 'portrait', image: '/testimonials/Ksud8CvJrW8EBKK6UADg7okcqg.webp', name: 'Marcus Lee', role: 'Head of Research' },
-  {
-    kind: 'quote',
-    bg: '/testimonials/gdn7G7rY1qzcykNXS1rYUKGlGM.webp',
-    avatar: '/testimonials/NE97Dd8nYnoAtbGouH0WCRgyOM.webp',
-    name: 'Thomas Aspen',
-    role: 'CTO · Analyx',
-    quote:
-      'The AI research analyst helps our team scan information quickly, making strategic decisions easier and far more data-driven and accurate.',
+  nl: {
+    title: 'Hoor het van klanten zoals u',
+    subtitle: 'Ontdek wat hen bij ons bracht, wat ze daarvoor probeerden en hoe ze vandaag werken.',
+    cards: [
+      {
+        kind: 'quote',
+        bg: '/testimonials/s8GPxlDcxupng4c3ToZpTaaLQ.webp',
+        avatar: '/testimonials/34CHRdTurlCbv7kCKIQR4GZmcI.webp',
+        name: 'James Gowley',
+        role: 'CEO · NeoRick',
+        quote:
+          'Deze tool veranderde de manier waarop we research doen. We scannen, genereren samenvattingen en leveren inzichten in een fractie van de tijd.',
+      },
+      { kind: 'logo', name: 'NeoRick', Icon: Sparkle },
+      { kind: 'portrait', image: '/testimonials/Ksud8CvJrW8EBKK6UADg7okcqg.webp', name: 'Marcus Lee', role: 'Hoofd Research' },
+      {
+        kind: 'quote',
+        bg: '/testimonials/gdn7G7rY1qzcykNXS1rYUKGlGM.webp',
+        avatar: '/testimonials/NE97Dd8nYnoAtbGouH0WCRgyOM.webp',
+        name: 'Thomas Aspen',
+        role: 'CTO · Analyx',
+        quote:
+          'De AI-research-analist helpt ons team om informatie snel te scannen, waardoor strategische beslissingen makkelijker, datagedreven en veel accurater worden.',
+      },
+      { kind: 'portrait', image: '/testimonials/MKA7INDXm9nEkdIrbzOYK7fJ4A.webp', name: 'Sara Müller', role: 'Operations Lead' },
+      { kind: 'logo', name: 'Colfare', Icon: Aperture },
+      { kind: 'portrait', image: '/testimonials/rxBNYoypQWFpaC9BMn51oDYSs8.webp', name: 'Elena Park', role: 'Data-analist' },
+      {
+        kind: 'quote',
+        bg: '/testimonials/oJMn0JMIXRyu0NZ9cSstBe6B9Q.webp',
+        avatar: '/testimonials/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
+        name: 'Aria Patel',
+        role: 'Founder · Colfare',
+        quote:
+          'We vervingen drie tools door één workspace. Alles wat onze analisten nodig hebben, staat nu op één rustige plek.',
+      },
+    ] as Card[],
   },
-  { kind: 'portrait', image: '/testimonials/MKA7INDXm9nEkdIrbzOYK7fJ4A.webp', name: 'Sara Müller', role: 'Operations Lead' },
-  { kind: 'logo', name: 'Colfare', Icon: Aperture },
-  { kind: 'portrait', image: '/testimonials/rxBNYoypQWFpaC9BMn51oDYSs8.webp', name: 'Elena Park', role: 'Data Analyst' },
-  {
-    kind: 'quote',
-    bg: '/testimonials/oJMn0JMIXRyu0NZ9cSstBe6B9Q.webp',
-    avatar: '/testimonials/xOeofCFdYTCvctAM7dTQu3f0oXU.jpg',
-    name: 'Aria Patel',
-    role: 'Founder · Colfare',
-    quote:
-      'We replaced three tools with one workspace. Everything our analysts need now lives in a single, calm place.',
-  },
-]
+} as const
 
 function TestimonialCard({ card }: { card: Card }) {
   if (card.kind === 'logo') {
@@ -83,14 +128,13 @@ function TestimonialCard({ card }: { card: Card }) {
 }
 
 export function Testimonials() {
-  const loop = [...CARDS, ...CARDS]
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const loop = [...t.cards, ...t.cards]
   return (
     <section className="relative w-full overflow-hidden py-24 lg:py-28">
       <div className="mx-auto w-full max-w-[1200px] px-6">
-        <SectionHeading
-          title="Hear from customers like you"
-          subtitle="Discover what brought them to us, what they tried before, and how they work today."
-        />
+        <SectionHeading title={t.title} subtitle={t.subtitle} />
       </div>
 
       {/* Marquee */}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/i18n'
 
 /**
  * Visual-paneel voor het "Our Services"-kaartje. Een dromerige wolkenfoto met
@@ -12,12 +13,20 @@ import { cn } from '@/lib/utils'
 
 type Slide = { img: string; tagline: string }
 
-const SLIDES: Slide[] = [
-  { img: '/services/service-appdesign.webp', tagline: 'Your idea, your app' },
-  { img: '/services/service-localai.webp', tagline: 'Own AI, own data' },
-  { img: '/services/service-aios.webp', tagline: 'Your company, automated' },
-  { img: '/services/service-consulting.webp', tagline: 'Where AI actually fits' },
-]
+const SLIDES_COPY = {
+  en: [
+    { img: '/services/service-appdesign.webp', tagline: 'Your idea, your app' },
+    { img: '/services/service-localai.webp', tagline: 'Own AI, own data' },
+    { img: '/services/service-aios.webp', tagline: 'Your company, automated' },
+    { img: '/services/service-consulting.webp', tagline: 'Where AI actually fits' },
+  ] as Slide[],
+  nl: [
+    { img: '/services/service-appdesign.webp', tagline: 'Uw idee, uw app' },
+    { img: '/services/service-localai.webp', tagline: 'Eigen AI, eigen data' },
+    { img: '/services/service-aios.webp', tagline: 'Uw bedrijf, geautomatiseerd' },
+    { img: '/services/service-consulting.webp', tagline: 'Waar AI echt past' },
+  ] as Slide[],
+} as const
 
 /** Zelfde trage, zachte curve als de hero-reveal. */
 const ease = [0.16, 1, 0.3, 1] as const
@@ -71,6 +80,8 @@ function SlideContent({ img, tagline }: Slide) {
 }
 
 export function ServicesShowcase() {
+  const { lang } = useLang()
+  const SLIDES = SLIDES_COPY[lang]
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.4 })
   const [index, setIndex] = useState(0)
@@ -80,7 +91,7 @@ export function ServicesShowcase() {
     if (!inView) return
     const t = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 4400)
     return () => clearInterval(t)
-  }, [inView])
+  }, [inView, SLIDES.length])
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">

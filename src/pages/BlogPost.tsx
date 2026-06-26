@@ -8,10 +8,28 @@ import { BlogCover } from '@/components/BlogCover'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { BOOKING_URL } from '@/data/contact'
 import { usePost } from '@/lib/blog'
+import { useLang } from '@/i18n'
+
+const COPY = {
+  en: {
+    notFound: 'Article not found',
+    backToBlog: 'Back to the blog',
+    back: 'Back',
+    bookCall: 'Book a call',
+  },
+  nl: {
+    notFound: 'Artikel niet gevonden',
+    backToBlog: 'Terug naar de blog',
+    back: 'Terug',
+    bookCall: 'Boek een gesprek',
+  },
+} as const
 
 export function BlogPost() {
   const { slug } = useParams()
   const { post, loaded } = usePost(slug)
+  const { lang } = useLang()
+  const t = COPY[lang]
 
   // Per-post SEO: set the tab title and meta description, then restore on leave.
   useEffect(() => {
@@ -35,12 +53,12 @@ export function BlogPost() {
     if (!loaded) return <main className="min-h-[70vh]" />
     return (
       <main className="mx-auto flex min-h-[70vh] w-full max-w-[760px] flex-col items-center justify-center px-6 text-center">
-        <h1 className="font-serif text-3xl text-ink">Article not found</h1>
+        <h1 className="font-serif text-3xl text-ink">{t.notFound}</h1>
         <Link
           to="/blog"
           className="mt-4 inline-flex items-center gap-2 text-sm text-faint transition-colors hover:text-ink"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to the blog
+          <ArrowLeft className="h-4 w-4" /> {t.backToBlog}
         </Link>
       </main>
     )
@@ -163,11 +181,11 @@ export function BlogPost() {
         <div className="mx-auto mt-14 flex max-w-[680px] items-center justify-between">
           <Button variant="dark" asChild>
             <Link to="/blog">
-              <ArrowLeft className="h-4 w-4" /> Back
+              <ArrowLeft className="h-4 w-4" /> {t.back}
             </Link>
           </Button>
           <Button variant="dark" asChild>
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Book a call</a>
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t.bookCall}</a>
           </Button>
         </div>
       </article>

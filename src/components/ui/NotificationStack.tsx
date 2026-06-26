@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { useLang, type Lang } from '@/i18n'
 
 /**
  * Cleane iOS-stijl meldingen binnen het visual-paneel van het Products-kaartje.
@@ -12,26 +13,41 @@ import { motion, useInView } from 'framer-motion'
 
 type Notif = { app: string; logo: string; blurb: string }
 
-const NOTIFS: Notif[] = [
-  { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.' },
-  { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
-]
+const NOTIFS: Record<Lang, Notif[]> = {
+  en: [
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.' },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
+  ],
+  nl: [
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'Al uw communicatie op één plek.' },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Spraak naar tekst, afgestemd op uw stem.' },
+  ],
+}
+
+const COPY = {
+  en: { comingSoon: 'Coming soon', notifAria: (app: string) => `${app}, coming soon, get notified at launch` },
+  nl: { comingSoon: 'Binnenkort', notifAria: (app: string) => `${app}, binnenkort, laat u op de hoogte brengen bij de lancering` },
+} as const
+
+const CLOCK_LOCALE: Record<Lang, string> = { en: 'en-GB', nl: 'nl-NL' }
 
 /** Houdt de echte tijd bij (HH:MM) — ververst elke 15s. */
-function useClock(): string {
+function useClock(locale: string): string {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 15_000)
     return () => clearInterval(id)
   }, [])
-  return now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit', hour12: false })
+  return now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
 function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
+  const { lang } = useLang()
+  const t = COPY[lang]
   return (
     <motion.a
       href="#contact"
-      aria-label={`${app}, coming soon, get notified at launch`}
+      aria-label={t.notifAria(app)}
       layout
       initial={{ opacity: 0, y: 34, scale: 0.965, filter: 'blur(6px)' }}
       animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
@@ -55,7 +71,7 @@ function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
           <span className="shrink-0 text-[11.5px] text-white/70">{time}</span>
         </div>
         <p className="truncate text-[12.5px] leading-snug text-white/85">
-          <span className="font-bold tracking-tight text-white">Coming soon</span> · {blurb}
+          <span className="font-bold tracking-tight text-white">{t.comingSoon}</span> · {blurb}
         </p>
       </div>
     </motion.a>
@@ -63,16 +79,18 @@ function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
 }
 
 export function NotificationStack() {
+  const { lang } = useLang()
+  const notifs = NOTIFS[lang]
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.4 })
   const [shown, setShown] = useState(0)
-  const time = useClock()
+  const time = useClock(CLOCK_LOCALE[lang])
 
   useEffect(() => {
     if (!inView) return
-    const timers = NOTIFS.map((_, i) => window.setTimeout(() => setShown(i + 1), 350 + i * 650))
+    const timers = notifs.map((_, i) => window.setTimeout(() => setShown(i + 1), 350 + i * 650))
     return () => timers.forEach(clearTimeout)
-  }, [inView])
+  }, [inView, notifs])
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
@@ -88,7 +106,7 @@ export function NotificationStack() {
       {/* iPhone-lockscreen: nieuwe melding schuift van onder in, duwt de stack
           omhoog (bottom-anchored). 1 → 2 → 3, telkens van onderen erbij. */}
       <div className="absolute inset-0 flex flex-col justify-end gap-2.5 p-4 sm:p-5">
-        {NOTIFS.slice(0, shown).map((n) => (
+        {notifs.slice(0, shown).map((n) => (
           <NotifCard key={n.app} {...n} time={time} />
         ))}
       </div>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Check, Loader2 } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { subscribe } from '@/lib/newsletter'
+import { useLang } from '@/i18n'
 
 /** Map the ?product= query to a friendly label. */
 const PRODUCT_LABELS: Record<string, string> = {
@@ -14,11 +15,72 @@ const PRODUCT_LABELS: Record<string, string> = {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_RE = /^[+0-9][0-9\s().-]{6,}$/
 
+const COPY = {
+  en: {
+    thingGeneric: 'Box and Voice',
+    comingSoon: (thing: string) => `${thing}, coming soon`,
+    titleProduct: (p: string) => `Be first to use ${p}`,
+    titleGeneric: 'Get notified at launch',
+    subProduct: (p: string) =>
+      `${p} is almost ready. Leave your details and we'll ping you the moment it goes live, nothing else.`,
+    subGeneric:
+      "Box and Voice are almost here. Leave your details and we'll ping you the moment they go live, nothing else.",
+    errName: 'Please add your name.',
+    errContact: 'Add an email or a phone number so we can reach you.',
+    errEmail: 'Please enter a valid email address.',
+    errPhone: 'Please enter a valid phone number.',
+    errGeneric: 'Something went wrong. Please try again.',
+    doneAlready: "You're already on the list",
+    doneNew: "You're on the list",
+    bodyAlready: (thing: string) => `We already have you down. We'll let you know the moment ${thing} drops.`,
+    bodyEmailPre: 'Check ',
+    bodyEmailPost: ' for a confirmation link, click it once and you are set.',
+    bodyThanks: (firstName: string, thing: string) =>
+      `Thanks${firstName ? `, ${firstName}` : ''}. We'll reach out the second ${thing} goes live.`,
+    phName: 'Your name',
+    phEmail: 'you@company.com',
+    phPhone: 'Phone (optional)',
+    submitting: 'One sec',
+    submit: 'Get notified',
+    foot: 'One message the day it drops. No spam, ever.',
+  },
+  nl: {
+    thingGeneric: 'Box en Voice',
+    comingSoon: (thing: string) => `${thing}, binnenkort`,
+    titleProduct: (p: string) => `Wees de eerste die ${p} gebruikt`,
+    titleGeneric: 'Krijg bericht bij de lancering',
+    subProduct: (p: string) =>
+      `${p} is bijna klaar. Laat uw gegevens achter en we laten van ons horen zodra het live gaat, niets anders.`,
+    subGeneric:
+      'Box en Voice zijn er bijna. Laat uw gegevens achter en we laten van ons horen zodra ze live gaan, niets anders.',
+    errName: 'Vul uw naam in.',
+    errContact: 'Vul een e-mail of telefoonnummer in zodat we u kunnen bereiken.',
+    errEmail: 'Vul een geldig e-mailadres in.',
+    errPhone: 'Vul een geldig telefoonnummer in.',
+    errGeneric: 'Er ging iets mis. Probeer het opnieuw.',
+    doneAlready: 'U staat al op de lijst',
+    doneNew: 'U staat op de lijst',
+    bodyAlready: (thing: string) => `We hebben u al genoteerd. We laten van ons horen zodra ${thing} er is.`,
+    bodyEmailPre: 'Controleer ',
+    bodyEmailPost: ' voor een bevestigingslink, klik er één keer op en u bent klaar.',
+    bodyThanks: (firstName: string, thing: string) =>
+      `Bedankt${firstName ? `, ${firstName}` : ''}. We nemen contact op zodra ${thing} live gaat.`,
+    phName: 'Uw naam',
+    phEmail: 'u@bedrijf.com',
+    phPhone: 'Telefoon (optioneel)',
+    submitting: 'Momentje',
+    submit: 'Houd me op de hoogte',
+    foot: 'Eén bericht op de dag van de lancering. Nooit spam.',
+  },
+} as const
+
 export function WaitlistPage() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [params] = useSearchParams()
   const productSlug = (params.get('product') ?? '').toLowerCase()
   const product = PRODUCT_LABELS[productSlug]
-  const thing = product ?? 'Box and Voice'
+  const thing = product ?? t.thingGeneric
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -29,10 +91,8 @@ export function WaitlistPage() {
   const [emailSent, setEmailSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const title = product ? `Be first to use ${product}` : 'Get notified at launch'
-  const subtitle = product
-    ? `${product} is almost ready. Leave your details and we'll ping you the moment it goes live, nothing else.`
-    : "Box and Voice are almost here. Leave your details and we'll ping you the moment they go live, nothing else."
+  const title = product ? t.titleProduct(product) : t.titleGeneric
+  const subtitle = product ? t.subProduct(product) : t.subGeneric
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -40,19 +100,19 @@ export function WaitlistPage() {
     const trimmedPhone = phone.trim()
 
     if (!name.trim()) {
-      setError('Please add your name.')
+      setError(t.errName)
       return
     }
     if (!trimmedEmail && !trimmedPhone) {
-      setError('Add an email or a phone number so we can reach you.')
+      setError(t.errContact)
       return
     }
     if (trimmedEmail && !EMAIL_RE.test(trimmedEmail)) {
-      setError('Please enter a valid email address.')
+      setError(t.errEmail)
       return
     }
     if (!trimmedEmail && trimmedPhone && !PHONE_RE.test(trimmedPhone)) {
-      setError('Please enter a valid phone number.')
+      setError(t.errPhone)
       return
     }
 
@@ -69,7 +129,7 @@ export function WaitlistPage() {
     })
     setSubmitting(false)
     if (!res.ok) {
-      setError(res.error ?? 'Something went wrong. Please try again.')
+      setError(res.error ?? t.errGeneric)
       return
     }
     setAlready(res.status === 'already_subscribed')
@@ -99,7 +159,7 @@ export function WaitlistPage() {
           <Reveal mode="mount">
             <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.04] px-3.5 py-1.5 text-[12.5px] font-medium text-muted backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
-              {thing}, coming soon
+              {t.comingSoon(thing)}
             </span>
           </Reveal>
 
@@ -138,19 +198,19 @@ export function WaitlistPage() {
                         <Check className="h-6 w-6" strokeWidth={2.4} />
                       </motion.span>
                       <h2 className="mt-5 font-serif text-[23px] tracking-[-0.01em] text-ink">
-                        {already ? "You're already on the list" : "You're on the list"}
+                        {already ? t.doneAlready : t.doneNew}
                       </h2>
                       <p className="mt-2.5 max-w-xs text-[14px] leading-relaxed text-faint">
                         {already ? (
-                          <>We already have you down. We'll let you know the moment {thing} drops.</>
+                          <>{t.bodyAlready(thing)}</>
                         ) : emailSent ? (
                           <>
-                            Check <span className="text-ink-soft">{email.trim()}</span> for a confirmation
-                            link, click it once and you are set.
+                            {t.bodyEmailPre}
+                            <span className="text-ink-soft">{email.trim()}</span>
+                            {t.bodyEmailPost}
                           </>
                         ) : (
-                          <>Thanks{name.trim() ? `, ${name.trim().split(' ')[0]}` : ''}. We'll reach out the
-                            second {thing} goes live.</>
+                          <>{t.bodyThanks(name.trim() ? name.trim().split(' ')[0] : '', thing)}</>
                         )}
                       </p>
                     </motion.div>
@@ -172,7 +232,7 @@ export function WaitlistPage() {
                           setName(e.target.value)
                           if (error) setError(null)
                         }}
-                        placeholder="Your name"
+                        placeholder={t.phName}
                         autoComplete="name"
                         className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
                       />
@@ -183,7 +243,7 @@ export function WaitlistPage() {
                           setEmail(e.target.value)
                           if (error) setError(null)
                         }}
-                        placeholder="you@company.com"
+                        placeholder={t.phEmail}
                         autoComplete="email"
                         aria-invalid={!!error}
                         className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
@@ -195,7 +255,7 @@ export function WaitlistPage() {
                           setPhone(e.target.value)
                           if (error) setError(null)
                         }}
-                        placeholder="Phone (optional)"
+                        placeholder={t.phPhone}
                         autoComplete="tel"
                         className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
                       />
@@ -207,12 +267,12 @@ export function WaitlistPage() {
                       >
                         {submitting ? (
                           <>
-                            One sec
+                            {t.submitting}
                             <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.8} />
                           </>
                         ) : (
                           <>
-                            Get notified
+                            {t.submit}
                             <ArrowRight
                               className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                               strokeWidth={1.8}
@@ -221,7 +281,7 @@ export function WaitlistPage() {
                         )}
                       </button>
                       <p className="mt-1.5 text-center text-[12px] text-dim">
-                        One message the day it drops. No spam, ever.
+                        {t.foot}
                       </p>
                     </motion.form>
                   )}

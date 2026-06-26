@@ -1,11 +1,15 @@
+import type { Lang } from '@/i18n'
 import type { ServiceContent, ServiceSlug } from './serviceContent'
 
 /**
  * Service landing-page copy, authored and edited for conversion, in Nivora's
  * voice: calm, direct, honest, no hype, no em-dashes. Conforms to the
  * ServiceContent contract in serviceContent.ts.
+ *
+ * Bilingual: SERVICE_CONTENT_EN holds the English copy, SERVICE_CONTENT_NL the
+ * Dutch. Consumers call getServiceContent(lang) to resolve the active language.
  */
-export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
+export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
   'app-design': {
     slug: 'app-design',
     name: 'App Design',
@@ -459,3 +463,467 @@ export const SERVICE_CONTENT: Record<ServiceSlug, ServiceContent> = {
     },
   },
 }
+
+/**
+ * Dutch service copy. Professional, neutral Standard Dutch for BE + NL,
+ * addresses the reader formally as "u/uw", calm and confident, faithful to the
+ * English meaning without translating word for word. Brand names stay as-is.
+ */
+export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
+  'app-design': {
+    slug: 'app-design',
+    name: 'App Design',
+    hero: {
+      eyebrow: 'App Design & Ontwikkeling',
+      headline: 'De app die u voor ogen hebt. Ontworpen en gebouwd, van eerste idee tot laatste scherm.',
+      subhead: 'We bouwen consumenten-apps, zakelijke tools, en alles wat te verfijnd of te complex is voor een template. In uw merk, in uw bezit, gebouwd om te blijven.',
+      primaryCta: 'Boek een strategiegesprek',
+      secondaryCta: 'Neem contact op',
+    },
+    intro: {
+      statement: 'Een app is alleen het bouwen waard als hij het gebruiken waard is. We ontwerpen hem zoals het hoort, bouwen hem om te blijven, en laten hem aanvoelen alsof hij gemaakt is voor de mensen die hij bedient.',
+      chips: ['Eigenaar van het product', 'Elk platform', 'Geen templates'],
+    },
+    reveal:
+      'De apps die mensen echt gebruiken zijn niet uit onderdelen samengesteld. Ze zijn met intentie ontworpen, op stevige fundamenten gebouwd, en gelanceerd om hun plek op iemands scherm te verdienen.',
+    problem: {
+      title: 'Uw app-idee verdient beter dan de shortcuts',
+      intro: 'De meeste app-ideeën stranden bij het bouwen. Niet omdat het idee verkeerd is, maar omdat de kloof tussen een concept en een product waar mensen van houden moeilijker te overbruggen is dan het lijkt.',
+      points: [
+        { title: 'De snelle routes lopen tegen een plafond aan', body: 'Templates en snelle tools zetten razendsnel iets in elkaar. Maar de uitzonderingsgevallen, de afwerking, de architectuur die overeind blijft wanneer echte gebruikers komen, dat vraagt nog altijd echt vakwerk. En precies in die kloof sterven goede ideeën meestal een stille dood.' },
+        { title: 'Templates laten u op iedereen lijken', body: 'Als uw app aanvoelt als een SaaS-template met nieuwe kleuren, voelen gebruikers dat. Premium-apps hebben hun eigen visuele taal, hun eigen gevoel. De apps die mensen elke dag openen zijn ontworpen, niet samengesteld.' },
+        { title: 'Een ruw prototype is geen product', body: 'Iets dat met workarounds aan elkaar hangt is geen fundament, het is een risico. Op een bepaald moment moet u toch herbouwen. Goed beginnen kost minder dan snel beginnen en er spijt van krijgen.' },
+      ],
+    },
+    solution: {
+      title: 'Een echt product, ontworpen vanaf de grond',
+      body: 'We ontwerpen en bouwen apps van begin tot eind: consumentenproducten, zakelijke tools, interne apps, en alles wat te complex of te verfijnd is voor een shortcut. We beginnen bij het idee en de mensen die het bedient, ontwerpen de interface in uw merk, en bouwen het volledige product op fundamenten die overeind blijven. U houdt er iets echts aan over.',
+      outcomes: [
+        'Een app die aanvoelt alsof hij voor uw gebruikers gemaakt is, niet uit onderdelen samengesteld',
+        'Een product dat volledig van u is: code, ontwerpbestanden en data',
+        'Zuivere fundamenten die overeind blijven wanneer gebruikers en complexiteit komen',
+        'Iets dat gelanceerd is, in gebruik, en het waard om elke dag te openen',
+      ],
+    },
+    capabilities: {
+      title: 'Wat we bouwen',
+      intro: 'Van uw eerste schermidee tot een product dat mensen echt openen. Consumenten-apps, zakelijke tools, en alles daartussenin.',
+      items: [
+        { title: 'Consumenten-apps', body: 'U hebt een app-idee dat verdient te bestaan. Wij brengen het van concept naar een product dat echte gebruikers downloaden, gebruiken en waar ze naar terugkeren. Ontworpen om zijn plek op iemands scherm te verdienen, niet alleen om gelanceerd te worden.' },
+        { title: 'Zakelijke tools en interne apps', body: 'De tool die past bij hoe uw team werkt bestaat nog niet, dus bouwen wij hem. Uw proces stuurt het ontwerp, niet het draaiboek van iemand anders.' },
+        { title: 'Merk en visuele identiteit', body: 'Van het icoon tot de laatste interactie: een visuele taal die uw gebruikers meteen herkennen. We ontwerpen de interface in uw merk, niet een template die iedereen kan huren.' },
+        { title: 'Complexe builds', body: 'Wanneer het idee te gelaagd is voor een snelle tool of te verfijnd voor een template, nemen wij het aan. Full-stack, degelijke architectuur, gebouwd om echt gebruik en echte schaal te doorstaan.' },
+        { title: 'AI waar het zijn plek verdient', body: 'We voegen AI alleen toe waar het echt tijd bespaart of echte waarde creëert voor gebruikers. Nooit omwille van zichzelf, nooit als een functie waar niemand om vroeg.' },
+        { title: 'Lanceren en groeien', body: 'We lanceren het, kijken hoe het gebruikt wordt, en verfijnen. Een product dat op dag één gebruikers wint, bouwt op dag negentig loyaliteit op.' },
+      ],
+    },
+    process: {
+      title: 'Hoe we werken',
+      steps: [
+        { label: '01', title: 'We luisteren eerst', body: 'We gaan met u samenzitten om het idee te begrijpen, voor wie het is, en wat het moet doen. We bakenen het echte product af voordat we iets ontwerpen, zodat er niets gebouwd wordt op een verkeerde aanname.' },
+        { label: '02', title: 'We ontwerpen wat past', body: 'We brengen de flows in kaart, ontwerpen de interface in uw merk, en spreken precies af wat de eerste versie doet. U ziet het vorm krijgen terwijl we werken, geen black box.' },
+        { label: '03', title: 'We bouwen het goed', body: 'Full-stack build, gekoppeld aan uw tools en infrastructuur, op zuivere fundamenten die overeind blijven terwijl u groeit. We tonen onderweg de voortgang.' },
+        { label: '04', title: 'We blijven aan uw zijde', body: 'We lanceren, kijken hoe het gebruikt wordt, en blijven het verbeteren. U krijgt geen zip-bestand in de hand gedrukt om er vervolgens alleen voor te staan.' },
+      ],
+    },
+    differentiators: {
+      title: 'Waarom met ons bouwen',
+      items: [
+        { title: 'Bouwers, geen bureau', body: 'We schrijven de code en ontwerpen de interface zelf. U praat met de mensen die uw product bouwen, niet met een accountmanager die berichten doorgeeft aan een team dat u nooit ontmoet.' },
+        { title: 'Het idee stuurt het ontwerp', body: 'We persen uw app niet in een template. We leren wat het moet zijn, voor wie het is, en wat het de moeite waard maakt om te gebruiken, en ontwerpen daaromheen.' },
+        { title: 'Alles is van u', body: 'De code, de ontwerpbestanden, de data: allemaal van u. Geen lock-in, geen licentiekost, geen verborgen afhankelijkheid van ons om het draaiend te houden. Neem het mee waarheen u wilt, wanneer u wilt.' },
+        { title: 'We bouwen wat anderen niet gelanceerd krijgen', body: 'De ideeën die te complex zijn voor een snelle tool, te verfijnd voor een template, of te ambitieus voor een shortcut. Daar zijn wij net voor.' },
+      ],
+    },
+    audience: {
+      title: 'Is dit de juiste match?',
+      body: 'We bouwen voor oprichters met app-ideeën en bedrijven die de juiste tool nodig hebben. Dit is voor wie het wel is, en voor wie niet.',
+      fits: [
+        'Oprichters met een echt app-idee die het de eerste keer goed gebouwd willen',
+        'Teams waarvan het proces spreadsheets en generieke SaaS ontgroeid is',
+        'Iedereen die een template of een snelle route probeerde en tegen het plafond aanliep',
+        'Eigenaars die hun product willen bezitten, niet iets huren dat bijna werkt',
+      ],
+      notFor: [
+        'Wie op zoek is naar een goedkope kloon of een snelle template',
+        '"Bouw het tegen volgende week" zonder ruimte voor ontwerp of ontdekking',
+        'Wegwerpprototypes zonder een echt plan erachter',
+      ],
+    },
+    faq: [
+      { q: 'Hoe lang duurt het?', a: 'Dat hangt af van wat u bouwt. Een gerichte interne tool is een kwestie van weken; een volwaardig consumentenproduct duurt langer. Na ons eerste gesprek geven we u een eerlijke timing voor uw scope, geen getal uit de lucht gegrepen.' },
+      { q: 'Wat kost het?', a: 'De prijs hangt af van de scope, niet van een vast pakket. Zodra we begrijpen wat u nodig hebt, geven we u een helder bedrag en wat het dekt, voordat u zich vastlegt. Geen verrassingsfacturen achteraf.' },
+      { q: 'Bezit ik de code en het ontwerp?', a: 'Ja. De code, de ontwerpbestanden en de data zijn van u. Geen lock-in. Als u het ooit in eigen huis wilt halen of ergens anders naartoe wilt verhuizen, kan dat.' },
+      { q: 'Bouwen jullie consumenten-apps, niet alleen zakelijke tools?', a: 'Ja, dat is een groot deel van wat we doen. Als u een app-idee hebt en het wilt omzetten in een echt product waar mensen graag mee werken, is dat precies het juiste gesprek om met ons te voeren.' },
+      { q: 'We gebruiken al enkele tools, vervangt dit die?', a: 'Niet noodzakelijk. We integreren met wat werkt en vervangen alleen wat u tegenhoudt. Het doel is één product dat in uw workflow past, niet nog een losstaand systeem.' },
+      { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen uw idee en uw situatie, en geven u een eerlijk antwoord over of dit de juiste match is en wat het zou vergen.' },
+    ],
+    finalCta: {
+      title: 'De app die u voor ogen hebt is dichterbij dan hij lijkt.',
+      body: 'Breng ons het idee. We tonen u wat er nodig is om het goed te bouwen, en of wij het juiste team zijn om het te doen.',
+      button: 'Boek een strategiegesprek',
+      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over wat het zou vergen. We reageren meestal binnen een dag.',
+    },
+  },
+  'local-ai': {
+    slug: 'local-ai',
+    name: 'Local AI',
+    hero: {
+      eyebrow: 'Private AI-installatie',
+      headline: 'Dezelfde AI-kracht, draaiend binnen uw eigen muren.',
+      subhead: 'We installeren krachtige open modellen op infrastructuur die u beheert. Uw team krijgt een krachtige private assistent. Uw meest vertrouwelijke data verlaat nooit het gebouw.',
+      primaryCta: 'Boek een strategiegesprek',
+      secondaryCta: 'Neem contact op',
+    },
+    intro: {
+      statement: 'Voor bedrijven die echte AI-kracht nodig hebben maar hun data niet in de cloud van iemand anders kunnen zetten. Wij bouwen de versie die u beide geeft.',
+      chips: ['Uw hardware', 'Geen cloudblootstelling', 'Volledig in eigen bezit'],
+    },
+    reveal:
+      'Elke prompt die uw team naar een cloudmodel stuurt, verlaat uw gebouw. Wij bouwen de versie die binnen blijft.',
+    problem: {
+      title: 'U hebt AI nodig. Over uw data valt niet te onderhandelen.',
+      intro: 'De teams die AI het hardst nodig hebben, zijn meestal degene die de makkelijke tools niet kunnen gebruiken. Daar is een structurele reden voor.',
+      points: [
+        {
+          title: 'Elke prompt naar een cloudmodel is een openbaarmaking',
+          body: 'Contracten, klantgegevens, financiële modellen, broncode. Op het moment dat het in ChatGPT terechtkomt, heeft het uw gebouw verlaten. Daar bent u in de voorwaarden mee akkoord gegaan. De meeste bedrijven staan er pas bij stil als er iets misgaat.',
+        },
+        {
+          title: 'Compliance betekent precies weten waar uw data heen ging',
+          body: '"We hebben een AI gebruikt" is geen antwoord dat standhoudt in een audit of een klantgesprek. "Het draait op onze eigen servers, er verlaat niets onze perimeter" wel. Cloud-AI maakt het tweede antwoord onmogelijk om eerlijk te geven.',
+        },
+        {
+          title: 'U bouwt op een fundament dat u niet beheert',
+          body: 'Prijzen per gebruiker, modelwijzigingen, rate limits, deprecaties. Elke workflow die u bouwt op de API van iemand anders is één beleidswijziging verwijderd van kapotgaan. U huurt de kracht maar bezit er niets van.',
+        },
+      ],
+    },
+    solution: {
+      title: 'Private AI, geïnstalleerd op hardware die u beheert.',
+      body: 'We zetten krachtige AI-modellen op binnen uw omgeving: uw eigen servers, of dedicated hardware die wij voor u beheren. Het systeem redeneert over uw documenten. Elke prompt blijft in uw gebouw. Er is geen API-oproep naar een publiek model, geen data die uw perimeter verlaat, geen blootstelling via servicevoorwaarden. U krijgt echte kracht met privacy die standhoudt onder echte controle.',
+      outcomes: [
+        'AI die draait op infrastructuur die u beheert, geen cloud-API in de keten',
+        'Elke prompt en elk antwoord blijft binnen uw eigen perimeter',
+        'Een private assistent die uw eigen documenten leest en erover redeneert',
+        'Geen facturatie per gebruiker, geen vendor lock-in, geen API die u niet kunt vertrouwen',
+      ],
+    },
+    capabilities: {
+      title: 'Wat we installeren',
+      intro: 'Een volledige private AI-opstelling, van infrastructuuranalyse tot een werkende assistent die uw team elke dag opent.',
+      items: [
+        {
+          title: 'Infrastructuuranalyse',
+          body: 'We bekijken wat u hebt en wat u nodig zou hebben. U krijgt een eerlijk antwoord over of u op uw bestaande servers draait of op dedicated hardware die wij beheren, voordat er werk begint.',
+        },
+        {
+          title: 'Modelselectie en uitrol',
+          body: 'We kiezen de juiste open modellen voor uw werk: krachtig genoeg voor serieuze taken, op maat van uw hardware, en gehost binnen uw eigen perimeter. Niets stuurt data ergens anders heen.',
+        },
+        {
+          title: 'Veilige configuratie',
+          body: 'Het systeem draait vanaf de eerste dag binnen uw perimeter. Data blijft in eigen huis, niet omdat we het beloven, maar omdat de architectuur het onmogelijk maakt dat het ergens anders heen gaat.',
+        },
+        {
+          title: 'Een private assistent over uw eigen documenten',
+          body: 'Uw team kan vragen stellen en antwoorden krijgen die gegrond zijn in uw contracten, gegevens, codebase of kennisbank. Er gaat niets naar buiten om te antwoorden.',
+        },
+        {
+          title: 'Toegangsbeheer en audit trail',
+          body: 'Wie het mag gebruiken, wat ze kunnen bereiken, en een volledig logboek van wat er gebeurd is. De controles en het spoor die uw complianceteam nodig heeft om met vertrouwen goed te keuren.',
+        },
+        {
+          title: 'Doorlopend onderhoud',
+          body: 'Modellen worden beter en dreigingen veranderen. We houden uw systeem up-to-date en draaiend, zodat private AI een troef blijft in plaats van een project dat u moet babysitten.',
+        },
+      ],
+    },
+    process: {
+      title: 'Hoe we werken',
+      steps: [
+        {
+          label: '01',
+          title: 'We luisteren eerst',
+          body: 'We brengen uw data in kaart, uw complianceverplichtingen, en wat u AI echt wilt laten doen. Voordat er hardware of modellen aan te pas komen, krijgen we helder welke grenzen u niet mag overschrijden.',
+        },
+        {
+          label: '02',
+          title: 'We ontwerpen wat past',
+          body: 'We kiezen de modellen, de hosting en de architectuur voor uw situatie, en tonen u precies hoe data stroomt en binnen blijft. U keurt het plan goed voordat we bouwen.',
+        },
+        {
+          label: '03',
+          title: 'We bouwen en rollen uit',
+          body: 'We installeren het systeem binnen uw omgeving, koppelen het aan uw documenten, zetten toegangsbeheer en auditing op, en testen het tegen echt werk van uw team.',
+        },
+        {
+          label: '04',
+          title: 'We blijven aan uw zijde',
+          body: 'We dragen een systeem over dat van u is, en houden het daarna onderhouden en up-to-date. Naarmate uw behoeften groeien, groeit de opstelling met u mee, zonder u terug naar de cloud te trekken.',
+        },
+      ],
+    },
+    differentiators: {
+      title: 'Waarom een bouwer, geen leverancier',
+      items: [
+        {
+          title: 'U bezit het systeem volledig',
+          body: 'Wanneer we klaar zijn, draait de AI op uw infrastructuur onder uw beheer. Geen teller per gebruiker. Geen knop die een leverancier kan omzetten om uw voorwaarden te wijzigen of uw toegang af te snijden.',
+        },
+        {
+          title: 'Privacy die standhoudt onder controle',
+          body: 'We bouwen de architectuur zo dat de data echt niet weg kan. Dat is een andere belofte dan beloven het niet te gebruiken. Uw auditors en klanten verdienen de sterkere versie.',
+        },
+        {
+          title: 'Gebouwd rond uw specifieke grenzen',
+          body: 'Elke sector heeft andere verplichtingen en ander vertrouwelijk materiaal. We ontwerpen de uitrol rond wat u echt niet mag blootgeven, niet rond een generieke template.',
+        },
+        {
+          title: 'We blijven na de lancering',
+          body: 'Private AI vraagt onderhoud naarmate modellen en dreigingen evolueren. We houden uw systeem actueel en onderhouden, zodat u de kracht behoudt zonder de last te erven om het alleen draaiende te houden.',
+        },
+      ],
+    },
+    audience: {
+      title: 'Voor wie dit gebouwd is',
+      body: 'Local AI is de juiste match wanneer data in eigen huis houden geen optie maar een vereiste is. Als dat uw situatie is, is dit daar precies voor ontworpen. Als dat niet zo is, zeggen we het u eerlijk.',
+      fits: [
+        'Gereguleerde sectoren waar dataverwerking niet onderhandelbaar is: juridisch, medisch, financiële diensten',
+        'Bedrijven waarvan de broncode, IP of onderzoek niet naar een extern model gestuurd mag worden',
+        'Teams die precies moeten kunnen antwoorden waar hun data heen ging, wanneer auditors of klanten ernaar vragen',
+        'Bedrijven die hun AI-kracht willen bezitten in plaats van per gebruiker te huren',
+      ],
+      notFor: [
+        'Teams zonder gevoelige data die tevreden zijn met cloud-SaaS zoals het is',
+        'Bedrijven die gewoon de goedkoopste weg willen zonder na te denken over waar data heen gaat',
+        'Wie op zoek is naar een snel abonnement zonder echte opzet',
+      ],
+    },
+    faq: [
+      {
+        q: 'Hoe lang duurt de uitrol?',
+        a: 'Dat hangt af van uw infrastructuur en hoeveel van uw documentenbibliotheek de assistent moet lezen. Een gerichte eerste uitrol is doorgaans een kwestie van weken. We geven u een echte timing na de analyse, voordat er werk begint, geen getal dat we later bijstellen.',
+      },
+      {
+        q: 'Bezitten we het echt, of zitten we aan jullie vast?',
+        a: 'U bezit het. Het systeem draait op infrastructuur die u beheert. We blijven betrokken voor onderhoud omdat klanten dat nuttig vinden, niet omdat u niet weg kunt.',
+      },
+      {
+        q: 'Hoe privé is het echt?',
+        a: 'Er gaat niets naar OpenAI of welk publiek cloudmodel dan ook. De modellen draaien binnen uw omgeving, elke prompt en elk antwoord blijft achter uw eigen muren, en we bouwen toegangsbeheer en een audit trail zodat u precies kunt tonen wie wat wanneer raadpleegde.',
+      },
+      {
+        q: 'We gebruiken al ChatGPT. Waarom veranderen?',
+        a: 'Als uw data niet gevoelig is, hoeft het misschien niet. Maar als uw team vertrouwelijk materiaal plakt in een tool die u niet beheert, draagt u een risico dat de meeste bedrijven onderschatten. Dit geeft u dezelfde kracht zonder de blootstelling.',
+      },
+      {
+        q: 'Hebben we onze eigen servers nodig?',
+        a: 'Nee. We kunnen uitrollen op uw bestaande hardware als u die hebt, of op dedicated infrastructuur die wij voor u beheren. Hoe dan ook, wij nemen de technische kant op ons en geven u een systeem dat gewoon werkt.',
+      },
+      {
+        q: 'Hoe krachtig zijn zelf-gehoste modellen vergeleken met cloud-AI?',
+        a: 'Sterk genoeg voor serieus zakelijk werk: documentanalyse, teksten opstellen, interne Q&A, classificatie, onderzoek. We stemmen het model af op uw echte taken en hardware, zodat wat u krijgt echt nuttig is, op uw eigen voorwaarden.',
+      },
+    ],
+    finalCta: {
+      title: 'Krijg de kracht van AI zonder de controle over uw data op te geven.',
+      body: 'Als uw bedrijf geen vertrouwelijke informatie naar de cloud kan sturen, hoeft u niet achterop te raken. Laat ons naar uw opstelling kijken en de private AI vinden die past.',
+      button: 'Boek een strategiegesprek',
+      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',
+    },
+  },
+  aios: {
+    slug: 'aios',
+    name: 'AIOS',
+    hero: {
+      eyebrow: 'AIOS, uw AI-besturingssysteem',
+      headline: 'Eén systeem om uw hele bedrijf op te draaien, met AI die het werk erin doet.',
+      subhead: 'AIOS is een AI-native ERP op maat, gebouwd rond hoe u echt werkt. Uw CRM, projecten, operations en kennis, met elkaar verbonden, met AI die over alles heen handelt.',
+      primaryCta: 'Boek een strategiegesprek',
+      secondaryCta: 'Neem contact op',
+    },
+    intro: {
+      statement: 'Eén brein voor uw bedrijf. Gevormd rond hoe u werkt, niet een template waar u uzelf in moet wringen.',
+      chips: ['U bezit het', 'Privé vanaf het ontwerp', 'Eén bron van waarheid'],
+    },
+    reveal:
+      'Al uw losstaande tools, vervangen door één systeem waar uw hele bedrijf op draait. U voert het één keer in, en het klopt overal.',
+    problem: {
+      title: 'Uw bedrijf draait op een kluwen van tools die niet met elkaar praten',
+      intro: 'Het groeide één app per keer. Notion voor documenten, Sheets voor cijfers, een CRM, Slack, een dozijn tabbladen. Elk apart logisch. Samen kosten ze uw team elke dag uren.',
+      points: [
+        { title: 'U voert steeds opnieuw hetzelfde in', body: 'Een nieuwe klant komt in de CRM terecht, wordt dan gekopieerd naar een spreadsheet, een projectbord en een factuur. Elke kopie is een kans om het fout te doen, en iemand doet dat altijd.' },
+        { title: 'Uw kennis versnippert, en wandelt dan de deur uit', body: 'Het antwoord staat ergens: een document, een thread, in iemands hoofd. Het vinden duurt langer dan het werk opnieuw doen. En wanneer mensen vertrekken, vertrekt wat zij wisten met hen mee.' },
+        { title: 'Niemand weet welk cijfer klopt', body: 'Twee tools tonen twee totalen en niemand vertrouwt er een. U beslist uiteindelijk op cijfers die u maar half gelooft, omdat uw tools het nooit eens zijn over het echte plaatje.' },
+      ],
+    },
+    solution: {
+      title: 'Eén systeem, gebouwd rond hoe u echt werkt',
+      body: 'AIOS vervangt de wirwar van losstaande tools door één systeem dat gevormd is naar uw operations. We brengen in kaart hoe uw bedrijf werkt, en bouwen dan één datamodel en modules op maat voor uw CRM, projecten, operations en kennis, allemaal onderhuids verbonden. Daarbovenop handelen AI-agents over uw workflows heen, in plaats van te wachten tot iemand tussen apps klikt.',
+      outcomes: [
+        'Eén systeem in plaats van vele, uw team werkt op één plek',
+        'Voer data één keer in, het klopt overal, geen overtypen meer',
+        'AI die echt werk doet over uw operations heen, geen chatbot in een hoekje',
+        'Eén bron van waarheid, zodat elk cijfer eindelijk klopt',
+      ],
+    },
+    capabilities: {
+      title: 'Wat we in uw AIOS bouwen',
+      intro: 'Geen stapel plug-ins. Eén systeem, van begin tot eind ontworpen rond de manier waarop uw bedrijf werkt. Geen generieke tools, geen bloat.',
+      items: [
+        { title: 'Operations in kaart brengen', body: 'We beginnen met leren hoe uw bedrijf echt draait: elke workflow, elke overdracht, elke plek waar data opnieuw wordt ingevoerd. Het systeem wordt daarop gebouwd, niet op een generieke template.' },
+        { title: 'Eén datamodel eronder', body: 'Een klant, een project, een taak betekent overal hetzelfde. Voer het één keer in en het blijft synchroon, niets dubbel getypt, niets dat verouderd raakt.' },
+        { title: 'Modules op maat van hoe u werkt', body: 'CRM, projecten, operations en kennis, gebouwd om bij uw proces te passen, niet bij iemands idee daarover. Geen functies die u nooit opent.' },
+        { title: 'AI-agents die over workflows heen handelen', body: 'Agents die opstellen, bijwerken, routeren en opvolgen tussen uw modules, die het echte werk doen, niet alleen vragen beantwoorden in een vakje.' },
+        { title: 'Dashboards die u kunt vertrouwen', body: 'Het echte beeld van uw bedrijf in één overzicht, getrokken uit één bron van waarheid. De cijfers kloppen omdat ze allemaal van dezelfde plek komen.' },
+        { title: 'Uitrol en teamtraining', body: 'We installeren het, brengen uw data binnen, en trainen uw team zodat ze het ook echt gebruiken. Daarna blijven we na de lancering aan uw zijde terwijl het bedrijf verandert.' },
+      ],
+    },
+    process: {
+      title: 'Hoe we het samen met u bouwen',
+      steps: [
+        { label: '01', title: 'We luisteren eerst', body: 'We gaan samen met u en uw team zitten om in kaart te brengen hoe het bedrijf vandaag draait: de tools, de workflows, de plekken die pijn doen. Er wordt niets gebouwd voordat we begrijpen hoe u echt werkt.' },
+        { label: '02', title: 'We ontwerpen het systeem', body: 'We vormen het datamodel en de modules rond uw operations, en spreken af wat AIOS vervangt en in welke volgorde. U ziet het plan voordat er één regel gebouwd is.' },
+        { label: '03', title: 'We bouwen wat past', body: 'We bouwen uw modules, automatisering en AI-agents, migreren dan uw data en koppelen wat blijft. We beginnen met het deel dat het meest pijn doet, zodat u de waarde vroeg voelt.' },
+        { label: '04', title: 'We blijven aan uw zijde', body: 'We rollen het uit, trainen uw team, en blijven het systeem verfijnen terwijl u groeit. AIOS is uw platform, het hoort bij het bedrijf te blijven passen terwijl het verandert.' },
+      ],
+    },
+    differentiators: {
+      title: 'Waarom een bouwer, geen leverancier',
+      items: [
+        { title: 'Gebouwd rond u, geen template', body: 'Kant-en-klare ERP-systemen laten u veranderen hoe u werkt om in de software te passen. Wij doen het omgekeerde: het systeem is gevormd naar uw operations, zodat het vanaf dag één past.' },
+        { title: 'U bezit het', body: 'Uw systeem, uw data, uw platform. Geen lock-in aan een tool die u niet kunt veranderen, geen taks per gebruiker als uw team groeit. Het draait voor het bedrijf, niet voor de leverancier.' },
+        { title: 'Privé vanaf het ontwerp', body: 'Uw kennis en operations blijven van u. We bouwen met privacy en controle vanaf de start, zodat uw data niet stilletjes het product van iemand anders voedt.' },
+        { title: 'AI die het werk doet', body: 'We voegen geen AI toe omwille van zichzelf. Agents gaan waar ze echte moeite wegnemen: het opnieuw invoeren, het achternazitten, het schakelen tussen tools.' },
+      ],
+    },
+    audience: {
+      title: 'Voor wie AIOS is',
+      body: 'AIOS is een platformvervanging, het meest ambitieuze dat we bouwen. Het is de moeite waard wanneer u voorbij het aan elkaar lappen van tools bent en klaar voor één systeem om het bedrijf op te draaien.',
+      fits: [
+        'Bedrijven die verzuipen in losstaande tools en dagelijks overtypen',
+        'Teams die hun operations opschalen en één bron van waarheid nodig hebben',
+        'Leiders die willen dat het hele bedrijf op één systeem draait',
+        'Eigenaars die klaar zijn om het juiste fundament te bouwen, niet er nog een lapmiddel op te schroeven',
+      ],
+      notFor: [
+        'Heel kleine teams die nog prima geholpen zijn met een paar apps',
+        'Wie tevreden is met kant-en-klare software precies zoals ze is',
+        'Teams die niet bereid zijn te veranderen hoe ze werken om op één systeem te draaien',
+      ],
+    },
+    faq: [
+      { q: 'Hoe lang duurt het om te bouwen?', a: 'Dat hangt af van hoeveel we vervangen en hoe complex uw operations zijn. We bouwen het niet in één keer. We beginnen met het deel dat het meest pijn doet, krijgen het live, en breiden van daaruit uit, zodat u vroeg waarde ziet in plaats van te wachten op één grote lancering. U krijgt een echte timing na het strategiegesprek en het in kaart brengen van uw operations.' },
+      { q: 'Bezitten we het systeem, of zitten we aan jullie vast?', a: 'U bezit het: het systeem, uw data, en het platform waarop het draait. Geen lock-in per gebruiker, geen leverancier waar u niet weg kunt. We blijven betrokken omdat klanten dat willen, niet omdat u vastzit.' },
+      { q: 'Is onze data veilig en privé?', a: 'Ja. We bouwen met privacy en controle in gedachten, uw kennis en operations blijven van u, en uw data wordt niet gebruikt om het product van iemand anders te trainen of te voeden. Voordat we bouwen, overlopen we precies waar uw data leeft en wie er toegang toe heeft.' },
+      { q: 'We hebben al een CRM en tools die we graag gebruiken. Gooien we die weg?', a: 'Niet blindelings. In de fase van in kaart brengen beslissen we samen wat AIOS vervangt en wat de moeite waard is om te houden en te koppelen. Het doel is één bron van waarheid, geen verandering omwille van de verandering. Als een tool u echt van dienst is, koppelen we eraan in plaats van hem te herbouwen.' },
+      { q: 'Wat als ons team weerstand biedt tegen een nieuw systeem?', a: 'Net daarom maken uitrol en training deel uit van de build, geen bijzaak achteraf. We beginnen met de workflow die de meeste dagelijkse pijn wegneemt, zodat mensen het voordeel snel voelen, en we blijven aan uw zijde tijdens de adoptie. Een systeem dat niemand gebruikt is het bouwen niet waard.' },
+      { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen hoe uw bedrijf vandaag draait en of AIOS de juiste match is, voordat u zich vastlegt. Als het nog niet juist is voor u, zeggen we het rechtuit.' },
+    ],
+    finalCta: {
+      title: 'Stop met uw bedrijf draaien op tools die niet met elkaar praten.',
+      body: 'Als uw bedrijf het lappendeken ontgroeid is, geeft AIOS het één systeem om op te draaien, gebouwd rond hoe u echt werkt, in uw bezit. Laten we in kaart brengen wat het zou vervangen en of het de juiste zet is.',
+      button: 'Boek een strategiegesprek',
+      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',
+    },
+  },
+  'ai-consulting': {
+    slug: 'ai-consulting',
+    name: 'AI Consulting',
+    hero: {
+      eyebrow: 'AI Consulting & Flows',
+      headline: 'Weet precies waar AI loont voordat u er één cent aan bouwt.',
+      subhead: 'We leren hoe uw team werkt, vinden waar AI zijn plek verdient, en geven u een geprioriteerde roadmap met pilots die eerst de waarde bewijzen.',
+      primaryCta: 'Boek een strategiegesprek',
+      secondaryCta: 'Neem contact op',
+    },
+    intro: {
+      statement: 'De meeste AI-uitgaven mislukken omdat ze beginnen bij een tool in plaats van een probleem. Wij beginnen bij hoe u echt werkt, en vinden dan waar AI zijn waarde bewijst.',
+      chips: ['Eerst een plan', 'Eerlijke ROI', 'U bezit het'],
+    },
+    reveal:
+      'De meeste AI-budgetten worden uitgegeven voordat iemand weet wat echt werkt. Wij vinden waar het loont, bewijzen het klein, en geven u dan het plan.',
+    problem: {
+      title: 'U voelt de druk om iets met AI te doen. U weet alleen niet waar te beginnen.',
+      intro: 'De meeste oprichters met wie we praten zitten in dezelfde situatie: de verwachting is luid, het pad is stil.',
+      points: [
+        { title: 'Druk zonder richting', body: 'Iedereen zegt dat u AI zou moeten gebruiken. Niemand vertelt u waar het in uw bedrijf past. Dus blijft u erop zitten, of u gokt en hoopt.' },
+        { title: 'Teleurgesteld door de hype', body: 'U probeerde een tool of twee. Ze deden het goed in de demo, en stierven dan een stille dood in het team. Nu bent u sceptisch over het volgende blinkende ding, en terecht.' },
+        { title: 'Bang om op het verkeerde te wedden', body: 'Een echte AI-build is echt geld. Uzelf vastleggen voordat u weet dat het de juiste zet is, is hoe goede bedrijven een kwartaal verspillen en intern vertrouwen verliezen.' },
+      ],
+    },
+    solution: {
+      title: 'We vinden waar AI past, bewijzen dat het werkt, en vertellen u dan wat te bouwen.',
+      body: 'Dit is de stap voor de grote build. We kruipen in hoe uw bedrijf vandaag draait, vinden elke plek waar AI echt zou kunnen helpen, en zetten eerlijke cijfers naast elke ervan. Daarna draaien we kleine, hands-on pilots zodat u echte resultaten ziet voordat u ergens budget aan vastlegt. U vertrekt met een plan waar u mee aan de slag kunt, geen presentatie die stof ligt te vergaren.',
+      outcomes: [
+        'Heldere antwoorden over waar AI u helpt, en waar niet',
+        'Een geprioriteerde roadmap, geordend op impact, inspanning en eerlijke ROI',
+        'Snelle automatiseringswinsten die uw team voelt in weken, niet in kwartalen',
+        'Een plan in handen voordat u uitgeeft, zodat de build het veilige deel is',
+      ],
+    },
+    capabilities: {
+      title: 'Wat de samenwerking omvat',
+      intro: 'Geen generieke frameworks. We kijken naar uw echte werk, uw echte tools, en uw echte cijfers.',
+      items: [
+        { title: 'Verkenning en audit', body: 'We gaan samen met u en uw team zitten om in kaart te brengen hoe het werk vandaag echt gebeurt, waar tijd weglekt, en wat u stilletjes geld kost.' },
+        { title: 'Kansen in kaart brengen met eerlijke ROI', body: 'Elk idee krijgt een cijfer en een oordeel. We vertellen u welke lonen, welke niet, en waarom, zodat u de juiste financiert.' },
+        { title: 'Ontwerp van workflows en automatisering', body: 'We ontwerpen de flows van begin tot eind, zodat het precies duidelijk is hoe het werk verandert, wie wat aanraakt, en waar de tijd terugkomt.' },
+        { title: 'Bouwen-of-kopen-beslissingen', body: 'Voor elke kans zeggen we u rechtuit: gebruik een bestaande tool, of bouw iets op maat. Geen voorkeur om u een build te verkopen.' },
+        { title: 'Een geprioriteerde roadmap', body: 'Alles komt samen in één geordend plan, gerangschikt op impact en inspanning, dat elk team morgen zou kunnen oppakken en uitvoeren.' },
+        { title: 'Hands-on pilots', body: 'We geven niet alleen advies. We zetten kleine werkende pilots op zodat u het resultaat met eigen ogen ziet voordat u echt budget vastlegt.' },
+      ],
+    },
+    process: {
+      title: 'Hoe we werken',
+      steps: [
+        { label: '01', title: 'We luisteren eerst', body: 'We leren uw bedrijf van binnenuit kennen: hoe het team werkt, waar het pijn doet, hoe goed er echt zou uitzien. Geen aannames, geen template.' },
+        { label: '02', title: 'We brengen in kaart en bewijzen', body: 'We vinden elke echte kans, zetten eerlijke ROI naast elk ervan, en draaien snelle pilots zodat de sterkste getest zijn, niet alleen in theorie.' },
+        { label: '03', title: 'We geven u het plan', body: 'U krijgt een geprioriteerde roadmap met heldere bouwen-of-kopen-beslissingen. Het is van u om mee aan de slag te gaan, met ons of zonder ons.' },
+        { label: '04', title: 'We blijven aan uw zijde', body: 'Wanneer u klaar bent om te bouwen, zijn we er nog. Dezelfde mensen die het plan schreven kunnen het bouwen, zodat er niets verloren gaat in de vertaling.' },
+      ],
+    },
+    differentiators: {
+      title: 'Waarom een bouwer, geen consultancy',
+      items: [
+        { title: 'Wij bouwen, dus het plan is bouwbaar', body: 'Onze roadmaps komen van mensen die echte systemen lanceren. Niets in uw plan is een slide die het contact met de realiteit niet overleeft.' },
+        { title: 'We hebben geen tool om u te verkopen', body: 'Onze bouwen-of-kopen-beslissingen zijn eerlijk omdat wij er niet bij winnen als u te veel bouwt. Als een kant-en-klare tool het juiste antwoord is, zeggen we dat.' },
+        { title: 'Bewijs voor uitgave', body: 'We tonen u liever een werkende pilot dan een uitkomst te beloven. U legt budget vast nadat u het hebt zien werken, niet ervoor.' },
+        { title: 'Helderheid boven jargon', body: 'U begrijpt elke aanbeveling en de reden erachter, in heldere taal. Geen black boxes, geen buzzwords.' },
+      ],
+    },
+    audience: {
+      title: 'Voor wie dit is',
+      body: 'Dit is het juiste startpunt wanneer de bestemming nog niet duidelijk is en u een plan wilt voordat u inzet.',
+      fits: [
+        'Leiders die weten dat AI ertoe doet maar niet zeker weten waar te beginnen',
+        'Teams die teleurgesteld zijn door de AI-hype en een nuchtere second opinion willen',
+        'Bedrijven die een echt plan en eerlijke ROI willen voordat ze investeren',
+        'Oprichters die liever klein de waarde bewijzen dan te gokken op een grote build',
+      ],
+      notFor: [
+        'Mensen die al precies weten wat te bouwen (u wilt App Design of AIOS, en daar wijzen we u naartoe)',
+        'Wie AI najaagt als buzzword in plaats van een echt resultaat',
+      ],
+    },
+    faq: [
+      { q: 'Hoe lang duurt dit?', a: 'De meeste samenwerkingen lopen enkele weken van eerste gesprek tot roadmap, met vroege pilots binnen dat venster. We bakenen het af tijdens het strategiegesprek zodra we uw situatie begrijpen, en we rekken het niet kunstmatig.' },
+      { q: 'Bezitten we wat jullie maken?', a: 'Ja. De audit, de roadmap, de pilots, alles is van u. U kunt ermee aan de slag met ons, met een ander team, of in eigen huis. Er zit geen lock-in in het plan ingebouwd.' },
+      { q: 'Hoe gaan jullie om met onze data en beveiliging?', a: 'We behandelen uw data als de uwe. We raadplegen alleen wat we nodig hebben om het werk te doen, we zijn duidelijk over waar alles draait, en als privacy cruciaal is ontwerpen we eromheen om dingen op uw eigen infrastructuur te houden.' },
+      { q: 'We hebben al enkele AI-tools draaien. Is dit dan nog de moeite?', a: 'Vaak des te meer. Een deel van de audit is beoordelen wat al werkt, wat stilletjes faalt, en wat te houden, te schrappen of te vervangen, zodat u stopt met betalen voor dingen die niet beklijven.' },
+      { q: 'Wat als het eerlijke antwoord is dat AI ons niet veel helpt?', a: 'Dan zeggen we het u, rechtuit. Weten waar AI niet past, bespaart u meer dan de roadmap van nog een leverancier ooit zal doen. Dat is een echt resultaat, geen mislukte samenwerking.' },
+      { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen waar u staat en geven u een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.' },
+    ],
+    finalCta: {
+      title: 'Krijg een plan voordat u uitgeeft.',
+      body: 'Breng ons de druk en de onzekerheid. Wij komen terug met helderheid over waar AI past, wat het waard is, en wat eerst te doen. Geen giswerk, geen hype.',
+      button: 'Boek een strategiegesprek',
+      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',
+    },
+  },
+}
+
+/** Resolve the service copy for the active language. */
+export const getServiceContent = (lang: Lang): Record<ServiceSlug, ServiceContent> =>
+  lang === 'nl' ? SERVICE_CONTENT_NL : SERVICE_CONTENT_EN

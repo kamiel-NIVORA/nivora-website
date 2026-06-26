@@ -1,38 +1,80 @@
-import { COMPANY_PRIMARY, PRODUCTS, SERVICES, type NavItem } from '@/lib/navigation'
+import {
+  getCompanyPrimary,
+  getProducts,
+  getServices,
+  type NavItem,
+} from '@/lib/navigation'
+import { useLang, type Lang } from '@/i18n'
 
 const toLinks = (items: NavItem[]) => items.map((i) => ({ label: i.title, href: i.href }))
 
-const COLUMNS = [
-  { title: 'Products', links: toLinks(PRODUCTS) },
-  { title: 'Services', links: toLinks(SERVICES) },
-  {
-    title: 'Company',
-    links: [
-      ...toLinks(COMPANY_PRIMARY),
-      { label: 'Blog', href: '/blog' },
-      { label: 'Brand Kit', href: '/media' },
-      { label: 'Help Center', href: '/help' },
-    ],
+const COPY = {
+  en: {
+    products: 'Products',
+    services: 'Services',
+    company: 'Company',
+    legal: 'Legal',
+    contact: 'Contact',
+    blog: 'Blog',
+    brandKit: 'Brand Kit',
+    helpCenter: 'Help Center',
+    privacy: 'Privacy Policy',
+    terms: 'Terms',
+    location: 'Brugge, Belgium',
+    rights: '© 2026 Nivora. All rights reserved.',
+    comingSoon: 'Coming soon',
   },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms', href: '/terms' },
-    ],
+  nl: {
+    products: 'Producten',
+    services: 'Diensten',
+    company: 'Bedrijf',
+    legal: 'Juridisch',
+    contact: 'Contact',
+    blog: 'Blog',
+    brandKit: 'Brand Kit',
+    helpCenter: 'Helpcentrum',
+    privacy: 'Privacybeleid',
+    terms: 'Voorwaarden',
+    location: 'Brugge, België',
+    rights: '© 2026 Nivora. Alle rechten voorbehouden.',
+    comingSoon: 'Binnenkort',
   },
-  {
-    title: 'Contact',
-    links: [
-      { label: 'kamiel@nivoraworks.com', href: 'mailto:kamiel@nivoraworks.com' },
-      { label: '+32 489 00 77 37', href: 'tel:+32489007737' },
-      {
-        label: 'Brugge, Belgium',
-        href: 'https://www.google.com/maps/search/?api=1&query=Julius%20en%20Maurits%20Sabbestraat%2015%2C%208000%20Brugge',
-      },
-    ],
-  },
-]
+} as const
+
+function getColumns(lang: Lang) {
+  const t = COPY[lang]
+  return [
+    { title: t.products, links: toLinks(getProducts(lang)) },
+    { title: t.services, links: toLinks(getServices(lang)) },
+    {
+      title: t.company,
+      links: [
+        ...toLinks(getCompanyPrimary(lang)),
+        { label: t.blog, href: '/blog' },
+        { label: t.brandKit, href: '/media' },
+        { label: t.helpCenter, href: '/help' },
+      ],
+    },
+    {
+      title: t.legal,
+      links: [
+        { label: t.privacy, href: '/privacy' },
+        { label: t.terms, href: '/terms' },
+      ],
+    },
+    {
+      title: t.contact,
+      links: [
+        { label: 'kamiel@nivoraworks.com', href: 'mailto:kamiel@nivoraworks.com' },
+        { label: '+32 489 00 77 37', href: 'tel:+32489007737' },
+        {
+          label: t.location,
+          href: 'https://www.google.com/maps/search/?api=1&query=Julius%20en%20Maurits%20Sabbestraat%2015%2C%208000%20Brugge',
+        },
+      ],
+    },
+  ]
+}
 
 const SOCIALS = [
   {
@@ -58,6 +100,10 @@ const SOCIALS = [
 ]
 
 export function Footer() {
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const columns = getColumns(lang)
+
   return (
     <footer className="relative overflow-hidden border-t border-line">
       {/* Warm glow behind the wordmark */}
@@ -70,7 +116,7 @@ export function Footer() {
           <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-28 max-w-full shrink-0 opacity-75" />
 
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 md:w-auto md:flex-1 md:max-w-[900px] md:pl-12">
-            {COLUMNS.map((col) => (
+            {columns.map((col) => (
               <div key={col.title}>
                 <p className="text-sm text-faint">{col.title}</p>
                 <ul className="mt-4 flex flex-col gap-3">
@@ -99,7 +145,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="relative flex flex-col items-center justify-between gap-4 border-t border-line py-6 sm:flex-row">
-          <p className="text-sm text-faint">© 2026 Nivora. All rights reserved.</p>
+          <p className="text-sm text-faint">{t.rights}</p>
           <div className="flex items-center gap-4">
             {SOCIALS.map((s) => {
               const icon = (
@@ -121,8 +167,8 @@ export function Footer() {
               ) : (
                 <span
                   key={s.label}
-                  aria-label={`${s.label}, coming soon`}
-                  title="Coming soon"
+                  aria-label={`${s.label}, ${t.comingSoon.toLowerCase()}`}
+                  title={t.comingSoon}
                   className="cursor-default text-ink-soft/20"
                 >
                   {icon}

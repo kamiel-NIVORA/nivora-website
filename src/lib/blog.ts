@@ -11,7 +11,8 @@
  * reads to published posts only.
  */
 import { useEffect, useState } from 'react'
-import { POSTS, type Post, type PostBlock } from '@/data/posts'
+import { getPosts, type Post, type PostBlock } from '@/data/posts'
+import { useLang } from '@/i18n'
 
 const SUPABASE_URL =
   (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? 'https://agpjxjujzjzasgizpphz.supabase.co'
@@ -103,7 +104,11 @@ export async function fetchPublishedPosts(): Promise<Post[]> {
 let cache: Post[] | null = null
 
 export function usePosts(): { posts: Post[]; loaded: boolean } {
-  const [posts, setPosts] = useState<Post[]>(cache ?? POSTS)
+  const { lang } = useLang()
+  // Live posts from Supabase (language-neutral DB content). Until they settle we
+  // render the bundled set in the active language, so a language switch is
+  // reflected instantly on the seeded posts.
+  const [live, setLive] = useState<Post[] | null>(cache)
   const [loaded, setLoaded] = useState(cache !== null)
   useEffect(() => {
     if (cache !== null) return
@@ -112,7 +117,7 @@ export function usePosts(): { posts: Post[]; loaded: boolean } {
       .then((p) => {
         if (alive && p.length) {
           cache = p
-          setPosts(p)
+          setLive(p)
         }
       })
       .catch(() => {})
@@ -123,7 +128,7 @@ export function usePosts(): { posts: Post[]; loaded: boolean } {
       alive = false
     }
   }, [])
-  return { posts, loaded }
+  return { posts: live ?? getPosts(lang), loaded }
 }
 
 /** A single post by slug, plus whether the live list has settled. */

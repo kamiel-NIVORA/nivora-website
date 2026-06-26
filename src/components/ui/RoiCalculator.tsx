@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useInView } from 'framer-motion'
 import { useCountUp } from '@/lib/useCountUp'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/i18n'
 
 /**
  * Universal ROI calculator — "money on the table".
@@ -19,8 +20,61 @@ const WORKDAYS = 220 // working days a year, a cautious ~44 weeks at 5 days
 const nf = (opts?: Intl.NumberFormatOptions) => new Intl.NumberFormat('nl-BE', opts)
 const eur = nf({ style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
 
+const COPY = {
+  en: {
+    inputs: {
+      people: {
+        label: 'People doing this repetitive work',
+        render: (v: number) => `${nf().format(v)} ${v === 1 ? 'person' : 'people'}`,
+      },
+      hoursPerDay: {
+        label: 'Hours each loses to it, per day',
+        render: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} h / day`,
+        help: 'The manual, repeatable part of the day, the work a system could do instead.',
+      },
+      hourlyRate: {
+        label: 'What an hour of their time costs you',
+        render: (v: number) => `${eur.format(v)} / h`,
+        help: 'A cautious default, below the Belgian loaded average. Use your own figure.',
+      },
+    },
+    onTheTable: 'on the table, every year',
+    blurb:
+      'What this repetitive work costs you across a working year. The ceiling of what automating it could hand back to your team.',
+    stats: { month: 'Per month', hours: 'Hours a year', weeks: 'Full-time weeks' },
+    footer:
+      'A rough estimate from your own numbers, based on 220 working days a year, not a promise. It shows the full cost of that time, so you can see what is at stake. Real savings depend on your process, which we scope honestly before any build.',
+  },
+  nl: {
+    inputs: {
+      people: {
+        label: 'Mensen die dit repetitieve werk doen',
+        render: (v: number) => `${nf().format(v)} ${v === 1 ? 'persoon' : 'mensen'}`,
+      },
+      hoursPerDay: {
+        label: 'Uren die elke persoon er per dag aan verliest',
+        render: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} u / dag`,
+        help: 'Het manuele, herhaalbare deel van de dag, het werk dat een systeem in plaats daarvan zou kunnen doen.',
+      },
+      hourlyRate: {
+        label: 'Wat een uur van hun tijd u kost',
+        render: (v: number) => `${eur.format(v)} / u`,
+        help: 'Een voorzichtige standaard, onder het Belgische gemiddelde inclusief loonlasten. Gebruik gerust uw eigen cijfer.',
+      },
+    },
+    onTheTable: 'op tafel, elk jaar',
+    blurb:
+      'Wat dit repetitieve werk u kost over een werkjaar. Het plafond van wat automatisering aan uw team zou kunnen teruggeven.',
+    stats: { month: 'Per maand', hours: 'Uren per jaar', weeks: 'Voltijdse weken' },
+    footer:
+      'Een ruwe schatting op basis van uw eigen cijfers, uitgaande van 220 werkdagen per jaar, geen belofte. Het toont de volledige kost van die tijd, zodat u ziet wat er op het spel staat. Echte besparingen hangen af van uw proces, dat we eerlijk afbakenen voordat er gebouwd wordt.',
+  },
+} as const
+
+type InputKey = 'people' | 'hoursPerDay' | 'hourlyRate'
+
 type Input = {
-  key: 'people' | 'hoursPerDay' | 'hourlyRate'
+  key: InputKey
   label: string
   min: number
   max: number
@@ -30,38 +84,6 @@ type Input = {
   render: (v: number) => string
   help?: string
 }
-
-const INPUTS: Input[] = [
-  {
-    key: 'people',
-    label: 'People doing this repetitive work',
-    min: 1,
-    max: 50,
-    default: 5,
-    step: 1,
-    render: (v) => `${nf().format(v)} ${v === 1 ? 'person' : 'people'}`,
-  },
-  {
-    key: 'hoursPerDay',
-    label: 'Hours each loses to it, per day',
-    min: 0.5,
-    max: 8,
-    default: 2,
-    step: 0.5,
-    render: (v) => `${nf({ maximumFractionDigits: 1 }).format(v)} h / day`,
-    help: 'The manual, repeatable part of the day, the work a system could do instead.',
-  },
-  {
-    key: 'hourlyRate',
-    label: 'What an hour of their time costs you',
-    min: 15,
-    max: 150,
-    default: 40,
-    step: 5,
-    render: (v) => `${eur.format(v)} / h`,
-    help: 'A cautious default, below the Belgian loaded average. Use your own figure.',
-  },
-]
 
 function Slider({
   input,
@@ -104,6 +126,41 @@ function Slider({
 }
 
 export function RoiCalculator() {
+  const { lang } = useLang()
+  const t = COPY[lang]
+
+  const INPUTS: Input[] = [
+    {
+      key: 'people',
+      label: t.inputs.people.label,
+      min: 1,
+      max: 50,
+      default: 5,
+      step: 1,
+      render: t.inputs.people.render,
+    },
+    {
+      key: 'hoursPerDay',
+      label: t.inputs.hoursPerDay.label,
+      min: 0.5,
+      max: 8,
+      default: 2,
+      step: 0.5,
+      render: t.inputs.hoursPerDay.render,
+      help: t.inputs.hoursPerDay.help,
+    },
+    {
+      key: 'hourlyRate',
+      label: t.inputs.hourlyRate.label,
+      min: 15,
+      max: 150,
+      default: 40,
+      step: 5,
+      render: t.inputs.hourlyRate.render,
+      help: t.inputs.hourlyRate.help,
+    },
+  ]
+
   const [values, setValues] = useState<Record<string, number>>(() =>
     Object.fromEntries(INPUTS.map((i) => [i.key, i.default])),
   )
@@ -116,9 +173,9 @@ export function RoiCalculator() {
   const animated = useCountUp(inView ? annualCost : 0)
 
   const stats = [
-    { label: 'Per month', value: eur.format(Math.round(annualCost / 12)) },
-    { label: 'Hours a year', value: nf({ maximumFractionDigits: 0 }).format(Math.round(hoursPerYear)) },
-    { label: 'Full-time weeks', value: nf({ maximumFractionDigits: 1 }).format(hoursPerYear / 40) },
+    { label: t.stats.month, value: eur.format(Math.round(annualCost / 12)) },
+    { label: t.stats.hours, value: nf({ maximumFractionDigits: 0 }).format(Math.round(hoursPerYear)) },
+    { label: t.stats.weeks, value: nf({ maximumFractionDigits: 1 }).format(hoursPerYear / 40) },
   ]
 
   return (
@@ -137,10 +194,9 @@ export function RoiCalculator() {
           >
             {eur.format(Math.round(animated))}
           </div>
-          <div className="label-mono mt-3 text-muted">on the table, every year</div>
+          <div className="label-mono mt-3 text-muted">{t.onTheTable}</div>
           <p className="mt-5 max-w-sm text-[13.5px] leading-relaxed text-faint">
-            What this repetitive work costs you across a working year. The ceiling of what automating it
-            could hand back to your team.
+            {t.blurb}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-x-9 gap-y-5">
@@ -167,9 +223,7 @@ export function RoiCalculator() {
       </div>
 
       <p className="relative mt-9 border-t border-line pt-6 text-[12.5px] leading-relaxed text-dim">
-        A rough estimate from your own numbers, based on 220 working days a year, not a promise. It shows the
-        full cost of that time, so you can see what is at stake. Real savings depend on your process, which we
-        scope honestly before any build.
+        {t.footer}
       </p>
     </div>
   )

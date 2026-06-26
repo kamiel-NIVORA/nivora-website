@@ -1,11 +1,33 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { Check, X, ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
+import { useLang } from '@/i18n'
+
+const COPY = {
+  en: {
+    titleOk: "You're confirmed",
+    titleExpired: 'Link expired',
+    bodyOk: 'Thanks for confirming. You will hear from us when we have something worth sharing about what we are building.',
+    bodyExpired: 'That confirmation link is no longer valid. Try signing up again and we will send a fresh one.',
+    backHome: 'Back to home',
+    signUpAgain: 'Sign up again',
+  },
+  nl: {
+    titleOk: 'U bent bevestigd',
+    titleExpired: 'Link verlopen',
+    bodyOk: 'Bedankt voor uw bevestiging. U hoort van ons zodra we iets hebben dat het delen waard is over wat we bouwen.',
+    bodyExpired: 'Die bevestigingslink is niet meer geldig. Schrijf u opnieuw in, dan sturen we een nieuwe.',
+    backHome: 'Terug naar home',
+    signUpAgain: 'Schrijf u opnieuw in',
+  },
+} as const
 
 /** Landing page the backend redirects to after a double opt-in confirm click. */
 export function NewsletterConfirmed() {
   const [params] = useSearchParams()
   const ok = (params.get('status') ?? 'ok') !== 'invalid'
+  const { lang } = useLang()
+  const t = COPY[lang]
 
   return (
     <main>
@@ -25,19 +47,17 @@ export function NewsletterConfirmed() {
             {ok ? <Check className="h-6 w-6" strokeWidth={2.2} /> : <X className="h-6 w-6" strokeWidth={2} />}
           </span>
           <h1 className="mt-7 font-serif text-[30px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[40px]">
-            {ok ? "You're confirmed" : 'Link expired'}
+            {ok ? t.titleOk : t.titleExpired}
           </h1>
           <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
-            {ok
-              ? 'Thanks for confirming. You will hear from us when we have something worth sharing about what we are building.'
-              : 'That confirmation link is no longer valid. Try signing up again and we will send a fresh one.'}
+            {ok ? t.bodyOk : t.bodyExpired}
           </p>
           <Link
             to={ok ? '/' : '/waitlist'}
             className="mt-8 inline-flex items-center gap-1.5 text-[13px] text-faint transition-colors hover:text-ink"
           >
             <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.8} />
-            {ok ? 'Back to home' : 'Sign up again'}
+            {ok ? t.backHome : t.signUpAgain}
           </Link>
         </Reveal>
       </section>

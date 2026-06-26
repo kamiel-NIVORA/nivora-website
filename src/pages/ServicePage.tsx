@@ -13,12 +13,14 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
+import { ServiceIntro } from '@/components/ui/ServiceIntro'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
-import { SERVICE_CONTENT } from '@/data/services'
-import { SERVICE_ROI } from '@/data/serviceRoi'
+import { getServiceContent } from '@/data/services'
+import { getServiceRoi } from '@/data/serviceRoi'
+import { useLang, type Lang } from '@/i18n'
 import {
   SERVICE_META,
   SERVICE_ORDER,
@@ -29,16 +31,205 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+/** Intro keywords: name the pain, then the resolution. Short, on the nose. */
+const INTRO_WORDS: Record<Lang, Record<ServiceSlug, string[]>> = {
+  en: {
+    'app-design': ['Your idea.', 'Built properly.', 'Owned by you.'],
+    'local-ai': ['Your hardware.', 'No cloud.', 'Owned by you.'],
+    aios: ['Too many tools.', 'One system.', 'Owned by you.'],
+    'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
+  },
+  nl: {
+    'app-design': ['Uw idee.', 'Goed gebouwd.', 'In uw bezit.'],
+    'local-ai': ['Uw hardware.', 'Geen cloud.', 'In uw bezit.'],
+    aios: ['Te veel tools.', 'Eén systeem.', 'In uw bezit.'],
+    'ai-consulting': ['Geen hype meer.', 'Eerst bewijs.', 'Dan een plan.'],
+  },
+}
+
 /** App types shown in the vertical marquee on the App Design statement section. */
-const APP_TYPES = [
-  'Consumer Apps',
-  'Business Tools',
-  'Internal Software',
-  'Brand Products',
-  'Complex Builds',
-  'Mobile Apps',
-  'Web Platforms',
-]
+const APP_TYPES: Record<Lang, string[]> = {
+  en: [
+    'Consumer Apps',
+    'Business Tools',
+    'Internal Software',
+    'Brand Products',
+    'Complex Builds',
+    'Mobile Apps',
+    'Web Platforms',
+  ],
+  nl: [
+    'Consumenten-apps',
+    'Zakelijke tools',
+    'Interne software',
+    'Merkproducten',
+    'Complexe builds',
+    'Mobiele apps',
+    'Webplatformen',
+  ],
+}
+
+/** Static UI strings on the service page, by language. */
+const UI = {
+  en: {
+    walkAway: 'What you walk away with',
+    bookCall: 'Book a strategy call',
+    brandObjectTitle: 'Yours to keep. Private to the core.',
+    brandObjectBody:
+      'Everything runs inside your own infrastructure: the models, the data, and every answer. Nothing is rented, nothing is sent away, and nothing ever leaves the building.',
+    brandObjectAlt: 'A Nivora folder labelled Private, Yours, Secure, Local, held in hand.',
+    privacyHeadline:
+      'Everything your team asks. Everything they receive. None of it leaves this building.',
+    privacyFacts: [
+      {
+        label: 'No cloud API',
+        body: 'Every prompt runs inside your infrastructure. Nothing touches OpenAI, Azure, or any third-party model.',
+      },
+      {
+        label: 'On your hardware',
+        body: 'The models run on servers you control, not infrastructure rented from someone else.',
+      },
+      {
+        label: 'Full audit trail',
+        body: 'A complete record of who asked what, when, and what was answered. Compliance-ready from day one.',
+      },
+      {
+        label: 'Owned outright',
+        body: 'The system, the models, the configuration. Yours to keep, move, or hand to another team.',
+      },
+    ],
+    showcaseHeadline: 'Every screen designed with intention. Every icon a statement.',
+    showcaseBoardLabel: 'Style Board',
+    showcaseCardTitle: 'Crafted, not assembled.',
+    showcaseCardBody:
+      'From the icon to the last interaction, we design the whole thing. The apps people open every day have a visual language no template ever gave them.',
+    comparisonHeadline:
+      'The difference is not just where the data goes. It is who controls every part of the chain.',
+    cloudTitle: 'Cloud AI',
+    cloudSub: 'ChatGPT, Copilot, Gemini and others',
+    localTitle: 'Local AI by Nivora',
+    localSub: 'Installed on infrastructure you control',
+    comparisonRows: [
+      {
+        label: 'Where your data goes',
+        cloud: 'Third-party servers. Once sent, out of your control.',
+        local: 'Your servers or hardware we manage. Never leaves your perimeter.',
+      },
+      {
+        label: 'Compliance proof',
+        cloud: 'A promise in a terms document. Hard to verify under scrutiny.',
+        local: 'Architectural: the data cannot leave, plus a full audit trail.',
+      },
+      {
+        label: 'Model control',
+        cloud: 'The provider decides what changes and when, without asking you.',
+        local: 'You control every update. New models deployed on your terms.',
+      },
+      {
+        label: 'Pricing',
+        cloud: 'Per-seat, per-month. Grows every time your team does.',
+        local: 'One deployment. No recurring fee per user, ever.',
+      },
+      {
+        label: 'Outage exposure',
+        cloud: 'If their API goes down, your team waits.',
+        local: 'Runs on your hardware. Independent of any third-party uptime.',
+      },
+      {
+        label: 'How your data is used',
+        cloud: 'Terms may allow use for training or product improvement.',
+        local: 'Used only by you. For nothing and nobody else.',
+      },
+    ],
+    strongFit: 'A strong fit if',
+    probablyNot: 'Probably not if',
+    goodToKnow: 'Good to know',
+    stillQuestion: 'Still have a question?',
+    reachPerson: 'reach a person',
+    orVisit: 'or visit the',
+    helpCenter: 'Help Center',
+    exploreOther: 'Explore other services',
+  },
+  nl: {
+    walkAway: 'Wat u overhoudt',
+    bookCall: 'Boek een strategiegesprek',
+    brandObjectTitle: 'Helemaal van u. Privé tot in de kern.',
+    brandObjectBody:
+      'Alles draait binnen uw eigen infrastructuur: de modellen, de data, en elk antwoord. Niets wordt gehuurd, niets wordt weggestuurd, en niets verlaat ooit het gebouw.',
+    brandObjectAlt: 'Een Nivora-map met het label Private, Yours, Secure, Local, in de hand gehouden.',
+    privacyHeadline:
+      'Alles wat uw team vraagt. Alles wat ze ontvangen. Niets ervan verlaat dit gebouw.',
+    privacyFacts: [
+      {
+        label: 'Geen cloud-API',
+        body: 'Elke prompt draait binnen uw infrastructuur. Niets raakt OpenAI, Azure of welk extern model dan ook.',
+      },
+      {
+        label: 'Op uw hardware',
+        body: 'De modellen draaien op servers die u beheert, niet op infrastructuur die u van iemand anders huurt.',
+      },
+      {
+        label: 'Volledige audit trail',
+        body: 'Een volledig logboek van wie wat wanneer vroeg, en wat er geantwoord werd. Klaar voor compliance vanaf dag één.',
+      },
+      {
+        label: 'Volledig in eigen bezit',
+        body: 'Het systeem, de modellen, de configuratie. Helemaal van u: om te houden, te verhuizen, of door te geven aan een ander team.',
+      },
+    ],
+    showcaseHeadline: 'Elk scherm ontworpen met intentie. Elk icoon een statement.',
+    showcaseBoardLabel: 'Style Board',
+    showcaseCardTitle: 'Vakwerk, geen montage.',
+    showcaseCardBody:
+      'Van het icoon tot de laatste interactie, we ontwerpen het geheel. De apps die mensen elke dag openen hebben een visuele taal die geen enkele template ze ooit gaf.',
+    comparisonHeadline:
+      'Het verschil is niet alleen waar de data heen gaat. Het is wie elk deel van de keten beheert.',
+    cloudTitle: 'Cloud-AI',
+    cloudSub: 'ChatGPT, Copilot, Gemini en anderen',
+    localTitle: 'Local AI van Nivora',
+    localSub: 'Geïnstalleerd op infrastructuur die u beheert',
+    comparisonRows: [
+      {
+        label: 'Waar uw data heen gaat',
+        cloud: 'Servers van derden. Eenmaal verstuurd, buiten uw controle.',
+        local: 'Uw servers of hardware die wij beheren. Verlaat nooit uw perimeter.',
+      },
+      {
+        label: 'Bewijs van compliance',
+        cloud: 'Een belofte in een voorwaardendocument. Moeilijk hard te maken bij een grondige controle.',
+        local: 'Architecturaal: de data kan niet weg, plus een volledige audit trail.',
+      },
+      {
+        label: 'Controle over het model',
+        cloud: 'De leverancier beslist wat er verandert en wanneer, zonder het u te vragen.',
+        local: 'U beheert elke update. Nieuwe modellen uitgerold op uw voorwaarden.',
+      },
+      {
+        label: 'Prijs',
+        cloud: 'Per gebruiker, per maand. Groeit telkens uw team groeit.',
+        local: 'Eén uitrol. Nooit een terugkerende kost per gebruiker.',
+      },
+      {
+        label: 'Blootstelling aan uitval',
+        cloud: 'Als hun API uitvalt, zit uw team te wachten.',
+        local: 'Draait op uw hardware. Onafhankelijk van de uptime van derden.',
+      },
+      {
+        label: 'Hoe uw data gebruikt wordt',
+        cloud: 'De voorwaarden kunnen gebruik voor training of productverbetering toelaten.',
+        local: 'Alleen door u gebruikt. Voor niets en niemand anders.',
+      },
+    ],
+    strongFit: 'Een sterke match als',
+    probablyNot: 'Waarschijnlijk niet als',
+    goodToKnow: 'Goed om te weten',
+    stillQuestion: 'Nog een vraag?',
+    reachPerson: 'spreek een mens',
+    orVisit: 'of bezoek het',
+    helpCenter: 'Helpcentrum',
+    exploreOther: 'Ontdek andere diensten',
+  },
+} as const
 
 /** Image shown per capability index on the App Design accordion. */
 const APP_CAPABILITY_IMAGES = [
@@ -63,8 +254,10 @@ function phaseWord(title: string): string {
    ────────────────────────────────────────────────────────────────────────── */
 export function ServicePage() {
   const { slug } = useParams<{ slug: string }>()
-  const isValid = !!slug && slug in SERVICE_CONTENT
-  const content = isValid ? SERVICE_CONTENT[slug as ServiceSlug] : null
+  const { lang } = useLang()
+  const dict = getServiceContent(lang)
+  const isValid = !!slug && slug in dict
+  const content = isValid ? dict[slug as ServiceSlug] : null
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
 
   useEffect(() => {
@@ -87,27 +280,29 @@ export function ServicePage() {
   if (!content || !meta) return <Navigate to="/" replace />
 
   return (
-    <main
-      className="relative w-full overflow-x-clip bg-bg"
-      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
-    >
-      <Hero content={content} meta={meta} />
-      {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
-      <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
-      <Problem content={content} />
-      <Solution content={content} meta={meta} />
-      {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
-      {meta.objectImage && <BrandObject meta={meta} />}
-      {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
-      {meta.slug === 'app-design' && <AppShowcase />}
-      {meta.slug === 'local-ai' && <ComparisonBand />}
-      <WhyUs content={content} meta={meta} />
-      <Process content={content} meta={meta} />
-      <RoiBand meta={meta} />
-      <FitFaq content={content} />
-      <FinalCta content={content} meta={meta} />
-      <OtherServices current={meta.slug} />
-    </main>
+    <ServiceIntro words={INTRO_WORDS[lang][meta.slug]} accent={meta.accent}>
+      <main
+        className="relative w-full overflow-x-clip bg-bg"
+        style={{ ['--accent' as string]: meta.accent } as CSSProperties}
+      >
+        <Hero content={content} meta={meta} />
+        {meta.slug === 'app-design' ? <AppStatement content={content} /> : <Statement content={content} />}
+        <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+        <Problem content={content} />
+        <Solution content={content} meta={meta} />
+        {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
+        {meta.objectImage && <BrandObject meta={meta} />}
+        {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
+        {meta.slug === 'app-design' && <AppShowcase />}
+        {meta.slug === 'local-ai' && <ComparisonBand />}
+        <WhyUs content={content} meta={meta} />
+        <Process content={content} meta={meta} />
+        <RoiBand meta={meta} />
+        <FitFaq content={content} />
+        <FinalCta content={content} meta={meta} />
+        <OtherServices current={meta.slug} />
+      </main>
+    </ServiceIntro>
   )
 }
 
@@ -180,6 +375,8 @@ function AnimFrame({ src, className }: { src: string; className?: string }) {
    scroll-drift. Used where a service has a hero brand asset, e.g. Local AI's
    "Private / Yours / Secure / Local" folder. */
 function BrandObject({ meta }: { meta: ServiceMeta }) {
+  const { lang } = useLang()
+  const t = UI[lang]
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['5%', '-5%'])
@@ -193,13 +390,12 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
         <div className="order-2 lg:order-1">
           <Reveal>
             <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              Yours to keep. Private to the core.
+              {t.brandObjectTitle}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
-              Everything runs inside your own infrastructure: the models, the data, and every
-              answer. Nothing is rented, nothing is sent away, and nothing ever leaves the building.
+              {t.brandObjectBody}
             </p>
           </Reveal>
         </div>
@@ -214,7 +410,7 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
           <Reveal y={32}>
             <motion.img
               src={meta.objectImage}
-              alt="A Nivora folder labelled Private, Yours, Secure, Local, held in hand."
+              alt={t.brandObjectAlt}
               loading="lazy"
               style={{ y }}
               className="relative mx-auto block w-full max-w-[440px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)]"
@@ -230,24 +426,9 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
 
 /** Four architecture-level privacy facts. Only shown for Local AI. */
 function PrivacyBand({ meta }: { meta: ServiceMeta }) {
-  const facts = [
-    {
-      label: 'No cloud API',
-      body: 'Every prompt runs inside your infrastructure. Nothing touches OpenAI, Azure, or any third-party model.',
-    },
-    {
-      label: 'On your hardware',
-      body: 'The models run on servers you control, not infrastructure rented from someone else.',
-    },
-    {
-      label: 'Full audit trail',
-      body: 'A complete record of who asked what, when, and what was answered. Compliance-ready from day one.',
-    },
-    {
-      label: 'Owned outright',
-      body: 'The system, the models, the configuration. Yours to keep, move, or hand to another team.',
-    },
-  ]
+  const { lang } = useLang()
+  const t = UI[lang]
+  const facts = t.privacyFacts
 
   return (
     <section className="relative w-full overflow-hidden border-y border-line py-20 lg:py-28">
@@ -265,7 +446,7 @@ function PrivacyBand({ meta }: { meta: ServiceMeta }) {
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <p className="mt-5 font-serif text-[26px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.24]">
-              Everything your team asks. Everything they receive. None of it leaves this building.
+              {t.privacyHeadline}
             </p>
           </Reveal>
         </div>
@@ -427,6 +608,8 @@ function Problem({ content }: { content: ServiceContent }) {
 /* Solution · sticky media + outcomes checklist (the "sold" moment) ──────────── */
 
 function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+  const { lang } = useLang()
+  const t = UI[lang]
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
       <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
@@ -446,7 +629,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
             <p className="text-[15.5px] leading-relaxed text-faint lg:text-base">{content.solution.body}</p>
           </Reveal>
           <div className="mt-9 rounded-[22px] border border-line bg-white/[0.02] p-7 lg:p-8">
-            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">What you walk away with</span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">{t.walkAway}</span>
             <ul className="mt-6 flex flex-col gap-4.5">
               {content.solution.outcomes.map((o, i) => (
                 <Reveal as="li" key={o} delay={i * 0.07} className="flex items-start gap-3.5">
@@ -457,7 +640,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
             </ul>
           </div>
           <Reveal delay={0.12}>
-            <BookCallButton className="mt-8 h-11 px-6 text-[14px]">Book a strategy call</BookCallButton>
+            <BookCallButton className="mt-8 h-11 px-6 text-[14px]">{t.bookCall}</BookCallButton>
           </Reveal>
         </div>
       </div>
@@ -499,6 +682,7 @@ function Capabilities({ content }: { content: ServiceContent }) {
 /* App Design: vertical marquee statement — replaces the generic chips version ─── */
 
 function AppStatement({ content }: { content: ServiceContent }) {
+  const { lang } = useLang()
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
       <div className="grid items-center gap-16 lg:grid-cols-[1fr_220px]">
@@ -534,7 +718,7 @@ function AppStatement({ content }: { content: ServiceContent }) {
               aria-hidden={copy === 1}
               style={{ animation: 'marquee-vertical 16s linear infinite' }}
             >
-              {APP_TYPES.map((type) => (
+              {APP_TYPES[lang].map((type) => (
                 <div
                   key={type}
                   className="border-b border-line/50 py-2.5 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink/30"
@@ -639,11 +823,13 @@ function AppCapabilities({ content }: { content: ServiceContent }) {
 /* App Design showcase · editorial two-column image grid ─────────────────────── */
 
 function AppShowcase() {
+  const { lang } = useLang()
+  const t = UI[lang]
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
       <Reveal>
         <p className="mx-auto mb-10 max-w-2xl text-center font-serif text-[24px] leading-[1.28] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
-          Every screen designed with intention. Every icon a statement.
+          {t.showcaseHeadline}
         </p>
       </Reveal>
 
@@ -660,7 +846,7 @@ function AppShowcase() {
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070709]/70 to-transparent" />
             <div className="absolute bottom-5 left-5">
-              <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/40">Style Board</span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/40">{t.showcaseBoardLabel}</span>
             </div>
           </div>
         </Reveal>
@@ -681,11 +867,10 @@ function AppShowcase() {
           <Reveal delay={0.14}>
             <div className="rounded-[20px] border border-line bg-surface p-6">
               <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
-                Crafted, not assembled.
+                {t.showcaseCardTitle}
               </p>
               <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
-                From the icon to the last interaction, we design the whole thing.
-                The apps people open every day have a visual language no template ever gave them.
+                {t.showcaseCardBody}
               </p>
             </div>
           </Reveal>
@@ -697,46 +882,16 @@ function AppShowcase() {
 
 /* Cloud vs Local comparison · only for local-ai ─────────────────────────────── */
 
-const COMPARISON_ROWS = [
-  {
-    label: 'Where your data goes',
-    cloud: 'Third-party servers. Once sent, out of your control.',
-    local: 'Your servers or hardware we manage. Never leaves your perimeter.',
-  },
-  {
-    label: 'Compliance proof',
-    cloud: 'A promise in a terms document. Hard to verify under scrutiny.',
-    local: 'Architectural: the data cannot leave, plus a full audit trail.',
-  },
-  {
-    label: 'Model control',
-    cloud: 'The provider decides what changes and when, without asking you.',
-    local: 'You control every update. New models deployed on your terms.',
-  },
-  {
-    label: 'Pricing',
-    cloud: 'Per-seat, per-month. Grows every time your team does.',
-    local: 'One deployment. No recurring fee per user, ever.',
-  },
-  {
-    label: 'Outage exposure',
-    cloud: 'If their API goes down, your team waits.',
-    local: 'Runs on your hardware. Independent of any third-party uptime.',
-  },
-  {
-    label: 'How your data is used',
-    cloud: 'Terms may allow use for training or product improvement.',
-    local: 'Used only by you. For nothing and nobody else.',
-  },
-]
-
 function ComparisonBand() {
+  const { lang } = useLang()
+  const t = UI[lang]
+  const COMPARISON_ROWS = t.comparisonRows
   return (
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            The difference is not just where the data goes. It is who controls every part of the chain.
+            {t.comparisonHeadline}
           </h2>
         </Reveal>
       </div>
@@ -751,8 +906,8 @@ function ComparisonBand() {
               </svg>
             </span>
             <div>
-              <span className="block text-[15px] font-semibold text-faint">Cloud AI</span>
-              <span className="block text-[12px] text-dim">ChatGPT, Copilot, Gemini and others</span>
+              <span className="block text-[15px] font-semibold text-faint">{t.cloudTitle}</span>
+              <span className="block text-[12px] text-dim">{t.cloudSub}</span>
             </div>
           </div>
           <div className="flex flex-col divide-y divide-line/50">
@@ -783,8 +938,8 @@ function ComparisonBand() {
               </svg>
             </span>
             <div>
-              <span className="block text-[15px] font-semibold text-ink">Local AI by Nivora</span>
-              <span className="block text-[12px] text-faint">Installed on infrastructure you control</span>
+              <span className="block text-[15px] font-semibold text-ink">{t.localTitle}</span>
+              <span className="block text-[12px] text-faint">{t.localSub}</span>
             </div>
           </div>
           <div className="flex flex-col divide-y divide-line/50">
@@ -869,7 +1024,8 @@ function Process({ content, meta }: { content: ServiceContent; meta: ServiceMeta
 /* ROI band · only where money-saved is the honest pitch (not consulting) ────── */
 
 function RoiBand({ meta }: { meta: ServiceMeta }) {
-  const config = SERVICE_ROI[meta.slug]
+  const { lang } = useLang()
+  const config = getServiceRoi(lang)[meta.slug]
   if (!config) return null // AI Consulting sells the plan, not hours saved
 
   return (
@@ -901,6 +1057,8 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
 
 function FitFaq({ content }: { content: ServiceContent }) {
   const { open } = useContactModal()
+  const { lang } = useLang()
+  const t = UI[lang]
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
@@ -917,7 +1075,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
       <div className="mt-12 grid gap-5 md:grid-cols-2">
         <Reveal>
           <div className="h-full rounded-[22px] border border-[var(--accent)]/25 bg-[var(--accent)]/[0.05] p-7">
-            <h3 className="text-[15px] font-semibold text-ink">A strong fit if</h3>
+            <h3 className="text-[15px] font-semibold text-ink">{t.strongFit}</h3>
             <ul className="mt-5 flex flex-col gap-3.5">
               {content.audience.fits.map((f) => (
                 <li key={f} className="flex items-start gap-3">
@@ -930,7 +1088,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
         </Reveal>
         <Reveal delay={0.08}>
           <div className="h-full rounded-[22px] border border-line bg-white/[0.015] p-7">
-            <h3 className="text-[15px] font-semibold text-muted">Probably not if</h3>
+            <h3 className="text-[15px] font-semibold text-muted">{t.probablyNot}</h3>
             <ul className="mt-5 flex flex-col gap-3.5">
               {content.audience.notFor.map((f) => (
                 <li key={f} className="flex items-start gap-3">
@@ -946,22 +1104,22 @@ function FitFaq({ content }: { content: ServiceContent }) {
       {/* FAQ */}
       <div className="mt-16 grid gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
         <Reveal>
-          <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[30px]">Good to know</h3>
+          <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[30px]">{t.goodToKnow}</h3>
           <p className="mt-4 text-[14px] leading-relaxed text-faint">
-            Still have a question?{' '}
+            {t.stillQuestion}{' '}
             <button
               type="button"
               onClick={open}
               className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
             >
-              reach a person
+              {t.reachPerson}
             </button>
-            {' '}or visit the{' '}
+            {' '}{t.orVisit}{' '}
             <Link
               to="/help"
               className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
             >
-              Help Center
+              {t.helpCenter}
             </Link>
             .
           </p>
@@ -1050,17 +1208,20 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
 /* Other services ───────────────────────────────────────────────────────────── */
 
 function OtherServices({ current }: { current: ServiceSlug }) {
+  const { lang } = useLang()
+  const t = UI[lang]
+  const dict = getServiceContent(lang)
   const others = SERVICE_ORDER.filter((s) => s !== current)
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-28">
       <div className="border-t border-line pt-14">
         <Reveal>
-          <h2 className="text-[13px] font-medium uppercase tracking-[0.14em] text-faint">Explore other services</h2>
+          <h2 className="text-[13px] font-medium uppercase tracking-[0.14em] text-faint">{t.exploreOther}</h2>
         </Reveal>
         <div className="mt-7 grid gap-4 sm:grid-cols-3">
           {others.map((slug, i) => {
             const m = SERVICE_META[slug]
-            const c = SERVICE_CONTENT[slug]
+            const c = dict[slug]
             return (
               <Reveal key={slug} delay={i * 0.07}>
                 <Link

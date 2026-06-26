@@ -3,13 +3,27 @@ import { Reveal } from '@/components/animations/Reveal'
 import { PostCard } from '@/components/PostCard'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePosts } from '@/lib/blog'
+import { useLang } from '@/i18n'
 import { cn } from '@/lib/utils'
+
+const COPY = {
+  en: { heading: 'Blog & News', viewAll: 'View All' },
+  nl: { heading: 'Blog & nieuws', viewAll: 'Alles' },
+} as const
 
 export function BlogIndex() {
   const { posts: allPosts } = usePosts()
-  const [active, setActive] = useState('View All')
-  const categories = ['View All', ...Array.from(new Set(allPosts.map((p) => p.category)))]
-  const posts = active === 'View All' ? allPosts : allPosts.filter((p) => p.category === active)
+  const { lang } = useLang()
+  const t = COPY[lang]
+  // null = "view all"; storing the category (not the localized label) keeps the
+  // active filter valid across a language switch.
+  const [active, setActive] = useState<string | null>(null)
+  const categories = Array.from(new Set(allPosts.map((p) => p.category)))
+  const posts = active === null ? allPosts : allPosts.filter((p) => p.category === active)
+  const tabs: { key: string; label: string; value: string | null }[] = [
+    { key: '__all__', label: t.viewAll, value: null },
+    ...categories.map((cat) => ({ key: cat, label: cat, value: cat })),
+  ]
 
   return (
     <main>
@@ -17,25 +31,25 @@ export function BlogIndex() {
         {/* Heading */}
         <Reveal>
           <h1 className="font-serif text-[44px] leading-[1.05] tracking-[-0.02em] text-ink sm:text-[60px]">
-            Blog &amp; News
+            {t.heading}
           </h1>
         </Reveal>
 
         {/* Category filters */}
         <Reveal delay={0.08}>
           <div className="mt-8 flex flex-wrap gap-2">
-            {categories.map((cat) => (
+            {tabs.map((tab) => (
               <button
-                key={cat}
-                onClick={() => setActive(cat)}
+                key={tab.key}
+                onClick={() => setActive(tab.value)}
                 className={cn(
                   'rounded-full px-4 py-2 text-[13px] transition-colors duration-200',
-                  active === cat
+                  active === tab.value
                     ? 'bg-ink text-bg'
                     : 'border border-line bg-white/[0.03] text-muted hover:bg-white/[0.06] hover:text-ink',
                 )}
               >
-                {cat}
+                {tab.label}
               </button>
             ))}
           </div>

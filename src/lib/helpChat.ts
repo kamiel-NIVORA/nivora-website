@@ -29,6 +29,8 @@
  * function and point HELP_CHAT_ENDPOINT at that instead.
  */
 
+import type { Lang } from '@/i18n'
+
 /** Your chat endpoint. Leave empty ('') to use the built-in local assistant.
  *  Points at /api/help-chat, which holds a simple OpenAI API key server-side
  *  and streams the reply back. */
@@ -52,6 +54,9 @@ export type SendOptions = {
   signal?: AbortSignal
   /** Called with each new chunk of text as it streams in. */
   onToken?: (chunk: string) => void
+  /** Active UI language. Drives the local assistant and is sent to the API so a
+   *  live model can answer in the visitor's language. Defaults to 'en'. */
+  lang?: Lang
 }
 
 /* ── Call-to-action directive ────────────────────────────────────────────────
@@ -133,6 +138,7 @@ export async function sendHelpMessage(
     headers: { 'Content-Type': 'application/json', ...HELP_CHAT_HEADERS },
     body: JSON.stringify({
       messages: history.map((m) => ({ role: m.role, content: m.content })),
+      lang: opts.lang ?? 'en',
     }),
     signal: opts.signal,
   })
@@ -257,7 +263,7 @@ function extractContent(data: unknown): string {
  */
 async function localAssistantReply(history: ChatMessage[], opts: SendOptions): Promise<string> {
   const lastUser = [...history].reverse().find((m) => m.role === 'user')?.content ?? ''
-  const reply = matchLocalReply(lastUser, history)
+  const reply = matchLocalReply(lastUser, history, opts.lang ?? 'en')
   await streamLocally(reply, opts)
   return reply
 }
@@ -265,54 +271,77 @@ async function localAssistantReply(history: ChatMessage[], opts: SendOptions): P
 const EMAIL = 'kamiel@nivoraworks.com'
 const PHONE = '+32 489 00 77 37'
 
-function matchLocalReply(text: string, history: ChatMessage[]): string {
+function matchLocalReply(text: string, history: ChatMessage[], lang: Lang): string {
   const q = text.toLowerCase()
   const firstAssistantTurn = !history.some((m) => m.role === 'assistant')
+  const nl = lang === 'nl'
 
   const has = (...words: string[]) => words.some((w) => q.includes(w))
 
   if (!text.trim()) {
-    return "Tell me what you're looking for and I'll point you the right way. You can ask about our services, our products, how we work, or how to reach us."
+    return nl
+      ? "Vertel me waar u naar op zoek bent, dan wijs ik u de juiste richting. U kunt vragen stellen over onze diensten, onze producten, hoe we werken of hoe u ons bereikt."
+      : "Tell me what you're looking for and I'll point you the right way. You can ask about our services, our products, how we work, or how to reach us."
   }
 
-  if (has('price', 'pricing', 'cost', 'budget', 'quote', 'how much', 'rate')) {
-    return `Every engagement is scoped to the work, so there is no fixed price list. The clearest next step is a short call where we look at what you need and come back with a concrete proposal. You can book one from any "Book a call" button, or write to ${EMAIL} and we will get you a number quickly.`
+  if (has('price', 'pricing', 'cost', 'budget', 'quote', 'how much', 'rate', 'prijs', 'prijzen', 'kost', 'kosten', 'tarief', 'offerte', 'hoeveel')) {
+    return nl
+      ? `Elk traject wordt op maat van het werk bepaald, dus er is geen vaste prijslijst. De duidelijkste volgende stap is een kort gesprek waarin we bekijken wat u nodig hebt en met een concreet voorstel terugkomen. U boekt er een via elke "Boek een gesprek"-knop, of schrijf naar ${EMAIL} en we bezorgen u snel een cijfer.`
+      : `Every engagement is scoped to the work, so there is no fixed price list. The clearest next step is a short call where we look at what you need and come back with a concrete proposal. You can book one from any "Book a call" button, or write to ${EMAIL} and we will get you a number quickly.`
   }
 
-  if (has('local ai', 'on-prem', 'on prem', 'self-host', 'self host', 'private', 'gdpr', 'data', 'secure', 'security', 'privacy')) {
-    return `Keeping your data yours is a core part of how we build. With Local AI we run models on your own servers, or ours, so sensitive information never has to leave your control. If you tell me a little about your setup I can suggest where to start, or read more on the Local AI service page.`
+  if (has('local ai', 'on-prem', 'on prem', 'self-host', 'self host', 'private', 'gdpr', 'data', 'secure', 'security', 'privacy', 'lokale ai', 'privé', 'prive', 'gegevens', 'veilig', 'beveiliging')) {
+    return nl
+      ? `Ervoor zorgen dat uw data van u blijft, is een kernonderdeel van hoe we bouwen. Met Local AI draaien we modellen op uw eigen servers, of die van ons, zodat gevoelige informatie nooit uw controle hoeft te verlaten. Vertel me wat meer over uw opzet, dan stel ik voor waar u begint, of lees meer op de Local AI servicepagina.`
+      : `Keeping your data yours is a core part of how we build. With Local AI we run models on your own servers, or ours, so sensitive information never has to leave your control. If you tell me a little about your setup I can suggest where to start, or read more on the Local AI service page.`
   }
 
-  if (has('aios', 'operating system', 'os ')) {
-    return `AIOS is a custom AI operating system for your company. It ties your tools, data and workflows into one place your team actually uses every day. It is one of our four services. If you want, I can connect you with Kamiel to talk through what it would look like for your team.`
+  if (has('aios', 'operating system', 'os ', 'besturingssysteem')) {
+    return nl
+      ? `AIOS is een AI-besturingssysteem op maat van uw bedrijf. Het brengt uw tools, data en workflows samen op één plek die uw team elke dag echt gebruikt. Het is een van onze vier diensten. Als u wilt, breng ik u in contact met Kamiel om door te nemen hoe dat er voor uw team zou uitzien.`
+      : `AIOS is a custom AI operating system for your company. It ties your tools, data and workflows into one place your team actually uses every day. It is one of our four services. If you want, I can connect you with Kamiel to talk through what it would look like for your team.`
   }
 
-  if (has('consult', 'strategy', 'advice', 'where to start', 'roadmap')) {
-    return `AI Consulting is where a lot of people start. We help you find where AI genuinely fits, which ideas are worth building, and which to skip. It usually begins with a strategy call. You can book one from any "Book a call" button on the site.`
+  if (has('consult', 'strategy', 'advice', 'where to start', 'roadmap', 'strategie', 'advies', 'waar begin')) {
+    return nl
+      ? `AI Consulting is waar veel mensen starten. We helpen u ontdekken waar AI echt past, welke ideeën het bouwen waard zijn en welke u beter overslaat. Het begint meestal met een strategiegesprek. U boekt er een via elke "Boek een gesprek"-knop op de site.`
+      : `AI Consulting is where a lot of people start. We help you find where AI genuinely fits, which ideas are worth building, and which to skip. It usually begins with a strategy call. You can book one from any "Book a call" button on the site.`
   }
 
-  if (has('app design', 'app', 'build', 'mobile', 'website', 'software', 'develop')) {
-    return `We design and build custom apps around your idea, for mobile and desktop. The App Design service page walks through how that works, and the best first step is a short call so we understand what you are picturing. Want me to point you to it?`
+  if (has('app design', 'app', 'build', 'mobile', 'website', 'software', 'develop', 'bouwen', 'mobiel', 'ontwikkel')) {
+    return nl
+      ? `We ontwerpen en bouwen apps op maat rond uw idee, voor mobiel en desktop. De App Design servicepagina legt uit hoe dat werkt, en de beste eerste stap is een kort gesprek zodat we begrijpen wat u voor ogen hebt. Wilt u dat ik u ernaartoe verwijs?`
+      : `We design and build custom apps around your idea, for mobile and desktop. The App Design service page walks through how that works, and the best first step is a short call so we understand what you are picturing. Want me to point you to it?`
   }
 
-  if (has('service', 'what do you do', 'what can you', 'offer', 'help with')) {
-    return `We work across four services: App Design (custom apps), Local AI (secure AI on your servers or ours), AIOS (a custom AI operating system for your company), and AI Consulting (finding where AI fits and which strategy wins). Tell me which one is closest to what you need and I can go deeper.`
+  if (has('service', 'what do you do', 'what can you', 'offer', 'help with', 'dienst', 'diensten', 'wat doen jullie', 'wat doe je', 'aanbod')) {
+    return nl
+      ? `We werken rond vier diensten: App Design (apps op maat), Local AI (veilige AI op uw eigen servers of die van ons), AIOS (een AI-besturingssysteem op maat van uw bedrijf) en AI Consulting (uitzoeken waar AI past en welke strategie wint). Vertel me welke het dichtst bij uw behoefte ligt, dan ga ik dieper.`
+      : `We work across four services: App Design (custom apps), Local AI (secure AI on your servers or ours), AIOS (a custom AI operating system for your company), and AI Consulting (finding where AI fits and which strategy wins). Tell me which one is closest to what you need and I can go deeper.`
   }
 
-  if (has('box', 'voice', 'product', 'download', 'waitlist', 'early access', 'launch', 'beta')) {
-    return `Box and Voice are our two products, and both are launching soon. Box brings all your communication into one place, Voice is speech to text tuned to how you write. Leave your details on the waitlist and we'll notify you the moment they go live.`
+  if (has('box', 'voice', 'product', 'download', 'waitlist', 'early access', 'launch', 'beta', 'producten', 'wachtlijst', 'vroege toegang', 'lancering', 'lanceren')) {
+    return nl
+      ? `Box en Voice zijn onze twee producten, en beide lanceren binnenkort. Box brengt al uw communicatie samen op één plek, Voice is spraak naar tekst, afgestemd op hoe u schrijft. Laat uw gegevens achter op de wachtlijst, dan brengen we u op de hoogte zodra ze live gaan.`
+      : `Box and Voice are our two products, and both are launching soon. Box brings all your communication into one place, Voice is speech to text tuned to how you write. Leave your details on the waitlist and we'll notify you the moment they go live.`
   }
 
-  if (has('contact', 'human', 'person', 'talk', 'call', 'email', 'phone', 'reach', 'speak', 'someone')) {
-    return `Of course. You can reach us directly at ${EMAIL} or ${PHONE}, and we usually reply within a day. If you would rather have a proper conversation, any "Book a call" button on the site sets up a time.`
+  if (has('contact', 'human', 'person', 'talk', 'call', 'email', 'phone', 'reach', 'speak', 'someone', 'mens', 'persoon', 'praten', 'bellen', 'mail', 'telefoon', 'bereiken', 'spreken', 'iemand')) {
+    return nl
+      ? `Natuurlijk. U kunt ons rechtstreeks bereiken via ${EMAIL} of ${PHONE}, en we reageren meestal binnen een dag. Wilt u liever een echt gesprek, dan plant elke "Boek een gesprek"-knop op de site een moment in.`
+      : `Of course. You can reach us directly at ${EMAIL} or ${PHONE}, and we usually reply within a day. If you would rather have a proper conversation, any "Book a call" button on the site sets up a time.`
   }
 
-  if (firstAssistantTurn && has('hi', 'hello', 'hey', 'good morning', 'good afternoon')) {
-    return `Hi, good to meet you. I can help with questions about our services, our products, or how we work. What would you like to know?`
+  if (firstAssistantTurn && has('hi', 'hello', 'hey', 'good morning', 'good afternoon', 'hoi', 'hallo', 'goedemorgen', 'goedemiddag')) {
+    return nl
+      ? `Hoi, leuk u te ontmoeten. Ik help u graag met vragen over onze diensten, onze producten of hoe we werken. Wat wilt u weten?`
+      : `Hi, good to meet you. I can help with questions about our services, our products, or how we work. What would you like to know?`
   }
 
   // Default: stay honest, stay helpful, always offer a person.
-  return `Good question. I can help with the basics about our services, products and how we work, and for anything specific the fastest route is a person. You can reach us at ${EMAIL} or ${PHONE}, or book a call from any "Book a call" button. What would be most useful right now?`
+  return nl
+    ? `Goede vraag. Ik help u met de basis over onze diensten, producten en hoe we werken, en voor iets specifieks is de snelste weg een persoon. U kunt ons bereiken via ${EMAIL} of ${PHONE}, of boek een gesprek via elke "Boek een gesprek"-knop. Wat zou nu het meest nuttig zijn?`
+    : `Good question. I can help with the basics about our services, products and how we work, and for anything specific the fastest route is a person. You can reach us at ${EMAIL} or ${PHONE}, or book a call from any "Book a call" button. What would be most useful right now?`
 }
 
 /** Emit a reply word by word so the local assistant feels like the live one. */

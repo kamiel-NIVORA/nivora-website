@@ -12,8 +12,36 @@ import { Check, Copy, Mail, Phone, X, type LucideIcon } from 'lucide-react'
 import { useLenis } from 'lenis/react'
 import { CONTACT, SOCIAL_LINKS } from '@/data/contact'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
+
+const COPY = {
+  en: {
+    dialogLabel: 'Get in touch',
+    kicker: 'Contact',
+    heading: 'Get in touch',
+    sub: 'Mail or call us directly. We usually reply within a day.',
+    labelEmail: 'Email',
+    labelPhone: 'Phone',
+    close: 'Close',
+    copied: 'Copied',
+    copy: 'Copy',
+    copyAria: (label: string) => `Copy ${label.toLowerCase()}`,
+  },
+  nl: {
+    dialogLabel: 'Neem contact op',
+    kicker: 'Contact',
+    heading: 'Neem contact op',
+    sub: 'Mail of bel ons rechtstreeks. We reageren meestal binnen een dag.',
+    labelEmail: 'E-mail',
+    labelPhone: 'Telefoon',
+    close: 'Sluiten',
+    copied: 'Gekopieerd',
+    copy: 'Kopiëren',
+    copyAria: (label: string) => `${label} kopiëren`,
+  },
+} as const
 
 type Ctx = { open: () => void; close: () => void }
 const ContactModalContext = createContext<Ctx | null>(null)
@@ -46,6 +74,9 @@ function CopyRow({
   href,
   copied,
   onCopy,
+  copyAria,
+  copyLabel,
+  copiedLabel,
 }: {
   icon: LucideIcon
   label: string
@@ -53,6 +84,9 @@ function CopyRow({
   href: string
   copied: boolean
   onCopy: () => void
+  copyAria: string
+  copyLabel: string
+  copiedLabel: string
 }) {
   return (
     <div className="group flex items-center gap-3 rounded-2xl border border-line bg-white/[0.025] p-2 pr-2 transition-colors hover:bg-white/[0.045]">
@@ -68,7 +102,7 @@ function CopyRow({
       <button
         type="button"
         onClick={onCopy}
-        aria-label={`Copy ${label.toLowerCase()}`}
+        aria-label={copyAria}
         className={cn(
           'flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[12px] font-medium transition-colors',
           copied
@@ -77,7 +111,7 @@ function CopyRow({
         )}
       >
         {copied ? <Check className="h-4 w-4" strokeWidth={2} /> : <Copy className="h-4 w-4" strokeWidth={1.7} />}
-        <span>{copied ? 'Copied' : 'Copy'}</span>
+        <span>{copied ? copiedLabel : copyLabel}</span>
       </button>
     </div>
   )
@@ -85,6 +119,8 @@ function CopyRow({
 
 function ContactModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const lenis = useLenis()
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [copied, setCopied] = useState<CopyKey | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -147,7 +183,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Get in touch"
+            aria-label={t.dialogLabel}
             onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, y: 16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -164,7 +200,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
               ref={closeRef}
               type="button"
               onClick={onClose}
-              aria-label="Close"
+              aria-label={t.close}
               className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white/[0.03] text-faint transition-colors hover:bg-white/[0.08] hover:text-ink"
             >
               <X className="h-4 w-4" />
@@ -172,12 +208,12 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
 
             {/* Header */}
             <div className="relative">
-              <span className="label-mono text-dim">Contact</span>
+              <span className="label-mono text-dim">{t.kicker}</span>
               <h2 className="mt-2 font-serif text-[26px] leading-tight tracking-[-0.01em] text-ink">
-                Get in touch
+                {t.heading}
               </h2>
               <p className="mt-2 max-w-[300px] text-[13.5px] leading-relaxed text-faint">
-                Mail or call us directly. We usually reply within a day.
+                {t.sub}
               </p>
             </div>
 
@@ -185,19 +221,25 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
             <div className="relative mt-6 flex flex-col gap-2">
               <CopyRow
                 icon={Mail}
-                label="Email"
+                label={t.labelEmail}
                 value={CONTACT.email}
                 href={`mailto:${CONTACT.email}`}
                 copied={copied === 'email'}
                 onCopy={() => doCopy(CONTACT.email, 'email')}
+                copyAria={t.copyAria(t.labelEmail)}
+                copyLabel={t.copy}
+                copiedLabel={t.copied}
               />
               <CopyRow
                 icon={Phone}
-                label="Phone"
+                label={t.labelPhone}
                 value={CONTACT.phoneDisplay}
                 href={CONTACT.phoneHref}
                 copied={copied === 'phone'}
                 onCopy={() => doCopy(CONTACT.phoneDisplay, 'phone')}
+                copyAria={t.copyAria(t.labelPhone)}
+                copyLabel={t.copy}
+                copiedLabel={t.copied}
               />
             </div>
 

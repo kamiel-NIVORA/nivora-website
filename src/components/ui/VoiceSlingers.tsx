@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { AnimatePresence, animate, motion, useInView } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useLang, type Lang } from '@/i18n'
 
 /** CSS style that also carries custom properties (e.g. --bar-min). */
 type VarStyle = CSSProperties & Record<`--${string}`, string | number>
@@ -34,11 +35,15 @@ const WAVE =
 const RIBBON = 'M 500 338 C 672 326 802 238 922 168 C 1012 126 1096 108 1190 98'
 
 /* Raw speech (left): lowercase, a filler, a stutter, a grammar slip, no punctuation. */
-const RAW =
-  "so um i think their going to handle the the first part but i'm not totally sure   also i told the team the new timeline   "
+const RAW_BY_LANG: Record<Lang, string> = {
+  en: "so um i think their going to handle the the first part but i'm not totally sure   also i told the team the new timeline   ",
+  nl: 'dus euh ik denk dat zij het het eerste deel gaan doen maar ik ben niet helemaal zeker   ook heb ik het team de nieuwe planning verteld   ',
+}
 /* Clean copy (right): grammar fixed, filler and repeat gone, real punctuation. */
-const CLEAN =
-  "So, I think they're going to handle the first part, but I'm not totally sure. Also, I told the team the new timeline is set.   "
+const CLEAN_BY_LANG: Record<Lang, string> = {
+  en: "So, I think they're going to handle the first part, but I'm not totally sure. Also, I told the team the new timeline is set.   ",
+  nl: 'Dus, ik denk dat zij het eerste deel gaan doen, maar ik ben niet helemaal zeker. Ook heb ik het team de nieuwe planning verteld.   ',
+}
 
 const REPEAT = 3
 const FONT_SIZE = 20
@@ -46,21 +51,37 @@ const SPEED = 104 // px/second — both streams share it, so the flow reads as o
 
 /* Wispr-style correction nudges: a little phrase where the wrong word strikes
    through (or a mark is added), then the fix label lands. Cycles slowly. */
-const CORRECTIONS: { pre: string; strike?: string; post?: string; add?: string; label: string }[] = [
-  { pre: 'so', strike: 'umm', post: 'i think', label: 'Removed filler' },
-  { pre: 'told the', strike: 'the', post: 'team', label: 'Removed repetition' },
-  { pre: 'i think', strike: 'their', post: 'going', label: 'Fixed grammar' },
-  { pre: '', strike: 'i', post: 'will send it', label: 'Capitalized' },
-  { pre: 'is it ready', add: '?', label: 'Added question mark' },
-  { pre: 'sounds good', add: '.', label: 'Added punctuation' },
-  { pre: 'meet', strike: 'at at', post: 'noon', label: 'Removed stutter' },
-]
+type Correction = { pre: string; strike?: string; post?: string; add?: string; label: string }
+const CORRECTIONS_BY_LANG: Record<Lang, Correction[]> = {
+  en: [
+    { pre: 'so', strike: 'umm', post: 'i think', label: 'Removed filler' },
+    { pre: 'told the', strike: 'the', post: 'team', label: 'Removed repetition' },
+    { pre: 'i think', strike: 'their', post: 'going', label: 'Fixed grammar' },
+    { pre: '', strike: 'i', post: 'will send it', label: 'Capitalized' },
+    { pre: 'is it ready', add: '?', label: 'Added question mark' },
+    { pre: 'sounds good', add: '.', label: 'Added punctuation' },
+    { pre: 'meet', strike: 'at at', post: 'noon', label: 'Removed stutter' },
+  ],
+  nl: [
+    { pre: 'dus', strike: 'euh', post: 'ik denk', label: 'Vulwoord verwijderd' },
+    { pre: 'het', strike: 'het', post: 'team', label: 'Herhaling verwijderd' },
+    { pre: 'ik denk', strike: 'hun', post: 'gaan', label: 'Grammatica gecorrigeerd' },
+    { pre: '', strike: 'ik', post: 'stuur het', label: 'Hoofdletter toegevoegd' },
+    { pre: 'is het klaar', add: '?', label: 'Vraagteken toegevoegd' },
+    { pre: 'klinkt goed', add: '.', label: 'Leesteken toegevoegd' },
+    { pre: 'afspraak', strike: 'om om', post: 'twaalf uur', label: 'Stotter verwijderd' },
+  ],
+}
 
 /* Equaliser profile — taller in the middle so the resting node reads as a voice. */
 const BARS = [0.34, 0.5, 0.42, 0.66, 0.82, 0.58, 0.94, 0.72, 1, 0.72, 0.94, 0.58, 0.82, 0.66, 0.42, 0.5, 0.34]
 const BAR_TRACK = 30 // px, the tallest a bar can reach inside the pill
 
 export function VoiceSlingers() {
+  const { lang } = useLang()
+  const RAW = RAW_BY_LANG[lang]
+  const CLEAN = CLEAN_BY_LANG[lang]
+  const CORRECTIONS = CORRECTIONS_BY_LANG[lang]
   const reduced = usePrefersReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
   const rawPathRef = useRef<SVGTextPathElement>(null)
@@ -117,7 +138,7 @@ export function VoiceSlingers() {
       cancelled = true
       controls.forEach((c) => c.stop())
     }
-  }, [reduced, inView])
+  }, [reduced, inView, lang])
 
   // ── Cycle the correction pills while the card is on screen ──
   // Beat 1: show the struck word. Beat 2 (after ~1.7s): swap to the fix label.
@@ -134,9 +155,9 @@ export function VoiceSlingers() {
       window.clearTimeout(toLabel)
       window.clearTimeout(toNext)
     }
-  }, [fix, reduced, inView])
+  }, [fix, reduced, inView, lang, CORRECTIONS.length])
 
-  const c = CORRECTIONS[fix]
+  const c = CORRECTIONS[fix % CORRECTIONS.length]
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden">

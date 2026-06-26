@@ -7,7 +7,22 @@
  * browser fetch is blocked by CORS. Proxying makes the request same-origin, so
  * there is no preflight and no CORS to satisfy.
  */
+import type { Lang } from '@/i18n'
+
 const API_BASE = '/nivora-api'
+
+/** User-facing fallback messages, localized. The backend may also return its own
+ *  `error` string; that is shown verbatim when present. */
+const MESSAGES: Record<Lang, { generic: string; network: string }> = {
+  en: {
+    generic: 'Something went wrong. Please try again.',
+    network: 'Network error. Please check your connection and try again.',
+  },
+  nl: {
+    generic: 'Er ging iets mis. Probeer het opnieuw.',
+    network: 'Netwerkfout. Controleer uw verbinding en probeer het opnieuw.',
+  },
+}
 
 export type SubscribeResult = {
   ok: boolean
@@ -28,7 +43,11 @@ export async function subscribe(input: {
   /** Overrides the derived source, e.g. 'newsletter:home' so the AIOS can see
    *  where a lead came in from. Falls back to the product / generic website tag. */
   source?: string
+  /** Active UI language, used to localize the fallback error messages. Optional
+   *  so existing callers keep working; defaults to English. */
+  lang?: Lang
 }): Promise<SubscribeResult> {
+  const t = MESSAGES[input.lang ?? 'en']
   try {
     const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
       method: 'POST',
@@ -43,10 +62,10 @@ export async function subscribe(input: {
     })
     const data = await res.json().catch(() => ({}))
     if (!res.ok || data.ok === false) {
-      return { ok: false, error: data.error || 'Something went wrong. Please try again.' }
+      return { ok: false, error: data.error || t.generic }
     }
     return { ok: true, status: data.status, emailSent: data.email_sent === true }
   } catch {
-    return { ok: false, error: 'Network error. Please check your connection and try again.' }
+    return { ok: false, error: t.network }
   }
 }

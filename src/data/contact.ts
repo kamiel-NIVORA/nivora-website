@@ -1,3 +1,5 @@
+import type { Lang, Localized } from '@/i18n'
+
 /** Single source of truth for direct contact details + social links. */
 export const CONTACT = {
   email: 'kamiel@nivoraworks.com',
@@ -19,6 +21,14 @@ export const ADDRESS = {
   region: 'Available across West-Vlaanderen',
   mapQuery: 'Julius en Maurits Sabbestraat 15, 8000 Brugge',
 } as const
+
+/** Human-readable address copy in both languages (only ADDRESS.region needs translating). */
+const ADDRESS_REGION: Localized<string> = {
+  en: 'Available across West-Vlaanderen',
+  nl: 'Beschikbaar in heel West-Vlaanderen',
+}
+
+export const getAddressRegion = (lang: Lang): string => ADDRESS_REGION[lang]
 
 export type SocialLink = { label: string; href: string; path: string }
 

@@ -14,9 +14,68 @@ import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
 import MacOSDock, { type DockApp } from '@/components/ui/MacOSDock'
 import { cn } from '@/lib/utils'
+import { useLang, type Lang } from '@/i18n'
 
 /** Soft luminous backdrop — placeholder, swap for the final art later. */
 const GLOW = '/products/IMG_0683.webp'
+
+/* All user-facing copy for the Products section, in both languages. */
+const COPY = {
+  en: {
+    sectionTitle: 'Our Products',
+    sectionSubtitle:
+      'Intelligent software, built by Nivora. Box and Voice are coming soon, leave your details to get notified the moment they launch.',
+    comingSoon: 'Coming soon',
+    boxAria: 'Box, get notified at launch',
+    voiceAria: 'Voice, get notified at launch',
+    boxDesc: 'Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.',
+    boxCta: 'Get notified at launch',
+    voiceDesc: 'Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.',
+    phoneNotifAria: (name: string) => `${name}, coming soon, get notified at launch`,
+    now: 'now',
+    phoneBox: 'one calm inbox',
+    phoneVoice: 'speech to text',
+    phoneAlt: 'The Nivora suite on iPhone',
+    mobileTitle: 'Made for mobile',
+    mobileDesc: 'The whole suite in your pocket. Native and quietly out of the way.',
+    desktopTitle: 'Made for desktop',
+    desktopDesc: 'Box and Voice live right in your dock on Mac and Windows. The full suite, a click away.',
+    download: 'Download',
+    storeOpen: 'Open',
+    appStore: 'App Store',
+    googlePlay: 'Google Play',
+    scan: 'Scan',
+    toDownload: 'to download',
+    lockAria: (appName: string) => `${appName} downloads are coming soon, get notified at launch`,
+  },
+  nl: {
+    sectionTitle: 'Onze producten',
+    sectionSubtitle:
+      'Intelligente software, gebouwd door Nivora. Box en Voice komen binnenkort, laat uw gegevens achter en we brengen u op de hoogte zodra ze er zijn.',
+    comingSoon: 'Binnenkort',
+    boxAria: 'Box, laat u op de hoogte brengen bij de lancering',
+    voiceAria: 'Voice, laat u op de hoogte brengen bij de lancering',
+    boxDesc: 'E-mail, chat en DMs in één rustige inbox. Lees, sorteer en antwoord zonder ooit van app te wisselen.',
+    boxCta: 'Laat u op de hoogte brengen bij de lancering',
+    voiceDesc: 'Spraak naar tekst, afgestemd op hoe u praat en hoe u schrijft. Dicteer één keer, krijg nette tekst.',
+    phoneNotifAria: (name: string) => `${name}, binnenkort, laat u op de hoogte brengen bij de lancering`,
+    now: 'nu',
+    phoneBox: 'één rustige inbox',
+    phoneVoice: 'spraak naar tekst',
+    phoneAlt: 'De Nivora-suite op iPhone',
+    mobileTitle: 'Gemaakt voor mobiel',
+    mobileDesc: 'De volledige suite in uw zak. Native en rustig op de achtergrond.',
+    desktopTitle: 'Gemaakt voor desktop',
+    desktopDesc: 'Box en Voice staan gewoon in uw dock op Mac en Windows. De volledige suite, één klik weg.',
+    download: 'Downloaden',
+    storeOpen: 'Openen',
+    appStore: 'App Store',
+    googlePlay: 'Google Play',
+    scan: 'Scan',
+    toDownload: 'om te downloaden',
+    lockAria: (appName: string) => `${appName} downloads komen binnenkort, laat u op de hoogte brengen bij de lancering`,
+  },
+} as const
 
 /**
  * Our Products — a bento of the Nivora tools.
@@ -31,6 +90,8 @@ const GLOW = '/products/IMG_0683.webp'
  * Every card is a doorway to the waiting list.
  */
 export function Products() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const bentoRef = useRef<HTMLDivElement | null>(null)
   const { scrollYProgress } = useScroll({
     target: bentoRef,
@@ -55,10 +116,7 @@ export function Products() {
       </div>
 
       <div className="relative mx-auto w-full max-w-[1480px] px-6">
-        <SectionHeading
-          title="Our Products"
-          subtitle="Intelligent software, built by Nivora. Box and Voice are coming soon, leave your details to get notified the moment they launch."
-        />
+        <SectionHeading title={t.sectionTitle} subtitle={t.sectionSubtitle} />
 
         <div
           ref={bentoRef}
@@ -70,7 +128,7 @@ export function Products() {
             dx={-44}
             dark
             href="/waitlist?product=box"
-            ariaLabel="Box, get notified at launch"
+            ariaLabel={t.boxAria}
             className="min-h-[460px] lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2 lg:min-h-0"
           >
             <BoxCard />
@@ -94,7 +152,7 @@ export function Products() {
             start={0.06}
             dark
             href="/waitlist?product=voice"
-            ariaLabel="Voice, get notified at launch"
+            ariaLabel={t.voiceAria}
             className="min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <VoiceCard />
@@ -191,10 +249,11 @@ function BentoCard({
 
 /* Small shared bits ──────────────────────────────────────────── */
 function ComingSoon() {
+  const { lang } = useLang()
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
       <span className="h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
-      Coming soon
+      {COPY[lang].comingSoon}
     </span>
   )
 }
@@ -213,6 +272,8 @@ function AppLogo({ src }: { src: string }) {
 
 /* ── Card 1 · Box ──────────────────────────────────────────── */
 function BoxCard() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   return (
     <>
       {/* Converging-apps animation — every channel resolves into Box */}
@@ -227,13 +288,11 @@ function BoxCard() {
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
           <ComingSoon />
         </div>
-        <p className="mt-3.5 text-[14px] leading-relaxed text-faint">
-          Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.
-        </p>
+        <p className="mt-3.5 text-[14px] leading-relaxed text-faint">{t.boxDesc}</p>
         {/* Presentational — the whole card is already the link, so this just
             reads as the call to action (avoids a duplicate keyboard tab stop). */}
         <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
-          Get notified at launch
+          {t.boxCta}
           <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
         </span>
       </div>
@@ -243,6 +302,7 @@ function BoxCard() {
 
 /* ── Card 2 · Voice — wide hero with the speech-to-clean-copy flow ────────── */
 function VoiceCard() {
+  const { lang } = useLang()
   return (
     <div className="relative h-full">
       {/* Full-bleed flow + node — escape the card padding, clipped to its corners */}
@@ -259,9 +319,7 @@ function VoiceCard() {
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
           <ComingSoon />
         </div>
-        <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-faint">
-          Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.
-        </p>
+        <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-faint">{COPY[lang].voiceDesc}</p>
       </div>
     </div>
   )
@@ -269,13 +327,15 @@ function VoiceCard() {
 
 /* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/products/box-logo.webp', name: 'Box', body: 'one calm inbox', href: '/waitlist?product=box' },
-  { src: '/products/voice-logo.webp', name: 'Voice', body: 'speech to text', href: '/waitlist?product=voice' },
-]
+  { src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneBox', href: '/waitlist?product=box' },
+  { src: '/products/voice-logo.webp', name: 'Voice', bodyKey: 'phoneVoice', href: '/waitlist?product=voice' },
+] as const
 
 /** A single glossy notification — a button to the waiting list. Styled to match
  *  the NotificationStack in the Features section (frosted glass, inner sheen). */
-function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
+function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number]) {
+  const { lang } = useLang()
+  const t = COPY[lang]
   return (
     <motion.div
       layout
@@ -285,7 +345,7 @@ function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
     >
       <Link
         to={href}
-        aria-label={`${name}, coming soon, get notified at launch`}
+        aria-label={t.phoneNotifAria(name)}
         className="pointer-events-auto flex items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
         style={{
           boxShadow:
@@ -300,10 +360,10 @@ function PhoneNotif({ src, name, body, href }: (typeof PHONE_NOTIFS)[number]) {
         <div className="min-w-0 flex-1 leading-none">
           <div className="flex items-baseline justify-between gap-1">
             <span className="text-[clamp(8px,2.7cqw,12px)] font-semibold text-[#0c0c0c]">{name}</span>
-            <span className="shrink-0 text-[clamp(6px,1.9cqw,9px)] text-black/40">now</span>
+            <span className="shrink-0 text-[clamp(6px,1.9cqw,9px)] text-black/40">{t.now}</span>
           </div>
           <p className="mt-[2.5%] whitespace-nowrap text-[clamp(6.5px,2.2cqw,10px)] text-black/55">
-            <span className="font-semibold text-black/75">Coming soon</span> · {body}
+            <span className="font-semibold text-black/75">{t.comingSoon}</span> · {t[bodyKey]}
           </p>
         </div>
       </Link>
@@ -340,6 +400,8 @@ function PhoneNotifications() {
 }
 
 function MobileCard() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   return (
     <div className="relative h-full">
       {/* The lower phone — widget, banner and buttons — anchored at the bottom and
@@ -348,7 +410,7 @@ function MobileCard() {
       <div className="pointer-events-none absolute inset-x-0 -bottom-2 z-0 mx-auto w-[94%] max-w-[324px] [container-type:inline-size] left-1/2 -translate-x-1/2">
         <img
           src="/products/product-phone.webp"
-          alt="The Nivora suite on iPhone"
+          alt={t.phoneAlt}
           className="w-full select-none object-contain [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,transparent_6%,#000_14%,#000_85%,transparent_100%)]"
           loading="lazy"
           draggable={false}
@@ -363,46 +425,40 @@ function MobileCard() {
 
       {/* Title — sits at the top, clear of the phone screen below */}
       <div className="relative z-[2]">
-        <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">
-          Made for mobile
-        </h3>
-        <p className="mt-2 max-w-[18rem] text-[13px] leading-relaxed text-muted">
-          The whole suite in your pocket. Native and quietly out of the way.
-        </p>
+        <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">{t.mobileTitle}</h3>
+        <p className="mt-2 max-w-[18rem] text-[13px] leading-relaxed text-muted">{t.mobileDesc}</p>
       </div>
     </div>
   )
 }
 
 /* ── Card 4 · Made for desktop (empty browser-window frame) ─────────────── */
-const DOCK_APPS: DockApp[] = [
+const getDockApps = (lang: Lang): DockApp[] => [
   { id: 'finder', name: 'Finder', icon: 'https://cdn.jim-nielsen.com/macos/1024/finder-2021-09-10.png?rf=1024' },
-  { id: 'calculator', name: 'Calculator', icon: 'https://cdn.jim-nielsen.com/macos/1024/calculator-2021-04-29.png?rf=1024' },
+  { id: 'calculator', name: lang === 'nl' ? 'Rekenmachine' : 'Calculator', icon: 'https://cdn.jim-nielsen.com/macos/1024/calculator-2021-04-29.png?rf=1024' },
   { id: 'terminal', name: 'Terminal', icon: 'https://cdn.jim-nielsen.com/macos/1024/terminal-2021-06-03.png?rf=1024' },
-  { id: 'notes', name: 'Notes', icon: 'https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024' },
-  { id: 'box', name: 'Box by Nivora', icon: '/products/box-logo.webp' },
-  { id: 'voice', name: 'Voice by Nivora', icon: '/products/voice-logo.webp' },
+  { id: 'notes', name: lang === 'nl' ? 'Notities' : 'Notes', icon: 'https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024' },
+  { id: 'box', name: lang === 'nl' ? 'Box van Nivora' : 'Box by Nivora', icon: '/products/box-logo.webp' },
+  { id: 'voice', name: lang === 'nl' ? 'Voice van Nivora' : 'Voice by Nivora', icon: '/products/voice-logo.webp' },
   { id: 'safari', name: 'Safari', icon: 'https://cdn.jim-nielsen.com/macos/1024/safari-2021-06-02.png?rf=1024' },
-  { id: 'photos', name: 'Photos', icon: 'https://cdn.jim-nielsen.com/macos/1024/photos-2021-05-28.png?rf=1024' },
-  { id: 'music', name: 'Music', icon: 'https://cdn.jim-nielsen.com/macos/1024/music-2021-05-25.png?rf=1024' },
+  { id: 'photos', name: lang === 'nl' ? "Foto's" : 'Photos', icon: 'https://cdn.jim-nielsen.com/macos/1024/photos-2021-05-28.png?rf=1024' },
+  { id: 'music', name: lang === 'nl' ? 'Muziek' : 'Music', icon: 'https://cdn.jim-nielsen.com/macos/1024/music-2021-05-25.png?rf=1024' },
 ]
 
 function DesktopCard() {
   const navigate = useNavigate()
+  const { lang } = useLang()
+  const t = COPY[lang]
   return (
     <>
       {/* Live macOS dock — Box and Voice sit in the middle and magnify on hover */}
       <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-hidden">
-        <MacOSDock apps={DOCK_APPS} openApps={['box', 'voice']} onAppClick={() => navigate('/waitlist')} />
+        <MacOSDock apps={getDockApps(lang)} openApps={['box', 'voice']} onAppClick={() => navigate('/waitlist')} />
       </div>
 
       <div className="pt-5">
-        <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">
-          Made for desktop
-        </h3>
-        <p className="mt-2 text-[13px] leading-relaxed text-faint">
-          Box and Voice live right in your dock on Mac and Windows. The full suite, a click away.
-        </p>
+        <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink">{t.desktopTitle}</h3>
+        <p className="mt-2 text-[13px] leading-relaxed text-faint">{t.desktopDesc}</p>
       </div>
     </>
   )
@@ -423,6 +479,8 @@ function RackTile({ glyph, line1, line2 }: { glyph: ReactNode; line1: string; li
 }
 
 function DownloadCard() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [tab, setTab] = useState<'box' | 'voice'>('box')
   const appName = tab === 'box' ? 'Box' : 'Voice'
 
@@ -430,7 +488,7 @@ function DownloadCard() {
     <>
       {/* Title + Box / Voice switch — the lock leads to the chosen app's waiting list */}
       <div className="flex items-center justify-between gap-3">
-        <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">Download</h3>
+        <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">{t.download}</h3>
         <ProductTabs value={tab} onChange={setTab} />
       </div>
 
@@ -446,8 +504,8 @@ function DownloadCard() {
         >
           <RackTile
             glyph={<img src="/products/store-apple.svg" alt="" className="h-[30px] w-[30px] object-contain" />}
-            line1="Open"
-            line2="App Store"
+            line1={t.storeOpen}
+            line2={t.appStore}
           />
           <RackTile
             glyph={
@@ -457,20 +515,20 @@ function DownloadCard() {
                 className="h-[30px] w-[30px] object-contain [filter:grayscale(1)_brightness(1.7)]"
               />
             }
-            line1="Open"
-            line2="Google Play"
+            line1={t.storeOpen}
+            line2={t.googlePlay}
           />
           <RackTile
             glyph={<QrCode className="h-[30px] w-[30px]" strokeWidth={1.3} />}
-            line1="Scan"
-            line2="to download"
+            line1={t.scan}
+            line2={t.toDownload}
           />
         </motion.div>
 
         {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
         <Link
           to={`/waitlist?product=${tab}`}
-          aria-label={`${appName} downloads are coming soon, get notified at launch`}
+          aria-label={t.lockAria(appName)}
           className="group/lock absolute inset-0 grid place-items-center rounded-[14px]"
         >
           <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/85 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md transition-transform duration-300 group-hover/lock:scale-105">

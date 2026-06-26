@@ -2,6 +2,12 @@ import { useEffect, useRef } from 'react'
 import { animate, motion, useInView, useMotionValue, useTransform, type MotionValue } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useLang } from '@/i18n'
+
+const COPY = {
+  en: { allInOne: 'All in one inbox' },
+  nl: { allInOne: 'Alles in één inbox' },
+} as const
 
 /**
  * Box card visual — clean, no photo, no tiles. The real channel logos (Gmail,
@@ -62,6 +68,7 @@ function FloatingIcon({ t, app }: { t: MotionValue<number>; app: App }) {
 }
 
 export function BoxConverge() {
+  const { lang } = useLang()
   const ref = useRef<HTMLDivElement>(null)
   const reduced = usePrefersReducedMotion()
   const inView = useInView(ref, { amount: 0.3 })
@@ -120,7 +127,7 @@ export function BoxConverge() {
               <span className="grid h-[18px] w-[18px] place-items-center rounded-full bg-white/15">
                 <Check className="h-3 w-3 text-white" strokeWidth={2.8} />
               </span>
-              All in one inbox
+              {COPY[lang].allInOne}
             </motion.div>
           </div>
         </div>

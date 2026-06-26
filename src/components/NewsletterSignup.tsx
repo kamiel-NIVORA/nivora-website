@@ -5,9 +5,53 @@ import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { subscribe } from '@/lib/newsletter'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useLang } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const COPY = {
+  en: {
+    invalidEmail: 'Please enter a valid email address.',
+    genericError: 'Something went wrong. Please try again.',
+    titleAlready: "You're already in",
+    titleSent: 'Check your inbox',
+    titleList: "You're on the list",
+    alreadyPre: 'We already have ',
+    alreadyPost: '. You are on the list, nothing more to do.',
+    sentPre: 'We sent a confirmation link to ',
+    sentPost: '. Click it once and you are in.',
+    listPre: 'From now on, ',
+    listPost: ' never misses what matters in AI. We send the signal, never the noise.',
+    formTitle: 'Stop worrying about AI',
+    formBody:
+      'We weigh up what AI can genuinely do for a business like yours, cut through the noise, and keep you posted on what actually matters. You stay in the loop, without the hype.',
+    emailAria: 'Email address',
+    joining: 'Joining',
+    submit: 'Keep me posted',
+    note: 'One short email, now and then. No spam, unsubscribe anytime.',
+  },
+  nl: {
+    invalidEmail: 'Voer een geldig e-mailadres in.',
+    genericError: 'Er ging iets mis. Probeer het opnieuw.',
+    titleAlready: 'U bent al ingeschreven',
+    titleSent: 'Controleer uw inbox',
+    titleList: 'U staat op de lijst',
+    alreadyPre: 'We hebben ',
+    alreadyPost: ' al. U staat op de lijst, meer hoeft u niet te doen.',
+    sentPre: 'We stuurden een bevestigingslink naar ',
+    sentPost: '. Klik er één keer op en u bent erbij.',
+    listPre: 'Vanaf nu mist ',
+    listPost: ' nooit meer wat telt in AI. We sturen het signaal, nooit de ruis.',
+    formTitle: 'Maak u geen zorgen meer over AI',
+    formBody:
+      'We wegen af wat AI echt kan doen voor een bedrijf zoals het uwe, filteren de ruis eruit, en houden u op de hoogte van wat echt telt. U blijft mee, zonder de hype.',
+    emailAria: 'E-mailadres',
+    joining: 'Bezig',
+    submit: 'Houd me op de hoogte',
+    note: 'Eén korte e-mail, af en toe. Geen spam, uitschrijven kan altijd.',
+  },
+} as const
 
 type Props = {
   /** Where this band lives (home, blog-index, blog-post). Tags the lead so its
@@ -29,19 +73,21 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
   const [emailSent, setEmailSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const reduced = usePrefersReducedMotion()
+  const { lang } = useLang()
+  const t = COPY[lang]
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     if (!EMAIL_RE.test(email.trim())) {
-      setError('Please enter a valid email address.')
+      setError(t.invalidEmail)
       return
     }
     setError(null)
     setSubmitting(true)
-    const res = await subscribe({ email, source: `newsletter:${source}` })
+    const res = await subscribe({ email, source: `newsletter:${source}`, lang })
     setSubmitting(false)
     if (!res.ok) {
-      setError(res.error ?? 'Something went wrong. Please try again.')
+      setError(res.error ?? t.genericError)
       return
     }
     setAlready(res.status === 'already_subscribed')
@@ -110,23 +156,26 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                     </svg>
                   </motion.span>
                   <h2 className="mt-7 font-serif text-[28px] leading-[1.12] tracking-[-0.02em] text-ink sm:text-[34px]">
-                    {already ? "You're already in" : emailSent ? 'Check your inbox' : "You're on the list"}
+                    {already ? t.titleAlready : emailSent ? t.titleSent : t.titleList}
                   </h2>
                   <p className="mx-auto mt-3.5 max-w-md text-[15px] leading-relaxed text-faint">
                     {already ? (
                       <>
-                        We already have <span className="text-ink-soft">{email.trim()}</span>. You are on the
-                        list, nothing more to do.
+                        {t.alreadyPre}
+                        <span className="text-ink-soft">{email.trim()}</span>
+                        {t.alreadyPost}
                       </>
                     ) : emailSent ? (
                       <>
-                        We sent a confirmation link to{' '}
-                        <span className="text-ink-soft">{email.trim()}</span>. Click it once and you are in.
+                        {t.sentPre}
+                        <span className="text-ink-soft">{email.trim()}</span>
+                        {t.sentPost}
                       </>
                     ) : (
                       <>
-                        From now on, <span className="text-ink-soft">{email.trim()}</span> never misses what
-                        matters in AI. We send the signal, never the noise.
+                        {t.listPre}
+                        <span className="text-ink-soft">{email.trim()}</span>
+                        {t.listPost}
                       </>
                     )}
                   </p>
@@ -150,12 +199,10 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                   </motion.span>
 
                   <h2 className="mt-5 max-w-md font-serif text-[32px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[42px]">
-                    Stop worrying about AI
+                    {t.formTitle}
                   </h2>
                   <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
-                    We weigh up what AI can genuinely do for a business like yours, cut through the
-                    noise, and keep you posted on what actually matters. You stay in the loop,
-                    without the hype.
+                    {t.formBody}
                   </p>
 
                   <form onSubmit={onSubmit} noValidate className="mt-9 w-full max-w-[480px]">
@@ -169,7 +216,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         }}
                         placeholder="you@company.com"
                         aria-invalid={!!error}
-                        aria-label="Email address"
+                        aria-label={t.emailAria}
                         className="h-12 w-full flex-1 rounded-full border border-line bg-white/[0.03] px-5 text-center text-[14px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:text-left"
                       />
                       <RippleButton
@@ -178,14 +225,14 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         disabled={submitting}
                         className="h-12 shrink-0 px-6 text-[14px]"
                       >
-                        {submitting ? 'Joining' : 'Keep me posted'}
+                        {submitting ? t.joining : t.submit}
                       </RippleButton>
                     </div>
                     {error ? (
                       <span className="mt-2.5 block text-[12.5px] text-terracotta">{error}</span>
                     ) : (
                       <span className="mt-3.5 block text-[12px] text-dim">
-                        One short email, now and then. No spam, unsubscribe anytime.
+                        {t.note}
                       </span>
                     )}
                   </form>

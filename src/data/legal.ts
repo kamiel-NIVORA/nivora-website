@@ -1,3 +1,5 @@
+import type { Lang, Localized } from '@/i18n'
+
 export type LegalBlock = string | { list: string[] }
 export type LegalSection = { heading: string; blocks: LegalBlock[] }
 export type LegalDoc = {
@@ -13,12 +15,13 @@ export type LegalDoc = {
 const CONTACT_EMAIL = 'kamiel@nivoraworks.com'
 const CONTACT_PHONE = '+32 489 00 77 37'
 const COMPANY = 'Nivora'
-const UPDATED = 'June 20, 2026'
+const UPDATED_EN = 'June 20, 2026'
+const UPDATED_NL = '20 juni 2026'
 
-export const TERMS: LegalDoc = {
+const TERMS_EN: LegalDoc = {
   slug: 'terms',
   title: 'Terms of Service',
-  updated: UPDATED,
+  updated: UPDATED_EN,
   intro:
     'These terms cover how we work together when you engage Nivora to advise on, design, build, or support an AI system. By working with us or using this website, you agree to what is set out below.',
   sections: [
@@ -116,10 +119,111 @@ export const TERMS: LegalDoc = {
   ],
 }
 
-export const PRIVACY: LegalDoc = {
+const TERMS_NL: LegalDoc = {
+  slug: 'terms',
+  title: 'Servicevoorwaarden',
+  updated: UPDATED_NL,
+  intro:
+    'Deze voorwaarden beschrijven hoe we samenwerken wanneer u Nivora inschakelt om te adviseren over, te ontwerpen, te bouwen of te ondersteunen bij een AI-systeem. Door met ons samen te werken of deze website te gebruiken, gaat u akkoord met wat hieronder staat.',
+  sections: [
+    {
+      heading: 'Wie we zijn',
+      blocks: [
+        `${COMPANY} is een studio in België die op maat gemaakte AI-systemen ontwerpt en bouwt voor bedrijven. We werken in drie fases: consulting om te bepalen wat de moeite waard is om te bouwen, implementatie om het te ontwerpen en uit te rollen, en support om het draaiende en in verbetering te houden.`,
+        `U bereikt ons op ${CONTACT_EMAIL} of ${CONTACT_PHONE}. Bedrijfsgegevens: [company registration number], [registered address].`,
+      ],
+    },
+    {
+      heading: 'Hoe een opdracht verloopt',
+      blocks: [
+        'Voor we aan een volledig project beginnen, bewijzen we de waarde meestal eerst op een klein, echt stuk van uw werk. Dat betekent dat we één concrete taak nemen en daar een werkende versie van het systeem omheen bouwen, met uw data en uw proces. Als het duidelijk helpt, bepalen we van daaruit de scope van de volledige bouw. Zo niet, dan hebt u een kleine stap verloren in plaats van een grote.',
+        'De exacte scope, opleveringen, timing en prijs van elke opdracht staan in een aparte offerte of opdrachtbeschrijving. Waar dat document en deze voorwaarden van elkaar verschillen, geldt voor dat project de offerte.',
+      ],
+    },
+    {
+      heading: 'Offertes, vergoedingen en betaling',
+      blocks: [
+        'Offertes zijn geldig voor de periode die in de offerte staat. Tenzij anders afgesproken:',
+        {
+          list: [
+            'Vergoedingen en een eventueel betalingsschema worden per project in de offerte vastgelegd.',
+            'Facturen zijn betaalbaar binnen de termijn die op de factuur staat.',
+            'Vermelde prijzen zijn exclusief btw en eventuele kosten van derden, zoals hosting, modelgebruik of licenties, tenzij we anders aangeven.',
+            'Terugkerende support of hosting wordt gefactureerd volgens de schriftelijk afgesproken cyclus.',
+          ],
+        },
+      ],
+    },
+    {
+      heading: 'Wat we van u nodig hebben',
+      blocks: [
+        'Om iets te bouwen dat werkt, rekenen we erop dat u ons tijdig toegang geeft tot de mensen, systemen, data en beslissingen die een project nodig heeft. U bevestigt dat u het recht hebt om de data en accounts waartoe u ons toegang geeft te delen, en dat dit geen wet of andere overeenkomst schendt waaraan u gebonden bent.',
+        'Vertraging of ontbrekende toegang aan uw kant kan de timing en de kosten beïnvloeden. We melden dit zo vroeg mogelijk.',
+      ],
+    },
+    {
+      heading: 'Eigendom van wat we bouwen',
+      blocks: [
+        'Uw data blijft van u. Het maatwerk dat we voor uw project opleveren, inclusief de configuratie en code die specifiek voor u is geschreven, wordt van u zodra de bijhorende facturen volledig betaald zijn.',
+        'Wij behouden het eigendom van de algemene tools, libraries, methodes en knowhow die we naar het werk meebrengen en hergebruiken bij verschillende klanten. We geven u een licentie om die te gebruiken als onderdeel van uw opgeleverde systeem. Open source- en componenten van derden blijven onder hun eigen licenties vallen.',
+      ],
+    },
+    {
+      heading: 'Privé van bij het ontwerp',
+      blocks: [
+        'Waar een project erom vraagt, bouwen we systemen die draaien binnen uw eigen omgeving of op infrastructuur die u beheert, zodat uw data uw muren niet hoeft te verlaten. Waar een systeem precies draait en wie er toegang toe heeft, spreken we per project af. De verwerking van persoonsgegevens binnen een project wordt geregeld in een aparte verwerkersovereenkomst waar de wet er een vereist.',
+      ],
+    },
+    {
+      heading: 'AI-output en menselijk toezicht',
+      blocks: [
+        'AI-systemen leveren nuttige resultaten, maar ze zijn niet perfect en kunnen fout of onvolledig zijn. De systemen die we bouwen zijn tools die uw werk ondersteunen, geen vervanging van menselijk oordeel. U bent zelf verantwoordelijk om output te controleren voor u er beslissingen op baseert, en om een mens in de lus te houden waar de inzet dat vraagt. We zeggen u duidelijk waar een systeem sterk in is en waar het nagekeken moet worden.',
+      ],
+    },
+    {
+      heading: 'Vertrouwelijkheid',
+      blocks: [
+        'Elke partij houdt de niet-publieke informatie van de andere partij vertrouwelijk en gebruikt die enkel om het werk uit te voeren. Dit geldt niet voor informatie die al publiek is, die u of wij al hadden, of die we wettelijk verplicht zijn vrij te geven. Deze plicht blijft gelden nadat de opdracht is afgelopen.',
+      ],
+    },
+    {
+      heading: 'Garanties en aansprakelijkheid',
+      blocks: [
+        'We voeren ons werk uit met redelijke vakkundigheid en zorg. Daarnaast worden onze diensten en deze website, voor zover de wet dit toelaat, geleverd in de staat waarin ze zich bevinden, zonder andere garanties.',
+        'Voor zover de wet dit toelaat, zijn we niet aansprakelijk voor indirecte of gevolgschade, gederfde winst of verloren data, en is onze totale aansprakelijkheid voor een opdracht beperkt tot de vergoedingen die u ons voor die opdracht hebt betaald in de twaalf maanden voor de claim. Niets hierin beperkt aansprakelijkheid die wettelijk niet beperkt kan worden.',
+      ],
+    },
+    {
+      heading: 'Een opdracht beëindigen',
+      blocks: [
+        'Beide partijen kunnen een opdracht beëindigen zoals beschreven in de betreffende offerte, of met een redelijke schriftelijke opzegtermijn als er geen vaste looptijd is. Als u een project vroegtijdig stopzet, betaalt u voor het geleverde werk en de tot dan toe aangegane kosten. We kunnen het werk pauzeren of stopzetten als facturen ernstig achterstallig zijn.',
+      ],
+    },
+    {
+      heading: 'Wijzigingen aan deze voorwaarden',
+      blocks: [
+        'We kunnen deze voorwaarden aanpassen naarmate ons werk evolueert. De geldende versie is altijd die op deze pagina, met de datum van de laatste update. Voor lopende opdrachten blijven de voorwaarden gelden die van kracht waren toen de offerte werd ondertekend, tenzij we iets anders afspreken.',
+      ],
+    },
+    {
+      heading: 'Toepasselijk recht',
+      blocks: [
+        'Deze voorwaarden worden beheerst door het Belgisch recht, en elk geschil valt onder de rechtbanken die bevoegd zijn voor onze maatschappelijke zetel, tenzij dwingend recht anders bepaalt.',
+      ],
+    },
+    {
+      heading: 'Contact',
+      blocks: [
+        `Vragen over deze voorwaarden? Mail naar ${CONTACT_EMAIL} of bel ${CONTACT_PHONE}.`,
+      ],
+    },
+  ],
+}
+
+const PRIVACY_EN: LegalDoc = {
   slug: 'privacy',
   title: 'Privacy Policy',
-  updated: UPDATED,
+  updated: UPDATED_EN,
   intro:
     'This policy explains what personal data Nivora handles when you visit this website or get in touch, why we handle it, and the rights you have. We keep the data we hold to a minimum, on purpose.',
   sections: [
@@ -226,7 +330,123 @@ export const PRIVACY: LegalDoc = {
   ],
 }
 
-export const LEGAL_DOCS: Record<LegalDoc['slug'], LegalDoc> = {
+const PRIVACY_NL: LegalDoc = {
+  slug: 'privacy',
+  title: 'Privacybeleid',
+  updated: UPDATED_NL,
+  intro:
+    'Dit beleid legt uit welke persoonsgegevens Nivora verwerkt wanneer u deze website bezoekt of contact opneemt, waarom we ze verwerken, en welke rechten u hebt. We houden de gegevens die we bewaren bewust tot een minimum beperkt.',
+  sections: [
+    {
+      heading: 'Wie verantwoordelijk is',
+      blocks: [
+        `${COMPANY}, gevestigd in België, is de verwerkingsverantwoordelijke voor de persoonsgegevens die hier beschreven staan. U bereikt ons op ${CONTACT_EMAIL} of ${CONTACT_PHONE}. Bedrijfsgegevens: [company registration number], [registered address].`,
+        'Dit beleid heeft betrekking op de website en ons rechtstreekse contact met u. Persoonsgegevens die we binnen een klantproject, in uw opdracht, verwerken, worden geregeld door de opdrachtovereenkomst en een aparte verwerkersovereenkomst waar de wet er een vereist.',
+      ],
+    },
+    {
+      heading: 'Wat we verzamelen',
+      blocks: [
+        'We verzamelen enkel wat we nodig hebben om met u te praten en onze zaak te runnen:',
+        {
+          list: [
+            'Contact- en berichtgegevens die u ons geeft wanneer u mailt, belt, een gesprek boekt of een formulier invult, zoals uw naam, bedrijf, e-mail, telefoonnummer en wat u ons schrijft.',
+            'Een verslag van onze correspondentie en gesprekken, zodat we correct kunnen opvolgen.',
+            'Basis technische gegevens die elke webserver ontvangt, zoals uw IP-adres, browsertype en de pagina’s die u bekijkt. Onze hostingprovider logt dit om de site veilig en werkend te houden.',
+          ],
+        },
+        'We vragen geen bijzondere categorieën van gegevens, en we vragen u om geen gevoelige persoonsgegevens te versturen via algemene contactkanalen.',
+      ],
+    },
+    {
+      heading: 'Waarom we ze gebruiken, en onze rechtsgrond',
+      blocks: [
+        'Onder de GDPR steunen we op de volgende gronden:',
+        {
+          list: [
+            'Om uw vragen te beantwoorden en een opdracht voor te bereiden of uit te voeren, op basis van het nemen van stappen op uw verzoek en de uitvoering van onze overeenkomst.',
+            'Om onze website en onze zaak te laten draaien, te beveiligen en te verbeteren, op basis van ons gerechtvaardigd belang om veilig en goed te werken.',
+            'Om u informatie te sturen waar u om vroeg, op basis van uw toestemming, die u op elk moment kunt intrekken.',
+            'Om te voldoen aan wettelijke en boekhoudkundige verplichtingen, op basis van naleving van de wet.',
+          ],
+        },
+      ],
+    },
+    {
+      heading: 'Privé van bij het ontwerp',
+      blocks: [
+        'De systemen die we bouwen zijn vaak ontworpen om binnen uw eigen omgeving te draaien, zodat uw operationele data niet uit uw controle verdwijnt. We trekken diezelfde terughoudendheid door in onze eigen zaak: we verzamelen weinig, we bouwen geen profielen van u op, en we verkopen persoonsgegevens aan niemand.',
+      ],
+    },
+    {
+      heading: 'Met wie we ze delen',
+      blocks: [
+        'We verkopen uw gegevens niet. We delen ze enkel met dienstverleners die ons helpen om te werken, en enkel voor zover nodig. Dat zijn doorgaans onze websitehosting, e-mail en gelijkaardige bedrijfstools. Deze dienstverleners handelen volgens onze instructies en zijn gebonden om uw gegevens te beschermen. We kunnen gegevens ook vrijgeven waar de wet dit vereist.',
+      ],
+    },
+    {
+      heading: 'Internationale doorgiften',
+      blocks: [
+        'We geven de voorkeur aan dienstverleners die gegevens binnen de Europese Economische Ruimte houden. Waar gegevens buiten de EER worden verwerkt, zorgen we dat er een goedgekeurde waarborg geldt, zoals de standaardcontractbepalingen van de Europese Commissie.',
+      ],
+    },
+    {
+      heading: 'Hoelang we ze bewaren',
+      blocks: [
+        'We bewaren persoonsgegevens enkel zolang we ze nodig hebben voor het doel waarvoor we ze verzamelden, en verwijderen of anonimiseren ze daarna. Aanvragen die niet tot werk leiden, bewaren we voor een beperkte periode en verwijderen we daarna. Gegevens die gekoppeld zijn aan een overeenkomst of een wettelijke verplichting, zoals facturen, bewaren we zolang de wet dit vereist.',
+      ],
+    },
+    {
+      heading: 'Cookies',
+      blocks: [
+        'Deze website gebruikt enkel wat ze nodig heeft om te functioneren. We draaien geen advertentietrackers. Als we later analytics of andere niet-essentiële cookies toevoegen, vermelden we ze hier en vragen we eerst uw toestemming waar de wet dit vereist.',
+      ],
+    },
+    {
+      heading: 'Hoe we ze beschermen',
+      blocks: [
+        'We gebruiken redelijke technische en organisatorische maatregelen om persoonsgegevens te beschermen tegen verlies, misbruik en ongeoorloofde toegang, en we houden de toegang beperkt tot wie ze nodig heeft. Geen enkel systeem is perfect veilig, maar we nemen dit serieus en ontwerpen ervoor.',
+      ],
+    },
+    {
+      heading: 'Uw rechten',
+      blocks: [
+        'Onder de GDPR kunt u ons vragen om:',
+        {
+          list: [
+            'U een kopie te geven van de persoonsgegevens die we over u bewaren.',
+            'Gegevens te corrigeren die fout of onvolledig zijn.',
+            'Uw gegevens te verwijderen, waar er geen doorslaggevende reden is om ze te bewaren.',
+            'Het gebruik ervan te beperken of er bezwaar tegen te maken.',
+            'Uw gegevens in een overdraagbaar formaat te ontvangen, waar dat recht van toepassing is.',
+            'Uw toestemming op elk moment in te trekken, zonder dat dit gevolgen heeft voor het gebruik daarvan vóór de intrekking.',
+          ],
+        },
+        `Om een van deze rechten uit te oefenen, mail naar ${CONTACT_EMAIL}. Als u denkt dat we uw gegevens verkeerd hebben behandeld, kunt u ook een klacht indienen bij de Belgische Gegevensbeschermingsautoriteit (Gegevensbeschermingsautoriteit / Autorité de protection des données).`,
+      ],
+    },
+    {
+      heading: 'Wijzigingen aan dit beleid',
+      blocks: [
+        'We kunnen dit beleid aanpassen naarmate onze werkwijze verandert. De geldende versie, met de datum van de laatste update, is altijd die op deze pagina.',
+      ],
+    },
+    {
+      heading: 'Contact',
+      blocks: [
+        `Voor alles over uw privacy of dit beleid, mail naar ${CONTACT_EMAIL} of bel ${CONTACT_PHONE}.`,
+      ],
+    },
+  ],
+}
+
+export const TERMS: Localized<LegalDoc> = { en: TERMS_EN, nl: TERMS_NL }
+export const PRIVACY: Localized<LegalDoc> = { en: PRIVACY_EN, nl: PRIVACY_NL }
+
+const LEGAL_DOCS: Record<LegalDoc['slug'], Localized<LegalDoc>> = {
   terms: TERMS,
   privacy: PRIVACY,
 }
+
+export const getLegalDoc = (lang: Lang, slug: 'terms' | 'privacy'): LegalDoc =>
+  LEGAL_DOCS[slug][lang]

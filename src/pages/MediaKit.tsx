@@ -10,16 +10,17 @@ import {
   downloadAll,
   useCopyFeedback,
 } from '@/lib/clipboard'
+import { useLang } from '@/i18n'
 import {
-  COLOR_GROUPS,
-  FONTS,
-  LOGOS,
-  RADII,
-  PHOTO_GALLERY,
-  PHOTO_PRINCIPLES,
-  PHOTO_PROMPTS,
+  getColorGroups,
+  getFonts,
+  getLogos,
+  getRadii,
+  getPhotoGallery,
+  getPhotoPrinciples,
+  getPhotoPrompts,
+  getVoice,
   ALL_ASSETS,
-  VOICE,
 } from '@/data/brand'
 
 /* ── Section frame: mono eyebrow + serif title, anchored for the TOC ── */
@@ -84,7 +85,192 @@ function ActionButton({
   )
 }
 
+const COPY = {
+  en: {
+    headerEyebrow: 'Brand & Media Kit',
+    headerTitle: 'The Nivora brand kit',
+    headerIntro:
+      'Everything you need to represent Nivora correctly: logos, colours, type, photography and the prompts behind our images. Built for partners, affiliates and the press. Copy or download anything with one click.',
+    downloadAll: 'Download all assets',
+    preparing: 'Preparing…',
+    questions: 'Questions? Get in touch',
+    toc: {
+      logo: 'Logo',
+      colour: 'Colour',
+      type: 'Typography',
+      layout: 'Layout',
+      photography: 'Photography',
+      voice: 'Voice',
+    },
+    logo: {
+      eyebrow: 'Logo & mark',
+      title: 'The mark, and how to use it.',
+      intro:
+        'The arrow rising through the wordmark is our symbol of growth. Give it room, keep it monochrome, and never redraw it.',
+      copyImage: 'Copy image',
+      copied: 'Copied',
+      downloadPng: 'Download PNG',
+      rules: [
+        'Keep clear space around the mark equal to the height of the arrow.',
+        'Use white on dark, black on light. Nothing in between.',
+        'Don’t recolour, rotate, stretch, or add shadows and outlines.',
+        'Don’t place the logo on a busy area of a photo. Find calm space.',
+      ],
+    },
+    colour: {
+      eyebrow: 'Colour',
+      title: 'Near-black, with earth from the landscape.',
+      intro:
+        'The interface is built from layered near-blacks and a grayscale text ladder. Colour appears only in small earthy accents, pulled straight from our photography. Click any swatch to copy its value.',
+      copy: 'Copy',
+      copied: 'Copied',
+    },
+    type: {
+      eyebrow: 'Typography',
+      title: 'A serif that speaks, a sans that works.',
+      intro:
+        'Hedvig Letters Serif carries every headline; Inter handles the reading and the interface; Geist Mono labels things. That is the whole system.',
+      copyName: 'Copy name',
+      copied: 'Copied',
+    },
+    layout: {
+      eyebrow: 'Layout & components',
+      title: 'Soft corners, hairline borders, calm motion.',
+      intro:
+        'Surfaces are framed with white hairline borders at low opacity and rounded consistently. Buttons are full pills; cards round generously.',
+      cornerRadius: 'Corner radius',
+      buttons: 'Buttons',
+      primary: 'Primary',
+      secondary: 'Secondary',
+      ghost: 'Ghost',
+      buttonNote:
+        'Primary is the white pill that fills black from the cursor. Secondary is a hairline dark pill. Both are fully rounded with a 200 ms ease. Keep one primary action per view.',
+      pillTag: 'Pill · rounded-full',
+      cardTag: 'Card · rounded-2xl',
+    },
+    photography: {
+      eyebrow: 'Photography & image prompts',
+      title: 'One landscape, shot many ways.',
+      intro:
+        'Every Nivora image looks like it came from the same quiet morning. Follow the principles below, and use the prompts to generate new on-brand photos for blogs and ads, text included.',
+      promptsTitle: 'Image prompts',
+      promptsIntro:
+        'Paste these into an image model (we use Nano Banana Pro) and swap the capitalised placeholders. They keep every new image on-brand.',
+      copyPrompt: 'Copy prompt',
+      copied: 'Copied',
+      downloadPhoto: 'Download photo',
+    },
+    voice: {
+      eyebrow: 'Voice & tone',
+      do: 'Do',
+      dont: 'Don’t',
+    },
+    closing: {
+      title: 'Building something with Nivora?',
+      intro:
+        'Grab the full asset bundle, or reach out if you need a format, colour, or logo variant that isn’t here.',
+      contact: 'Contact us',
+    },
+  },
+  nl: {
+    headerEyebrow: 'Brand & Media Kit',
+    headerTitle: 'De Nivora brand kit',
+    headerIntro:
+      'Alles wat u nodig hebt om Nivora correct weer te geven: logo’s, kleuren, typografie, fotografie en de prompts achter onze beelden. Gemaakt voor partners, affiliates en de pers. Kopieer of download alles met één klik.',
+    downloadAll: 'Download alle assets',
+    preparing: 'Bezig…',
+    questions: 'Vragen? Neem contact op',
+    toc: {
+      logo: 'Logo',
+      colour: 'Kleur',
+      type: 'Typografie',
+      layout: 'Layout',
+      photography: 'Fotografie',
+      voice: 'Stem',
+    },
+    logo: {
+      eyebrow: 'Logo & teken',
+      title: 'Het teken, en hoe u het gebruikt.',
+      intro:
+        'De pijl die door het woordmerk omhoogkomt is ons symbool van groei. Geef het ruimte, houd het monochroom, en teken het nooit opnieuw.',
+      copyImage: 'Kopieer afbeelding',
+      copied: 'Gekopieerd',
+      downloadPng: 'Download PNG',
+      rules: [
+        'Houd rondom het teken vrije ruimte gelijk aan de hoogte van de pijl.',
+        'Gebruik wit op donker, zwart op licht. Niets daartussen.',
+        'Herkleur, roteer of rek het niet, en voeg geen schaduwen of contouren toe.',
+        'Plaats het logo niet op een druk deel van een foto. Zoek rustige ruimte.',
+      ],
+    },
+    colour: {
+      eyebrow: 'Kleur',
+      title: 'Bijna-zwart, met aarde uit het landschap.',
+      intro:
+        'De interface is opgebouwd uit gelaagde bijna-zwarten en een grijswaardenladder voor tekst. Kleur verschijnt alleen in kleine aardse accenten, rechtstreeks uit onze fotografie. Klik op een staal om de waarde te kopiëren.',
+      copy: 'Kopieer',
+      copied: 'Gekopieerd',
+    },
+    type: {
+      eyebrow: 'Typografie',
+      title: 'Een serif die spreekt, een sans die werkt.',
+      intro:
+        'Hedvig Letters Serif draagt elke kop; Inter verzorgt het lezen en de interface; Geist Mono labelt de dingen. Dat is het hele systeem.',
+      copyName: 'Kopieer naam',
+      copied: 'Gekopieerd',
+    },
+    layout: {
+      eyebrow: 'Layout & componenten',
+      title: 'Zachte hoeken, haarlijnranden, kalme beweging.',
+      intro:
+        'Oppervlakken zijn omkaderd met witte haarlijnranden met lage opaciteit en consistent afgerond. Knoppen zijn volledige pills; cards ronden royaal af.',
+      cornerRadius: 'Hoekafronding',
+      buttons: 'Knoppen',
+      primary: 'Primair',
+      secondary: 'Secundair',
+      ghost: 'Ghost',
+      buttonNote:
+        'Primair is de witte pill die vanaf de cursor zwart vult. Secundair is een donkere haarlijn-pill. Beide zijn volledig afgerond met een ease van 200 ms. Houd één primaire actie per scherm.',
+      pillTag: 'Pill · rounded-full',
+      cardTag: 'Card · rounded-2xl',
+    },
+    photography: {
+      eyebrow: 'Fotografie & beeldprompts',
+      title: 'Eén landschap, op vele manieren geschoten.',
+      intro:
+        'Elk Nivora-beeld lijkt van dezelfde stille ochtend te komen. Volg de principes hieronder, en gebruik de prompts om nieuwe on-brand foto’s te genereren voor blogs en advertenties, tekst inbegrepen.',
+      promptsTitle: 'Beeldprompts',
+      promptsIntro:
+        'Plak deze in een beeldmodel (wij gebruiken Nano Banana Pro) en vervang de placeholders in hoofdletters. Ze houden elk nieuw beeld on-brand.',
+      copyPrompt: 'Kopieer prompt',
+      copied: 'Gekopieerd',
+      downloadPhoto: 'Download foto',
+    },
+    voice: {
+      eyebrow: 'Stem & toon',
+      do: 'Wel',
+      dont: 'Niet',
+    },
+    closing: {
+      title: 'Bouwt u iets met Nivora?',
+      intro:
+        'Pak de volledige asset-bundel, of laat het weten als u een formaat, kleur of logovariant nodig hebt die hier niet staat.',
+      contact: 'Neem contact op',
+    },
+  },
+} as const
+
 export function MediaKit() {
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const colorGroups = getColorGroups(lang)
+  const fonts = getFonts(lang)
+  const logos = getLogos(lang)
+  const radii = getRadii(lang)
+  const photoGallery = getPhotoGallery(lang)
+  const photoPrinciples = getPhotoPrinciples(lang)
+  const photoPrompts = getPhotoPrompts(lang)
+  const voice = getVoice(lang)
   const { copiedKey, flash } = useCopyFeedback()
   const [downloading, setDownloading] = useState(false)
 
@@ -103,12 +289,12 @@ export function MediaKit() {
   }
 
   const TOC = [
-    { id: 'logo', label: 'Logo' },
-    { id: 'colour', label: 'Colour' },
-    { id: 'type', label: 'Typography' },
-    { id: 'layout', label: 'Layout' },
-    { id: 'photography', label: 'Photography' },
-    { id: 'voice', label: 'Voice' },
+    { id: 'logo', label: t.toc.logo },
+    { id: 'colour', label: t.toc.colour },
+    { id: 'type', label: t.toc.type },
+    { id: 'layout', label: t.toc.layout },
+    { id: 'photography', label: t.toc.photography },
+    { id: 'voice', label: t.toc.voice },
   ]
 
   return (
@@ -127,15 +313,12 @@ export function MediaKit() {
 
         <div className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-36 lg:pb-20 lg:pt-44">
           <Reveal mode="mount">
-            <span className="label-mono">Brand &amp; Media Kit</span>
+            <span className="label-mono">{t.headerEyebrow}</span>
             <h1 className="mt-5 max-w-3xl font-serif text-[44px] leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl lg:text-[72px] lg:leading-[1.02]">
-              The Nivora brand kit
+              {t.headerTitle}
             </h1>
             <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-ink-soft/80">
-              Everything you need to represent Nivora correctly — logos, colours,
-              type, photography and the prompts behind our images. Built for
-              partners, affiliates and the press. Copy or download anything with
-              one click.
+              {t.headerIntro}
             </p>
           </Reveal>
 
@@ -143,11 +326,11 @@ export function MediaKit() {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button size="lg" onClick={onDownloadAll} disabled={downloading}>
                 <Download className="h-4 w-4" />
-                {downloading ? 'Preparing…' : 'Download all assets'}
+                {downloading ? t.preparing : t.downloadAll}
               </Button>
               <Button variant="dark" size="lg" asChild>
                 <a href="#contact">
-                  Questions? Get in touch <ArrowRight className="h-4 w-4" />
+                  {t.questions} <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
             </div>
@@ -175,12 +358,12 @@ export function MediaKit() {
         <Section
           id="logo"
           index="01"
-          eyebrow="Logo & mark"
-          title="The mark, and how to use it."
-          intro="The arrow rising through the wordmark is our symbol of growth. Give it room, keep it monochrome, and never redraw it."
+          eyebrow={t.logo.eyebrow}
+          title={t.logo.title}
+          intro={t.logo.intro}
         >
           <div className="grid gap-6 sm:grid-cols-2">
-            {LOGOS.map((logo) => {
+            {logos.map((logo) => {
               const copyKey = `logo-copy-${logo.filename}`
               return (
                 <Reveal key={logo.filename}>
@@ -202,15 +385,15 @@ export function MediaKit() {
                         <ActionButton
                           active={copiedKey === copyKey}
                           onClick={() => onCopyImage(copyKey, logo.src)}
-                          idle="Copy image"
-                          done="Copied"
+                          idle={t.logo.copyImage}
+                          done={t.logo.copied}
                           icon={ImageDown}
                         />
                         <ActionButton
                           active={false}
                           onClick={() => downloadAsset(logo.src, logo.filename)}
-                          idle="Download PNG"
-                          done="Download PNG"
+                          idle={t.logo.downloadPng}
+                          done={t.logo.downloadPng}
                           icon={Download}
                         />
                       </div>
@@ -224,12 +407,7 @@ export function MediaKit() {
           {/* Misuse rules */}
           <Reveal>
             <div className="mt-6 grid gap-3 rounded-2xl border border-line bg-white/[0.02] p-6 sm:grid-cols-2">
-              {[
-                'Keep clear space around the mark equal to the height of the arrow.',
-                'Use white on dark, black on light — nothing in between.',
-                'Don’t recolour, rotate, stretch, or add shadows and outlines.',
-                'Don’t place the logo on a busy area of a photo — find calm space.',
-              ].map((rule) => (
+              {t.logo.rules.map((rule) => (
                 <p key={rule} className="flex gap-2.5 text-[13px] leading-snug text-muted">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-terracotta" />
                   {rule}
@@ -243,12 +421,12 @@ export function MediaKit() {
         <Section
           id="colour"
           index="02"
-          eyebrow="Colour"
-          title="Near-black, with earth from the landscape."
-          intro="The interface is built from layered near-blacks and a grayscale text ladder. Colour appears only in small earthy accents, pulled straight from our photography. Click any swatch to copy its value."
+          eyebrow={t.colour.eyebrow}
+          title={t.colour.title}
+          intro={t.colour.intro}
         >
           <div className="flex flex-col gap-10">
-            {COLOR_GROUPS.map((group) => (
+            {colorGroups.map((group) => (
               <Reveal key={group.label}>
                 <div className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between">
                   <h3 className="font-serif text-[20px] text-ink">{group.label}</h3>
@@ -274,7 +452,7 @@ export function MediaKit() {
                           )}
                         >
                           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                          {copied ? 'Copied' : 'Copy'}
+                          {copied ? t.colour.copied : t.colour.copy}
                         </span>
                         <span>
                           <span
@@ -307,12 +485,12 @@ export function MediaKit() {
         <Section
           id="type"
           index="03"
-          eyebrow="Typography"
-          title="A serif that speaks, a sans that works."
-          intro="Hedvig Letters Serif carries every headline; Inter handles the reading and the interface; Geist Mono labels things. That is the whole system."
+          eyebrow={t.type.eyebrow}
+          title={t.type.title}
+          intro={t.type.intro}
         >
           <div className="flex flex-col gap-4">
-            {FONTS.map((font) => {
+            {fonts.map((font) => {
               const key = `font-${font.name}`
               return (
                 <Reveal key={font.name}>
@@ -327,8 +505,8 @@ export function MediaKit() {
                       <ActionButton
                         active={copiedKey === key}
                         onClick={() => onCopyText(key, font.name)}
-                        idle="Copy name"
-                        done="Copied"
+                        idle={t.type.copyName}
+                        done={t.type.copied}
                         icon={Copy}
                       />
                     </div>
@@ -350,17 +528,17 @@ export function MediaKit() {
         <Section
           id="layout"
           index="04"
-          eyebrow="Layout & components"
-          title="Soft corners, hairline borders, calm motion."
-          intro="Surfaces are framed with white hairline borders at low opacity and rounded consistently. Buttons are full pills; cards round generously."
+          eyebrow={t.layout.eyebrow}
+          title={t.layout.title}
+          intro={t.layout.intro}
         >
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Radius scale */}
             <Reveal>
               <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5">Corner radius</p>
+                <p className="label-mono mb-5">{t.layout.cornerRadius}</p>
                 <div className="flex flex-wrap items-end gap-4">
-                  {RADII.map((r) => (
+                  {radii.map((r) => (
                     <div key={r.name} className="flex flex-col items-center gap-2">
                       <div
                         className="h-16 w-16 border border-line-strong bg-white/[0.05]"
@@ -377,24 +555,22 @@ export function MediaKit() {
             {/* Buttons */}
             <Reveal delay={0.05}>
               <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5">Buttons</p>
+                <p className="label-mono mb-5">{t.layout.buttons}</p>
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap items-center gap-3">
-                    <Button>Primary</Button>
-                    <Button variant="dark">Secondary</Button>
-                    <Button variant="ghost">Ghost</Button>
+                    <Button>{t.layout.primary}</Button>
+                    <Button variant="dark">{t.layout.secondary}</Button>
+                    <Button variant="ghost">{t.layout.ghost}</Button>
                   </div>
                   <p className="text-[13px] leading-relaxed text-muted">
-                    Primary is the white pill that fills black from the cursor.
-                    Secondary is a hairline dark pill. Both are fully rounded with
-                    a 200&nbsp;ms ease. Keep one primary action per view.
+                    {t.layout.buttonNote}
                   </p>
                   <div className="flex flex-wrap gap-3 pt-1">
                     <span className="rounded-full border border-line bg-white/[0.04] px-3 py-1 text-[12px] text-muted">
-                      Pill · rounded-full
+                      {t.layout.pillTag}
                     </span>
                     <span className="rounded-2xl border border-line bg-white/[0.04] px-3 py-1.5 text-[12px] text-muted">
-                      Card · rounded-2xl
+                      {t.layout.cardTag}
                     </span>
                   </div>
                 </div>
@@ -407,14 +583,14 @@ export function MediaKit() {
         <Section
           id="photography"
           index="05"
-          eyebrow="Photography & image prompts"
-          title="One landscape, shot many ways."
-          intro="Every Nivora image looks like it came from the same quiet morning. Follow the principles below, and use the prompts to generate new on-brand photos for blogs and ads — text included."
+          eyebrow={t.photography.eyebrow}
+          title={t.photography.title}
+          intro={t.photography.intro}
         >
           {/* Principles */}
           <Reveal>
             <div className="grid gap-3 rounded-2xl border border-line bg-white/[0.02] p-6 sm:grid-cols-2">
-              {PHOTO_PRINCIPLES.map((p) => (
+              {photoPrinciples.map((p) => (
                 <p key={p} className="flex gap-2.5 text-[13px] leading-snug text-muted">
                   <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
                   {p}
@@ -425,7 +601,7 @@ export function MediaKit() {
 
           {/* Gallery */}
           <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {PHOTO_GALLERY.map((shot) => {
+            {photoGallery.map((shot) => {
               const key = `shot-${shot.src}`
               return (
                 <Reveal
@@ -448,7 +624,7 @@ export function MediaKit() {
                       <button
                         type="button"
                         onClick={() => downloadAsset(shot.src)}
-                        aria-label="Download photo"
+                        aria-label={t.photography.downloadPhoto}
                         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-black/40 text-ink-soft backdrop-blur transition-colors hover:bg-black/70 hover:text-white"
                       >
                         {copiedKey === key ? <Check className="h-4 w-4" /> : <Download className="h-4 w-4" />}
@@ -462,14 +638,13 @@ export function MediaKit() {
 
           {/* Prompt formulas */}
           <Reveal>
-            <h3 className="mt-14 font-serif text-[22px] text-ink">Image prompts</h3>
+            <h3 className="mt-14 font-serif text-[22px] text-ink">{t.photography.promptsTitle}</h3>
             <p className="mt-2 max-w-xl text-[14px] leading-relaxed text-faint">
-              Paste these into an image model (we use Nano Banana Pro) and swap the
-              capitalised placeholders. They keep every new image on-brand.
+              {t.photography.promptsIntro}
             </p>
           </Reveal>
           <div className="mt-6 flex flex-col gap-4">
-            {PHOTO_PROMPTS.map((p) => {
+            {photoPrompts.map((p) => {
               const key = `prompt-${p.label}`
               return (
                 <Reveal key={p.label}>
@@ -482,8 +657,8 @@ export function MediaKit() {
                       <ActionButton
                         active={copiedKey === key}
                         onClick={() => onCopyText(key, p.prompt)}
-                        idle="Copy prompt"
-                        done="Copied"
+                        idle={t.photography.copyPrompt}
+                        done={t.photography.copied}
                         icon={Copy}
                       />
                     </div>
@@ -501,15 +676,15 @@ export function MediaKit() {
         <Section
           id="voice"
           index="06"
-          eyebrow="Voice & tone"
-          title={VOICE.essence}
+          eyebrow={t.voice.eyebrow}
+          title={voice.essence}
         >
           <div className="grid gap-6 md:grid-cols-2">
             <Reveal>
               <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5 text-olive">Do</p>
+                <p className="label-mono mb-5 text-olive">{t.voice.do}</p>
                 <ul className="flex flex-col gap-3">
-                  {VOICE.dos.map((d) => (
+                  {voice.dos.map((d) => (
                     <li key={d} className="flex gap-2.5 text-[14px] leading-snug text-ink-soft/85">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-olive" />
                       {d}
@@ -520,9 +695,9 @@ export function MediaKit() {
             </Reveal>
             <Reveal delay={0.05}>
               <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5 text-terracotta">Don’t</p>
+                <p className="label-mono mb-5 text-terracotta">{t.voice.dont}</p>
                 <ul className="flex flex-col gap-3">
-                  {VOICE.donts.map((d) => (
+                  {voice.donts.map((d) => (
                     <li key={d} className="flex gap-2.5 text-[14px] leading-snug text-muted">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-terracotta" />
                       {d}
@@ -538,19 +713,18 @@ export function MediaKit() {
         <section className="border-t border-line py-20 text-center lg:py-28">
           <Reveal>
             <h2 className="mx-auto max-w-xl font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[40px]">
-              Building something with Nivora?
+              {t.closing.title}
             </h2>
             <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint">
-              Grab the full asset bundle, or reach out if you need a format,
-              colour, or logo variant that isn’t here.
+              {t.closing.intro}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button size="lg" onClick={onDownloadAll} disabled={downloading}>
                 <Download className="h-4 w-4" />
-                {downloading ? 'Preparing…' : 'Download all assets'}
+                {downloading ? t.preparing : t.downloadAll}
               </Button>
               <Button variant="dark" size="lg" asChild>
-                <a href="/#contact">Contact us</a>
+                <a href="/#contact">{t.closing.contact}</a>
               </Button>
             </div>
           </Reveal>

@@ -3,21 +3,58 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { RippleButton } from '@/components/ui/RippleButton'
+import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { cn } from '@/lib/utils'
 import {
-  COMPANY_PRIMARY,
-  PRODUCTS,
-  RESOURCES,
-  SERVICES,
+  getCompanyPrimary,
+  getProducts,
+  getResources,
+  getServices,
+  getMenuLabel,
+  MENU_KEYS,
+  type MenuKey,
   type NavItem as Item,
 } from '@/lib/navigation'
+import { useLang, type Lang } from '@/i18n'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { BOOKING_URL } from '@/data/contact'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const MENU = ['Products', 'Services', 'Company', 'Resources']
-const ORDER: Record<string, number> = { Products: 0, Services: 1, Company: 2, Resources: 3 }
+const ORDER: Record<MenuKey, number> = { Products: 0, Services: 1, Company: 2, Resources: 3 }
+
+const COPY = {
+  en: {
+    comingSoon: 'Coming soon',
+    interested: 'Interested?',
+    bookDemo: 'Book a demo',
+    bookStrategy: 'Book a strategy call',
+    getInTouch: 'Get in touch',
+    contactUs: 'Contact Us',
+    bookCall: 'Book a call',
+    language: 'Language',
+    toggleMenu: 'Toggle menu',
+    dismiss: 'Dismiss',
+    home: 'Nivora works home',
+    bannerLead: 'Box and Voice are coming.',
+    bannerCta: 'Get notified at launch',
+  },
+  nl: {
+    comingSoon: 'Binnenkort',
+    interested: 'Interesse?',
+    bookDemo: 'Boek een demo',
+    bookStrategy: 'Boek een strategiegesprek',
+    getInTouch: 'Neem contact op',
+    contactUs: 'Neem contact op',
+    bookCall: 'Boek een gesprek',
+    language: 'Taal',
+    toggleMenu: 'Menu openen',
+    dismiss: 'Sluiten',
+    home: 'Nivora works home',
+    bannerLead: 'Box en Voice komen eraan.',
+    bannerCta: 'Word op de hoogte gebracht bij de lancering',
+  },
+} as const
 
 const slide = {
   enter: (d: number) => ({ opacity: 0, x: d * 28 }),
@@ -27,6 +64,7 @@ const slide = {
 
 /* Small, elegant "coming soon" tag — used next to Products. */
 function ComingSoonTag({ className }: { className?: string }) {
+  const { lang } = useLang()
   return (
     <span
       className={cn(
@@ -35,7 +73,7 @@ function ComingSoonTag({ className }: { className?: string }) {
       )}
     >
       <span className="h-1 w-1 rounded-full bg-olive shadow-[0_0_6px_rgba(150,167,102,0.7)]" />
-      Coming soon
+      {COPY[lang].comingSoon}
     </span>
   )
 }
@@ -71,20 +109,28 @@ function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   )
 }
 
-/* Short clickable line under the panel. "Book ..." labels go to the Nivora
-   booking page; "Get in touch" opens the contact popup. */
-function InterestedRow({ label, onSelect }: { label: string; onSelect?: () => void }) {
+/* Short clickable line under the panel. Booking labels go to the Nivora booking
+   page; contact labels open the contact popup. */
+function InterestedRow({
+  label,
+  kind,
+  onSelect,
+}: {
+  label: string
+  kind: 'booking' | 'contact'
+  onSelect?: () => void
+}) {
   const { open } = useContactModal()
-  const isBooking = label.toLowerCase().startsWith('book')
+  const { lang } = useLang()
   const cls = 'group/c mt-2.5 inline-flex items-center gap-1.5 px-3 text-[13px]'
   const inner = (
     <>
-      <span className="text-faint">Interested?</span>
+      <span className="text-faint">{COPY[lang].interested}</span>
       <span className="font-medium text-ink transition-colors group-hover/c:text-white">{label}</span>
       <ArrowRight className="h-3.5 w-3.5 text-ink transition-transform duration-200 group-hover/c:translate-x-0.5" strokeWidth={1.8} />
     </>
   )
-  if (isBooking && BOOKING_URL) {
+  if (kind === 'booking' && BOOKING_URL) {
     return (
       <a
         href={BOOKING_URL}
@@ -104,15 +150,31 @@ function InterestedRow({ label, onSelect }: { label: string; onSelect?: () => vo
   )
 }
 
-const PANELS: Record<string, { items: Item[]; label?: string }> = {
-  Products: { items: PRODUCTS, label: 'Book a demo' },
-  Services: { items: SERVICES, label: 'Book a strategy call' },
-  Company: { items: COMPANY_PRIMARY, label: 'Get in touch' },
-  Resources: { items: RESOURCES },
+type PanelDef = {
+  items: Item[]
+  label?: string
+  kind?: 'booking' | 'contact'
+  /** Resources gets the language toggle instead of an "interested" row. */
+  switcher?: boolean
 }
 
-function PanelContent({ active, onSelect }: { active: string; onSelect?: () => void }) {
-  const panel = PANELS[active] ?? PANELS.Products
+function getPanel(key: MenuKey, lang: Lang): PanelDef {
+  const t = COPY[lang]
+  switch (key) {
+    case 'Products':
+      return { items: getProducts(lang), label: t.bookDemo, kind: 'booking' }
+    case 'Services':
+      return { items: getServices(lang), label: t.bookStrategy, kind: 'booking' }
+    case 'Company':
+      return { items: getCompanyPrimary(lang), label: t.getInTouch, kind: 'contact' }
+    case 'Resources':
+      return { items: getResources(lang), switcher: true }
+  }
+}
+
+function PanelContent({ active, onSelect }: { active: MenuKey; onSelect?: () => void }) {
+  const { lang } = useLang()
+  const panel = getPanel(active, lang)
 
   return (
     <div className="w-[360px]">
@@ -122,7 +184,15 @@ function PanelContent({ active, onSelect }: { active: string; onSelect?: () => v
           <CardItem key={it.title} {...it} />
         ))}
       </div>
-      {panel.label && <InterestedRow label={panel.label} onSelect={onSelect} />}
+      {panel.label && panel.kind && (
+        <InterestedRow label={panel.label} kind={panel.kind} onSelect={onSelect} />
+      )}
+      {panel.switcher && (
+        <div className="mt-2.5 flex items-center justify-between gap-2 px-3">
+          <span className="text-[13px] text-faint">{COPY[lang].language}</span>
+          <LanguageSwitch />
+        </div>
+      )}
     </div>
   )
 }
@@ -130,6 +200,8 @@ function PanelContent({ active, onSelect }: { active: string; onSelect?: () => v
 /* Slim launch announcement that floats above the bar and points at the waitlist.
  *  Dismissible, and the choice is remembered so it stays out of the way. */
 function LaunchBanner() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [show, setShow] = useState(false)
 
   useEffect(() => {
@@ -145,13 +217,13 @@ function LaunchBanner() {
         className="group flex flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-[12.5px] text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
       >
         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
-        <span className="hidden sm:inline">Box and Voice are coming.</span>
-        <span className="font-medium text-ink">Get notified at launch</span>
+        <span className="hidden sm:inline">{t.bannerLead}</span>
+        <span className="font-medium text-ink">{t.bannerCta}</span>
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
       </a>
       <button
         type="button"
-        aria-label="Dismiss"
+        aria-label={t.dismiss}
         onClick={() => {
           localStorage.setItem('nivora.launchBanner.dismissed', '1')
           setShow(false)
@@ -165,9 +237,11 @@ function LaunchBanner() {
 }
 
 export function Navbar() {
+  const { lang } = useLang()
+  const t = COPY[lang]
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const [active, setActive] = useState<string | null>(null)
+  const [active, setActive] = useState<MenuKey | null>(null)
   const [dir, setDir] = useState(1)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -185,7 +259,7 @@ export function Navbar() {
     cancelClose()
     closeTimer.current = setTimeout(() => setActive(null), 130)
   }
-  const openMenu = (label: string) => {
+  const openMenu = (label: MenuKey) => {
     cancelClose()
     setActive((prev) => {
       if (prev && prev !== label) setDir(ORDER[label] > ORDER[prev] ? 1 : -1)
@@ -210,26 +284,26 @@ export function Navbar() {
         >
           <div className="flex items-center justify-between">
             {/* Left: logo */}
-            <a href="/" className="flex items-center pl-1" aria-label="Nivora works home">
+            <a href="/" className="flex items-center pl-1" aria-label={t.home}>
               <img src="/brand/nivora-logo.png" alt="Nivora" className="h-[22px] w-auto" />
             </a>
 
             {/* Center: links */}
             <div className="absolute left-1/2 hidden -translate-x-1/2 lg:block">
               <div className="flex items-center gap-1">
-                {MENU.map((label) => (
+                {MENU_KEYS.map((key) => (
                   <button
-                    key={label}
-                    onMouseEnter={() => openMenu(label)}
+                    key={key}
+                    onMouseEnter={() => openMenu(key)}
                     onMouseLeave={closeSoon}
                     className={cn(
                       'flex items-center gap-1 rounded-lg px-3 py-2 text-sm transition-colors',
-                      active === label ? 'bg-white/[0.07] text-ink' : 'text-muted hover:text-ink',
+                      active === key ? 'bg-white/[0.07] text-ink' : 'text-muted hover:text-ink',
                     )}
                   >
-                    {label}
+                    {getMenuLabel(key, lang)}
                     <ChevronDown
-                      className={cn('h-3.5 w-3.5 transition-transform duration-300', active === label && 'rotate-180')}
+                      className={cn('h-3.5 w-3.5 transition-transform duration-300', active === key && 'rotate-180')}
                     />
                   </button>
                 ))}
@@ -238,15 +312,15 @@ export function Navbar() {
 
             {/* Right: actions */}
             <div className="hidden items-center gap-2.5 lg:flex">
-              <RippleButton variant="ghost" href="/contact">Contact Us</RippleButton>
-              <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer">Book a call</RippleButton>
+              <RippleButton variant="ghost" href="/contact">{t.contactUs}</RippleButton>
+              <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t.bookCall}</RippleButton>
             </div>
 
             {/* Mobile toggle */}
             <button
               onClick={() => setOpen((v) => !v)}
               className="flex h-9 w-9 items-center justify-center rounded-lg text-ink lg:hidden"
-              aria-label="Toggle menu"
+              aria-label={t.toggleMenu}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -255,27 +329,31 @@ export function Navbar() {
           {/* Mobile panel */}
           {open && (
             <div className="mt-3 flex flex-col gap-1 border-t border-line pt-3 lg:hidden">
-              <p className="px-2 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">Products</p>
-              {PRODUCTS.map((l) => (
+              <p className="px-2 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
+              {getProducts(lang).map((l) => (
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Services</p>
-              {SERVICES.map((l) => (
+              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
+              {getServices(lang).map((l) => (
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Company</p>
-              {COMPANY_PRIMARY.map((l) => (
+              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Company', lang)}</p>
+              {getCompanyPrimary(lang).map((l) => (
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">
                   {l.title}
                   {l.comingSoon && <ComingSoonTag />}
                 </a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">Resources</p>
-              {RESOURCES.map((l) => (
+              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Resources', lang)}</p>
+              {getResources(lang).map((l) => (
                 <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
               ))}
+              <div className="mt-3 flex items-center justify-between gap-2 border-t border-line px-2 pt-3">
+                <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>
+                <LanguageSwitch />
+              </div>
               <Button size="sm" className="mt-2" asChild>
-                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Book a call</a>
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t.bookCall}</a>
               </Button>
             </div>
           )}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { CONTACT } from '@/data/contact'
+import { useLang, type Localized } from '@/i18n'
 import { newId, sendHelpMessage, type ChatMessage } from './helpChat'
 
 export type ChatStatus = 'idle' | 'thinking' | 'streaming' | 'error'
@@ -9,8 +10,10 @@ type Options = {
   initial?: ChatMessage[]
 }
 
-const ERROR_REPLY =
-  `Something went wrong reaching the assistant. You can try again, or reach us directly at ${CONTACT.email} or ${CONTACT.phoneDisplay}.`
+const ERROR_REPLY: Localized<string> = {
+  en: `Something went wrong reaching the assistant. You can try again, or reach us directly at ${CONTACT.email} or ${CONTACT.phoneDisplay}.`,
+  nl: `Er ging iets mis bij het bereiken van de assistent. U kunt het opnieuw proberen, of ons rechtstreeks bereiken via ${CONTACT.email} of ${CONTACT.phoneDisplay}.`,
+}
 
 /**
  * Drives the Help Center conversation: holds the thread, sends a turn, and
@@ -21,10 +24,17 @@ export function useHelpChat({ initial = [] }: Options = {}) {
   const [messages, setMessages] = useState<ChatMessage[]>(initial)
   const [status, setStatus] = useState<ChatStatus>('idle')
 
+  const { lang } = useLang()
+
   // Mirror of `messages` so a turn always builds history from the latest state
   // without `send`/`retry` being re-created on every render.
   const messagesRef = useRef(messages)
   messagesRef.current = messages
+
+  // Mirror of the active language so `runTurn` can read it without being
+  // re-created (and without re-creating `send`/`retry`) on every render.
+  const langRef = useRef(lang)
+  langRef.current = lang
 
   const abortRef = useRef<AbortController | null>(null)
   const mountedRef = useRef(true)
@@ -59,7 +69,7 @@ export function useHelpChat({ initial = [] }: Options = {}) {
     }
 
     try {
-      const full = await sendHelpMessage(history, { signal: controller.signal, onToken })
+      const full = await sendHelpMessage(history, { signal: controller.signal, onToken, lang: langRef.current })
       if (!mountedRef.current) return
       if (!created && full) {
         setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content: full }])
@@ -67,7 +77,7 @@ export function useHelpChat({ initial = [] }: Options = {}) {
       setStatus('idle')
     } catch (err) {
       if (controller.signal.aborted || !mountedRef.current) return
-      setMessages((prev) => [...prev, { id: newId('a'), role: 'assistant', content: ERROR_REPLY }])
+      setMessages((prev) => [...prev, { id: newId('a'), role: 'assistant', content: ERROR_REPLY[langRef.current] }])
       setStatus('error')
     } finally {
       if (abortRef.current === controller) abortRef.current = null

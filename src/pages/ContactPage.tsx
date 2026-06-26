@@ -3,9 +3,37 @@ import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { CONTACT, ADDRESS, SOCIAL_LINKS } from '@/data/contact'
+import { useLang } from '@/i18n'
 
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS.mapQuery)}`
 const MAP_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS.mapQuery)}&z=15&output=embed`
+
+const COPY = {
+  en: {
+    docTitle: 'Contact · Nivora',
+    heading: "Let's talk.",
+    sub: "Tell us the challenge, or the idea you can't get built. Book a call, or reach us directly, we usually reply within a day.",
+    bookCall: 'Book a call',
+    emailUs: 'Email us',
+    labelEmail: 'Email',
+    labelPhone: 'Phone',
+    labelStudio: 'Studio',
+    mapTitle: 'Nivora studio, Brugge',
+    route: 'Route',
+  },
+  nl: {
+    docTitle: 'Contact · Nivora',
+    heading: 'Laten we praten.',
+    sub: 'Vertel ons de uitdaging, of het idee dat u maar niet gebouwd krijgt. Boek een gesprek, of bereik ons rechtstreeks, we reageren meestal binnen een dag.',
+    bookCall: 'Boek een gesprek',
+    emailUs: 'Mail ons',
+    labelEmail: 'E-mail',
+    labelPhone: 'Telefoon',
+    labelStudio: 'Studio',
+    mapTitle: 'Nivora studio, Brugge',
+    route: 'Route',
+  },
+} as const
 
 /** A single contact tile (email / phone / location). */
 function ContactCard({
@@ -49,13 +77,16 @@ function ContactCard({
 }
 
 export function ContactPage() {
+  const { lang } = useLang()
+  const t = COPY[lang]
+
   useEffect(() => {
     const prev = document.title
-    document.title = 'Contact · Nivora'
+    document.title = t.docTitle
     return () => {
       document.title = prev
     }
-  }, [])
+  }, [t.docTitle])
 
   return (
     <main>
@@ -67,23 +98,22 @@ export function ContactPage() {
         />
         <Reveal mode="mount">
           <h1 className="mx-auto max-w-3xl font-serif text-[46px] leading-[1.02] tracking-[-0.02em] text-ink sm:text-[64px] lg:text-[78px]">
-            Let's talk.
+            {t.heading}
           </h1>
         </Reveal>
         <Reveal mode="mount" delay={0.06}>
           <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-faint sm:text-[16px]">
-            Tell us the challenge, or the idea you can't get built. Book a call, or reach us
-            directly, we usually reply within a day.
+            {t.sub}
           </p>
         </Reveal>
         <Reveal mode="mount" delay={0.12}>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <BookCallButton className="h-12 px-6 text-[15px]">Book a call</BookCallButton>
+            <BookCallButton className="h-12 px-6 text-[15px]">{t.bookCall}</BookCallButton>
             <a
               href={`mailto:${CONTACT.email}`}
               className="inline-flex h-12 items-center gap-2 rounded-full border border-line bg-white/[0.02] px-6 text-[15px] text-ink-soft transition-colors hover:border-line-strong hover:text-ink"
             >
-              Email us
+              {t.emailUs}
             </a>
           </div>
         </Reveal>
@@ -93,15 +123,15 @@ export function ContactPage() {
       <section className="mx-auto w-full max-w-[1100px] px-6">
         <div className="grid gap-4 sm:grid-cols-3">
           <Reveal>
-            <ContactCard icon={Mail} label="Email" lines={[CONTACT.email]} href={`mailto:${CONTACT.email}`} />
+            <ContactCard icon={Mail} label={t.labelEmail} lines={[CONTACT.email]} href={`mailto:${CONTACT.email}`} />
           </Reveal>
           <Reveal delay={0.06}>
-            <ContactCard icon={Phone} label="Phone" lines={[CONTACT.phoneDisplay]} href={CONTACT.phoneHref} />
+            <ContactCard icon={Phone} label={t.labelPhone} lines={[CONTACT.phoneDisplay]} href={CONTACT.phoneHref} />
           </Reveal>
           <Reveal delay={0.12}>
             <ContactCard
               icon={MapPin}
-              label="Studio"
+              label={t.labelStudio}
               lines={[ADDRESS.line1, ADDRESS.line2]}
               href={MAPS_LINK}
               external
@@ -135,7 +165,7 @@ export function ContactPage() {
         <Reveal>
           <div className="relative h-[380px] overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a] sm:h-[460px]">
             <iframe
-              title="Nivora studio, Brugge"
+              title={t.mapTitle}
               src={MAP_EMBED}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -160,7 +190,7 @@ export function ContactPage() {
                 <span className="text-[12px] text-faint">{ADDRESS.line2}</span>
               </span>
               <span className="inline-flex shrink-0 items-center gap-1 text-[12px] text-faint transition-colors group-hover:text-ink">
-                Route <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
+                {t.route} <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
               </span>
             </a>
           </div>

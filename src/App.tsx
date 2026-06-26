@@ -5,7 +5,6 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollManager } from '@/components/ScrollManager'
 import { Home } from '@/pages/Home'
-import { TERMS, PRIVACY } from '@/data/legal'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
 
 /* The landing page stays in the main bundle so it paints immediately. Every
@@ -53,8 +52,8 @@ export default function App() {
               <Route path="/partnership" element={<PartnershipPage />} />
               <Route path="/newsletter/confirmed" element={<NewsletterConfirmed />} />
               <Route path="/unsubscribed" element={<Unsubscribed />} />
-              <Route path="/terms" element={<LegalPage doc={TERMS} />} />
-              <Route path="/privacy" element={<LegalPage doc={PRIVACY} />} />
+              <Route path="/terms" element={<LegalPage slug="terms" />} />
+              <Route path="/privacy" element={<LegalPage slug="privacy" />} />
               <Route path="*" element={<Home />} />
             </Routes>
           </Suspense>
