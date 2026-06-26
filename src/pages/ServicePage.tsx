@@ -7,7 +7,7 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion'
-import { ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, Minus, Sparkles } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -280,6 +280,7 @@ export function ServicePage() {
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
         <OtherServices current={meta.slug} />
+        <ServiceAskFab meta={meta} />
       </main>
     </ServiceIntro>
   )
@@ -506,6 +507,72 @@ function WhatYouGet({ meta }: { meta: ServiceMeta }) {
         </div>
       </div>
     </section>
+  )
+}
+
+/* Floating "ask Nivora about this service" button. Clean glass FAB, bottom-right,
+   that opens the Help Center with a per-service question already sent. Hovering
+   reveals the question. Bilingual. ─────────────────────────────────────────────*/
+const SERVICE_ASK: Record<Lang, Record<ServiceSlug, { label: string; prompt: string }>> = {
+  en: {
+    'app-design': {
+      label: 'What is App Design?',
+      prompt: 'What is App Design at Nivora and what do I get out of it?',
+    },
+    'local-ai': {
+      label: 'What is Local AI?',
+      prompt: 'What is Local AI and how does it keep my data private?',
+    },
+    aios: {
+      label: 'What is AIOS?',
+      prompt: 'What is AIOS and what are the benefits for my company?',
+    },
+    'ai-consulting': {
+      label: 'What is AI Consulting?',
+      prompt: 'What does AI Consulting do and when is it the right fit for me?',
+    },
+  },
+  nl: {
+    'app-design': {
+      label: 'Wat is App Design?',
+      prompt: 'Wat is App Design bij Nivora en wat levert het mij op?',
+    },
+    'local-ai': {
+      label: 'Wat is Local AI?',
+      prompt: 'Wat is Local AI en hoe houdt het mijn data privé?',
+    },
+    aios: {
+      label: 'Wat is AIOS?',
+      prompt: 'Wat is AIOS en wat zijn de voordelen voor mijn bedrijf?',
+    },
+    'ai-consulting': {
+      label: 'Wat is AI Consulting?',
+      prompt: 'Wat doet AI Consulting en wanneer is het iets voor mij?',
+    },
+  },
+}
+
+function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
+  const { lang } = useLang()
+  const ask = SERVICE_ASK[lang][meta.slug]
+  return (
+    <Link
+      to={`/help?ask=${encodeURIComponent(ask.prompt)}`}
+      aria-label={ask.label}
+      className="group fixed bottom-5 right-5 z-40 flex items-center gap-3 sm:bottom-6 sm:right-6"
+    >
+      <span className="pointer-events-none hidden max-w-0 overflow-hidden whitespace-nowrap rounded-full border border-line bg-black/70 py-2.5 text-[13.5px] font-medium text-ink-soft opacity-0 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 group-hover:max-w-[320px] group-hover:px-4 group-hover:opacity-100 sm:block">
+        {ask.label}
+      </span>
+      <span className="relative flex h-14 w-14 items-center justify-center rounded-full border border-line bg-black/60 text-ink shadow-[0_12px_44px_rgba(0,0,0,0.55)] backdrop-blur-xl transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-line-strong group-hover:bg-black/75">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(60%_60%_at_50%_28%,rgba(255,255,255,0.14),transparent_70%)]"
+        />
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-full bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        <Sparkles className="relative h-[22px] w-[22px]" strokeWidth={1.6} />
+      </span>
+    </Link>
   )
 }
 

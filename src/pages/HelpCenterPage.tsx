@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUp,
@@ -91,6 +91,8 @@ export function HelpCenterPage() {
   const t = COPY[lang]
   const { messages, status, busy, send, retry, reset, stop } = useHelpChat()
   const endRef = useRef<HTMLDivElement>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const askSentRef = useRef(false)
 
   const empty = messages.length === 0
 
@@ -108,6 +110,24 @@ export function HelpCenterPage() {
     if (empty || !endRef.current) return
     endRef.current.scrollIntoView({ block: 'end' })
   }, [messages, status, empty])
+
+  // A question can be handed in via /help?ask=... (the service-page button).
+  // Send it once on arrival, then strip the param so a refresh does not resend.
+  useEffect(() => {
+    if (askSentRef.current) return
+    const ask = searchParams.get('ask')
+    if (ask && ask.trim()) {
+      askSentRef.current = true
+      send(ask.trim())
+      setSearchParams(
+        (prev) => {
+          prev.delete('ask')
+          return prev
+        },
+        { replace: true },
+      )
+    }
+  }, [searchParams, send, setSearchParams])
 
   return (
     <main className="relative w-full bg-bg">
