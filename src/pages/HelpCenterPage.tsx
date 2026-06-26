@@ -90,7 +90,7 @@ export function HelpCenterPage() {
   const { lang } = useLang()
   const t = COPY[lang]
   const { messages, status, busy, send, retry, reset, stop } = useHelpChat()
-  const bodyRef = useRef<HTMLDivElement>(null)
+  const endRef = useRef<HTMLDivElement>(null)
 
   const empty = messages.length === 0
 
@@ -101,15 +101,17 @@ export function HelpCenterPage() {
     }
   }, [lang])
 
-  // Keep the newest turn in view as it streams in.
+  // Follow the newest turn as it streams in. The conversation flows in the page
+  // (so page scrolling stays smooth), and the end sentinel carries a scroll
+  // margin so the latest message lands just above the sticky composer.
   useEffect(() => {
-    const el = bodyRef.current
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'auto' })
-  }, [messages, status])
+    if (empty || !endRef.current) return
+    endRef.current.scrollIntoView({ block: 'end' })
+  }, [messages, status, empty])
 
   return (
     <main className="relative w-full bg-bg">
-      <section className={cn('relative flex w-full flex-col overflow-hidden', empty ? 'min-h-svh' : 'h-svh')}>
+      <section className={cn('relative flex w-full flex-col', empty ? 'min-h-svh overflow-hidden' : 'min-h-svh')}>
         {/* Moving dot-matrix backdrop, echoing the AIOS chat. Shown only on the
             empty hero. The moment a conversation starts it clears, so chatting is
             a clean, distraction-free interface. */}
@@ -122,19 +124,10 @@ export function HelpCenterPage() {
           </div>
         )}
 
-        <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pb-8 pt-28 sm:px-6 lg:pt-32">
-          {/* Conversation — hidden while empty so the hero is centered. */}
-          <div
-            ref={bodyRef}
-            aria-live="polite"
-            data-lenis-prevent
-            className={cn(
-              'space-y-6',
-              empty
-                ? 'hidden'
-                : 'min-h-0 flex-1 overflow-y-auto pb-6 [mask-image:linear-gradient(to_bottom,transparent,black_22px,black_calc(100%_-_8px),transparent)]',
-            )}
-          >
+        <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pt-28 sm:px-6 lg:pt-32">
+          {/* Conversation — flows in the page so scrolling stays smooth. Hidden
+              while empty so the hero is centered. */}
+          <div aria-live="polite" className={cn('space-y-6', empty ? 'hidden' : 'flex-1 pb-2')}>
             {!empty && (
               <>
                 {messages.map((m, i) => (
@@ -148,6 +141,7 @@ export function HelpCenterPage() {
                   />
                 ))}
                 {status === 'thinking' && <ThinkingIndicator reduced={reduced} />}
+                <div ref={endRef} aria-hidden className="scroll-mb-[200px]" />
               </>
             )}
           </div>
@@ -157,7 +151,9 @@ export function HelpCenterPage() {
               composer element itself never unmounts across the switch. */}
           <div
             className={cn(
-              empty ? 'flex flex-1 flex-col items-center justify-center gap-9' : 'shrink-0',
+              empty
+                ? 'flex flex-1 flex-col items-center justify-center gap-9 pb-8'
+                : 'sticky bottom-0 z-20 -mx-5 bg-gradient-to-t from-bg from-72% to-transparent px-5 pb-5 pt-12 sm:-mx-6 sm:px-6',
             )}
           >
             {empty && (
@@ -193,7 +189,7 @@ export function HelpCenterPage() {
             )}
 
             <Composer
-              className={empty ? 'w-full' : 'pt-2'}
+              className="w-full"
               reduced={reduced}
               onSend={send}
               onStop={stop}
