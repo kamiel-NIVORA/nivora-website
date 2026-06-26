@@ -432,19 +432,16 @@ function Message({
       <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-white/[0.04]">
         <img src="/brand/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
       </span>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 pt-0.5">
+        {/* Open, frameless answer, like the AIOS chat: no bubble, more room. */}
         <div
           className={cn(
-            'rounded-2xl rounded-bl-md border px-4 py-3 text-[15px] leading-[1.7]',
-            isError
-              ? 'border-white/[0.1] bg-white/[0.04] text-faint'
-              : 'border-white/[0.07] bg-white/[0.04] text-ink-soft',
+            'space-y-0.5 text-[15.5px] leading-[1.75]',
+            isError ? 'text-faint' : 'text-ink-soft',
           )}
         >
-          <div className="space-y-0.5">
-            {renderChatMarkdown(text)}
-            {streaming && !reduced && <Caret />}
-          </div>
+          {renderChatMarkdown(text)}
+          {streaming && !reduced && <Caret />}
         </div>
 
         {tokens.length > 0 && <CtaRow tokens={tokens} />}
