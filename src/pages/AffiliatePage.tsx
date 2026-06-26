@@ -391,7 +391,7 @@ function GiftBlock() {
   return (
     <section className="relative w-full px-6 pb-8 lg:pb-12">
       <div className="relative mx-auto w-full max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a]">
+        <div className="relative overflow-hidden rounded-[32px] border border-line bg-black">
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
 
           <div className="relative grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1fr] lg:gap-16 lg:p-16">
