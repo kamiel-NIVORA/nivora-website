@@ -36,8 +36,8 @@ const COPY = {
   en: {
     docTitle: 'Help Center · Nivora',
     heroTitle: 'How can we help?',
-    heroAsk: 'Ask anything',
-    contact: 'Contact',
+    heroAsk: 'Ask our Nivora assistant anything. Would you rather reach us directly?',
+    contact: 'Get in touch',
     placeholder: 'Ask a question or give Nivora a command...',
     typing: 'Nivora is answering, wait or press stop...',
     experts: 'Experts',
@@ -59,8 +59,8 @@ const COPY = {
   nl: {
     docTitle: 'Helpcentrum · Nivora',
     heroTitle: 'Hoe kunnen we helpen?',
-    heroAsk: 'Vraag gerust alles',
-    contact: 'Contact',
+    heroAsk: 'Vraag alles aan onze Nivora-assistent. Wilt u liever rechtstreeks contact?',
+    contact: 'Neem contact op',
     placeholder: 'Stel een vraag of geef een commando aan Nivora...',
     typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
     experts: 'Experts',
@@ -179,13 +179,12 @@ export function HelpCenterPage() {
                   initial={reduced ? false : { opacity: 0, y: 8 }}
                   animate={reduced ? undefined : { opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="flex items-center gap-2.5 text-[14.5px]"
+                  className="max-w-md text-balance text-[14.5px] leading-relaxed text-faint"
                 >
-                  <span className="text-faint">{t.heroAsk}</span>
-                  <span className="text-dim">·</span>
+                  {t.heroAsk}{' '}
                   <Link
                     to="/contact"
-                    className="text-ink-soft underline-offset-4 transition-colors hover:text-white hover:underline"
+                    className="font-medium text-ink underline-offset-4 transition-colors hover:text-white hover:underline"
                   >
                     {t.contact}
                   </Link>
