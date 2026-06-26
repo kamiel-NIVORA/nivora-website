@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
-import { ArrowUp, ArrowUpRight, CalendarClock, RefreshCw, RotateCw, type LucideIcon } from 'lucide-react'
-import { Reveal } from '@/components/animations/Reveal'
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  ArrowUp,
+  ArrowUpRight,
+  Brain,
+  CalendarClock,
+  Paperclip,
+  RotateCw,
+  Sparkles,
+  X,
+  type LucideIcon,
+} from 'lucide-react'
 import { ChatBackdrop } from '@/components/help/ChatBackdrop'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { cn } from '@/lib/utils'
@@ -10,35 +19,10 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { useHelpChat } from '@/lib/useHelpChat'
 import { splitCta, type ChatMessage, type CtaToken } from '@/lib/helpChat'
 import { renderChatMarkdown } from '@/lib/chatMarkdown'
-import { CONTACT, BOOKING_URL } from '@/data/contact'
+import { BOOKING_URL } from '@/data/contact'
 import { useLang, pick, type Localized } from '@/i18n'
 
 const ease = [0.16, 1, 0.3, 1] as const
-
-/* The questions a Nivora visitor most often arrives with. */
-const STARTER_PROMPTS: Localized<string[]> = {
-  en: [
-    'What does Nivora actually do?',
-    'Which service fits my company?',
-    'How does Local AI keep our data private?',
-    'What is AIOS, exactly?',
-    'What does a project cost?',
-    'When do Box and Voice launch?',
-  ],
-  nl: [
-    'Wat doet Nivora eigenlijk?',
-    'Welke dienst past bij mijn bedrijf?',
-    'Hoe houdt Local AI onze data privé?',
-    'Wat is AIOS precies?',
-    'Wat kost een project?',
-    'Wanneer lanceren Box en Voice?',
-  ],
-}
-
-const PLACEHOLDERS: Localized<string[]> = {
-  en: ['Ask anything about Nivora.', 'What can we build for you?', 'How does Local AI work?'],
-  nl: ['Vraag alles over Nivora.', 'Wat kunnen we voor u bouwen?', 'Hoe werkt Local AI?'],
-}
 
 /* Calm status words while the assistant is composing (Nivora voice, not playful). */
 const THINKING_WORDS: Localized<string[]> = {
@@ -46,33 +30,25 @@ const THINKING_WORDS: Localized<string[]> = {
   nl: ['Aan het denken', 'Aan het lezen', 'Aan het samenstellen'],
 }
 
-/* All other user-facing copy on the Help Center page. */
+/* All user-facing copy on the Help Center page. The page mirrors the Nivora
+   AIOS chat hero exactly: a dot-matrix field, the centered Nivora mark, one
+   clean heading, and the same chat composer (attach · Experts · Assistent ·
+   Verstuur). No page title, no subtitle, no extra sections. */
 const COPY = {
   en: {
     docTitle: 'Help Center · Nivora',
-    headingWords: ['Help', 'Center'],
-    headerSub:
-      'Ask anything about Nivora. Our assistant knows the work inside out, and the team is right here whenever you would rather speak with a person.',
-    assistantName: 'Nivora Assistant',
-    online: 'Online',
-    newChatAria: 'Start a new chat',
-    newChat: 'New chat',
-    talkToTeam: 'Talk to the team',
-    greetingTitle: 'How can we help?',
-    greetingSub:
-      'Ask in your own words. The assistant knows our products, services, pricing and how we work, and it will point you to the right place.',
-    tryAgain: 'Try again',
-    composerAria: 'Message the Nivora assistant',
+    heroTitle: 'How can we help?',
+    placeholder: 'Ask a question or give Nivora a command...',
+    typing: 'Nivora is answering, wait or press stop...',
+    experts: 'Experts',
+    assistant: 'Assistant',
+    send: 'Send',
+    stop: 'Stop',
+    attach: 'Add a file',
     sendAria: 'Send message',
-    disclaimerPre: 'Answers are AI-generated. Prefer a person? ',
-    peopleTitle: 'Prefer to talk to a person?',
-    peopleSub:
-      'The assistant gets you a clear answer in seconds. When you would rather talk it through, the team is one message away. Book a short call, or reach us directly.',
-    bookCall: 'Book a call',
-    contactUs: 'Contact us',
-    emailLead: 'Or email ',
-    callLead: ' · call ',
-    locationTail: '. Based in Brugge. Usually a reply within a day.',
+    composerAria: 'Message the Nivora assistant',
+    tryAgain: 'Try again',
+    talkToTeam: 'Talk to the team',
     cta: {
       book_call: 'Book a call',
       contact: 'Contact us',
@@ -82,29 +58,18 @@ const COPY = {
   },
   nl: {
     docTitle: 'Helpcentrum · Nivora',
-    headingWords: ['Helpcentrum'],
-    headerSub:
-      'Vraag alles over Nivora. Onze assistent kent het werk door en door, en het team staat klaar zodra u liever met een persoon spreekt.',
-    assistantName: 'Nivora Assistent',
-    online: 'Online',
-    newChatAria: 'Start een nieuwe chat',
-    newChat: 'Nieuwe chat',
-    talkToTeam: 'Praat met het team',
-    greetingTitle: 'Hoe kunnen we helpen?',
-    greetingSub:
-      'Vraag het in uw eigen woorden. De assistent kent onze producten, diensten, prijzen en hoe we werken, en wijst u naar de juiste plek.',
-    tryAgain: 'Probeer opnieuw',
-    composerAria: 'Stuur de Nivora-assistent een bericht',
+    heroTitle: 'Hoe kunnen we helpen?',
+    placeholder: 'Stel een vraag of geef een commando aan Nivora...',
+    typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
+    experts: 'Experts',
+    assistant: 'Assistent',
+    send: 'Verstuur',
+    stop: 'Stop',
+    attach: 'Bestand toevoegen',
     sendAria: 'Bericht versturen',
-    disclaimerPre: 'Antwoorden zijn AI-gegenereerd. Liever een persoon? ',
-    peopleTitle: 'Liever met een persoon praten?',
-    peopleSub:
-      'De assistent geeft u in seconden een helder antwoord. Wilt u het liever uitpraten, dan is het team maar één bericht verwijderd. Boek een kort gesprek, of bereik ons rechtstreeks.',
-    bookCall: 'Boek een gesprek',
-    contactUs: 'Neem contact op',
-    emailLead: 'Of mail ',
-    callLead: ' · bel ',
-    locationTail: '. Gevestigd in Brugge. Meestal antwoord binnen een dag.',
+    composerAria: 'Stuur de Nivora-assistent een bericht',
+    tryAgain: 'Probeer opnieuw',
+    talkToTeam: 'Praat met het team',
     cta: {
       book_call: 'Boek een gesprek',
       contact: 'Neem contact op',
@@ -115,11 +80,17 @@ const COPY = {
 } as const
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Page
+   Page — a full-height AIOS-style chat hero. The site nav sits above it and
+   the footer follows on scroll.
    ────────────────────────────────────────────────────────────────────────── */
 export function HelpCenterPage() {
   const reduced = usePrefersReducedMotion()
   const { lang } = useLang()
+  const t = COPY[lang]
+  const { messages, status, busy, send, retry, reset, stop } = useHelpChat()
+  const bodyRef = useRef<HTMLDivElement>(null)
+
+  const empty = messages.length === 0
 
   useEffect(() => {
     document.title = COPY[lang].docTitle
@@ -128,239 +99,326 @@ export function HelpCenterPage() {
     }
   }, [lang])
 
-  return (
-    <main className="relative w-full overflow-hidden bg-bg">
-      {/* Moving dot-matrix backdrop, echoing the AIOS chat. Monochrome, no red. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[1000px]">
-        <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,transparent_0%,rgba(6,6,6,0.6)_70%,#060606_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
-      </div>
-
-      <section className="relative z-10 mx-auto flex w-full max-w-[920px] flex-col items-center px-5 pb-6 pt-28 sm:px-6 lg:pt-32">
-        <HelpHeader reduced={reduced} />
-        <ChatPanel reduced={reduced} />
-      </section>
-
-      <PeopleRow />
-    </main>
-  )
-}
-
-/* Header — just "Help Center", clean white serif. No tall hero. ──────────────*/
-
-const headWrap: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
-}
-const headWord: Variants = {
-  hidden: { opacity: 0, y: 14, filter: 'blur(12px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.1, ease } },
-}
-const headFade: Variants = {
-  hidden: { opacity: 0, y: 12, filter: 'blur(8px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1, ease } },
-}
-
-function HelpHeader({ reduced }: { reduced: boolean }) {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  return (
-    <motion.div
-      variants={headWrap}
-      initial={reduced ? false : 'hidden'}
-      animate={reduced ? undefined : 'show'}
-      className="relative mb-7 flex w-full flex-col items-center text-center sm:mb-9"
-    >
-      <h1 className="font-serif text-[44px] leading-[1.02] tracking-[-0.02em] sm:text-[60px] lg:text-[72px]">
-        {t.headingWords.map((w, i) => (
-          <motion.span
-            key={i}
-            variants={headWord}
-            className="mr-[0.22em] inline-block bg-gradient-to-br from-white via-ink to-ink-soft bg-clip-text text-transparent last:mr-0"
-          >
-            {w}
-          </motion.span>
-        ))}
-      </h1>
-      <motion.p
-        variants={headFade}
-        className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink-soft/75 sm:text-[16.5px]"
-      >
-        {t.headerSub}
-      </motion.p>
-    </motion.div>
-  )
-}
-
-/* Chat panel — the centerpiece. ──────────────────────────────────────────────*/
-
-function ChatPanel({ reduced }: { reduced: boolean }) {
-  const { messages, status, busy, send, retry, reset } = useHelpChat()
-  const bodyRef = useRef<HTMLDivElement>(null)
-
   // Keep the newest turn in view as it streams in.
   useEffect(() => {
     const el = bodyRef.current
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'auto' })
   }, [messages, status])
 
-  const empty = messages.length === 0
-
   return (
-    <Reveal mode="mount" className="w-full">
-      <div className="relative w-full">
-        <div className="relative flex h-[66svh] min-h-[540px] flex-col overflow-hidden rounded-[26px] border border-white/[0.08] bg-gradient-to-b from-white/[0.055] to-white/[0.015] shadow-[0_40px_120px_-30px_rgba(0,0,0,0.85)] backdrop-blur-2xl sm:h-[64svh] lg:max-h-[760px]">
-          {/* Top hairline, soft white */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
-          />
+    <main className="relative w-full bg-bg">
+      <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
+        {/* Moving dot-matrix backdrop, echoing the AIOS chat. Monochrome, no red. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+          <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(6,6,6,0.55)_60%,#060606_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
+        </div>
 
-          <ChatHeader reduced={reduced} hasMessages={!empty} onReset={reset} />
-
+        <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col px-5 pb-12 pt-28 sm:px-6 lg:pt-32">
+          {/* Conversation — hidden while empty so the hero is centered. */}
           <div
             ref={bodyRef}
             aria-live="polite"
             data-lenis-prevent
-            className="flex-1 space-y-6 overflow-y-auto px-4 py-6 sm:px-7 [mask-image:linear-gradient(to_bottom,transparent,black_22px,black_calc(100%_-_22px),transparent)]"
-          >
-            {empty ? (
-              <Greeting reduced={reduced} onPick={send} />
-            ) : (
-              messages.map((m, i) => (
-                <Message
-                  key={m.id}
-                  message={m}
-                  reduced={reduced}
-                  streaming={status === 'streaming' && m.role === 'assistant' && i === messages.length - 1}
-                  isError={status === 'error' && m.role === 'assistant' && i === messages.length - 1}
-                  onRetry={retry}
-                />
-              ))
+            className={cn(
+              'space-y-6',
+              empty
+                ? 'hidden'
+                : 'min-h-0 flex-1 overflow-y-auto pb-6 [mask-image:linear-gradient(to_bottom,transparent,black_22px,black_calc(100%_-_8px),transparent)]',
             )}
-            {status === 'thinking' && <ThinkingIndicator reduced={reduced} />}
+          >
+            {!empty && (
+              <>
+                {messages.map((m, i) => (
+                  <Message
+                    key={m.id}
+                    message={m}
+                    reduced={reduced}
+                    streaming={status === 'streaming' && m.role === 'assistant' && i === messages.length - 1}
+                    isError={status === 'error' && m.role === 'assistant' && i === messages.length - 1}
+                    onRetry={retry}
+                  />
+                ))}
+                {status === 'thinking' && <ThinkingIndicator reduced={reduced} />}
+              </>
+            )}
           </div>
 
-          <Composer onSend={send} busy={busy} reduced={reduced} />
+          {/* Hero (empty) wraps the composer so logo + heading + input stay centered
+              as one group. When chatting, the composer drops to the bottom. The
+              composer element itself never unmounts across the switch. */}
+          <div
+            className={cn(
+              empty ? 'flex flex-1 flex-col items-center justify-center gap-9' : 'shrink-0',
+            )}
+          >
+            {empty && (
+              <motion.div
+                className="flex flex-col items-center gap-4 text-center"
+                initial={reduced ? false : { opacity: 0, y: 18 }}
+                animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease }}
+              >
+                <motion.img
+                  src="/brand/nivora-logo.png"
+                  alt="Nivora"
+                  className="h-9 w-auto object-contain sm:h-11"
+                  initial={reduced ? false : { opacity: 0, y: -8 }}
+                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                />
+                <motion.h1
+                  initial={reduced ? false : { opacity: 0, y: 10 }}
+                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="bg-gradient-to-r from-white/95 to-white/55 bg-clip-text pb-1 text-[32px] font-medium leading-tight tracking-tight text-transparent sm:text-[40px]"
+                >
+                  {t.heroTitle}
+                </motion.h1>
+              </motion.div>
+            )}
+
+            <Composer
+              className={empty ? 'w-full' : 'pt-2'}
+              reduced={reduced}
+              onSend={send}
+              onStop={stop}
+              onReset={reset}
+              hasMessages={!empty}
+              busy={busy}
+            />
+          </div>
         </div>
-      </div>
-    </Reveal>
+      </section>
+    </main>
   )
 }
 
-function ChatHeader({
+/* ──────────────────────────────────────────────────────────────────────────
+   Composer — a faithful port of the AIOS hero chat box. A glassy panel with the
+   prompt textarea, then a control row: attach · Experts · Assistent on the left,
+   Verstuur on the right.
+   ────────────────────────────────────────────────────────────────────────── */
+
+type Mode = 'experts' | 'assistant' | null
+
+function Composer({
+  className,
   reduced,
-  hasMessages,
+  onSend,
+  onStop,
   onReset,
+  hasMessages,
+  busy,
 }: {
+  className?: string
   reduced: boolean
-  hasMessages: boolean
+  onSend: (text: string) => void
+  onStop: () => void
   onReset: () => void
+  hasMessages: boolean
+  busy: boolean
 }) {
   const { lang } = useLang()
   const t = COPY[lang]
-  return (
-    <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3.5 sm:px-6">
-      <div className="flex items-center gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-white/[0.08] bg-white/[0.04]">
-          <img src="/brand/nivora-mark.webp" alt="Nivora" className="h-5 w-5 object-contain" />
-        </span>
-        <span className="flex flex-col">
-          <span className="text-[14px] font-medium text-ink">{t.assistantName}</span>
-          <span className="mt-0.5 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-            <OnlineDot reduced={reduced} />
-            {t.online}
-          </span>
-        </span>
-      </div>
+  const [value, setValue] = useState('')
+  const [mode, setMode] = useState<Mode>(null)
+  const [files, setFiles] = useState<string[]>([])
+  const taRef = useRef<HTMLTextAreaElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
-      <div className="flex items-center gap-1.5">
-        {hasMessages && (
-          <button
+  const grow = () => {
+    const ta = taRef.current
+    if (!ta) return
+    ta.style.height = 'auto'
+    ta.style.height = `${Math.min(ta.scrollHeight, 200)}px`
+  }
+
+  const submit = () => {
+    const v = value.trim()
+    if (!v || busy) return
+    onSend(v)
+    setValue('')
+    setFiles([])
+    requestAnimationFrame(() => {
+      if (taRef.current) taRef.current.style.height = 'auto'
+    })
+  }
+
+  const canSend = value.trim().length > 0 && !busy
+  const toggle = (m: Exclude<Mode, null>) => setMode((prev) => (prev === m ? null : m))
+
+  return (
+    <motion.div
+      className={cn('relative', className)}
+      initial={reduced ? false : { scale: 0.98, opacity: 0 }}
+      animate={reduced ? undefined : { scale: 1, opacity: 1 }}
+      transition={{ duration: 0.35, delay: hasMessages ? 0 : 0.3, ease }}
+    >
+      <input
+        ref={fileRef}
+        type="file"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          const names = Array.from(e.target.files ?? []).map((f) => f.name)
+          if (names.length) setFiles((prev) => [...prev, ...names])
+          e.target.value = ''
+        }}
+      />
+
+      <div className="relative rounded-2xl border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300 focus-within:border-white/[0.18] focus-within:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.12)]">
+        {/* Prompt */}
+        <div className="p-4">
+          <textarea
+            ref={taRef}
+            rows={1}
+            value={value}
+            disabled={busy}
+            onChange={(e) => {
+              setValue(e.target.value)
+              grow()
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                submit()
+              }
+            }}
+            aria-label={t.composerAria}
+            placeholder={busy ? t.typing : t.placeholder}
+            className="block max-h-[200px] w-full resize-none border-none bg-transparent text-[15px] leading-7 text-white/90 caret-white outline-none placeholder:text-white/30 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          />
+        </div>
+
+        {/* Attachment chips (visual; wired to the backend later) */}
+        <AnimatePresence>
+          {files.length > 0 && (
+            <motion.div
+              className="flex flex-wrap gap-2 px-4 pb-3"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              {files.map((name, i) => (
+                <span
+                  key={`${name}-${i}`}
+                  className="inline-flex max-w-[220px] items-center gap-1.5 rounded-lg border border-white/[0.1] bg-white/[0.05] px-2.5 py-1 text-[12px] text-white/70"
+                >
+                  <Paperclip className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
+                    className="shrink-0 text-white/40 transition-colors hover:text-white"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Control row */}
+        <div className="flex items-center justify-between gap-4 border-t border-white/[0.05] p-4">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="rounded-lg p-2 text-white/40 transition-colors hover:text-white/90"
+              title={t.attach}
+              aria-label={t.attach}
+            >
+              <Paperclip className="h-4 w-4" />
+            </button>
+
+            <ModeButton
+              active={mode === 'experts'}
+              onClick={() => toggle('experts')}
+              Icon={Brain}
+              label={t.experts}
+            />
+            <ModeButton
+              active={mode === 'assistant'}
+              onClick={() => toggle('assistant')}
+              Icon={Sparkles}
+              label={t.assistant}
+            />
+
+            {hasMessages && (
+              <button
+                type="button"
+                onClick={onReset}
+                className="rounded-lg p-2 text-white/40 transition-colors hover:text-white/90"
+                title={t.tryAgain}
+                aria-label={t.tryAgain}
+              >
+                <RotateCw className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          <motion.button
             type="button"
-            onClick={onReset}
-            aria-label={t.newChatAria}
-            className="flex h-8 items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 text-[12.5px] text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+            onClick={() => (busy ? onStop() : submit())}
+            whileTap={busy || canSend ? { scale: 0.96 } : undefined}
+            disabled={!busy && !canSend}
+            aria-label={busy ? t.stop : t.sendAria}
+            className={cn(
+              'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all',
+              busy || canSend
+                ? 'bg-white text-[#0A0A0B] shadow-lg shadow-white/10'
+                : 'bg-white/[0.05] text-white/40',
+            )}
           >
-            <RefreshCw className="h-3.5 w-3.5" strokeWidth={1.7} />
-            <span className="hidden sm:inline">{t.newChat}</span>
-          </button>
-        )}
-        <Link
-          to="/contact"
-          className="flex h-8 items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] px-3 text-[12.5px] font-medium text-ink transition-colors hover:border-white/25 hover:bg-white/[0.08]"
-        >
-          {t.talkToTeam}
-          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
-        </Link>
+            {busy ? (
+              <>
+                <span className="h-3 w-3 rounded-[2px] bg-[#0A0A0B]" />
+                <span>{t.stop}</span>
+              </>
+            ) : (
+              <>
+                <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
+                <span>{t.send}</span>
+              </>
+            )}
+          </motion.button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
-function OnlineDot({ reduced }: { reduced: boolean }) {
-  const cls = 'h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.6)]'
-  if (reduced) return <span className={cls} />
+function ModeButton({
+  active,
+  onClick,
+  Icon,
+  label,
+}: {
+  active: boolean
+  onClick: () => void
+  Icon: LucideIcon
+  label: string
+}) {
   return (
-    <motion.span
-      className={cls}
-      animate={{ opacity: [0.4, 1, 0.4] }}
-      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-    />
-  )
-}
-
-/* Greeting / empty state ─────────────────────────────────────────────────────*/
-
-function Greeting({ reduced, onPick }: { reduced: boolean; onPick: (q: string) => void }) {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  return (
-    <div className="flex min-h-full flex-col items-center justify-center px-2 text-center">
-      <motion.span
-        initial={reduced ? false : { opacity: 0, y: -12 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0 }}
-        transition={{ delay: 0.05, duration: 0.5, ease }}
-        className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/[0.12] bg-white/[0.05] shadow-[0_0_30px_-6px_rgba(255,255,255,0.25)]"
-      >
-        <img src="/brand/nivora-mark.webp" alt="Nivora" className="h-7 w-7 object-contain" />
-      </motion.span>
-      <motion.h3
-        initial={reduced ? false : { opacity: 0, y: 14 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0 }}
-        transition={{ delay: 0.14, duration: 0.5, ease }}
-        className="mt-6 font-serif text-[26px] tracking-[-0.01em] text-ink sm:text-[30px]"
-      >
-        {t.greetingTitle}
-      </motion.h3>
-      <motion.p
-        initial={reduced ? false : { opacity: 0, y: 14 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5, ease }}
-        className="mx-auto mt-3 max-w-md text-[14px] leading-relaxed text-faint"
-      >
-        {t.greetingSub}
-      </motion.p>
-      <motion.div
-        initial={reduced ? false : { opacity: 0, y: 14 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0 }}
-        transition={{ delay: 0.27, duration: 0.5, ease }}
-        className="mt-7 flex flex-wrap items-center justify-center gap-2"
-      >
-        {pick(STARTER_PROMPTS, lang).map((p) => (
-          <button
-            key={p}
-            type="button"
-            onClick={() => onPick(p)}
-            className="inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-[13px] text-faint transition-all duration-200 hover:-translate-y-px hover:border-white/20 hover:bg-white/[0.06] hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-          >
-            {p}
-          </button>
-        ))}
-      </motion.div>
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        'flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-all',
+        active
+          ? 'border-white/25 bg-white/[0.12] text-white'
+          : 'border-transparent text-white/50 hover:border-white/10 hover:bg-white/[0.06] hover:text-white',
+      )}
+    >
+      <Icon className="h-3.5 w-3.5" />
+      <span>{label}</span>
+      {active && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}
+    </button>
   )
 }
 
@@ -581,185 +639,5 @@ function ThinkingIndicator({ reduced }: { reduced: boolean }) {
         )}
       </div>
     </div>
-  )
-}
-
-/* Composer ───────────────────────────────────────────────────────────────────*/
-
-function Composer({ onSend, busy, reduced }: { onSend: (text: string) => void; busy: boolean; reduced: boolean }) {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  const placeholders = pick(PLACEHOLDERS, lang)
-  const [value, setValue] = useState('')
-  const [focused, setFocused] = useState(false)
-  const [phIdx, setPhIdx] = useState(0)
-  const taRef = useRef<HTMLTextAreaElement>(null)
-
-  // Gently rotate the placeholder while the field is empty and at rest.
-  useEffect(() => {
-    if (reduced || focused || value) return
-    const id = setInterval(() => setPhIdx((i) => (i + 1) % placeholders.length), 4500)
-    return () => clearInterval(id)
-  }, [reduced, focused, value, placeholders.length])
-
-  const grow = () => {
-    const ta = taRef.current
-    if (!ta) return
-    ta.style.height = 'auto'
-    ta.style.height = `${Math.min(ta.scrollHeight, 140)}px`
-  }
-
-  const submit = () => {
-    const v = value.trim()
-    if (!v || busy) return
-    onSend(v)
-    setValue('')
-    requestAnimationFrame(() => {
-      if (taRef.current) taRef.current.style.height = 'auto'
-    })
-  }
-
-  const canSend = value.trim().length > 0 && !busy
-
-  return (
-    <div className="shrink-0 px-3 pb-4 pt-2 sm:px-5">
-      <div className="group relative flex items-end gap-2 rounded-[20px] border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] px-3 py-2 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-2xl transition-all duration-300 focus-within:border-white/[0.18]">
-        {/* Soft white focus glow */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-[20px] bg-[radial-gradient(70%_140%_at_50%_0%,rgba(255,255,255,0.06),transparent_70%)] opacity-0 transition-opacity duration-300 group-focus-within:opacity-100"
-        />
-        <div className="relative flex-1">
-          <textarea
-            ref={taRef}
-            rows={1}
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value)
-              grow()
-            }}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                submit()
-              }
-            }}
-            aria-label={t.composerAria}
-            className="relative z-[1] block max-h-36 w-full resize-none bg-transparent py-1.5 text-[15px] leading-7 text-ink caret-white outline-none"
-          />
-          {value.length === 0 && (
-            <div className="pointer-events-none absolute inset-0 flex items-start py-1.5">
-              {reduced ? (
-                <span className="text-[15px] leading-7 text-dim">{placeholders[0]}</span>
-              ) : (
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={phIdx}
-                    initial={{ opacity: 0, filter: 'blur(4px)' }}
-                    animate={{ opacity: 1, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, filter: 'blur(4px)' }}
-                    transition={{ duration: 0.4 }}
-                    className="text-[15px] leading-7 text-dim"
-                  >
-                    {placeholders[phIdx]}
-                  </motion.span>
-                </AnimatePresence>
-              )}
-            </div>
-          )}
-        </div>
-        <SendButton canSend={canSend} busy={busy} onClick={submit} />
-      </div>
-      <p className="mt-2 text-center text-[12px] text-dim">
-        {t.disclaimerPre}
-        <Link to="/contact" className="text-faint underline underline-offset-2 transition-colors hover:text-ink">
-          {t.talkToTeam}
-        </Link>
-        .
-      </p>
-    </div>
-  )
-}
-
-function SendButton({ canSend, busy, onClick }: { canSend: boolean; busy: boolean; onClick: () => void }) {
-  const { lang } = useLang()
-  return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      disabled={!canSend}
-      aria-label={COPY[lang].sendAria}
-      whileHover={canSend ? { scale: 1.05 } : undefined}
-      whileTap={canSend ? { scale: 0.96 } : undefined}
-      className={cn(
-        'relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
-        canSend
-          ? 'bg-white text-[#0a0a0a] shadow-[0_6px_20px_-6px_rgba(255,255,255,0.5)] hover:bg-white/90'
-          : 'bg-white/[0.06] text-faint',
-      )}
-    >
-      {busy ? (
-        <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-[#0a0a0a]/30 border-t-[#0a0a0a]" />
-      ) : (
-        <ArrowUp className="h-[18px] w-[18px]" strokeWidth={2.1} />
-      )}
-    </motion.button>
-  )
-}
-
-/* Prefer a person — clean CTA row beneath the chat. ──────────────────────────*/
-
-function PeopleRow() {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  return (
-    <section className="relative z-10 w-full px-6 py-20 lg:py-24">
-      <Reveal>
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-[28px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[34px]">
-            {t.peopleTitle}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-faint">
-            {t.peopleSub}
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={BOOKING_URL || '#'}
-              {...(BOOKING_URL ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-medium text-[#0a0a0a] shadow-[0_14px_40px_-12px_rgba(255,255,255,0.4)] transition-colors hover:bg-white/90"
-            >
-              <CalendarClock className="h-[18px] w-[18px]" strokeWidth={1.8} />
-              {t.bookCall}
-            </a>
-            <Link
-              to="/contact"
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.02] px-6 text-[15px] text-ink-soft transition-colors hover:border-white/[0.2] hover:text-ink"
-            >
-              {t.contactUs}
-              <ArrowUpRight className="h-4 w-4" strokeWidth={1.8} />
-            </Link>
-          </div>
-          <p className="mt-6 text-[13px] text-dim">
-            {t.emailLead}
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="text-faint underline underline-offset-2 transition-colors hover:text-ink"
-            >
-              {CONTACT.email}
-            </a>
-            {t.callLead}
-            <a
-              href={CONTACT.phoneHref}
-              className="text-faint underline underline-offset-2 transition-colors hover:text-ink"
-            >
-              {CONTACT.phoneDisplay}
-            </a>
-            {t.locationTail}
-          </p>
-        </div>
-      </Reveal>
-    </section>
   )
 }

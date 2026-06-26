@@ -115,7 +115,14 @@ export function useHelpChat({ initial = [] }: Options = {}) {
     setStatus('idle')
   }, [initial])
 
+  // Abort an in-flight turn without clearing the thread (the composer's Stop).
+  const stop = useCallback(() => {
+    abortRef.current?.abort()
+    abortRef.current = null
+    setStatus('idle')
+  }, [])
+
   const busy = status === 'thinking' || status === 'streaming'
 
-  return { messages, status, busy, send, retry, reset }
+  return { messages, status, busy, send, retry, reset, stop }
 }
