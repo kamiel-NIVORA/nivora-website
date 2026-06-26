@@ -112,7 +112,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'App Design',
     icon: '/services/icon-appdesign.png',
     tile: '/services/service-appdesign.webp',
-    heroImage: '/IMG_0845.jpg',
+    heroImage: '/services/hero-appdesign.jpg',
     photo: '/IMG_0892.JPG',
     anim: '/services/anim-appdesign.mp4',
     // Brand-neutral device shot (shared with AIOS). The previous asset was a
@@ -141,7 +141,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AIOS',
     icon: '/services/icon-aios.png',
     tile: '/services/service-aios.webp',
-    heroImage: '/IMG_0890.jpg',
+    heroImage: '/services/hero-aios.jpg',
     photo: '/IMG_0897.jpg',
     anim: '/services/anim-aios.mp4',
     mockup: '/services/mockup-aios.webp',
