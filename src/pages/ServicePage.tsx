@@ -536,25 +536,40 @@ const SERVICE_ASK: Record<Lang, Record<ServiceSlug, { label: string; prompt: str
 function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
   const { lang } = useLang()
   const ask = SERVICE_ASK[lang][meta.slug]
+  const [hover, setHover] = useState(false)
+  const [teaser, setTeaser] = useState(false)
+
+  // Peek open by itself shortly after the page loads, then close again. Hover
+  // keeps it open. One frame (the box) just lengthens, no second element.
+  useEffect(() => {
+    const openAt = setTimeout(() => setTeaser(true), 600)
+    const closeAt = setTimeout(() => setTeaser(false), 3600)
+    return () => {
+      clearTimeout(openAt)
+      clearTimeout(closeAt)
+    }
+  }, [])
+
+  const open = hover || teaser
+
   return (
     <Link
       to={`/help?ask=${encodeURIComponent(ask.prompt)}`}
       aria-label={ask.label}
-      className="group fixed bottom-5 right-5 z-40 flex items-center gap-3 sm:bottom-6 sm:right-6"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className="fixed bottom-5 right-5 z-40 flex items-center rounded-[20px] border border-line bg-black/55 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-[background-color,border-color] duration-300 hover:border-line-strong hover:bg-black/65 sm:bottom-6 sm:right-6"
     >
-      <span className="pointer-events-none hidden max-w-0 overflow-hidden whitespace-nowrap rounded-full border border-line bg-black/70 py-2.5 text-[13.5px] font-medium text-ink-soft opacity-0 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 group-hover:max-w-[320px] group-hover:px-4 group-hover:opacity-100 sm:block">
+      <span
+        className={cn(
+          'overflow-hidden whitespace-nowrap text-[14.5px] font-medium leading-none text-ink-soft transition-all duration-[420ms] ease-out',
+          open ? 'max-w-[340px] pl-5 opacity-100' : 'max-w-0 opacity-0',
+        )}
+      >
         {ask.label}
       </span>
-      <span className="relative flex h-14 w-14 items-center justify-center rounded-[18px] border border-line bg-black/55 text-ink shadow-[0_12px_44px_rgba(0,0,0,0.55)] backdrop-blur-2xl transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-line-strong group-hover:bg-black/70">
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[18px] bg-[radial-gradient(70%_60%_at_50%_22%,rgba(255,255,255,0.16),transparent_70%)]"
-        />
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[18px] bg-gradient-to-r from-transparent via-white/30 to-transparent"
-        />
-        <img src="/brand/ask-icon.png" alt="" className="relative h-[26px] w-[26px] object-contain" />
+      <span className="flex h-16 w-16 shrink-0 items-center justify-center">
+        <img src="/brand/ask-icon.png" alt="" className="h-8 w-8 object-contain" />
       </span>
     </Link>
   )
