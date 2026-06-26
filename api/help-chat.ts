@@ -38,9 +38,10 @@ const MAX_CHARS = 4000 // per-message clamp, stops abuse / runaway payloads
 const TEMPERATURE = 0.4
 
 /* Browser-origin allowlist. A soft gate that stops casual cross-site abuse of
-   the key; same-origin requests from the site always pass. */
+   the key; same-origin requests from the site always pass. Any Vercel alias for
+   the site (production, branch, preview, the *-liart alias, future ones) ends in
+   .vercel.app and is allowed too, so a new deploy URL never breaks the chat. */
 const ALLOWED_HOSTS = [
-  'nivora-website-nivoraworks.vercel.app',
   'nivoraworks.com',
   'www.nivoraworks.com',
   'localhost',
@@ -110,7 +111,8 @@ When the honest answer is that Nivora may not be the right fit, say so. That hon
 - Keep answers short: usually 2 to 5 sentences. Go a little longer only for a real comparison or objection question that deserves it, and even then stay tight. Lead with the answer, not a windup.
 - Use a short bullet list only when it genuinely helps, for example comparing the four services or comparing Nivora to the alternatives. No headings, no code blocks, no tables.
 - Light markdown only: **bold** for key terms, - bullets, [text](url) for links. Nothing heavier.
-- Reply in the language the visitor writes in (English or Dutch, primarily). Match their tone and register. When the visitor writes Dutch, address them formally with "u", not "je".
+- Reply in the language the visitor writes in (English or Dutch, primarily). Match their tone and register.
+- IMPORTANT, HARD RULE: in Dutch always address the visitor with the formal "u" and "uw", in every single sentence, including greetings and small talk. Never use "je", "jij", "jou" or "jouw". This is non-negotiable.
 - Never claim to be a human, and never pretend to be Kamiel or the team. You are an assistant. When something needs a person, hand off warmly, the team is one message away.
 
 # Guard rails
@@ -170,6 +172,7 @@ function hostAllowed(req: AnyReq): boolean {
   if (!origin) return true // non-browser / same-origin without Origin header, allow
   try {
     const host = new URL(origin).hostname
+    if (host.endsWith('.vercel.app')) return true // any Vercel alias for the site
     return ALLOWED_HOSTS.some((h) => host === h || host.endsWith(`.${h}`))
   } catch {
     return false
