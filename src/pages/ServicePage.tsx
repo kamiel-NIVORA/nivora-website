@@ -3,7 +3,10 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   AnimatePresence,
   motion,
+  useMotionTemplate,
+  useMotionValue,
   useScroll,
+  useSpring,
   useTransform,
   type Variants,
 } from 'framer-motion'
@@ -295,17 +298,56 @@ function ParallaxImage({
   )
 }
 
+/** Glass card with a subtle cursor-following 3D tilt, a glossy highlight that
+ *  tracks the pointer, and a soft depth shadow on hover. Calms to a flat card
+ *  when the visitor prefers reduced motion. */
 function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const px = useMotionValue(0.5)
+  const py = useMotionValue(0.5)
+  const rotateX = useSpring(useTransform(py, [0, 1], [6, -6]), { stiffness: 220, damping: 20 })
+  const rotateY = useSpring(useTransform(px, [0, 1], [-6, 6]), { stiffness: 220, damping: 20 })
+  const glossX = useTransform(px, (v) => `${v * 100}%`)
+  const glossY = useTransform(py, (v) => `${v * 100}%`)
+  const gloss = useMotionTemplate`radial-gradient(380px circle at ${glossX} ${glossY}, rgba(255,255,255,0.07), transparent 60%)`
+
+  if (reduced) {
+    return (
+      <div className={cn('relative overflow-hidden rounded-[22px] border border-line bg-surface p-7', className)}>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        {children}
+      </div>
+    )
+  }
+
   return (
-    <div
+    <motion.div
+      ref={ref}
+      onMouseMove={(e) => {
+        const r = ref.current?.getBoundingClientRect()
+        if (!r) return
+        px.set((e.clientX - r.left) / r.width)
+        py.set((e.clientY - r.top) / r.height)
+      }}
+      onMouseLeave={() => {
+        px.set(0.5)
+        py.set(0.5)
+      }}
+      style={{ rotateX, rotateY, transformPerspective: 1000 }}
       className={cn(
-        'relative overflow-hidden rounded-[22px] border border-line bg-surface p-7',
+        'group/card relative overflow-hidden rounded-[22px] border border-line bg-surface p-7 transition-[border-color,box-shadow] duration-300 will-change-transform hover:border-line-strong hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.8)]',
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      {children}
-    </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+      <motion.div
+        aria-hidden
+        style={{ background: gloss }}
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+      />
+      <div className="relative">{children}</div>
+    </motion.div>
   )
 }
 
@@ -345,7 +387,7 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
   if (!meta.objectImage) return null
 
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Copy — complements the words baked into the object */}
         <div className="order-2 lg:order-1">
@@ -448,7 +490,7 @@ function WhatYouGet({ meta }: { meta: ServiceMeta }) {
   const y = useTransform(scrollYProgress, [0, 1], ['6%', '-6%'])
 
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 lg:order-1">
           <Reveal>
@@ -558,7 +600,7 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
       aria-label={ask.label}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="fixed bottom-5 right-5 z-40 flex items-center rounded-[20px] border border-line bg-black/55 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-[background-color,border-color] duration-300 hover:border-line-strong hover:bg-black/65 sm:bottom-6 sm:right-6"
+      className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-40 flex items-center rounded-[18px] border border-line bg-black/50 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-[background-color,border-color] duration-300 hover:border-line-strong hover:bg-black/60 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-[calc(1.5rem+env(safe-area-inset-right))]"
     >
       <span
         className={cn(
@@ -568,8 +610,8 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
       >
         {ask.label}
       </span>
-      <span className="flex h-16 w-16 shrink-0 items-center justify-center">
-        <img src="/brand/ask-icon.png" alt="" className="h-8 w-8 object-contain" />
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center">
+        <img src="/brand/ask-icon.png" alt="" className="h-7 w-7 object-contain" />
       </span>
     </Link>
   )
@@ -584,7 +626,7 @@ function PrivacyBand({ meta }: { meta: ServiceMeta }) {
   const facts = t.privacyFacts
 
   return (
-    <section className="relative w-full overflow-hidden border-y border-line py-20 lg:py-28">
+    <section className="relative w-full overflow-hidden border-y border-line py-16 sm:py-20 lg:py-28">
       <ParallaxImage src="/backgrounds/bg-peak-mono.webp" range={['-6%', '6%']} />
       <div className="absolute inset-0 bg-bg/88" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
@@ -638,7 +680,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
   const { open } = useContactModal()
   const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative grid min-h-[100svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
+    <section className="relative grid min-h-[100svh] w-full place-items-center overflow-hidden px-6 pb-20 pt-28 sm:pb-24 sm:pt-32">
       {/* Scenic landscape backdrop, drifting on scroll */}
       <ParallaxImage src={meta.heroImage} range={['-6%', '6%']} />
       {/* Overlays: darken for the nav, fade the foot into the page */}
@@ -706,7 +748,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
 
 function Problem({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -738,7 +780,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
   const { lang } = useLang()
   const t = UI[lang]
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="lg:sticky lg:top-28">
           <Reveal>
@@ -779,7 +821,7 @@ function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMet
 
 function Capabilities({ content }: { content: ServiceContent }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -812,7 +854,7 @@ function AppCapabilities({ content }: { content: ServiceContent }) {
   const [activeIdx, setActiveIdx] = useState(0)
 
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -959,7 +1001,7 @@ function ComparisonBand() {
   const t = UI[lang]
   const COMPARISON_ROWS = t.comparisonRows
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -979,7 +1021,7 @@ function ComparisonBand() {
             </span>
             <div>
               <span className="block text-[15px] font-semibold text-faint">{t.cloudTitle}</span>
-              <span className="block text-[12px] text-dim">{t.cloudSub}</span>
+              <span className="block text-[12.5px] text-dim">{t.cloudSub}</span>
             </div>
           </div>
           <div className="flex flex-col divide-y divide-line/50">
@@ -989,8 +1031,8 @@ function ComparisonBand() {
                   <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
                 </svg>
                 <div>
-                  <span className="block text-[13px] font-medium text-faint">{row.label}</span>
-                  <span className="block text-[13px] leading-relaxed text-dim">{row.cloud}</span>
+                  <span className="block text-[14px] font-medium text-faint sm:text-[13px]">{row.label}</span>
+                  <span className="block text-[14px] leading-relaxed text-dim sm:text-[13px]">{row.cloud}</span>
                 </div>
               </div>
             ))}
@@ -1011,7 +1053,7 @@ function ComparisonBand() {
             </span>
             <div>
               <span className="block text-[15px] font-semibold text-ink">{t.localTitle}</span>
-              <span className="block text-[12px] text-faint">{t.localSub}</span>
+              <span className="block text-[12.5px] text-faint">{t.localSub}</span>
             </div>
           </div>
           <div className="flex flex-col divide-y divide-line/50">
@@ -1019,8 +1061,8 @@ function ComparisonBand() {
               <div key={row.label} className="flex items-start gap-3 py-4">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2.2} />
                 <div>
-                  <span className="block text-[13px] font-medium text-ink">{row.label}</span>
-                  <span className="block text-[13px] leading-relaxed text-ink-soft/80">{row.local}</span>
+                  <span className="block text-[14px] font-medium text-ink sm:text-[13px]">{row.label}</span>
+                  <span className="block text-[14px] leading-relaxed text-ink-soft/80 sm:text-[13px]">{row.local}</span>
                 </div>
               </div>
             ))}
@@ -1035,7 +1077,7 @@ function ComparisonBand() {
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative w-full overflow-hidden py-20 lg:py-28">
+    <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-28">
       <ParallaxImage src={meta.photo} range={['-10%', '10%']} />
       <div className="absolute inset-0 bg-bg/80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
@@ -1074,7 +1116,7 @@ function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }
 
 function Process({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -1101,7 +1143,7 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
   if (!config) return null // AI Consulting sells the plan, not hours saved
 
   return (
-    <section className="relative w-full border-y border-line py-20 lg:py-28">
+    <section className="relative w-full border-y border-line py-16 sm:py-20 lg:py-28">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -1134,7 +1176,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 lg:py-24">
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
       <Reveal>
         <h2 className="max-w-2xl font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
           {content.audience.title}
@@ -1182,14 +1224,14 @@ function FitFaq({ content }: { content: ServiceContent }) {
             <button
               type="button"
               onClick={open}
-              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+              className="inline-block py-1 -my-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
             >
               {t.reachPerson}
             </button>
             {' '}{t.orVisit}{' '}
             <Link
               to="/help"
-              className="text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+              className="inline-block py-1 -my-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
             >
               {t.helpCenter}
             </Link>
@@ -1239,7 +1281,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
 function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative grid w-full place-items-center overflow-hidden px-6 py-24 lg:py-36">
+    <section className="relative grid w-full place-items-center overflow-hidden px-6 py-20 sm:py-24 lg:py-36">
       <ParallaxImage src={meta.photo} range={['-8%', '8%']} />
       <div className="absolute inset-0 bg-black/40" />
       <div
@@ -1285,7 +1327,7 @@ function OtherServices({ current }: { current: ServiceSlug }) {
   const dict = getServiceContent(lang)
   const others = SERVICE_ORDER.filter((s) => s !== current)
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-28">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-20 sm:pb-28">
       <div className="border-t border-line pt-14">
         <Reveal>
           <h2 className="text-[13px] font-medium uppercase tracking-[0.14em] text-faint">{t.exploreOther}</h2>

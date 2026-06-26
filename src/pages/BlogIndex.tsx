@@ -43,7 +43,7 @@ export function BlogIndex() {
                 key={tab.key}
                 onClick={() => setActive(tab.value)}
                 className={cn(
-                  'rounded-full px-4 py-2 text-[13px] transition-colors duration-200',
+                  'inline-flex min-h-[44px] items-center rounded-full px-4 py-2.5 text-[13px] transition-colors duration-200 sm:min-h-0 sm:py-2',
                   active === tab.value
                     ? 'bg-ink text-bg'
                     : 'border border-line bg-white/[0.03] text-muted hover:bg-white/[0.06] hover:text-ink',
@@ -56,7 +56,7 @@ export function BlogIndex() {
         </Reveal>
 
         {/* Post grid — keyed by filter so cards re-reveal on switch */}
-        <div key={active} className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        <div key={active} className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, i) => (
             <Reveal key={post.slug} delay={Math.min(i, 5) * 0.06}>
               <PostCard post={post} />

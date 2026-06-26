@@ -77,9 +77,9 @@ export function Hero() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1200px] flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1200px] flex-col items-center justify-center px-6 pt-24 pb-16 text-center lg:pt-0 lg:pb-0"
       >
-        <h1 className="font-serif text-[44px] leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl lg:text-[80px] lg:leading-[1.02] lg:tracking-[-1.6px]">
+        <h1 className="font-serif text-[38px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-5xl md:text-6xl lg:text-[80px] lg:leading-[1.02] lg:tracking-[-1.6px]">
           {t.headlineLines.map((line) => (
             <span key={line} className="block">
               {line.split(' ').map((w, i) => (
@@ -102,17 +102,20 @@ export function Hero() {
           {t.sub}
         </motion.p>
 
-        <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <motion.div
+          variants={fadeUp}
+          className="mt-10 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center"
+        >
           <RippleButton
             variant="solid"
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="h-12 px-7 text-[15px]"
+            className="h-12 w-full px-7 text-[15px] sm:w-auto"
           >
             {t.bookCall}
           </RippleButton>
-          <RippleButton variant="ghost" href="/contact" className="h-12 px-7 text-[15px]">
+          <RippleButton variant="ghost" href="/contact" className="h-12 w-full px-7 text-[15px] sm:w-auto">
             {t.contact}
           </RippleButton>
         </motion.div>

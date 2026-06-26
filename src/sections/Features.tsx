@@ -155,17 +155,17 @@ function FeatureCard({
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-faint">{body}</p>
           {services ? (
-            <RippleButton variant="ghost" href={href} className="mt-7 h-11 self-start px-5 text-sm">
+            <RippleButton variant="ghost" href={href} className="mt-7 min-h-11 max-w-full self-start px-5 py-2.5 text-sm">
               {labels.learnMoreAbout}
               <CyclingWord words={serviceTitles} />
             </RippleButton>
           ) : (
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <RippleButton variant="solid" href={href} className="h-11 px-5 text-sm">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <RippleButton variant="solid" href={href} className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto">
                 {cta}
               </RippleButton>
               {secondaryCta && secondaryHref && (
-                <RippleButton variant="ghost" href={secondaryHref} className="h-11 px-5 text-sm">
+                <RippleButton variant="ghost" href={secondaryHref} className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto">
                   {secondaryCta}
                 </RippleButton>
               )}
@@ -187,7 +187,7 @@ export function Features() {
     altPrefix: t.altPrefix,
   }
   return (
-    <section id="features" className="relative mx-auto w-full max-w-[1200px] px-6 py-24 lg:py-32">
+    <section id="features" className="relative mx-auto w-full max-w-[1200px] px-6 py-20 md:py-24 lg:py-32">
       <SectionHeading title={t.headingTitle} subtitle={t.headingSubtitle} />
       <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
         {t.features.map((f) => (

@@ -59,13 +59,13 @@ export function Services() {
   const services = getServices(lang)
 
   return (
-    <section id="services" className="relative w-full overflow-hidden py-28 lg:py-36">
+    <section id="services" className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-36">
       <div className="relative mx-auto w-full max-w-[1400px] px-6">
         <SectionHeading title={t.title} subtitle={t.subtitle} />
 
         {/* Cards band. The sharp peak backdrop is confined to EXACTLY this row
             (overflow-hidden), so it never bleeds up into the heading above. */}
-        <div ref={bandRef} className="relative mt-16">
+        <div ref={bandRef} className="relative mt-10 sm:mt-16">
           {/* Sharp backdrop, clipped to the band: peak centred, the star sky on top
               and the watermark on the bottom-right both cropped out, edges faded
               softly into the black. Shown crisp in the gaps between the cards. */}
@@ -175,7 +175,7 @@ function ServiceCard({
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/30 p-6 transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[440px] lg:p-7"
+        className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/30 p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:none)]:shadow-[0_18px_50px_-30px_rgba(0,0,0,0.6)] [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] sm:min-h-[340px] lg:min-h-[440px] lg:p-7"
       >
         {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
         {frost && (

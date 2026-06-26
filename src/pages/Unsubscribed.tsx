@@ -30,6 +30,10 @@ export function Unsubscribed() {
   return (
     <main>
       <section className="relative mx-auto flex w-full max-w-[640px] flex-col items-center px-6 pb-28 pt-40 text-center lg:pt-48">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-28 -z-10 mx-auto h-[280px] w-[280px] rounded-full bg-olive/10 blur-[120px] sm:h-[360px] sm:w-[360px]"
+        />
         <Reveal mode="mount">
           <span className="grid h-14 w-14 place-items-center rounded-full border border-line bg-white/[0.04] text-faint">
             <Check className="h-6 w-6" strokeWidth={2} />
@@ -37,12 +41,12 @@ export function Unsubscribed() {
           <h1 className="mt-7 font-serif text-[30px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[40px]">
             {ok ? t.titleOk : t.titleHandled}
           </h1>
-          <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
+          <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-muted sm:text-faint">
             {ok ? t.bodyOk : t.bodyHandled}
           </p>
           <Link
             to="/"
-            className="mt-8 inline-flex items-center gap-1.5 text-[13px] text-faint transition-colors hover:text-ink"
+            className="mt-8 -mx-3 inline-flex min-h-[44px] items-center gap-1.5 px-3 py-2.5 text-sm text-faint transition-colors hover:text-ink active:text-ink"
           >
             <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.8} />
             {t.backHome}

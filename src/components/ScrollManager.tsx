@@ -18,7 +18,8 @@ export function ScrollManager() {
     if (hash) {
       const el = document.querySelector(hash)
       if (el) {
-        if (lenis) lenis.scrollTo(el as HTMLElement)
+        // Offset by the fixed navbar height so the target isn't hidden behind it.
+        if (lenis) lenis.scrollTo(el as HTMLElement, { offset: -96 })
         else el.scrollIntoView()
         return
       }

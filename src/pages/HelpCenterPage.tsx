@@ -110,6 +110,7 @@ export function HelpCenterPage() {
   const askSentRef = useRef(false)
 
   const empty = messages.length === 0
+  const prevLenRef = useRef(0)
 
   useEffect(() => {
     document.title = COPY[lang].docTitle
@@ -120,10 +121,18 @@ export function HelpCenterPage() {
 
   // Follow the newest turn as it streams in. The conversation flows in the page
   // (so page scrolling stays smooth), and the end sentinel carries a scroll
-  // margin so the latest message lands just above the sticky composer.
+  // margin so the latest message lands just above the sticky composer. We only
+  // auto-follow when the reader is already near the bottom, so scrolling up to
+  // re-read mid-stream is never yanked back; a freshly sent question always jumps.
   useEffect(() => {
     if (empty || !endRef.current) return
-    endRef.current.scrollIntoView({ block: 'end' })
+    const grew = messages.length > prevLenRef.current
+    prevLenRef.current = messages.length
+    const lastIsUser = messages[messages.length - 1]?.role === 'user'
+    const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 160
+    if (nearBottom || (grew && lastIsUser)) {
+      endRef.current.scrollIntoView({ block: 'end' })
+    }
   }, [messages, status, empty])
 
   // A question can be handed in via /help?ask=... (the service-page button).
@@ -146,12 +155,13 @@ export function HelpCenterPage() {
 
   return (
     <main className="relative w-full bg-bg">
-      <section className={cn('relative flex w-full flex-col', empty ? 'min-h-svh overflow-hidden' : 'min-h-svh')}>
+      <section className="relative flex min-h-svh w-full flex-col">
         {/* Moving dot-matrix backdrop, echoing the AIOS chat. Shown only on the
             empty hero. The moment a conversation starts it clears, so chatting is
-            a clean, distraction-free interface. */}
+            a clean, distraction-free interface. The backdrop wrapper clips itself
+            so the section can scroll the focused composer above the keyboard. */}
         {empty && (
-          <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(6,6,6,0.55)_60%,#060606_100%)]" />
             <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
@@ -188,8 +198,8 @@ export function HelpCenterPage() {
           <div
             className={cn(
               empty
-                ? 'flex flex-1 flex-col items-center justify-center gap-9 pb-8'
-                : 'sticky bottom-0 z-20 -mx-5 bg-gradient-to-t from-bg from-72% to-transparent px-5 pb-5 pt-12 sm:-mx-6 sm:px-6',
+                ? 'flex flex-1 flex-col items-center justify-center gap-9 pb-[max(2rem,env(safe-area-inset-bottom))]'
+                : 'sticky bottom-0 z-20 -mx-5 bg-gradient-to-t from-bg from-72% to-transparent px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-12 sm:-mx-6 sm:px-6',
             )}
           >
             {empty && (
@@ -272,7 +282,13 @@ function Composer({
   // The box is large by default; on the hero it stands tall, in a conversation it
   // starts shorter and grows. min/max are tuned per state.
   const minH = hasMessages ? 32 : 96
-  const maxH = hasMessages ? 200 : 300
+  // Cap the box to ~40% of the viewport on short phones so a long paste never
+  // eats the space above the keyboard; desktop heights keep the original cap.
+  const baseMaxH = hasMessages ? 200 : 300
+  const maxH = Math.min(
+    Math.round((typeof window !== 'undefined' ? window.innerHeight : 800) * 0.4),
+    baseMaxH,
+  )
 
   const grow = () => {
     const ta = taRef.current
@@ -373,7 +389,7 @@ function Composer({
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90 sm:min-h-0 sm:min-w-0"
               title={t.attach}
               aria-label={t.attach}
             >
@@ -384,7 +400,7 @@ function Composer({
               <button
                 type="button"
                 onClick={onReset}
-                className="rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90 sm:min-h-0 sm:min-w-0"
                 title={t.tryAgain}
                 aria-label={t.tryAgain}
               >
@@ -400,7 +416,7 @@ function Composer({
             disabled={!busy && !canSend}
             aria-label={busy ? t.stop : t.sendAria}
             className={cn(
-              'flex items-center gap-2 rounded-xl px-5 py-2.5 text-[15px] font-medium transition-all',
+              'flex min-h-11 items-center gap-2 rounded-xl px-5 py-2.5 text-[15px] font-medium transition-all sm:min-h-0',
               busy || canSend
                 ? 'bg-white text-[#0A0A0B] shadow-lg shadow-white/10'
                 : 'bg-white/[0.05] text-white/40',
@@ -536,10 +552,10 @@ function MessageActions({
   }
 
   const btn =
-    'flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink'
+    'flex h-10 w-10 items-center justify-center rounded-lg text-muted transition-colors hover:bg-white/[0.06] hover:text-ink sm:h-8 sm:w-8 sm:text-faint'
 
   return (
-    <div className="mt-3 flex items-center gap-0.5 border-t border-white/[0.06] pt-2.5">
+    <div className="mt-3 flex items-center gap-1 border-t border-white/[0.06] pt-2.5 sm:gap-0.5">
       {isLast && (
         <button type="button" onClick={onRetry} className={btn} title={t.regenerate} aria-label={t.regenerate}>
           <RotateCw className="h-[15px] w-[15px]" strokeWidth={1.7} />
@@ -635,7 +651,7 @@ function CtaButton({ spec }: { spec: CtaSpec }) {
   const Icon: LucideIcon = spec.kind === 'book' ? CalendarClock : ArrowUpRight
 
   const base =
-    'group inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg'
+    'group inline-flex min-h-11 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg sm:min-h-0'
   const cls = spec.primary
     ? cn(base, 'bg-white text-[#0a0a0a] hover:bg-white/90')
     : cn(base, 'border border-white/[0.12] bg-white/[0.04] text-ink hover:border-white/25 hover:bg-white/[0.08]')

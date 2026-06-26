@@ -241,7 +241,7 @@ export function PartnershipPage() {
 
       {/* ── What you get ── */}
       <section className="mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-20">
           <div>
             <Reveal>
               <h2 className="font-serif text-[28px] leading-[1.15] tracking-[-0.015em] text-ink sm:text-[36px]">
@@ -280,7 +280,7 @@ export function PartnershipPage() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
           {t.steps.map((s, i) => (
             <Reveal key={s.n} delay={0.06 * i}>
               <div className="rounded-[20px] border border-line bg-surface p-7">
@@ -296,7 +296,7 @@ export function PartnershipPage() {
       {/* ── CTA ── */}
       <section className="mx-auto w-full max-w-[1100px] px-6 pb-28 lg:pb-36">
         <Reveal>
-          <div className="rounded-[24px] border border-line bg-surface px-8 py-14 text-center lg:px-16 lg:py-20">
+          <div className="relative overflow-hidden rounded-[24px] border border-line bg-surface px-8 py-14 text-center lg:px-16 lg:py-20">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[24px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <h2 className="font-serif text-[30px] leading-[1.14] tracking-[-0.02em] text-ink sm:text-[42px]">
               {t.ctaHeading}

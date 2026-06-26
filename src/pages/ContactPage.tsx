@@ -129,7 +129,7 @@ export function ContactPage() {
 
       {/* Three equal, big, clean contact cards — one line each */}
       <section className="mx-auto w-full max-w-[1120px] px-6">
-        <div className="grid items-stretch gap-5 sm:grid-cols-3">
+        <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal>
             <ContactCard icon={Mail} label={t.labelEmail} value={CONTACT.email} href={`mailto:${CONTACT.email}`} />
           </Reveal>
@@ -208,7 +208,8 @@ export function ContactPage() {
                 <span className="truncate text-[12.5px] text-faint">{ADDRESS.line2}</span>
               </span>
               <span className="inline-flex shrink-0 items-center gap-1 text-[12.5px] text-faint transition-colors group-hover:text-ink">
-                {t.route} <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
+                <span className="hidden sm:inline">{t.route} </span>
+                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
               </span>
             </a>
           </div>

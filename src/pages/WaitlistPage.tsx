@@ -139,7 +139,7 @@ export function WaitlistPage() {
 
   return (
     <main>
-      <section className="relative isolate flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32 text-center">
+      <section className="relative isolate flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center sm:pb-24 sm:pt-32">
         {/* ── Background: monochrome waves glowing through the lower half ── */}
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <img
@@ -164,7 +164,7 @@ export function WaitlistPage() {
           </Reveal>
 
           <Reveal mode="mount" delay={0.05}>
-            <h1 className="mt-6 bg-gradient-to-b from-white via-white to-white/55 bg-clip-text font-serif text-[36px] leading-[1.08] tracking-[-0.02em] text-transparent sm:text-[52px]">
+            <h1 className="mt-6 bg-gradient-to-b from-white via-white to-white/55 bg-clip-text font-serif text-[30px] leading-[1.08] tracking-[-0.02em] text-transparent sm:text-[52px]">
               {title}
             </h1>
             <p className="mx-auto mt-5 max-w-md text-[15px] leading-relaxed text-faint sm:text-[16px]">
@@ -234,7 +234,7 @@ export function WaitlistPage() {
                         }}
                         placeholder={t.phName}
                         autoComplete="name"
-                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
+                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[16px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
                       />
                       <input
                         type="email"
@@ -246,7 +246,7 @@ export function WaitlistPage() {
                         placeholder={t.phEmail}
                         autoComplete="email"
                         aria-invalid={!!error}
-                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
+                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[16px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
                       />
                       <input
                         type="tel"
@@ -257,7 +257,7 @@ export function WaitlistPage() {
                         }}
                         placeholder={t.phPhone}
                         autoComplete="tel"
-                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[14px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
+                        className="h-12 rounded-[14px] border border-line bg-white/[0.04] px-4 text-[16px] text-ink outline-none transition-colors placeholder:text-dim focus:border-line-strong"
                       />
                       {error && <span className="px-1 text-[12.5px] text-terracotta">{error}</span>}
                       <button

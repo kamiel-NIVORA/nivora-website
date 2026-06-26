@@ -90,7 +90,7 @@ function TestimonialCard({ card }: { card: Card }) {
   if (card.kind === 'logo') {
     const { Icon, name } = card
     return (
-      <div className="flex h-[340px] w-[260px] shrink-0 flex-col items-center justify-center gap-3 rounded-3xl border border-line bg-white/[0.02]">
+      <div className="flex h-[300px] w-[220px] shrink-0 flex-col items-center justify-center gap-3 rounded-3xl border border-line bg-white/[0.02] sm:h-[340px] sm:w-[260px]">
         <Icon className="h-7 w-7 text-ink-soft" strokeWidth={1.5} />
         <span className="text-lg font-semibold tracking-tight text-ink-soft">{name}</span>
       </div>
@@ -99,7 +99,7 @@ function TestimonialCard({ card }: { card: Card }) {
 
   if (card.kind === 'portrait') {
     return (
-      <div className="relative h-[340px] w-[280px] shrink-0 overflow-hidden rounded-3xl border border-line">
+      <div className="relative h-[300px] w-[240px] shrink-0 overflow-hidden rounded-3xl border border-line sm:h-[340px] sm:w-[280px]">
         <img src={card.image} alt={card.name} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pt-12">
           <p className="text-[15px] font-semibold text-ink">{card.name}</p>
@@ -110,10 +110,10 @@ function TestimonialCard({ card }: { card: Card }) {
   }
 
   return (
-    <div className="relative h-[340px] w-[440px] shrink-0 overflow-hidden rounded-3xl border border-line">
+    <div className="relative h-[300px] w-[300px] shrink-0 overflow-hidden rounded-3xl border border-line sm:h-[340px] sm:w-[440px]">
       <img src={card.bg} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
       <div className="absolute inset-0 bg-black/55" />
-      <div className="relative flex h-full flex-col justify-between p-6">
+      <div className="relative flex h-full flex-col justify-between p-5 sm:p-6">
         <div className="flex items-center gap-3">
           <img src={card.avatar} alt={card.name} className="h-9 w-9 rounded-full object-cover" loading="lazy" />
           <div>
@@ -121,7 +121,7 @@ function TestimonialCard({ card }: { card: Card }) {
             <p className="text-xs text-ink-soft/70">{card.role}</p>
           </div>
         </div>
-        <p className="font-serif text-xl leading-snug tracking-tight text-ink">“{card.quote}”</p>
+        <p className="font-serif text-lg leading-snug tracking-tight text-ink sm:text-xl">“{card.quote}”</p>
       </div>
     </div>
   )
@@ -140,9 +140,9 @@ export function Testimonials() {
       {/* Marquee */}
       <div className="group relative mt-14">
         {/* edge fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-bg to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-bg to-transparent" />
-        <div className="flex w-max gap-5 [animation:marquee_55s_linear_infinite] group-hover:[animation-play-state:paused]">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-bg to-transparent sm:w-24" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-bg to-transparent sm:w-24" />
+        <div className="flex w-max gap-5 [animation:marquee_55s_linear_infinite] group-hover:[animation-play-state:paused] motion-reduce:[animation:none]">
           {loop.map((card, i) => (
             <TestimonialCard key={i} card={card} />
           ))}

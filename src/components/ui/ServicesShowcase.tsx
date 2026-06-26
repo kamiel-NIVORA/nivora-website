@@ -59,7 +59,7 @@ function SlideContent({ img, tagline }: Slide) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.7, ease }}
-      className="flex flex-col items-center gap-7"
+      className="flex flex-col items-center gap-4 sm:gap-7"
     >
       <motion.img
         src={img}
@@ -67,10 +67,10 @@ function SlideContent({ img, tagline }: Slide) {
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease, delay: 0.05 }}
-        className="h-24 w-24 rounded-[22px] shadow-[0_14px_36px_rgba(15,23,42,0.28)]"
+        className="h-16 w-16 rounded-[18px] shadow-[0_14px_36px_rgba(15,23,42,0.28)] sm:h-24 sm:w-24 sm:rounded-[22px]"
       />
       <p
-        className="min-h-[28px] whitespace-nowrap font-sans text-[21px] font-medium tracking-[-0.01em] text-slate-900"
+        className="min-h-[3.4em] px-4 text-center font-sans text-[17px] font-medium tracking-[-0.01em] text-slate-900 sm:text-[21px] lg:min-h-[28px]"
         style={{ textShadow: '0 1px 14px rgba(255,255,255,0.5)' }}
       >
         {typed}
@@ -94,7 +94,7 @@ export function ServicesShowcase() {
   }, [inView, SLIDES.length])
 
   return (
-    <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
+    <div ref={ref} className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/10]">
       {/* dromerige wolken-wallpaper */}
       <img src="/services/IMG_0702.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
       {/* zachte lichte wash zodat de donkere tekst leesbaar blijft */}
@@ -110,7 +110,7 @@ export function ServicesShowcase() {
       </div>
 
       {/* progress-indicator — onderaan de kader */}
-      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 sm:bottom-6">
         {SLIDES.map((s, d) => (
           <span
             key={s.tagline}

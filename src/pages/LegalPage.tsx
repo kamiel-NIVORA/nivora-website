@@ -17,7 +17,7 @@ export function LegalPage({ slug }: { slug: 'terms' | 'privacy' }) {
         {/* Header */}
         <Reveal mode="mount">
           <span className="label-mono text-dim">{t.label}</span>
-          <h1 className="mt-4 font-serif text-[36px] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[44px]">
+          <h1 className="mt-4 font-serif text-[30px] leading-[1.12] tracking-[-0.02em] text-ink break-words sm:text-[44px] sm:leading-[1.1]">
             {doc.title}
           </h1>
           <p className="mt-4 text-sm text-faint">{t.lastUpdated} {doc.updated}</p>

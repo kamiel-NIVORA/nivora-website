@@ -215,7 +215,7 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         placeholder="you@company.com"
                         aria-invalid={!!error}
                         aria-label={t.emailAria}
-                        className="h-12 w-full flex-1 rounded-full border border-line bg-white/[0.03] px-5 text-center text-[14px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:text-left"
+                        className="h-12 w-full flex-1 rounded-full border border-line bg-white/[0.03] px-5 text-center text-[16px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:text-left sm:text-[14px]"
                       />
                       <RippleButton
                         type="submit"

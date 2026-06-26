@@ -42,8 +42,8 @@ function Node({ step, i, accent }: { step: ProcessStep; i: number; accent: strin
           {step.phase}
         </span>
       </div>
-      <h3 className="mt-3 text-[16px] font-semibold tracking-tight text-ink sm:mt-4 sm:text-[17px]">{step.title}</h3>
-      <p className="mt-2 text-[13.5px] leading-relaxed text-faint">{step.body}</p>
+      <h3 className="mt-3 pl-7 text-[16px] font-semibold tracking-tight text-ink sm:mt-4 sm:pl-0 sm:text-[17px]">{step.title}</h3>
+      <p className="mt-2 pl-7 text-[13.5px] leading-relaxed text-faint sm:pl-0">{step.body}</p>
     </motion.div>
   )
 }

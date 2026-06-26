@@ -25,46 +25,46 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio. We build custom software and AI around how your business actually works, and we make our own products, Box and Voice.',
-    heroHeadline: 'A software and AI studio, built around how you actually work.',
+    heroHeadline: 'Software and AI, shaped around how you really work.',
     heroSub:
-      'Nivora designs and builds custom software and AI for companies, shaped around the way your team already works, not the other way around. And we make our own products too. Box and Voice are on the way.',
+      "We're Nivora, a small studio in Brugge. We design and build custom software and AI that fits the way your team already works, instead of fighting it. And we make our own products too. Box and Voice are on the way.",
     bookCall: 'Book a call',
     getInTouch: 'Get in touch',
     missionHeading:
-      'Most companies get sold AI. Very few get shown what it should actually do for them.',
+      'Most companies get sold AI. Hardly anyone gets shown what it should actually do for them.',
     missionBody:
-      'We started Nivora to work the other way around. We begin with how your business really runs, then build the software and AI that fits it. Sometimes that means adapting what you already have. Sometimes it means building from scratch. The test is always the same. Does it make the work genuinely easier.',
+      "That gap is exactly why we started Nivora. We do not lead with a tool, we lead with a conversation: how does your business really run, and where does it hurt? Then we build the software and AI that fits, whether that means sharpening what you already have or starting fresh. The only test that matters to us is a simple one. Does it make the day genuinely easier?",
     promises: [
       {
-        title: 'Built around you',
-        body: 'We shape the software to how your team already works, instead of bending your work to fit a tool.',
+        title: 'We build around you',
+        body: 'We shape the software to the way your team already works, never the other way around. You never bend your day to fit a tool.',
       },
       {
-        title: 'Value before commitment',
-        body: 'You see what we can build, and what it is worth, before you pay for it. No long contract to find out if it works.',
+        title: 'You see the value first',
+        body: 'We show you what is worth building, and what it is worth, before you commit a cent. No leap of faith, no long contract to find out.',
       },
       {
-        title: 'Private by default',
-        body: 'Your data stays yours. We can run the AI on your servers or ours, so nothing has to leave your control.',
+        title: 'Your data stays yours',
+        body: 'We can run the AI on your servers or ours, so the sensitive things never have to leave your walls. Private by default, not as an upsell.',
       },
     ] as PromiseItem[],
     howHeading: 'How we work',
-    howSub: 'No heavy process. Three steps, and we stay close to you through all of them.',
+    howSub: 'No heavy process, no account managers in between. Three steps, and we stay close through all of them.',
     steps: [
       {
         phase: 'Listen',
-        title: 'We learn how you work',
-        body: 'We start with your business, not a product pitch, and find where the real friction sits.',
+        title: 'We get how you work',
+        body: 'We start with your business and your team, not a pitch, and find where the real friction sits.',
       },
       {
         phase: 'Build',
         title: 'We build it around you',
-        body: 'We design and build the system, adapting what you already have or starting fresh, and show you progress early.',
+        body: 'We design and build the system, sharpening what you have or starting fresh, and put something real in front of you early.',
       },
       {
         phase: 'Stay',
-        title: 'We stay after launch',
-        body: 'We do not disappear once it ships. We maintain it, refine it, and grow it as your business grows.',
+        title: 'We stick around',
+        body: 'We do not vanish once it ships. We maintain it, refine it, and let it grow right along with you.',
       },
     ] as ProcessStep[],
     founderAlt: 'Kamiel Niville, founder of Nivora',
@@ -73,61 +73,61 @@ const COPY = {
     founderLinkedinAria: 'Kamiel on LinkedIn',
     founderHeading: 'The story behind Nivora',
     founderP1:
-      'I am Kamiel. I started Nivora because I kept seeing the same thing. Companies were being sold AI, but almost no one was building it around what those companies actually do.',
+      "Hi, I'm Kamiel. I started Nivora after watching the same thing happen over and over: companies getting sold AI, but almost no one building it around what those companies actually do all day.",
     founderP2:
-      'So I started doing the opposite. We shape software and AI around the business, give people tools they can genuinely use, and keep everything on systems they control.',
+      'So we do the opposite. We start with the work, shape the software and AI around it, and give people tools they genuinely reach for, all on systems they own and control.',
     founderP3:
-      'Whether we adapt something you already have or build it from scratch, the goal never changes. Technology that quietly does its job, so you can get on with yours.',
+      'Whether we polish something you already have or build it from the ground up, the goal never changes. Technology that quietly does its job, so you and your team can get on with yours.',
     founderSign: 'Founder, based in Brugge, Belgium',
-    ctaHeading: 'Let us build the right thing',
+    ctaHeading: "Let's build the right thing",
     ctaBody:
-      'Tell us where the friction is. We will show you what is worth building, and what it is worth, before you commit.',
-    ctaFootPre: 'Based in Brugge, Belgium. Working with companies wherever they are. Or email ',
+      'Tell us where the friction is. We will show you what is worth building, and what it is worth, before you commit to anything.',
+    ctaFootPre: 'Based in Brugge, working with companies wherever they are. Or just email ',
   },
   nl: {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio. We bouwen software en AI op maat, rond de manier waarop uw bedrijf echt werkt, en we maken onze eigen producten, Box en Voice.',
-    heroHeadline: 'Een software- en AI-studio, gebouwd rond hoe u echt werkt.',
+    heroHeadline: 'Software en AI, gevormd rond hoe u echt werkt.',
     heroSub:
-      'Nivora ontwerpt en bouwt software en AI op maat voor bedrijven, gevormd naar de manier waarop uw team al werkt, niet andersom. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
+      'Wij zijn Nivora, een kleine studio in Brugge. We ontwerpen en bouwen software en AI op maat die past bij hoe uw team al werkt, in plaats van ertegenin. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
     bookCall: 'Boek een gesprek',
     getInTouch: 'Neem contact op',
     missionHeading:
-      'De meeste bedrijven krijgen AI verkocht. Maar weinigen krijgen te zien wat het echt voor hen zou moeten doen.',
+      'De meeste bedrijven krijgen AI verkocht. Bijna niemand krijgt te zien wat het echt voor hen zou moeten doen.',
     missionBody:
-      'We zijn Nivora gestart om het andersom te doen. We beginnen bij hoe uw bedrijf echt draait, en bouwen daarna de software en AI die daarbij past. Soms betekent dat dat we aanpassen wat u al hebt. Soms betekent het bouwen vanaf nul. De test is altijd dezelfde. Maakt het het werk echt makkelijker.',
+      'Net dat gat is waarom we Nivora startten. We beginnen niet met een tool, maar met een gesprek: hoe draait uw bedrijf echt, en waar doet het pijn? Daarna bouwen we de software en AI die past, of dat nu betekent aanscherpen wat u al hebt of opnieuw beginnen. De enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
     promises: [
       {
-        title: 'Gebouwd rond u',
-        body: 'We vormen de software naar hoe uw team al werkt, in plaats van uw werk te buigen naar een tool.',
+        title: 'We bouwen rond u',
+        body: 'We vormen de software naar hoe uw team al werkt, nooit andersom. U buigt uw dag nooit om naar een tool.',
       },
       {
-        title: 'Waarde vóór verbintenis',
-        body: 'U ziet wat we kunnen bouwen, en wat het waard is, voordat u ervoor betaalt. Geen lang contract om te ontdekken of het werkt.',
+        title: 'U ziet eerst de waarde',
+        body: 'We tonen u wat de moeite waard is om te bouwen, en wat het waard is, voordat u een euro uitgeeft. Geen sprong in het diepe, geen lang contract om erachter te komen.',
       },
       {
-        title: 'Privé vanaf de start',
-        body: 'Uw data blijft van u. We kunnen de AI op uw servers of de onze draaien, zodat er niets buiten uw controle hoeft te gaan.',
+        title: 'Uw data blijft van u',
+        body: 'We draaien de AI op uw servers of de onze, zodat het gevoelige nooit uw muren hoeft te verlaten. Privé vanaf de start, niet als duurdere optie.',
       },
     ] as PromiseItem[],
     howHeading: 'Hoe we werken',
-    howSub: 'Geen zwaar proces. Drie stappen, en bij alle drie blijven we dicht bij u.',
+    howSub: 'Geen zwaar proces, geen accountmanagers ertussen. Drie stappen, en bij alle drie blijven we dicht bij u.',
     steps: [
       {
         phase: 'Luisteren',
-        title: 'We leren hoe u werkt',
-        body: 'We beginnen bij uw bedrijf, niet bij een verkooppraatje, en zoeken waar de echte wrijving zit.',
+        title: 'We snappen hoe u werkt',
+        body: 'We beginnen bij uw bedrijf en uw team, niet bij een verkooppraatje, en zoeken waar de echte wrijving zit.',
       },
       {
         phase: 'Bouwen',
         title: 'We bouwen het rond u',
-        body: 'We ontwerpen en bouwen het systeem, passen aan wat u al hebt of starten van nul, en laten u vroeg al vooruitgang zien.',
+        body: 'We ontwerpen en bouwen het systeem, scherpen aan wat u hebt of starten opnieuw, en zetten vroeg al iets echts voor u neer.',
       },
       {
         phase: 'Blijven',
-        title: 'We blijven na de lancering',
-        body: 'We verdwijnen niet zodra het live staat. We onderhouden het, verfijnen het, en laten het meegroeien met uw bedrijf.',
+        title: 'We blijven erbij',
+        body: 'We verdwijnen niet zodra het live staat. We onderhouden het, verfijnen het, en laten het meegroeien met u.',
       },
     ] as ProcessStep[],
     founderAlt: 'Kamiel Niville, oprichter van Nivora',
@@ -136,16 +136,16 @@ const COPY = {
     founderLinkedinAria: 'Kamiel op LinkedIn',
     founderHeading: 'Het verhaal achter Nivora',
     founderP1:
-      'Ik ben Kamiel. Ik startte Nivora omdat ik telkens hetzelfde zag. Bedrijven kregen AI verkocht, maar bijna niemand bouwde het rond wat die bedrijven echt doen.',
+      'Hallo, ik ben Kamiel. Ik startte Nivora nadat ik telkens hetzelfde zag gebeuren: bedrijven kregen AI verkocht, maar bijna niemand bouwde het rond wat die bedrijven de hele dag echt doen.',
     founderP2:
-      'Dus begon ik het tegenovergestelde te doen. We vormen software en AI rond het bedrijf, geven mensen tools die ze echt kunnen gebruiken, en houden alles op systemen die zij beheren.',
+      'Dus doen wij het omgekeerd. We beginnen bij het werk, vormen de software en AI eromheen, en geven mensen tools die ze echt vastpakken, allemaal op systemen die zij bezitten en beheren.',
     founderP3:
-      'Of we nu iets aanpassen wat u al hebt of het vanaf nul bouwen, het doel verandert nooit. Technologie die stilletjes haar werk doet, zodat u verder kunt met het uwe.',
+      'Of we nu iets bijschaven dat u al hebt of het van de grond af bouwen, het doel verandert nooit. Technologie die stilletjes haar werk doet, zodat u en uw team verder kunnen met het uwe.',
     founderSign: 'Oprichter, gevestigd in Brugge, België',
     ctaHeading: 'Laat ons het juiste bouwen',
     ctaBody:
-      'Vertel ons waar de wrijving zit. We tonen u wat het waard is om te bouwen, en wat het waard is, voordat u zich vastlegt.',
-    ctaFootPre: 'Gevestigd in Brugge, België. We werken met bedrijven waar ze ook zijn. Of mail ',
+      'Vertel ons waar de wrijving zit. We tonen u wat de moeite waard is om te bouwen, en wat het waard is, voordat u zich ergens aan vastlegt.',
+    ctaFootPre: 'Gevestigd in Brugge, we werken met bedrijven waar ze ook zijn. Of mail gewoon ',
   },
 } as const
 
@@ -362,7 +362,7 @@ function Founder() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={t.founderLinkedinAria}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04] text-muted transition-colors hover:bg-white/[0.09] hover:text-ink"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04] text-muted transition-colors hover:bg-white/[0.09] hover:text-ink lg:h-9 lg:w-9"
                 >
                   <svg viewBox="0 0 24 24" className="h-[16px] w-[16px]" fill="currentColor" aria-hidden="true">
                     <path d={LINKEDIN_PATH} />

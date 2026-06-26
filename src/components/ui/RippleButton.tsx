@@ -27,9 +27,11 @@ type Variant = 'solid' | 'ghost'
  *  - `ghost` — transparent, hairline-bordered pill that fills a soft light
  *    from the cursor (secondary CTA, e.g. "Contact Us").
  */
+/* Hover colour shifts are gated to real hover devices: on touch a :hover can
+   stick after a tap and would leave the solid pill's label white-on-white. */
 const VARIANTS: Record<Variant, { surface: string; text: string; layer?: string; fill: string }> = {
-  solid: { surface: 'bg-[#0a0a0a]', text: 'text-[#0a0a0a] hover:text-white', layer: 'bg-ink', fill: '#0a0a0a' },
-  ghost: { surface: 'bg-transparent', text: 'border border-line text-muted hover:text-ink', fill: 'rgba(255,255,255,0.09)' },
+  solid: { surface: 'bg-[#0a0a0a]', text: 'text-[#0a0a0a] [@media(hover:hover)]:hover:text-white', layer: 'bg-ink', fill: '#0a0a0a' },
+  ghost: { surface: 'bg-transparent', text: 'border border-line text-muted [@media(hover:hover)]:hover:text-ink', fill: 'rgba(255,255,255,0.09)' },
 }
 
 export function RippleButton({

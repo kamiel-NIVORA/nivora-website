@@ -113,14 +113,16 @@ function Slider({
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={input.label}
         className={cn(
-          'mt-3 h-1.5 w-full cursor-pointer appearance-none rounded-full outline-none',
+          'mt-3 h-1.5 w-full cursor-pointer touch-pan-y appearance-none rounded-full outline-none',
           '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_1px_5px_rgba(0,0,0,0.6)] [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-black/30 [&::-webkit-slider-thumb]:transition-transform active:[&::-webkit-slider-thumb]:scale-110',
+          'pointer-coarse:[&::-webkit-slider-thumb]:h-6 pointer-coarse:[&::-webkit-slider-thumb]:w-6',
           '[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white',
+          'pointer-coarse:[&::-moz-range-thumb]:h-6 pointer-coarse:[&::-moz-range-thumb]:w-6',
           'focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-white/70',
         )}
         style={{ background: `linear-gradient(to right, rgba(245,245,245,0.9) ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
       />
-      {input.help && <p className="mt-2 text-[11.5px] leading-relaxed text-dim">{input.help}</p>}
+      {input.help && <p className="mt-2 text-[12px] leading-relaxed text-dim sm:text-[11.5px]">{input.help}</p>}
     </div>
   )
 }
@@ -203,7 +205,7 @@ export function RoiCalculator() {
             {stats.map((s) => (
               <div key={s.label}>
                 <div className="font-mono text-[19px] tabular-nums text-ink-soft">{s.value}</div>
-                <div className="mt-1 text-[10.5px] uppercase tracking-[0.1em] text-dim">{s.label}</div>
+                <div className="mt-1 text-[11px] uppercase tracking-[0.1em] text-dim sm:text-[10.5px]">{s.label}</div>
               </div>
             ))}
           </div>
@@ -222,7 +224,7 @@ export function RoiCalculator() {
         </div>
       </div>
 
-      <p className="relative mt-9 border-t border-line pt-6 text-[12.5px] leading-relaxed text-dim">
+      <p className="relative mt-9 border-t border-line pt-6 text-[13px] leading-relaxed text-dim sm:text-[12.5px]">
         {t.footer}
       </p>
     </div>

@@ -12,6 +12,7 @@ import { Check, Copy, Mail, Phone, X, type LucideIcon } from 'lucide-react'
 import { useLenis } from 'lenis/react'
 import { CONTACT, SOCIAL_LINKS } from '@/data/contact'
 import { cn } from '@/lib/utils'
+import { useScrollLock } from '@/lib/useScrollLock'
 import { useLang } from '@/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -104,7 +105,7 @@ function CopyRow({
         onClick={onCopy}
         aria-label={copyAria}
         className={cn(
-          'flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-[12px] font-medium transition-colors',
+          'flex h-10 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-[12px] font-medium transition-colors',
           copied
             ? 'border-olive/40 bg-olive/10 text-olive'
             : 'border-line bg-white/[0.03] text-faint hover:bg-white/[0.08] hover:text-ink',
@@ -123,6 +124,9 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
   const t = COPY[lang]
   const [copied, setCopied] = useState<CopyKey | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+
+  // Real native scroll-lock (lenis.stop alone doesn't hold on touch).
+  useScrollLock(open)
 
   const doCopy = useCallback(async (text: string, key: CopyKey) => {
     try {
@@ -189,7 +193,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.34, ease }}
-            className="relative z-[1] w-full max-w-[400px] overflow-hidden rounded-[28px] border border-line bg-gradient-to-b from-[#171717]/90 to-[#0b0b0b]/92 p-6 shadow-[0_40px_120px_-24px_rgba(0,0,0,0.85)] backdrop-blur-2xl sm:p-7"
+            className="relative z-[1] max-h-[calc(100svh-2rem)] w-full max-w-[400px] overflow-y-auto overflow-x-hidden overscroll-contain rounded-[28px] border border-line bg-gradient-to-b from-[#171717]/90 to-[#0b0b0b]/92 p-6 shadow-[0_40px_120px_-24px_rgba(0,0,0,0.85)] backdrop-blur-2xl sm:p-7"
           >
             {/* Glossy highlights */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
@@ -201,7 +205,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
               type="button"
               onClick={onClose}
               aria-label={t.close}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white/[0.03] text-faint transition-colors hover:bg-white/[0.08] hover:text-ink"
+              className="absolute right-4 top-4 z-[2] flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white/[0.03] text-faint transition-colors hover:bg-white/[0.08] hover:text-ink"
             >
               <X className="h-4 w-4" />
             </button>

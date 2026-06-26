@@ -40,7 +40,7 @@ function Section({
   children: ReactNode
 }) {
   return (
-    <section id={id} className="scroll-mt-28 border-t border-line py-20 lg:py-28">
+    <section id={id} className="scroll-mt-28 border-t border-line py-14 sm:py-20 lg:py-28">
       <Reveal>
         <div className="flex items-baseline gap-3">
           <span className="label-mono text-dim">{index}</span>
@@ -75,7 +75,7 @@ function ActionButton({
       type="button"
       onClick={onClick}
       className={cn(
-        'inline-flex h-8 items-center gap-1.5 rounded-full border border-line px-3 text-[12px] font-medium transition-colors',
+        'inline-flex h-10 min-h-[44px] items-center gap-1.5 rounded-full border border-line px-3.5 text-[12px] font-medium transition-colors lg:h-8 lg:min-h-0 lg:px-3',
         active ? 'bg-olive/15 text-olive' : 'bg-white/[0.03] text-muted hover:bg-white/[0.07] hover:text-ink',
       )}
     >
@@ -338,12 +338,12 @@ export function MediaKit() {
 
           {/* Table of contents */}
           <Reveal mode="mount" delay={0.18}>
-            <nav className="mt-12 flex flex-wrap gap-2">
+            <nav className="mt-12 flex flex-wrap gap-2.5 lg:gap-2">
               {TOC.map((t) => (
                 <a
                   key={t.id}
                   href={`#${t.id}`}
-                  className="rounded-full border border-line bg-white/[0.03] px-4 py-2 text-[13px] text-muted transition-colors hover:bg-white/[0.07] hover:text-ink"
+                  className="inline-flex min-h-[44px] items-center rounded-full border border-line bg-white/[0.03] px-4 py-2.5 text-[13px] text-muted transition-colors hover:bg-white/[0.07] hover:text-ink lg:min-h-0 lg:py-2"
                 >
                   {t.label}
                 </a>
@@ -448,7 +448,9 @@ export function MediaKit() {
                           className={cn(
                             'flex items-center gap-1 text-[11px] font-medium transition-opacity',
                             s.text === 'dark' ? 'text-black/70' : 'text-white/80',
-                            copied ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+                            copied
+                              ? 'opacity-100'
+                              : 'opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100',
                           )}
                         >
                           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -545,7 +547,7 @@ export function MediaKit() {
                         style={{ borderRadius: r.px > 100 ? 9999 : r.px }}
                       />
                       <span className="font-mono text-[11px] text-muted">{r.name}</span>
-                      <span className="text-[10px] text-dim">{r.usage}</span>
+                      <span className="text-[11px] text-muted lg:text-[10px] lg:text-dim">{r.usage}</span>
                     </div>
                   ))}
                 </div>
@@ -607,8 +609,8 @@ export function MediaKit() {
                 <Reveal
                   key={shot.src}
                   className={cn(
-                    shot.span === 'wide' && 'col-span-2',
-                    shot.span === 'tall' && 'row-span-2',
+                    shot.span === 'wide' && 'lg:col-span-2',
+                    shot.span === 'tall' && 'lg:row-span-2',
                   )}
                 >
                   <div className="group relative h-full overflow-hidden rounded-2xl border border-line">
@@ -625,7 +627,7 @@ export function MediaKit() {
                         type="button"
                         onClick={() => downloadAsset(shot.src)}
                         aria-label={t.photography.downloadPhoto}
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-black/40 text-ink-soft backdrop-blur transition-colors hover:bg-black/70 hover:text-white"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line bg-black/40 text-ink-soft backdrop-blur transition-colors hover:bg-black/70 hover:text-white lg:h-8 lg:w-8"
                       >
                         {copiedKey === key ? <Check className="h-4 w-4" /> : <Download className="h-4 w-4" />}
                       </button>
@@ -710,7 +712,7 @@ export function MediaKit() {
         </Section>
 
         {/* ── Closing CTA ── */}
-        <section className="border-t border-line py-20 text-center lg:py-28">
+        <section className="border-t border-line py-14 text-center sm:py-20 lg:py-28">
           <Reveal>
             <h2 className="mx-auto max-w-xl font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[40px]">
               {t.closing.title}

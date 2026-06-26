@@ -269,10 +269,10 @@ function Hero() {
           {t.heroSub}
         </motion.p>
 
-        <motion.div variants={heroFade} className="mt-10">
+        <motion.div variants={heroFade} className="mt-10 w-full sm:w-auto">
           <RippleButton
             href="#contact"
-            className="h-12 px-7 text-[15px]"
+            className="h-12 w-full px-7 text-[15px] sm:w-auto"
             onClick={(e) => {
               e.preventDefault()
               open()
@@ -290,7 +290,7 @@ function Hero() {
           className="group mt-12 flex flex-col items-center gap-3 text-faint transition-colors hover:text-ink"
         >
           <span className="text-[12px] tracking-wide">{t.seeHow}</span>
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/30 backdrop-blur-md transition-colors group-hover:border-white/30">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/30 backdrop-blur-md transition-colors group-hover:border-white/30 sm:h-10 sm:w-10">
             <motion.span
               animate={{ y: [0, 4, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -335,7 +335,7 @@ function HowItWorks() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section id="how" className="relative w-full scroll-mt-24 px-6 py-28 lg:py-36">
+    <section id="how" className="relative w-full scroll-mt-24 px-6 py-20 sm:py-24 lg:py-36">
       {/* Faint topographic texture, just enough to feel designed */}
       <img
         src={TOPO_IMG}
@@ -412,7 +412,7 @@ function GiftBlock() {
               </Reveal>
               <Reveal delay={0.18} y={16}>
                 <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-line bg-white/[0.03] px-4 py-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-line bg-white/[0.04] text-ink-soft">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-white/[0.04] text-ink-soft">
                     <Gift className="h-[18px] w-[18px]" strokeWidth={1.6} />
                   </span>
                   <span className="text-[14px] text-ink-soft">
@@ -450,7 +450,7 @@ function Apps() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-28 lg:py-36">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 sm:py-24 lg:py-36">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal y={16}>
           <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
@@ -503,7 +503,7 @@ function FinalCta() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section id="contact" className="relative w-full overflow-hidden px-6 pb-32 pt-12 lg:pb-40">
+    <section id="contact" className="relative w-full overflow-hidden px-6 pb-24 pt-10 sm:pb-32 sm:pt-12 lg:pb-40">
       {/* Flowing line art, anchoring the close */}
       <img
         src={WAVES_IMG}
@@ -524,7 +524,7 @@ function FinalCta() {
           <div className="mt-9 flex justify-center">
             <RippleButton
               href="#contact"
-              className="h-12 px-7 text-[15px]"
+              className="h-12 w-full px-7 text-[15px] sm:w-auto"
               onClick={(e) => {
                 e.preventDefault()
                 open()

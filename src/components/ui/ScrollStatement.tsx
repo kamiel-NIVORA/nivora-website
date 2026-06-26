@@ -58,8 +58,8 @@ export function ScrollStatement({
     : 'radial-gradient(120% 90% at 50% 50%, transparent 32%, rgba(6,6,6,0.62) 100%)'
 
   return (
-    <section ref={sectionRef} className="relative h-[260vh] w-full">
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-bg">
+    <section ref={sectionRef} className="relative h-[260svh] w-full">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-bg">
         {/* The whole frame scales up as one unit, corners straightening to square */}
         <motion.div
           style={{ scale: cardScale, borderRadius: radius }}

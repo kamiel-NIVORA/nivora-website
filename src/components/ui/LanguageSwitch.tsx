@@ -32,7 +32,7 @@ export function LanguageSwitch({ className }: { className?: string }) {
             onClick={() => setLang(opt.value)}
             aria-pressed={active}
             className={cn(
-              'rounded-full px-2.5 py-1 text-[12px] font-medium leading-none transition-colors',
+              'inline-flex min-h-[36px] items-center justify-center rounded-full px-3.5 py-1.5 text-[13px] font-medium leading-none transition-colors',
               active ? 'bg-white/[0.12] text-ink' : 'text-faint hover:text-ink',
             )}
           >

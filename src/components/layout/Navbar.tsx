@@ -17,6 +17,7 @@ import {
 } from '@/lib/navigation'
 import { useLang, type Lang } from '@/i18n'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { useScrollLock } from '@/lib/useScrollLock'
 import { BOOKING_URL } from '@/data/contact'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -38,6 +39,7 @@ const COPY = {
     home: 'Nivora works home',
     bannerLead: 'Box and Voice are coming.',
     bannerCta: 'Get notified at launch',
+    bannerCtaShort: 'Get notified',
   },
   nl: {
     comingSoon: 'Binnenkort',
@@ -53,6 +55,7 @@ const COPY = {
     home: 'Nivora works home',
     bannerLead: 'Box en Voice komen eraan.',
     bannerCta: 'Word op de hoogte gebracht bij de lancering',
+    bannerCtaShort: 'Blijf op de hoogte',
   },
 } as const
 
@@ -214,12 +217,13 @@ function LaunchBanner() {
     <div className="mx-auto mb-2 flex w-full max-w-[1200px] items-stretch gap-2">
       <a
         href="/waitlist"
-        className="group flex flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-[12.5px] text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
+        className="group flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-center text-[12.5px] leading-snug text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
       >
         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
         <span className="hidden sm:inline">{t.bannerLead}</span>
-        <span className="font-medium text-ink">{t.bannerCta}</span>
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
+        <span className="font-medium text-ink sm:hidden">{t.bannerCtaShort}</span>
+        <span className="hidden font-medium text-ink sm:inline">{t.bannerCta}</span>
+        <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
       </a>
       <button
         type="button"
@@ -228,7 +232,7 @@ function LaunchBanner() {
           localStorage.setItem('nivora.launchBanner.dismissed', '1')
           setShow(false)
         }}
-        className="flex w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-black/55 text-faint backdrop-blur-xl transition-colors hover:text-ink"
+        className="flex w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-black/55 text-faint backdrop-blur-xl transition-colors hover:text-ink"
       >
         <X className="h-4 w-4" strokeWidth={1.8} />
       </button>
@@ -243,13 +247,28 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<MenuKey | null>(null)
   const [dir, setDir] = useState(1)
+  /* Hover-to-open is for real pointers only. On touch tablets (iPad landscape
+     gets the desktop nav) hover is emulated and unreliable, so there we drive
+     the dropdowns by tap instead. */
+  const [canHover, setCanHover] = useState(true)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  /* Lock the page behind the open mobile menu (Lenis doesn't stop touch scroll). */
+  useScrollLock(open)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const update = () => setCanHover(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
   }, [])
 
   useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current) }, [])
@@ -268,7 +287,7 @@ export function Navbar() {
   }
 
   return (
-    <div className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
+    <div className="fixed inset-x-0 top-0 z-50 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(1rem,env(safe-area-inset-top))]">
       <LaunchBanner />
       <div className="relative mx-auto w-full max-w-[1200px]">
         <motion.nav
@@ -277,7 +296,9 @@ export function Navbar() {
           transition={{ duration: 0.4, ease }}
           className={cn(
             'mx-auto w-full rounded-2xl transition-[background-color,box-shadow,backdrop-filter] duration-300',
-            scrolled
+            // Glass surface whenever scrolled OR the mobile menu is open, so the
+            // menu always sits on a readable backing instead of floating over the hero.
+            scrolled || open
               ? 'bg-black/55 px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl'
               : 'px-2 py-2',
           )}
@@ -294,10 +315,11 @@ export function Navbar() {
                 {MENU_KEYS.map((key) => (
                   <button
                     key={key}
-                    onMouseEnter={() => openMenu(key)}
-                    onMouseLeave={closeSoon}
+                    onMouseEnter={canHover ? () => openMenu(key) : undefined}
+                    onMouseLeave={canHover ? closeSoon : undefined}
+                    onClick={() => setActive((a) => (a === key ? null : key))}
                     className={cn(
-                      'flex items-center gap-1 rounded-lg px-3 py-2 text-sm transition-colors',
+                      'flex items-center gap-1 rounded-lg px-3 py-2.5 text-sm transition-colors',
                       active === key ? 'bg-white/[0.07] text-ink' : 'text-muted hover:text-ink',
                     )}
                   >
@@ -312,47 +334,49 @@ export function Navbar() {
 
             {/* Right: actions */}
             <div className="hidden items-center gap-2.5 lg:flex">
-              <RippleButton variant="ghost" href="/contact">{t.contactUs}</RippleButton>
-              <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer">{t.bookCall}</RippleButton>
+              <RippleButton variant="ghost" href="/contact" className="h-10 px-5">{t.contactUs}</RippleButton>
+              <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="h-10 px-5">{t.bookCall}</RippleButton>
             </div>
 
             {/* Mobile toggle */}
             <button
               onClick={() => setOpen((v) => !v)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-ink lg:hidden"
+              className="-mr-1.5 flex h-11 w-11 items-center justify-center rounded-lg text-ink lg:hidden"
               aria-label={t.toggleMenu}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
 
-          {/* Mobile panel */}
+          {/* Mobile panel — capped to the viewport and internally scrollable so
+              the lower sections + CTA stay reachable on short phones, with the
+              page itself locked behind it. */}
           {open && (
-            <div className="mt-3 flex flex-col gap-1 border-t border-line pt-3 lg:hidden">
-              <p className="px-2 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
+            <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
+              <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
               {getProducts(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
+              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
               {getServices(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Company', lang)}</p>
+              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Company', lang)}</p>
               {getCompanyPrimary(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
                   {l.title}
                   {l.comingSoon && <ComingSoonTag />}
                 </a>
               ))}
-              <p className="px-2 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Resources', lang)}</p>
+              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Resources', lang)}</p>
               {getResources(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="rounded-lg px-2 py-2 text-sm text-muted hover:bg-white/5 hover:text-ink">{l.title}</a>
+                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
-              <div className="mt-3 flex items-center justify-between gap-2 border-t border-line px-2 pt-3">
+              <div className="mt-3 flex items-center justify-between gap-2 border-t border-line px-3 pt-3">
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>
                 <LanguageSwitch />
               </div>
-              <Button size="sm" className="mt-2" asChild>
+              <Button size="md" className="mt-3 w-full" asChild>
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t.bookCall}</a>
               </Button>
             </div>
@@ -365,6 +389,17 @@ export function Navbar() {
             what made it recompute mid-animation and flicker, so keep it scale-free and
             the glass stays smooth. Switching menus keeps the panel up and only slides
             its contents. */}
+        {/* Tap-away closer for touch tablets (desktop closes on hover-out). */}
+        {active && !canHover && (
+          <button
+            type="button"
+            aria-hidden
+            tabIndex={-1}
+            onClick={() => setActive(null)}
+            className="fixed inset-0 z-40 hidden cursor-default lg:block"
+          />
+        )}
+
         <AnimatePresence>
           {active && (
             <motion.div
@@ -373,9 +408,9 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.22, ease }}
-              className="absolute left-0 right-0 top-full hidden justify-center pt-2 transform-gpu [backface-visibility:hidden] lg:flex"
-              onMouseEnter={cancelClose}
-              onMouseLeave={closeSoon}
+              className="absolute left-0 right-0 top-full z-50 hidden justify-center pt-2 transform-gpu [backface-visibility:hidden] lg:flex"
+              onMouseEnter={canHover ? cancelClose : undefined}
+              onMouseLeave={canHover ? closeSoon : undefined}
             >
               <div className="relative">
                 {/* Frosted glass — identical blur to the scrolled bar, so the hero

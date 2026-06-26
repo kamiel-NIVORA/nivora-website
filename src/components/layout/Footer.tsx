@@ -122,7 +122,10 @@ export function Footer() {
                 <ul className="mt-4 flex flex-col gap-3">
                   {col.links.map((l) => (
                     <li key={l.label}>
-                      <a href={l.href} className="text-sm text-ink-soft/85 transition-colors hover:text-ink">
+                      <a
+                        href={l.href}
+                        className="inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors [overflow-wrap:anywhere] hover:text-ink"
+                      >
                         {l.label}
                       </a>
                     </li>
@@ -160,7 +163,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="text-ink-soft/45 transition-colors hover:text-ink-soft/80"
+                  className="-m-2.5 grid h-11 w-11 place-items-center text-ink-soft/45 transition-colors hover:text-ink-soft/80"
                 >
                   {icon}
                 </a>
@@ -169,7 +172,7 @@ export function Footer() {
                   key={s.label}
                   aria-label={`${s.label}, ${t.comingSoon.toLowerCase()}`}
                   title={t.comingSoon}
-                  className="cursor-default text-ink-soft/20"
+                  className="-m-2.5 grid h-11 w-11 cursor-default place-items-center text-ink-soft/20"
                 >
                   {icon}
                 </span>

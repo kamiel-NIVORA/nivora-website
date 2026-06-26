@@ -36,7 +36,13 @@ export default function App() {
         <div className="relative min-h-screen bg-bg">
           <ScrollManager />
           <Navbar />
-          <Suspense fallback={<div className="min-h-screen" />}>
+          <Suspense
+            fallback={
+              <div className="grid min-h-svh place-items-center">
+                <img src="/brand/nivora-logo.png" alt="" className="h-6 w-auto animate-pulse opacity-50" />
+              </div>
+            }
+          >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />

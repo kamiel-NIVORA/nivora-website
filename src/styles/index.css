@@ -48,8 +48,15 @@
   }
 
   html {
-    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Lenis drives smooth scrolling site-wide; only fall back to native smooth
+     scroll when Lenis is absent (it adds a `.lenis` class to <html>). Running
+     both at once makes anchor/hash jumps double-ease and jank on phones. */
+  html:not(.lenis) {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -61,7 +68,37 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    /* `clip` instead of `hidden`: it tames stray horizontal overflow without
+       creating a scroll container, so `position: sticky` keeps working. */
+    overflow-x: clip;
+  }
+
+  /* Fixed navbar clearance for in-page anchor jumps (#services, #contact, …)
+     so a targeted section never lands hidden behind the nav. */
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  /* Form controls never below 16px: anything smaller makes iOS Safari auto-zoom
+     the whole page on focus, the classic broken-feeling mobile form. Components
+     that want a smaller field on desktop override this with an explicit sm: size. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Honour reduced-motion globally: neutralises the CSS keyframes (marquee,
+     voice bars, shimmer) and transitions for users who ask for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {

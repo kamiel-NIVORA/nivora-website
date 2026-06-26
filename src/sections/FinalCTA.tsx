@@ -22,7 +22,7 @@ export function FinalCTA() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section id="contact" className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 py-28 lg:py-36">
+    <section id="contact" className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 py-20 sm:py-28 lg:py-36">
       <div className="relative z-10 flex flex-col items-center text-center">
         <Reveal>
           <h2 className="font-serif text-[34px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[44px] lg:text-5xl lg:leading-[1.2]">

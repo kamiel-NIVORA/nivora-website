@@ -35,7 +35,7 @@ function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
       out.push(
         <code
           key={`${keyPrefix}-${k++}`}
-          className="rounded bg-white/[0.06] px-1 py-0.5 font-mono text-[12.5px] text-ink-soft"
+          className="break-words rounded bg-white/[0.06] px-1 py-0.5 font-mono text-[12.5px] text-ink-soft"
         >
           {m[6]}
         </code>,
@@ -48,7 +48,7 @@ function renderInline(text: string, keyPrefix = 'i'): ReactNode[] {
           key={`${keyPrefix}-${k++}`}
           href={href}
           {...(internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
-          className="font-medium text-ink underline decoration-white/30 underline-offset-2 transition-colors hover:decoration-white/60"
+          className="break-words font-medium text-ink underline decoration-white/30 underline-offset-2 transition-colors hover:decoration-white/60"
         >
           {m[7]}
         </a>,

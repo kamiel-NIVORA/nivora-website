@@ -56,7 +56,7 @@ export function BlogPost() {
         <h1 className="font-serif text-3xl text-ink">{t.notFound}</h1>
         <Link
           to="/blog"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-faint transition-colors hover:text-ink"
+          className="mt-4 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm text-faint transition-colors hover:text-ink active:text-ink"
         >
           <ArrowLeft className="h-4 w-4" /> {t.backToBlog}
         </Link>
