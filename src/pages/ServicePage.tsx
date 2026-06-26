@@ -48,27 +48,6 @@ const INTRO_WORDS: Record<Lang, Record<ServiceSlug, string[]>> = {
 }
 
 /** App types shown in the vertical marquee on the App Design statement section. */
-const APP_TYPES: Record<Lang, string[]> = {
-  en: [
-    'Consumer Apps',
-    'Business Tools',
-    'Internal Software',
-    'Brand Products',
-    'Complex Builds',
-    'Mobile Apps',
-    'Web Platforms',
-  ],
-  nl: [
-    'Consumenten-apps',
-    'Zakelijke tools',
-    'Interne software',
-    'Merkproducten',
-    'Complexe builds',
-    'Mobiele apps',
-    'Webplatformen',
-  ],
-}
-
 /** Static UI strings on the service page, by language. */
 const UI = {
   en: {
@@ -287,7 +266,6 @@ export function ServicePage() {
       >
         <Hero content={content} meta={meta} />
         <WhatYouGet meta={meta} />
-        {meta.slug === 'app-design' && <AppStatement content={content} />}
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
         <Problem content={content} />
         <Solution content={content} meta={meta} />
@@ -674,7 +652,7 @@ function Problem({ content }: { content: ServiceContent }) {
         </Reveal>
       </div>
 
-      <div className="mt-14 grid gap-5 md:grid-cols-3">
+      <div className="mx-auto mt-14 grid max-w-3xl gap-5 sm:grid-cols-2">
         {content.problem.points.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.08}>
             <GlassCard className="h-full">
@@ -757,61 +735,6 @@ function Capabilities({ content }: { content: ServiceContent }) {
             </GlassCard>
           </Reveal>
         ))}
-      </div>
-    </section>
-  )
-}
-
-/* App Design: vertical marquee statement — replaces the generic chips version ─── */
-
-function AppStatement({ content }: { content: ServiceContent }) {
-  const { lang } = useLang()
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <div className="grid items-center gap-16 lg:grid-cols-[1fr_220px]">
-        {/* Left: statement + chips */}
-        <div>
-          <Reveal>
-            <p className="font-serif text-[27px] leading-[1.38] tracking-[-0.015em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.34]">
-              {content.intro.statement}
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="mt-8 flex flex-wrap gap-2.5">
-              {content.intro.chips.map((chip) => (
-                <span
-                  key={chip}
-                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.04] px-4 py-2 text-[13px] text-ink-soft/90"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                  {chip}
-                </span>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Right: vertical marquee of app types */}
-        <div className="relative hidden h-56 overflow-hidden lg:block">
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b from-bg to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-gradient-to-t from-bg to-transparent" />
-          {[0, 1].map((copy) => (
-            <div
-              key={copy}
-              aria-hidden={copy === 1}
-              style={{ animation: 'marquee-vertical 16s linear infinite' }}
-            >
-              {APP_TYPES[lang].map((type) => (
-                <div
-                  key={type}
-                  className="border-b border-line/50 py-2.5 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink/30"
-                >
-                  {type}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   )
