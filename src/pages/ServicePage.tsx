@@ -13,7 +13,6 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
-import { ServiceIntro } from '@/components/ui/ServiceIntro'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
@@ -30,22 +29,6 @@ import {
 } from '@/data/serviceContent'
 
 const ease = [0.16, 1, 0.3, 1] as const
-
-/** Intro keywords: name the pain, then the resolution. Short, on the nose. */
-const INTRO_WORDS: Record<Lang, Record<ServiceSlug, string[]>> = {
-  en: {
-    'app-design': ['Your idea.', 'Built properly.', 'Owned by you.'],
-    'local-ai': ['Your hardware.', 'No cloud.', 'Owned by you.'],
-    aios: ['Too many tools.', 'One system.', 'Owned by you.'],
-    'ai-consulting': ['No more hype.', 'Proof first.', 'Then a plan.'],
-  },
-  nl: {
-    'app-design': ['Uw idee.', 'Goed gebouwd.', 'In uw bezit.'],
-    'local-ai': ['Uw hardware.', 'Geen cloud.', 'In uw bezit.'],
-    aios: ['Te veel tools.', 'Eén systeem.', 'In uw bezit.'],
-    'ai-consulting': ['Geen hype meer.', 'Eerst bewijs.', 'Dan een plan.'],
-  },
-}
 
 /** App types shown in the vertical marquee on the App Design statement section. */
 /** Static UI strings on the service page, by language. */
@@ -259,11 +242,10 @@ export function ServicePage() {
   if (!content || !meta) return <Navigate to="/" replace />
 
   return (
-    <ServiceIntro words={INTRO_WORDS[lang][meta.slug]} accent={meta.accent}>
-      <main
-        className="relative w-full overflow-x-clip bg-bg"
-        style={{ ['--accent' as string]: meta.accent } as CSSProperties}
-      >
+    <main
+      className="relative w-full overflow-x-clip bg-bg"
+      style={{ ['--accent' as string]: meta.accent } as CSSProperties}
+    >
         <Hero content={content} meta={meta} />
         <WhatYouGet meta={meta} />
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
@@ -281,8 +263,7 @@ export function ServicePage() {
         <FinalCta content={content} meta={meta} />
         <OtherServices current={meta.slug} />
         <ServiceAskFab meta={meta} />
-      </main>
-    </ServiceIntro>
+    </main>
   )
 }
 

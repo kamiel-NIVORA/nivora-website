@@ -201,7 +201,14 @@ function Hero() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section className="relative flex min-h-[88svh] w-full flex-col items-center justify-center px-6 pb-24 pt-32">
+    <section className="relative flex min-h-[88svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32">
+      {/* Hero photo, darkened so the white headline stays legible. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <img src="/about/hero.jpg" alt="" className="h-full w-full object-cover object-center" />
+        <div className="absolute inset-0 bg-bg/50" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-bg/70 to-transparent" />
+      </div>
       <motion.div
         variants={heroContainer}
         initial="hidden"
