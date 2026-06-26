@@ -4,11 +4,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUp,
   ArrowUpRight,
-  Brain,
   CalendarClock,
   Paperclip,
   RotateCw,
-  Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -107,16 +105,20 @@ export function HelpCenterPage() {
 
   return (
     <main className="relative w-full bg-bg">
-      <section className="relative flex min-h-svh w-full flex-col overflow-hidden">
-        {/* Moving dot-matrix backdrop, echoing the AIOS chat. Monochrome, no red. */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-          <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(6,6,6,0.55)_60%,#060606_100%)]" />
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
-        </div>
+      <section className={cn('relative flex w-full flex-col overflow-hidden', empty ? 'min-h-svh' : 'h-svh')}>
+        {/* Moving dot-matrix backdrop, echoing the AIOS chat. Shown only on the
+            empty hero. The moment a conversation starts it clears, so chatting is
+            a clean, distraction-free interface. */}
+        {empty && (
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+            <ChatBackdrop reduced={reduced} className="absolute inset-0 h-full w-full" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(6,6,6,0.55)_60%,#060606_100%)]" />
+            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
+          </div>
+        )}
 
-        <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col px-5 pb-12 pt-28 sm:px-6 lg:pt-32">
+        <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pb-8 pt-28 sm:px-6 lg:pt-32">
           {/* Conversation — hidden while empty so the hero is centered. */}
           <div
             ref={bodyRef}
@@ -156,24 +158,16 @@ export function HelpCenterPage() {
           >
             {empty && (
               <motion.div
-                className="flex flex-col items-center gap-4 text-center"
+                className="flex flex-col items-center text-center"
                 initial={reduced ? false : { opacity: 0, y: 18 }}
                 animate={reduced ? undefined : { opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease }}
               >
-                <motion.img
-                  src="/brand/nivora-logo.png"
-                  alt="Nivora"
-                  className="h-9 w-auto object-contain sm:h-11"
-                  initial={reduced ? false : { opacity: 0, y: -8 }}
-                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
-                />
                 <motion.h1
                   initial={reduced ? false : { opacity: 0, y: 10 }}
                   animate={reduced ? undefined : { opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  className="bg-gradient-to-r from-white/95 to-white/55 bg-clip-text pb-1 text-[32px] font-medium leading-tight tracking-tight text-transparent sm:text-[40px]"
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                  className="bg-gradient-to-r from-white/95 to-white/55 bg-clip-text pb-1 text-[34px] font-medium leading-tight tracking-tight text-transparent sm:text-[46px]"
                 >
                   {t.heroTitle}
                 </motion.h1>
@@ -197,12 +191,9 @@ export function HelpCenterPage() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Composer — a faithful port of the AIOS hero chat box. A glassy panel with the
-   prompt textarea, then a control row: attach · Experts · Assistent on the left,
-   Verstuur on the right.
+   Composer — a large, glassy chat box. A roomy prompt textarea, then a slim
+   control row: attach on the left, Verstuur on the right. Big and clean.
    ────────────────────────────────────────────────────────────────────────── */
-
-type Mode = 'experts' | 'assistant' | null
 
 function Composer({
   className,
@@ -224,16 +215,20 @@ function Composer({
   const { lang } = useLang()
   const t = COPY[lang]
   const [value, setValue] = useState('')
-  const [mode, setMode] = useState<Mode>(null)
   const [files, setFiles] = useState<string[]>([])
   const taRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  // The box is large by default; on the hero it stands tall, in a conversation it
+  // starts shorter and grows. min/max are tuned per state.
+  const minH = hasMessages ? 32 : 96
+  const maxH = hasMessages ? 200 : 300
 
   const grow = () => {
     const ta = taRef.current
     if (!ta) return
     ta.style.height = 'auto'
-    ta.style.height = `${Math.min(ta.scrollHeight, 200)}px`
+    ta.style.height = `${Math.min(Math.max(ta.scrollHeight, minH), maxH)}px`
   }
 
   const submit = () => {
@@ -248,7 +243,6 @@ function Composer({
   }
 
   const canSend = value.trim().length > 0 && !busy
-  const toggle = (m: Exclude<Mode, null>) => setMode((prev) => (prev === m ? null : m))
 
   return (
     <motion.div
@@ -269,14 +263,15 @@ function Composer({
         }}
       />
 
-      <div className="relative rounded-2xl border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300 focus-within:border-white/[0.18] focus-within:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.12)]">
+      <div className="relative rounded-[28px] border border-white/[0.1] bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300 focus-within:border-white/[0.18] focus-within:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.12)]">
         {/* Prompt */}
-        <div className="p-4">
+        <div className="px-6 pt-5">
           <textarea
             ref={taRef}
             rows={1}
             value={value}
             disabled={busy}
+            style={{ minHeight: minH, maxHeight: maxH }}
             onChange={(e) => {
               setValue(e.target.value)
               grow()
@@ -289,7 +284,7 @@ function Composer({
             }}
             aria-label={t.composerAria}
             placeholder={busy ? t.typing : t.placeholder}
-            className="block max-h-[200px] w-full resize-none border-none bg-transparent text-[15px] leading-7 text-white/90 caret-white outline-none placeholder:text-white/30 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="block w-full resize-none border-none bg-transparent text-[16px] leading-8 text-white/90 caret-white outline-none placeholder:text-white/30 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           />
         </div>
 
@@ -297,7 +292,7 @@ function Composer({
         <AnimatePresence>
           {files.length > 0 && (
             <motion.div
-              className="flex flex-wrap gap-2 px-4 pb-3"
+              className="flex flex-wrap gap-2 px-6 pb-3"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -323,40 +318,27 @@ function Composer({
         </AnimatePresence>
 
         {/* Control row */}
-        <div className="flex items-center justify-between gap-4 border-t border-white/[0.05] p-4">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-4 px-5 pb-4 pt-2">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="rounded-lg p-2 text-white/40 transition-colors hover:text-white/90"
+              className="rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90"
               title={t.attach}
               aria-label={t.attach}
             >
-              <Paperclip className="h-4 w-4" />
+              <Paperclip className="h-[18px] w-[18px]" />
             </button>
-
-            <ModeButton
-              active={mode === 'experts'}
-              onClick={() => toggle('experts')}
-              Icon={Brain}
-              label={t.experts}
-            />
-            <ModeButton
-              active={mode === 'assistant'}
-              onClick={() => toggle('assistant')}
-              Icon={Sparkles}
-              label={t.assistant}
-            />
 
             {hasMessages && (
               <button
                 type="button"
                 onClick={onReset}
-                className="rounded-lg p-2 text-white/40 transition-colors hover:text-white/90"
+                className="rounded-lg p-2.5 text-white/40 transition-colors hover:text-white/90"
                 title={t.tryAgain}
                 aria-label={t.tryAgain}
               >
-                <RotateCw className="h-4 w-4" />
+                <RotateCw className="h-[18px] w-[18px]" />
               </button>
             )}
           </div>
@@ -368,7 +350,7 @@ function Composer({
             disabled={!busy && !canSend}
             aria-label={busy ? t.stop : t.sendAria}
             className={cn(
-              'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all',
+              'flex items-center gap-2 rounded-xl px-5 py-2.5 text-[15px] font-medium transition-all',
               busy || canSend
                 ? 'bg-white text-[#0A0A0B] shadow-lg shadow-white/10'
                 : 'bg-white/[0.05] text-white/40',
@@ -381,7 +363,7 @@ function Composer({
               </>
             ) : (
               <>
-                <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
+                <ArrowUp className="h-[18px] w-[18px]" strokeWidth={2.5} />
                 <span>{t.send}</span>
               </>
             )}
@@ -389,36 +371,6 @@ function Composer({
         </div>
       </div>
     </motion.div>
-  )
-}
-
-function ModeButton({
-  active,
-  onClick,
-  Icon,
-  label,
-}: {
-  active: boolean
-  onClick: () => void
-  Icon: LucideIcon
-  label: string
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        'flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-all',
-        active
-          ? 'border-white/25 bg-white/[0.12] text-white'
-          : 'border-transparent text-white/50 hover:border-white/10 hover:bg-white/[0.06] hover:text-white',
-      )}
-    >
-      <Icon className="h-3.5 w-3.5" />
-      <span>{label}</span>
-      {active && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}
-    </button>
   )
 }
 
