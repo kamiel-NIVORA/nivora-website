@@ -36,7 +36,8 @@ const COPY = {
   en: {
     docTitle: 'Help Center · Nivora',
     heroTitle: 'How can we help?',
-    heroAsk: 'Ask our Nivora assistant anything. Would you rather reach us directly?',
+    heroAsk1: 'Ask our Nivora assistant anything.',
+    heroAsk2: 'Rather reach us directly?',
     contact: 'Get in touch',
     placeholder: 'Ask a question or give Nivora a command...',
     typing: 'Nivora is answering, wait or press stop...',
@@ -59,7 +60,8 @@ const COPY = {
   nl: {
     docTitle: 'Helpcentrum · Nivora',
     heroTitle: 'Hoe kunnen we helpen?',
-    heroAsk: 'Vraag alles aan onze Nivora-assistent. Wilt u liever rechtstreeks contact?',
+    heroAsk1: 'Vraag gerust alles aan onze Nivora-assistent.',
+    heroAsk2: 'Liever rechtstreeks contact met ons?',
     contact: 'Neem contact op',
     placeholder: 'Stel een vraag of geef een commando aan Nivora...',
     typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
@@ -175,20 +177,21 @@ export function HelpCenterPage() {
                 >
                   {t.heroTitle}
                 </motion.h1>
-                <motion.p
+                <motion.div
                   initial={reduced ? false : { opacity: 0, y: 8 }}
                   animate={reduced ? undefined : { opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="max-w-md text-balance text-[14.5px] leading-relaxed text-faint"
+                  className="flex flex-col items-center gap-1 text-[14.5px] leading-snug text-faint"
                 >
-                  {t.heroAsk}{' '}
+                  <span>{t.heroAsk1}</span>
+                  <span>{t.heroAsk2}</span>
                   <Link
                     to="/contact"
-                    className="font-medium text-ink underline-offset-4 transition-colors hover:text-white hover:underline"
+                    className="mt-1 font-medium text-ink underline-offset-4 transition-colors hover:text-white hover:underline"
                   >
                     {t.contact}
                   </Link>
-                </motion.p>
+                </motion.div>
               </motion.div>
             )}
 
