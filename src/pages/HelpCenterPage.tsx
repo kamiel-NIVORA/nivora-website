@@ -5,8 +5,12 @@ import {
   ArrowUp,
   ArrowUpRight,
   CalendarClock,
+  Check,
+  Copy,
   Paperclip,
   RotateCw,
+  ThumbsDown,
+  ThumbsUp,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -17,6 +21,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { useHelpChat } from '@/lib/useHelpChat'
 import { splitCta, type ChatMessage, type CtaToken } from '@/lib/helpChat'
 import { renderChatMarkdown } from '@/lib/chatMarkdown'
+import { copyText } from '@/lib/clipboard'
 import { BOOKING_URL } from '@/data/contact'
 import { useLang, pick, type Localized } from '@/i18n'
 
@@ -48,6 +53,11 @@ const COPY = {
     sendAria: 'Send message',
     composerAria: 'Message the Nivora assistant',
     tryAgain: 'Try again',
+    regenerate: 'Regenerate',
+    copyLabel: 'Copy',
+    copied: 'Copied',
+    helpful: 'Good answer',
+    notHelpful: 'Could be better',
     talkToTeam: 'Talk to the team',
     cta: {
       book_call: 'Book a call',
@@ -71,6 +81,11 @@ const COPY = {
     sendAria: 'Bericht versturen',
     composerAria: 'Stuur de Nivora-assistent een bericht',
     tryAgain: 'Probeer opnieuw',
+    regenerate: 'Opnieuw genereren',
+    copyLabel: 'Kopiëren',
+    copied: 'Gekopieerd',
+    helpful: 'Goed antwoord',
+    notHelpful: 'Kan beter',
     talkToTeam: 'Praat met het team',
     cta: {
       book_call: 'Boek een gesprek',
@@ -157,6 +172,7 @@ export function HelpCenterPage() {
                     reduced={reduced}
                     streaming={status === 'streaming' && m.role === 'assistant' && i === messages.length - 1}
                     isError={status === 'error' && m.role === 'assistant' && i === messages.length - 1}
+                    isLast={i === messages.length - 1}
                     onRetry={retry}
                   />
                 ))}
@@ -415,12 +431,14 @@ function Message({
   reduced,
   streaming,
   isError,
+  isLast,
   onRetry,
 }: {
   message: ChatMessage
   reduced: boolean
   streaming: boolean
   isError: boolean
+  isLast: boolean
   onRetry: () => void
 }) {
   const { lang } = useLang()
@@ -466,6 +484,8 @@ function Message({
 
         {tokens.length > 0 && <CtaRow tokens={tokens} />}
 
+        {!streaming && !isError && <MessageActions text={text} isLast={isLast} onRetry={onRetry} />}
+
         {isError && (
           <div className="mt-2.5 flex items-center gap-4 pl-1 text-[13px]">
             <button
@@ -486,6 +506,75 @@ function Message({
         )}
       </div>
     </motion.div>
+  )
+}
+
+/* Per-message action footer, echoing the AIOS chat: regenerate (last turn),
+   copy, and a thumbs up/down. Divider above, subtle until hovered. ─────────────*/
+function MessageActions({
+  text,
+  isLast,
+  onRetry,
+}: {
+  text: string
+  isLast: boolean
+  onRetry: () => void
+}) {
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const [copied, setCopied] = useState(false)
+  const [vote, setVote] = useState<'up' | 'down' | null>(null)
+
+  const onCopy = async () => {
+    try {
+      await copyText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      /* clipboard blocked, ignore */
+    }
+  }
+
+  const btn =
+    'flex h-8 w-8 items-center justify-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink'
+
+  return (
+    <div className="mt-3 flex items-center gap-0.5 border-t border-white/[0.06] pt-2.5">
+      {isLast && (
+        <button type="button" onClick={onRetry} className={btn} title={t.regenerate} aria-label={t.regenerate}>
+          <RotateCw className="h-[15px] w-[15px]" strokeWidth={1.7} />
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={onCopy}
+        className={btn}
+        title={copied ? t.copied : t.copyLabel}
+        aria-label={copied ? t.copied : t.copyLabel}
+      >
+        {copied ? <Check className="h-[15px] w-[15px]" strokeWidth={2} /> : <Copy className="h-[15px] w-[15px]" strokeWidth={1.7} />}
+      </button>
+      <button
+        type="button"
+        onClick={() => setVote((v) => (v === 'up' ? null : 'up'))}
+        className={cn(btn, vote === 'up' && 'text-ink')}
+        title={t.helpful}
+        aria-label={t.helpful}
+        aria-pressed={vote === 'up'}
+      >
+        <ThumbsUp className="h-[15px] w-[15px]" strokeWidth={1.7} />
+      </button>
+      <button
+        type="button"
+        onClick={() => setVote((v) => (v === 'down' ? null : 'down'))}
+        className={cn(btn, vote === 'down' && 'text-ink')}
+        title={t.notHelpful}
+        aria-label={t.notHelpful}
+        aria-pressed={vote === 'down'}
+      >
+        <ThumbsDown className="h-[15px] w-[15px]" strokeWidth={1.7} />
+      </button>
+    </div>
   )
 }
 
