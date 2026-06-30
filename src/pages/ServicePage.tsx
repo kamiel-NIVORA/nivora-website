@@ -1346,30 +1346,31 @@ function AppWhoFor() {
   )
 }
 
-/* AIOS · who we build this for · three calm situation cards, each with a short bold
-   heading so a visitor sees at a glance which one is them. The system animation that
-   used to live in the Solution section sits here now. AIOS only. ───────────────── */
+/* AIOS · who we build this for · same two-column shape as Local AI's "Voor wie dit
+   gemaakt is": the system animation on the left, copy on the right with a checklist.
+   Each line leads with a short bold heading so a visitor sees at a glance which one is
+   them. The animation moved here from the old Solution section. AIOS only. ───────── */
 
 const AIOS_WHO: Record<
   Lang,
-  { title: string; subtitle: string; cards: { head: string; body: string }[] }
+  { title: string; subtitle: string; lines: { head: string; body: string }[] }
 > = {
   en: {
     title: 'Who we build this for',
     subtitle:
       'Not for someone who wants to try an AI tool, but for those who want to ready the way they work for what is coming.',
-    cards: [
+    lines: [
       {
         head: 'You are stuck on manual work',
-        body: 'The more clients you take on, the more people you need for the same kind of work. That does not last, and you feel it already.',
+        body: 'the more clients you take on, the more people you need for the same kind of work. That does not last, and you feel it already.',
       },
       {
         head: 'You do not know where to start',
-        body: 'You want to get going with AI and you can see it is possible, just not how all the pieces come together into something that truly works.',
+        body: 'you want to get going with AI and you can see it is possible, just not how all the pieces come together into something that truly works.',
       },
       {
         head: 'You want to grow without hiring',
-        body: 'You want to work faster without taking on someone new each time. To grow in what you can handle, not in how many people it takes to do the same.',
+        body: 'you want to work faster without taking on someone new each time. To grow in what you can handle, not in how many people it takes to do the same.',
       },
     ],
   },
@@ -1377,18 +1378,18 @@ const AIOS_WHO: Record<
     title: 'Voor wie we dit bouwen',
     subtitle:
       'Niet voor wie een AI-tool wil uitproberen, maar voor wie zijn manier van werken klaar wil maken voor wat komt.',
-    cards: [
+    lines: [
       {
         head: 'U loopt vast op handwerk',
-        body: 'Hoe meer klanten erbij komen, hoe meer mensen u nodig hebt voor hetzelfde soort werk. Dat blijft niet duren, en u voelt het nu al.',
+        body: 'hoe meer klanten erbij komen, hoe meer mensen u nodig hebt voor hetzelfde soort werk. Dat blijft niet duren, en u voelt het nu al.',
       },
       {
         head: 'U weet niet waar te beginnen',
-        body: 'U wil met AI aan de slag en ziet dat het kan, alleen niet hoe alle stukken samenkomen tot iets dat echt werkt.',
+        body: 'u wil met AI aan de slag en ziet dat het kan, alleen niet hoe alle stukken samenkomen tot iets dat echt werkt.',
       },
       {
         head: 'U wil groeien zonder bij te nemen',
-        body: 'U wil sneller werken zonder telkens iemand bij te nemen. Groeien in wat u aankan, niet in hoeveel mensen er nodig zijn om hetzelfde te doen.',
+        body: 'u wil sneller werken zonder telkens iemand bij te nemen. Groeien in wat u aankan, niet in hoeveel mensen er nodig zijn om hetzelfde te doen.',
       },
     ],
   },
@@ -1397,32 +1398,48 @@ const AIOS_WHO: Record<
 function AiosWhoFor({ meta }: { meta: ServiceMeta }) {
   const { lang } = useLang()
   const data = AIOS_WHO[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
+
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {data.title}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
-        </Reveal>
-      </div>
-
-      <Reveal delay={0.1}>
-        <AnimFrame src={meta.anim} className="mx-auto mt-12 aspect-square w-full max-w-[420px]" />
-      </Reveal>
-
-      <div className="mt-12 grid gap-5 sm:grid-cols-3">
-        {data.cards.map((c, i) => (
-          <Reveal key={c.head} delay={i * 0.08}>
-            <GlassCard className="h-full">
-              <h3 className="text-[17px] font-semibold tracking-tight text-ink">{c.head}</h3>
-              <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{c.body}</p>
-            </GlassCard>
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* The system animation — left on desktop, melts into the page */}
+        <div ref={ref} className="relative order-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
+          />
+          <Reveal y={24}>
+            <motion.div style={{ y }} className="will-change-transform">
+              <AnimFrame src={meta.anim} className="mx-auto aspect-square w-full max-w-[440px]" />
+            </motion.div>
           </Reveal>
-        ))}
+        </div>
+
+        {/* Copy — right on desktop */}
+        <div className="order-2">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
+              {data.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
+          </Reveal>
+          <ul className="mt-8 flex flex-col gap-4">
+            {data.lines.map((line, i) => (
+              <Reveal as="li" key={line.head} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
+                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                <span className="text-[15.5px] leading-relaxed text-ink-soft">
+                  <span className="font-semibold text-ink">{line.head}.</span> {line.body}
+                </span>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )
