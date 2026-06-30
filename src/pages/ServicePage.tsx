@@ -540,8 +540,8 @@ function WhatYouGet({ meta }: { meta: ServiceMeta }) {
                   alt=""
                   aria-hidden
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)] [-webkit-mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)]"
-                  style={{ mixBlendMode: 'screen' }}
+                  className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(72%_72%_at_50%_50%,#000_46%,transparent_92%)] [-webkit-mask-image:radial-gradient(72%_72%_at_50%_50%,#000_46%,transparent_92%)]"
+                  style={{ mixBlendMode: 'screen', filter: 'contrast(1.4) brightness(0.96)' }}
                 />
               </motion.div>
             </Reveal>
