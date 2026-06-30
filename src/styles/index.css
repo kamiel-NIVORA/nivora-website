@@ -132,6 +132,17 @@
   to { transform: translateX(-50%); }
 }
 
+/* Waitlist sea — each band is drawn across 2 tiles, so -50% loops seamlessly. */
+@keyframes seaDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Waitlist card — the "kader light" beam travelling around the border. */
+@keyframes borderSpin {
+  to { transform: rotate(360deg); }
+}
+
 @keyframes marquee-vertical {
   from { transform: translateY(0); }
   to { transform: translateY(-50%); }

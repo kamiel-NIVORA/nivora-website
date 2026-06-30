@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { ReactLenis } from 'lenis/react'
-import { Routes, Route, useParams, Navigate } from 'react-router-dom'
+import { Routes, Route, useParams, useLocation, Navigate } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollManager } from '@/components/ScrollManager'
@@ -29,13 +29,19 @@ function ServiceRoute() {
   return <ServicePage key={slug} />
 }
 
+/* Routes that render as a single focused frame: no site chrome (the waitlist
+   stands on its own, like the Nivora booking page). */
+const BARE_ROUTES = ['/waitlist']
+
 export default function App() {
+  const { pathname } = useLocation()
+  const bare = BARE_ROUTES.includes(pathname)
   return (
     <ReactLenis root>
       <ContactModalProvider>
         <div className="relative min-h-screen bg-bg">
           <ScrollManager />
-          <Navbar />
+          {!bare && <Navbar />}
           <Suspense
             fallback={
               <div className="grid min-h-svh place-items-center">
@@ -63,7 +69,7 @@ export default function App() {
               <Route path="*" element={<Home />} />
             </Routes>
           </Suspense>
-          <Footer />
+          {!bare && <Footer />}
         </div>
       </ContactModalProvider>
     </ReactLenis>
