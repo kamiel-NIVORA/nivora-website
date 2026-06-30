@@ -93,12 +93,6 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         'People ask us how the AI side is going more than almost anything else, so we want to answer it properly, without the usual fog. No grand claims, no roadmap theatre. Just where things actually stand right now.',
         { h2: 'The models got good enough, quietly' },
         'A year ago, running capable AI close to your own data meant giving something up on quality. That is no longer true. The models we build on can read a long contract, search years of internal files, and draft a careful reply, and they do it fast enough to feel instant. The leap happened without much noise, and it quietly changed what we are able to promise you.',
-        {
-          image: '/blog/blog-ai-hand.webp',
-          alt: 'A human hand reaching toward a hand formed from points of light',
-          caption:
-            'The gap between what people expect from AI and what it can quietly do has closed faster than most of us planned for.',
-        },
         'What that means in practice is simple. A lot of the things we used to describe as coming soon are now just things the software does. That is a good place to be standing.',
         { h2: 'We spent more time on trust than on features' },
         'If we are honest about where the hours went, it was not into piling on more. It went into making the system explain itself. Showing where an answer came from, making it easy to correct, and making sure nothing surprising happens behind your back. A clever feature you do not trust gets used once. A plain one you do trust gets used every day. We optimised hard for the second kind.',
@@ -126,12 +120,6 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         { h2: 'What local actually means' },
         'Local AI runs inside your own walls. The model lives on hardware you control, your data never leaves it, and the answers come from your own knowledge instead of a shared cloud. Nothing gets logged on a server you cannot see. Your information stays exactly where it already is, which is with you.',
         'For a long time that came with a catch. Local meant slower, smaller, and noticeably worse. That trade is mostly gone now. Models you can run privately have become strong enough for real work. Reading documents, drafting replies, searching everything you have ever written in seconds. You no longer have to choose between private and capable.',
-        {
-          image: '/blog/blog-local-horizon.webp',
-          alt: 'A lone figure standing on a wide beach, facing the open sea',
-          caption:
-            'Owning the system you depend on changes how it feels to use it. The horizon is yours, not rented.',
-        },
         { h2: 'Why this matters more than it sounds' },
         'When the AI lives with you, a few things shift at once. Your data stops being a liability you handed to a third party. Your costs stop being tied to someone else’s per-message pricing. And your system stops being something that can change or vanish because a provider updated their roadmap. You own the thing you rely on, end to end.',
         {
@@ -187,12 +175,6 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         'Mensen vragen ons hoe het met de AI-kant gaat vaker dan bijna al de rest, dus dat willen we naar behoren beantwoorden, zonder de gebruikelijke mist. Geen grootse beloftes, geen roadmaptheater. Gewoon waar het nu echt staat.',
         { h2: 'De modellen werden goed genoeg, in stilte' },
         'Een jaar geleden betekende capabele AI dicht bij uw eigen data draaien dat u inleverde op kwaliteit. Dat klopt niet meer. De modellen waarop we bouwen kunnen een lang contract lezen, jarenlange interne bestanden doorzoeken en een zorgvuldig antwoord opstellen, en ze doen het snel genoeg om instant aan te voelen. De sprong gebeurde zonder veel kabaal, en veranderde stilletjes wat we u kunnen beloven.',
-        {
-          image: '/blog/blog-ai-hand.webp',
-          alt: 'Een mensenhand die reikt naar een hand gevormd uit lichtpunten',
-          caption:
-            'De kloof tussen wat mensen van AI verwachten en wat het stilletjes kan, is sneller gedicht dan de meesten van ons hadden ingepland.',
-        },
         'Wat dat in de praktijk betekent is simpel. Veel van de dingen die we vroeger als binnenkort omschreven, zijn nu gewoon dingen die de software doet. Dat is een goede plek om te staan.',
         { h2: 'We staken meer tijd in vertrouwen dan in features' },
         'Als we eerlijk zijn over waar de uren naartoe gingen, dan was het niet naar méér opstapelen. Het ging naar het systeem zichzelf laten uitleggen. Tonen waar een antwoord vandaan komt, het makkelijk maken om te corrigeren, en zorgen dat er niets verrassends achter uw rug gebeurt. Een slimme feature die u niet vertrouwt, gebruikt u één keer. Een gewone die u wel vertrouwt, gebruikt u elke dag. We hebben hard geoptimaliseerd voor het tweede soort.',
@@ -220,12 +202,6 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         { h2: 'Wat local eigenlijk betekent' },
         'Local AI draait binnen uw eigen muren. Het model leeft op hardware die u beheert, uw data verlaat die nooit, en de antwoorden komen uit uw eigen kennis in plaats van uit een gedeelde cloud. Niets wordt gelogd op een server die u niet kunt zien. Uw informatie blijft precies waar ze al is, namelijk bij u.',
         'Lange tijd zat daar een addertje onder het gras. Local betekende trager, kleiner en merkbaar slechter. Die afweging is grotendeels verdwenen. Modellen die u privé kunt draaien zijn sterk genoeg geworden voor echt werk. Documenten lezen, antwoorden opstellen, alles wat u ooit hebt geschreven in seconden doorzoeken. U hoeft niet meer te kiezen tussen privé en capabel.',
-        {
-          image: '/blog/blog-local-horizon.webp',
-          alt: 'Een eenzame figuur op een breed strand, met de blik op de open zee',
-          caption:
-            'Het systeem bezitten waarvan u afhangt, verandert hoe het voelt om het te gebruiken. De horizon is van u, niet gehuurd.',
-        },
         { h2: 'Waarom dit meer uitmaakt dan het klinkt' },
         'Wanneer de AI bij u woont, verschuiven er een paar dingen tegelijk. Uw data is niet langer een risico dat u aan een derde partij hebt gegeven. Uw kosten zijn niet langer gekoppeld aan de prijs per bericht van iemand anders. En uw systeem is niet langer iets dat kan veranderen of verdwijnen omdat een aanbieder zijn roadmap aanpaste. U bezit het ding waarop u rekent, van begin tot eind.',
         {

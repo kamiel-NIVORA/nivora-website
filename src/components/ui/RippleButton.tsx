@@ -44,6 +44,7 @@ export function RippleButton({
   rel,
   type,
   disabled,
+  as,
 }: {
   children: React.ReactNode
   href?: string
@@ -55,6 +56,9 @@ export function RippleButton({
   /** When set, renders a real <button> (e.g. a form submit) instead of an <a>. */
   type?: 'submit' | 'button'
   disabled?: boolean
+  /** Render as a non-navigating <span> so the fill effect can live INSIDE another
+   *  link (an anchor cannot be nested). The wrapping link owns the click. */
+  as?: 'span'
 }) {
   const ref = useRef<HTMLElement>(null)
   const [ripple, setRipple] = useState<Ripple | null>(null)
@@ -127,6 +131,19 @@ export function RippleButton({
       </AnimatePresence>
     </>
   )
+
+  if (as === 'span') {
+    return (
+      <span
+        ref={ref as React.RefObject<HTMLSpanElement>}
+        onClick={onClick}
+        className={classes}
+        {...hover}
+      >
+        {inner}
+      </span>
+    )
+  }
 
   if (type) {
     return (

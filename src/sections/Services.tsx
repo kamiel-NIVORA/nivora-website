@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
+import { RippleButton } from '@/components/ui/RippleButton'
 import { getServices, type NavItem } from '@/lib/navigation'
 import { useLang } from '@/i18n'
 
@@ -81,7 +82,7 @@ export function Services() {
           <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {services.map((s, i) => (
               <Reveal key={s.title} delay={(i % 4) * 0.08}>
-                <ServiceCard service={s} index={i + 1} bandRef={bandRef} learnMore={t.learnMore} />
+                <ServiceCard service={s} bandRef={bandRef} learnMore={t.learnMore} />
               </Reveal>
             ))}
           </div>
@@ -109,12 +110,10 @@ type Frost = { w: number; h: number; left: number; top: number }
 
 function ServiceCard({
   service,
-  index,
   bandRef,
   learnMore,
 }: {
   service: NavItem
-  index: number
   bandRef: RefObject<HTMLDivElement | null>
   learnMore: string
 }) {
@@ -206,13 +205,6 @@ function ServiceCard({
             loading="lazy"
           />
         )}
-        {/* Quiet index in the opposite corner */}
-        <span
-          style={{ transform: 'translateZ(35px)' }}
-          className="absolute right-5 top-5 font-mono text-[11px] tracking-[0.12em] text-dim"
-        >
-          {String(index).padStart(2, '0')}
-        </span>
 
         {/* Middle: just the service name, in our serif */}
         <div
@@ -229,13 +221,13 @@ function ServiceCard({
           {desc && (
             <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
           )}
-          <span className="mt-4 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-white/[0.06] px-4 text-[13px] font-medium text-ink-soft transition-colors group-hover:bg-white/[0.10]">
+          <RippleButton as="span" variant="ghost" className="mt-4 gap-2">
             {learnMore}
             <ArrowRight
               className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
               strokeWidth={1.8}
             />
-          </span>
+          </RippleButton>
         </div>
       </MotionLink>
     </div>

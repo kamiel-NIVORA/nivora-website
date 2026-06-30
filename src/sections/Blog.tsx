@@ -23,10 +23,10 @@ export function Blog() {
   const t = COPY[lang]
 
   return (
-    <section id="blog" className="relative mx-auto w-full max-w-[1200px] px-6 py-24 lg:py-28">
+    <section id="blog" className="relative mx-auto w-full max-w-[1480px] px-6 py-24 lg:py-28">
       <SectionHeading title={t.title} subtitle={t.subtitle} />
 
-      <div className="mt-14 grid gap-x-6 gap-y-12 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:gap-x-10">
         {posts.slice(0, 3).map((post, i) => (
           <Reveal key={post.slug} delay={i * 0.07}>
             <PostCard post={post} />

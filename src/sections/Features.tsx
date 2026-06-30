@@ -56,7 +56,7 @@ const COPY = {
   en: {
     headingTitle: 'The tools you need. The systems you want.',
     headingSubtitle:
-      'Use our software directly, or let us build and install exactly what your business needs. Either way, everything is designed around you.',
+      'Use our software the day it launches, or let us build and install exactly what your business needs. Ready to use or built to order, both are made to fit right into your day.',
     comingSoon: 'Coming soon',
     learnMoreAbout: 'Learn more about',
     altPrefix: 'Visual illustrating',
@@ -83,7 +83,7 @@ const COPY = {
   nl: {
     headingTitle: 'De tools die u nodig hebt. De systemen die u wilt.',
     headingSubtitle:
-      'Gebruik onze software meteen, of laat ons precies bouwen en installeren wat uw bedrijf nodig heeft. Hoe dan ook, alles is rond u ontworpen.',
+      'Gebruik onze software meteen, of laat ons precies bouwen en installeren wat uw bedrijf nodig heeft. Klaar voor gebruik of op maat gebouwd, allebei passen ze naadloos in uw dag.',
     comingSoon: 'Binnenkort',
     learnMoreAbout: 'Lees meer over',
     altPrefix: 'Visual van',

@@ -56,7 +56,7 @@ const COPY = {
     boxAria: 'Box, laat u op de hoogte brengen bij de lancering',
     voiceAria: 'Voice, laat u op de hoogte brengen bij de lancering',
     boxDesc: 'E-mail, chat en DMs in één rustige inbox. Lees, sorteer en antwoord zonder ooit van app te wisselen.',
-    boxCta: 'Laat u op de hoogte brengen bij de lancering',
+    boxCta: 'Houd mij op de hoogte',
     voiceDesc: 'Spraak naar tekst, afgestemd op hoe u praat en hoe u schrijft. Dicteer één keer, krijg nette tekst.',
     phoneNotifAria: (name: string) => `${name}, binnenkort, laat u op de hoogte brengen bij de lancering`,
     now: 'nu',
@@ -153,7 +153,7 @@ export function Products() {
             dark
             href="/waitlist?product=voice"
             ariaLabel={t.voiceAria}
-            className="min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
+            className="min-h-[300px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <VoiceCard />
           </BentoCard>
@@ -291,9 +291,9 @@ function BoxCard() {
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">{t.boxDesc}</p>
         {/* Presentational — the whole card is already the link, so this just
             reads as the call to action (avoids a duplicate keyboard tab stop). */}
-        <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
+        <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
           {t.boxCta}
-          <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+          <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={1.8} />
         </span>
       </div>
     </>
@@ -346,7 +346,7 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
       <Link
         to={href}
         aria-label={t.phoneNotifAria(name)}
-        className="pointer-events-auto flex items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70"
+        className="pointer-events-auto flex min-h-[40px] items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70 lg:min-h-0"
         style={{
           boxShadow:
             'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 10px 22px -8px rgba(0,0,0,0.4)',
@@ -355,14 +355,14 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
         <img
           src={src}
           alt=""
-          className="aspect-square h-[clamp(15px,11cqw,22px)] shrink-0 rounded-[24%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
+          className="aspect-square h-[clamp(18px,11cqw,22px)] shrink-0 rounded-[24%] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)] lg:h-[clamp(15px,11cqw,22px)]"
         />
         <div className="min-w-0 flex-1 leading-none">
           <div className="flex items-baseline justify-between gap-1">
-            <span className="text-[clamp(8px,2.7cqw,12px)] font-semibold text-[#0c0c0c]">{name}</span>
-            <span className="shrink-0 text-[clamp(6px,1.9cqw,9px)] text-black/40">{t.now}</span>
+            <span className="text-[clamp(11px,2.7cqw,12px)] font-semibold text-[#0c0c0c] lg:text-[clamp(8px,2.7cqw,12px)]">{name}</span>
+            <span className="shrink-0 text-[clamp(8px,1.9cqw,9px)] text-black/40 lg:text-[clamp(6px,1.9cqw,9px)]">{t.now}</span>
           </div>
-          <p className="mt-[2.5%] whitespace-nowrap text-[clamp(6.5px,2.2cqw,10px)] text-black/55">
+          <p className="mt-[2.5%] whitespace-nowrap text-[clamp(9px,2.2cqw,10px)] text-black/55 lg:text-[clamp(6.5px,2.2cqw,10px)]">
             <span className="font-semibold text-black/75">{t.comingSoon}</span> · {t[bodyKey]}
           </p>
         </div>
@@ -451,8 +451,10 @@ function DesktopCard() {
   const t = COPY[lang]
   return (
     <>
-      {/* Live macOS dock — Box and Voice sit in the middle and magnify on hover */}
-      <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-hidden">
+      {/* Live macOS dock — Box and Voice sit in the middle and magnify on hover.
+          The dock measures and fits this column, but a hidden-scrollbar x-rail on
+          phone/tablet is a safety net so it can never clip its card. */}
+      <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-hidden">
         <MacOSDock apps={getDockApps(lang)} openApps={['box', 'voice']} onAppClick={() => navigate('/waitlist')} />
       </div>
 
@@ -557,7 +559,7 @@ function ProductTabs({
           onClick={() => onChange(p)}
           aria-pressed={value === p}
           className={cn(
-            'relative rounded-full px-3 py-1 text-[12px] font-medium capitalize transition-colors duration-200',
+            'relative inline-flex min-h-[40px] min-w-[56px] items-center justify-center rounded-full px-4 py-2 text-[13px] font-medium capitalize transition-colors duration-200 sm:min-h-[36px] sm:px-3.5 sm:py-1.5 lg:min-h-0 lg:min-w-0 lg:px-3 lg:py-1 lg:text-[12px]',
             value === p ? 'text-[#0a0a0a]' : 'text-faint hover:text-ink',
           )}
         >
