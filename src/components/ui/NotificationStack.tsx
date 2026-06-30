@@ -94,11 +94,13 @@ export function NotificationStack() {
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
-      {/* zachte mos-wallpaper op lichtgrijs — vult het hele kader, Apple-lockscreen-stijl. */}
+      {/* zachte mos-wallpaper op lichtgrijs — vult het hele kader, Apple-lockscreen-stijl.
+          Licht ingezoomd (scale) zodat het mos-beeld iets groter oogt; de overflow-hidden
+          van de kader snijdt netjes bij. */}
       <img
         src="/products/products-bg-moss.webp"
         alt=""
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        className="pointer-events-none absolute inset-0 h-full w-full scale-[1.15] object-cover"
       />
       {/* leesbaarheid: heel zachte witte wash zodat de glass-meldingen loskomen van de lichte achtergrond */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-white/10" />
