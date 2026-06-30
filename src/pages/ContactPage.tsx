@@ -39,7 +39,9 @@ const COPY = {
   },
 } as const
 
-/** A single contact tile. Big, equal-height, one clean line. */
+/** A single contact tile. Glossy frosted glass, echoing the home "Our Services"
+ *  cards: a frosted tint, a diagonal sheen and a top hairline, with a real
+ *  backdrop-blur so the sea behind frosts through. Equal-height, one clean line. */
 function ContactCard({
   icon: Icon,
   label,
@@ -57,22 +59,29 @@ function ContactCard({
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      className="group flex h-full min-h-[220px] flex-col justify-between rounded-[26px] border border-white/[0.08] bg-white/[0.025] p-8 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.045]"
+      className="group relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-white/[0.05] p-7 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.08] hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.8)] sm:p-8"
     >
-      <div className="flex items-center justify-between">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.1] bg-white/[0.04] text-ink transition-colors group-hover:bg-white/[0.07]">
-          <Icon className="h-6 w-6" strokeWidth={1.5} />
-        </span>
-        <ArrowUpRight
-          className="h-5 w-5 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
-          strokeWidth={1.7}
-        />
-      </div>
-      <div>
-        <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{label}</p>
-        <p className="mt-2.5 break-words text-[18px] font-medium leading-snug tracking-[-0.01em] text-ink sm:text-[20px]">
-          {value}
-        </p>
+      {/* Gloss — same recipe as the Our Services cards: frosted tint, diagonal sheen, top hairline */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-black/25" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_18%_-12%,rgba(255,255,255,0.16),transparent_56%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+
+      <div className="relative z-10 flex flex-1 flex-col justify-between">
+        <div className="flex items-center justify-between">
+          <span className="grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.16] bg-white/[0.08] text-ink shadow-[0_6px_18px_rgba(0,0,0,0.35)] transition-colors group-hover:bg-white/[0.12]">
+            <Icon className="h-6 w-6" strokeWidth={1.5} />
+          </span>
+          <ArrowUpRight
+            className="h-5 w-5 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
+            strokeWidth={1.7}
+          />
+        </div>
+        <div>
+          <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{label}</p>
+          <p className="mt-2.5 break-words text-[18px] font-medium leading-snug tracking-[-0.01em] text-ink sm:text-[20px]">
+            {value}
+          </p>
+        </div>
       </div>
     </a>
   )
@@ -92,68 +101,82 @@ export function ContactPage() {
 
   return (
     <main className="bg-bg">
-      {/* Hero — big, bold, pure black and white */}
-      <section className="relative mx-auto w-full max-w-[1120px] px-6 pb-16 pt-36 text-center lg:pb-20 lg:pt-44">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[480px] w-[760px] max-w-full rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.05),transparent)]"
-        />
-        <Reveal mode="mount">
-          <h1 className="mx-auto max-w-4xl font-serif text-[52px] leading-[0.98] tracking-[-0.03em] text-ink sm:text-[76px] lg:text-[92px]">
-            {t.heading}
-          </h1>
-        </Reveal>
-        <Reveal mode="mount" delay={0.1}>
-          <p className="mx-auto mt-7 max-w-xl text-[16px] leading-relaxed text-muted sm:text-[17px]">
-            {t.sub}
-          </p>
-        </Reveal>
-        <Reveal mode="mount" delay={0.15}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <BookCallButton className="h-[52px] px-7 text-[15px]">{t.bookCall}</BookCallButton>
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="inline-flex h-[52px] items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.02] px-7 text-[15px] text-ink-soft transition-colors hover:border-white/25 hover:bg-white/[0.05] hover:text-ink"
-            >
-              {t.emailUs}
-            </a>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Three equal, big, clean contact cards — one line each */}
-      <section className="mx-auto w-full max-w-[1120px] px-6">
-        <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <Reveal>
-            <ContactCard icon={Mail} label={t.labelEmail} value={CONTACT.email} href={`mailto:${CONTACT.email}`} />
-          </Reveal>
-          <Reveal delay={0.06}>
-            <ContactCard icon={Phone} label={t.labelPhone} value={CONTACT.phoneDisplay} href={CONTACT.phoneHref} />
-          </Reveal>
-          <Reveal delay={0.12}>
-            <ContactCard icon={MapPin} label={t.labelStudio} value={t.studioValue} href={MAPS_LINK} external />
-          </Reveal>
+      {/* Hero over the sea. The heading sits low, and the glossy cards peek up
+          from the bottom of the first screen so only their icons show. */}
+      <section className="relative overflow-hidden">
+        {/* Sea backdrop, pinned to the first screen and feathered into the page */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[122svh]">
+          <img
+            src="/backgrounds/bg-contact-sea.webp"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-[50%_38%]"
+          />
+          <div className="absolute inset-0 bg-bg/[0.34]" />
+          <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-bg via-bg/55 to-transparent" />
+          {/* Soft focal scrim so the white heading reads over the bright horizon */}
+          <div className="absolute inset-0 bg-[radial-gradient(120%_64%_at_50%_62%,rgba(6,6,6,0.6),transparent_64%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-[34svh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
         </div>
 
-        {/* Socials */}
-        <Reveal delay={0.16}>
-          <div className="mt-7 flex items-center justify-center gap-3">
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="grid h-12 w-12 place-items-center rounded-full border border-white/[0.1] bg-white/[0.02] text-ink-soft/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.06] hover:text-ink"
-              >
-                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="currentColor" aria-hidden="true">
-                  <path d={s.path} />
-                </svg>
-              </a>
-            ))}
+        <div className="relative z-10 mx-auto w-full max-w-[1120px] px-6">
+          {/* Heading block — tall, content pushed toward the lower part of the screen */}
+          <div className="flex min-h-[calc(100svh-150px)] flex-col items-center justify-end pb-12 text-center">
+            <Reveal mode="mount">
+              <h1 className="mx-auto max-w-4xl font-serif text-[52px] leading-[0.98] tracking-[-0.03em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[76px] lg:text-[92px]">
+                {t.heading}
+              </h1>
+            </Reveal>
+            <Reveal mode="mount" delay={0.1}>
+              <p className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-ink-soft/90 [text-shadow:0_1px_14px_rgba(0,0,0,0.55)] sm:text-[17px]">
+                {t.sub}
+              </p>
+            </Reveal>
+            <Reveal mode="mount" delay={0.15}>
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                <BookCallButton className="h-[52px] px-7 text-[15px]">{t.bookCall}</BookCallButton>
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  className="inline-flex h-[52px] items-center gap-2 rounded-full border border-white/[0.18] bg-white/[0.06] px-7 text-[15px] text-ink backdrop-blur-md transition-colors hover:border-white/30 hover:bg-white/[0.12]"
+                >
+                  {t.emailUs}
+                </a>
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
+
+          {/* Three glossy cards — only their top (the icon) peeks above the fold */}
+          <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal mode="mount" delay={0.2}>
+              <ContactCard icon={Mail} label={t.labelEmail} value={CONTACT.email} href={`mailto:${CONTACT.email}`} />
+            </Reveal>
+            <Reveal mode="mount" delay={0.26}>
+              <ContactCard icon={Phone} label={t.labelPhone} value={CONTACT.phoneDisplay} href={CONTACT.phoneHref} />
+            </Reveal>
+            <Reveal mode="mount" delay={0.32}>
+              <ContactCard icon={MapPin} label={t.labelStudio} value={t.studioValue} href={MAPS_LINK} external />
+            </Reveal>
+          </div>
+
+          {/* Socials */}
+          <Reveal delay={0.1}>
+            <div className="mt-7 flex items-center justify-center gap-3 pb-2">
+              {SOCIAL_LINKS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="grid h-12 w-12 place-items-center rounded-full border border-white/[0.1] bg-white/[0.02] text-ink-soft/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.06] hover:text-ink"
+                >
+                  <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="currentColor" aria-hidden="true">
+                    <path d={s.path} />
+                  </svg>
+                </a>
+              ))}
+            </div>
+          </Reveal>
+        </div>
       </section>
 
       {/* Frameless monochrome map that melts into the page — one quiet accent: the marker */}
