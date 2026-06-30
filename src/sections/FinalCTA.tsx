@@ -52,12 +52,12 @@ export function FinalCTA() {
         </Reveal>
       </div>
 
-      {/* Rocks cutout, resting on the dark with a soft grounding fade, pulled up nearer the CTA */}
+      {/* Mountain peak rising out of the dark, hard shadows kept, edges faded into the page */}
       <div className="pointer-events-none relative mx-auto -mt-2 h-56 w-full max-w-4xl sm:h-64 lg:h-80">
         <img
-          src="/home/rocks.png"
+          src="/home/cta-peak.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-contain object-bottom opacity-95 [mask-image:linear-gradient(to_bottom,#000_72%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_72%,transparent_100%)]"
+          className="absolute inset-0 h-full w-full object-cover object-center [mask-image:radial-gradient(ellipse_64%_70%_at_50%_46%,#000_14%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_64%_70%_at_50%_46%,#000_14%,transparent_75%)]"
         />
       </div>
     </section>
