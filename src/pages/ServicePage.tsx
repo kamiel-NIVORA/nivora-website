@@ -257,6 +257,7 @@ export function ServicePage() {
           accent={meta.accent}
         />
         {meta.slug === 'local-ai' && <LocalWhoFor />}
+        {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug !== 'app-design' && <Problem content={content} />}
@@ -265,7 +266,6 @@ export function ServicePage() {
         {meta.objectImage && <BrandObject meta={meta} />}
         {meta.slug !== 'app-design' && <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
-        {meta.slug === 'local-ai' && <ComparisonBand />}
         <WhyUs content={content} meta={meta} />
         {meta.slug !== 'app-design' && <Process content={content} meta={meta} />}
         <RoiBand meta={meta} />
@@ -1302,17 +1302,12 @@ function LocalWhoFor() {
 
 /* Cloud vs Local comparison · only for local-ai ─────────────────────────────── */
 
-const COMPARE: Record<
+const LOCAL_COMPARE: Record<
   Lang,
   {
     title: string
     subtitle: string
-    cloudTitle: string
-    cloudSub: string
-    cloud: string[]
-    localTitle: string
-    localSub: string
-    local: string[]
+    rows: { title: string; body: string; image: string }[]
     honest: string
   }
 > = {
@@ -1320,21 +1315,17 @@ const COMPARE: Record<
     title: 'Why your AI belongs with you',
     subtitle:
       'Most companies send their data to a handful of big tech companies. It works, but you give away more than you think. Here is the difference.',
-    cloudTitle: 'The big models',
-    cloudSub: 'Cloud AI from a big tech company',
-    cloud: [
-      'Your data leaves your building with every question you ask.',
-      'It is sometimes used to train their model further, unless you pay a steep premium.',
-      'You pay again every month, and that bill grows with your team.',
-      "You depend on someone else's servers, prices and rules.",
-    ],
-    localTitle: 'Your own local AI',
-    localSub: 'Inside your own walls',
-    local: [
-      'Your data stays in, with every question, without exception.',
-      'It learns only from you, and that knowledge stays yours.',
-      'You mostly pay once, for the hardware, and then it is yours.',
-      'You depend on no one, it sits inside your own walls.',
+    rows: [
+      {
+        title: 'The big models',
+        body: "With every question you ask, your data leaves the building. It is sometimes used to train their model further, unless you pay a steep premium. You pay again every month, and that bill grows with every new colleague. And you stay dependent on someone else's servers, prices and rules.",
+        image: '/IMG_0886.jpg',
+      },
+      {
+        title: 'Your own local AI',
+        body: 'Your data stays in, with every question, without exception. It learns only from you, and that knowledge stays yours. You mostly pay once, for the hardware, and after that it is yours. You depend on no one, it sits inside your own walls.',
+        image: '/IMG_0914.jpg',
+      },
     ],
     honest:
       'A local model is not the single most powerful one out there. But for what most companies actually need it is more than good enough, and the big advantage is that it is entirely yours.',
@@ -1343,129 +1334,120 @@ const COMPARE: Record<
     title: 'Waarom uw AI bij u hoort te staan',
     subtitle:
       'De meeste bedrijven sturen hun data naar een handvol grote techbedrijven. Het werkt, maar u geeft er meer voor weg dan u denkt. Zo zit het verschil.',
-    cloudTitle: 'De grote modellen',
-    cloudSub: 'Cloud-AI van een groot techbedrijf',
-    cloud: [
-      'Uw data verlaat uw gebouw bij elke vraag die u stelt.',
-      'Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
-      'U betaalt elke maand opnieuw, en die rekening groeit mee met uw team.',
-      'U bent afhankelijk van de servers, prijzen en regels van iemand anders.',
-    ],
-    localTitle: 'Uw eigen lokale AI',
-    localSub: 'Binnen uw eigen muren',
-    local: [
-      'Uw data blijft binnen, bij elke vraag, zonder uitzondering.',
-      'Ze leert alleen van u, en die kennis blijft van u.',
-      'U betaalt vooral een keer, voor de hardware, daarna is het van u.',
-      'U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+    rows: [
+      {
+        title: 'De grote modellen',
+        body: 'Bij elke vraag die u stelt, verlaat uw data het gebouw. Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt. U betaalt elke maand opnieuw, en die rekening groeit mee met elke nieuwe collega. En u blijft afhankelijk van de servers, prijzen en regels van iemand anders.',
+        image: '/IMG_0886.jpg',
+      },
+      {
+        title: 'Uw eigen lokale AI',
+        body: 'Uw data blijft binnen, bij elke vraag, zonder uitzondering. Ze leert alleen van u, en die kennis blijft van u. U betaalt vooral een keer, voor de hardware, en daarna is het van u. U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+        image: '/IMG_0914.jpg',
+      },
     ],
     honest:
       'Een lokaal model is niet het allerkrachtigste dat er bestaat. Maar voor wat de meeste bedrijven echt nodig hebben is het meer dan goed genoeg, en het grote voordeel is dat het volledig van u is.',
   },
 }
 
+/** One timeline row: copy on the left, photo on the right (wipes in from the
+ *  centre line), with a bead that lights up as the white line reaches it. */
+function CompareRow({ title, body, image }: { title: string; body: string; image: string }) {
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const clip = useTransform(scrollYProgress, [0, 0.4], ['inset(0 100% 0 0)', 'inset(0 0% 0 0)'])
+  const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0])
+  const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
+  const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
+  const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
+
+  return (
+    <div ref={ref} className="relative py-16 lg:py-32">
+      <span
+        aria-hidden
+        className="absolute left-1/2 top-1/2 z-10 hidden h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-bg lg:flex"
+      >
+        <motion.span
+          style={reduced ? undefined : { opacity: beadOpacity, scale: beadScale }}
+          className="h-3 w-3 rounded-full bg-ink shadow-[0_0_14px_rgba(245,245,245,0.7)]"
+        />
+      </span>
+
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
+        {/* copy — left */}
+        <motion.div style={reduced ? undefined : { y: ty }} className="lg:order-1 lg:px-2">
+          <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
+            {title}
+          </h3>
+          <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
+        </motion.div>
+
+        {/* photo — right */}
+        <motion.div
+          style={reduced ? undefined : { clipPath: clip, opacity }}
+          className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)] lg:order-2"
+        >
+          <img src={image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
 function ComparisonBand() {
   const { lang } = useLang()
-  const t = COMPARE[lang]
+  const data = LOCAL_COMPARE[lang]
+  const lineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 60%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+
   return (
-    <section className="relative w-full overflow-hidden border-y border-line py-20 sm:py-24 lg:py-32">
-      {/* Bigger scenic backdrop, drifting on scroll, faded deep into the page */}
-      <ParallaxImage src="/backgrounds/bg-waves-mono.jpg" range={['-6%', '6%']} />
-      <div className="absolute inset-0 bg-bg/85" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(60% 55% at 50% 36%, rgba(245,245,245,0.06), transparent 70%)' }}
-      />
-
-      <div className="relative mx-auto w-full max-w-[1100px] px-6">
-        {/* One big header card with title + subtitle */}
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <div className="mx-auto max-w-3xl rounded-[24px] border border-line bg-white/[0.03] p-8 text-center backdrop-blur-xl sm:p-10">
-            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
-              {t.title}
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-faint sm:text-[16px]">
-              {t.subtitle}
-            </p>
-          </div>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
         </Reveal>
-
-        {/* Two sides: the big cloud models vs your own local AI */}
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
-          {/* The big models, cloud */}
-          <Reveal y={20}>
-            <div className="h-full rounded-[22px] border border-line bg-[#0a0a0d]/40 p-6 backdrop-blur-xl lg:p-8">
-              <div className="mb-7 flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04]">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 text-faint" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
-                  </svg>
-                </span>
-                <div>
-                  <span className="block text-[15px] font-semibold text-faint">{t.cloudTitle}</span>
-                  <span className="block text-[12.5px] text-dim">{t.cloudSub}</span>
-                </div>
-              </div>
-              <ul className="flex flex-col divide-y divide-line/50">
-                {t.cloud.map((line) => (
-                  <li key={line} className="flex items-start gap-3 py-4">
-                    <svg viewBox="0 0 16 16" className="mt-0.5 h-4 w-4 shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
-                    </svg>
-                    <span className="text-[14px] leading-relaxed text-dim sm:text-[14.5px]">{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-
-          {/* Your own local AI */}
-          <Reveal y={20} delay={0.08}>
-            <div className="relative h-full overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.05] p-6 backdrop-blur-xl lg:p-8">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              <div className="mb-7 flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.08]">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                    <rect x="2" y="2" width="20" height="8" rx="2" />
-                    <rect x="2" y="14" width="20" height="8" rx="2" />
-                    <line x1="6" y1="6" x2="6.01" y2="6" />
-                    <line x1="6" y1="18" x2="6.01" y2="18" />
-                  </svg>
-                </span>
-                <div>
-                  <span className="block text-[15px] font-semibold text-ink">{t.localTitle}</span>
-                  <span className="block text-[12.5px] text-faint">{t.localSub}</span>
-                </div>
-              </div>
-              <ul className="flex flex-col divide-y divide-line/50">
-                {t.local.map((line) => (
-                  <li key={line} className="flex items-start gap-3 py-4">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2.2} />
-                    <span className="text-[14px] leading-relaxed text-ink-soft/90 sm:text-[14.5px]">{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* The honest bar: the one real trade-off, owned and turned around */}
-        <Reveal y={16}>
-          <div className="mt-4 flex items-start gap-4 rounded-[22px] border border-line-strong bg-white/[0.03] p-6 backdrop-blur-xl sm:items-center sm:p-7">
-            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
-              <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 8v5" strokeLinecap="round" />
-                <path d="M12 16.5h.01" strokeLinecap="round" />
-              </svg>
-            </span>
-            <p className="text-[14.5px] leading-relaxed text-ink-soft/90 sm:text-[15.5px]">{t.honest}</p>
-          </div>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
         </Reveal>
       </div>
+
+      <div
+        ref={lineRef}
+        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_92%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_92%,transparent_100%)]"
+      >
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
+          <motion.div
+            style={{ scaleY: fill }}
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/55 to-white/25"
+          />
+        </div>
+
+        {data.rows.map((r) => (
+          <CompareRow key={r.title} title={r.title} body={r.body} image={r.image} />
+        ))}
+      </div>
+
+      {/* The third element is not another feature but a band: the honest line,
+         the one real trade-off owned and turned straight back into the point. */}
+      <Reveal y={16}>
+        <div className="relative mx-auto mt-2 flex max-w-[1160px] items-start gap-4 overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 backdrop-blur-xl sm:items-center sm:p-8 lg:mt-6">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
+            <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8v5" strokeLinecap="round" />
+              <path d="M12 16.5h.01" strokeLinecap="round" />
+            </svg>
+          </span>
+          <p className="text-[15px] leading-relaxed text-ink-soft/90 sm:text-[16px]">{data.honest}</p>
+        </div>
+      </Reveal>
     </section>
   )
 }
