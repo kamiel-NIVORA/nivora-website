@@ -1089,10 +1089,10 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
           style={reduced ? undefined : { y: ty }}
           className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
         >
-          <h3 className="font-serif text-[26px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[34px]">
+          <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
             {title}
           </h3>
-          <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-faint">{body}</p>
+          <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
         </motion.div>
 
         <motion.div
@@ -1132,7 +1132,7 @@ function AppBuildShapes() {
 
       <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16">
         {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
-        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1.5 -translate-x-1/2 overflow-hidden rounded-full lg:block">
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <div className="absolute inset-0 bg-line" />
           <motion.div
             style={{ scaleY: fill }}
