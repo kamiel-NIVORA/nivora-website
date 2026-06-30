@@ -110,7 +110,7 @@ const UI = {
     probablyNot: 'Probably not if',
     goodToKnow: 'Good to know',
     stillQuestion: 'Still have a question?',
-    reachPerson: 'reach a person',
+    reachPerson: 'get in touch',
     orVisit: 'or visit the',
     helpCenter: 'Help Center',
     exploreOther: 'Explore other services',
@@ -189,7 +189,7 @@ const UI = {
     probablyNot: 'Waarschijnlijk niet als',
     goodToKnow: 'Goed om te weten',
     stillQuestion: 'Nog een vraag?',
-    reachPerson: 'spreek een mens',
+    reachPerson: 'neem gerust contact op',
     orVisit: 'of bezoek het',
     helpCenter: 'Helpcentrum',
     exploreOther: 'Ontdek andere diensten',
@@ -1242,7 +1242,10 @@ function ComparisonBand() {
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
   return (
     <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-28">
-      <ParallaxImage src={meta.photo} range={['-10%', '10%']} />
+      <ParallaxImage
+        src={meta.slug === 'app-design' ? '/services/whyus-appdesign.webp' : meta.photo}
+        range={['-10%', '10%']}
+      />
       <div className="absolute inset-0 bg-bg/80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
@@ -1342,13 +1345,22 @@ function FitFaq({ content }: { content: ServiceContent }) {
   // App Design: stripped to just the FAQ, centred, with a warm-red (terracotta)
   // heading like the homepage. No "is this the right fit" comparison block.
   if (content.slug === 'app-design') {
+    const faqSub =
+      lang === 'nl'
+        ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
+        : 'The things you probably want to know before we start on your app.'
     return (
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
-        <Reveal>
-          <h2 className="text-center font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-[var(--color-terracotta)] sm:text-[38px] lg:text-[44px]">
-            {t.goodToKnow}
-          </h2>
-        </Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-[#c0443b] sm:text-[38px] lg:text-[44px]">
+              {t.goodToKnow}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <p className="mx-auto mt-5 max-w-md text-[15px] leading-relaxed text-faint">{faqSub}</p>
+          </Reveal>
+        </div>
 
         <div className="mx-auto mt-12 flex w-full max-w-[760px] flex-col gap-3">
           {content.faq.map((item, i) => {
@@ -1516,7 +1528,10 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
   const reduced = usePrefersReducedMotion()
   return (
     <section className="relative grid w-full place-items-center overflow-hidden px-6 py-20 sm:py-24 lg:py-36">
-      <ParallaxImage src={meta.photo} range={['-8%', '8%']} />
+      <ParallaxImage
+        src={meta.slug === 'app-design' ? '/services/cta-appdesign.webp' : meta.photo}
+        range={['-8%', '8%']}
+      />
       <div className="absolute inset-0 bg-black/40" />
       <div
         aria-hidden
