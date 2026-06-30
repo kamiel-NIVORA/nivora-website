@@ -429,7 +429,7 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
    the BrandObject pattern to any service with a product shot (e.g. AIOS on an iPad):
    a headline, one line, and the top outcomes as proof. Self-gates per slug. */
 const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string }> = {
-  'app-design': { video: '/media/network.mp4' },
+  'app-design': { video: '/services/anim-appdesign.mp4' },
   'local-ai': { video: '/media/mesh.mp4' },
   aios: { img: '/services/mockup-aios-ipad.png', alt: 'The Nivora AIOS interface on an iPad.' },
   'ai-consulting': { video: '/media/threads.mp4' },
@@ -437,9 +437,9 @@ const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string
 const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: string; body: string }>> = {
   en: {
     'app-design': {
-      eyebrow: 'What we build',
-      title: "The app you've been picturing, built for real.",
-      body: 'Designed and built end to end, in your brand, never a template with new colours. You own the code, the design files and the data.',
+      eyebrow: 'From idea to app',
+      title: 'Your idea, sharpened into an app that lives.',
+      body: 'Bring us your idea, even the boldest one. We sharpen it together and take it from concept to a living, working app: business-grade, ready to ship as an internal B2B tool or a B2C product for your customers.',
     },
     'local-ai': {
       eyebrow: 'What we build',
@@ -459,9 +459,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
   },
   nl: {
     'app-design': {
-      eyebrow: 'Wat we bouwen',
-      title: 'De app die u voor ogen heeft, echt gebouwd.',
-      body: 'Van begin tot eind ontworpen en gebouwd, in uw huisstijl, nooit een template met andere kleuren. U bezit de code, de ontwerpbestanden en de data.',
+      eyebrow: 'Van idee tot app',
+      title: 'Uw idee, aangescherpt tot een app die leeft.',
+      body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk solide, klaar om in te zetten als interne B2B-tool of als B2C-product voor uw klanten.',
     },
     'local-ai': {
       eyebrow: 'Wat we bouwen',

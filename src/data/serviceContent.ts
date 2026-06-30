@@ -114,7 +114,10 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     tile: '/services/service-appdesign.webp',
     heroImage: '/services/hero-appdesign.jpg',
     photo: '/IMG_0892.JPG',
-    anim: '/services/anim-appdesign.mp4',
+    // The "designed from the ground up" anim moved up to the first section
+    // (WhatYouGet); the Solution section shows the network anim instead, so the
+    // same clip never appears twice on the page.
+    anim: '/media/network.mp4',
     // Brand-neutral device shot (shared with AIOS). The previous asset was a
     // third-party stock template still showing its vendor branding.
     mockup: '/services/mockup-aios.webp',
