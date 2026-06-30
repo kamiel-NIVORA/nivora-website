@@ -99,12 +99,6 @@ export function ContactPage() {
           className="pointer-events-none absolute inset-x-0 top-10 -z-10 mx-auto h-[480px] w-[760px] max-w-full rounded-full bg-[radial-gradient(closest-side,rgba(255,255,255,0.05),transparent)]"
         />
         <Reveal mode="mount">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.02] px-3.5 py-1.5 text-[12px] uppercase tracking-[0.2em] text-faint">
-            <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
-            {t.eyebrow}
-          </p>
-        </Reveal>
-        <Reveal mode="mount" delay={0.05}>
           <h1 className="mx-auto max-w-4xl font-serif text-[52px] leading-[0.98] tracking-[-0.03em] text-ink sm:text-[76px] lg:text-[92px]">
             {t.heading}
           </h1>
@@ -162,45 +156,51 @@ export function ContactPage() {
         </Reveal>
       </section>
 
-      {/* Frameless monochrome map with one colour: the pin */}
+      {/* Frameless monochrome map that melts into the page — one quiet accent: the marker */}
       <section className="mx-auto w-full max-w-[1120px] px-6 pb-28 pt-12 lg:pb-36">
         <Reveal>
-          <div className="relative h-[420px] overflow-hidden rounded-[28px] bg-[#0a0a0a] sm:h-[520px]">
+          <div className="relative h-[440px] overflow-hidden rounded-[28px] bg-bg sm:h-[540px]">
+            {/* The map is blown up well past the frame and kept non-interactive, so every
+                bit of Google's own chrome — the top-left place panel, the logo, the zoom
+                controls, the attribution strip — is cropped away. Centered, so the studio
+                stays dead-centre and the visible street extent matches a normal z=15 view. */}
             <iframe
               title={t.mapTitle}
               src={MAP_EMBED}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 h-full w-full border-0 [filter:invert(0.92)_grayscale(1)_brightness(0.96)_contrast(0.88)]"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[300%] w-[300%] -translate-x-1/2 -translate-y-1/2 border-0 [filter:invert(0.92)_grayscale(1)_brightness(0.6)_contrast(0.95)] sm:h-[220%] sm:w-[220%]"
             />
-            {/* Heavy edge feather so the map melts into the black page — no frame */}
-            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_90px_44px_#060606]" />
+            {/* Tint + heavy edge feather so the map sinks into the near-black page */}
+            <div className="pointer-events-none absolute inset-0 bg-bg/40" />
+            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_130px_64px_#060606]" />
 
-            {/* The one colour on the page: a terracotta location pin, centered on the studio */}
+            {/* The single colour on the page: a quiet terracotta marker on the studio */}
             <div className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2">
-              <span className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta/25 blur-2xl" />
-              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta shadow-[0_0_12px_2px_rgba(208,122,84,0.8)]" />
+              <span className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta/15 blur-lg" />
               <svg
                 viewBox="0 0 24 24"
-                className="relative h-11 w-11 -translate-y-[22px] text-terracotta drop-shadow-[0_6px_14px_rgba(0,0,0,0.7)]"
+                className="relative h-8 w-8 -translate-y-[16px] text-terracotta drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
                 aria-hidden="true"
               >
                 <path
                   fill="currentColor"
                   d="M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
                 />
-                <circle cx="12" cy="9" r="2.5" fill="#0a0a0a" />
+                <circle cx="12" cy="9" r="2.5" fill="#060606" />
               </svg>
             </div>
 
-            {/* Address / route chip */}
+            {/* Address / route chip — the lower-left card, kept clean */}
             <a
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group absolute inset-x-4 bottom-4 z-[3] flex items-center gap-3 rounded-2xl border border-white/[0.12] bg-black/80 px-4 py-3.5 backdrop-blur-md transition-colors hover:bg-black/90 sm:inset-x-auto sm:left-5 sm:max-w-md"
+              className="group absolute inset-x-4 bottom-4 z-[3] flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-bg/80 px-4 py-3.5 backdrop-blur-md transition-colors hover:border-white/15 hover:bg-bg/90 sm:inset-x-auto sm:left-5 sm:max-w-md"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.1] bg-white/[0.04] text-terracotta">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-terracotta">
                 <MapPin className="h-[19px] w-[19px]" strokeWidth={1.7} />
               </span>
               <span className="flex min-w-0 flex-1 flex-col">
