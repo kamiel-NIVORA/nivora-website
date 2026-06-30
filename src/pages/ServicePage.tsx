@@ -63,7 +63,9 @@ const UI = {
         body: 'The system, the models, the configuration. Yours to keep, move, or hand to another team.',
       },
     ],
-    showcaseHeadline: 'Every screen designed with intention. Every icon a statement.',
+    showcaseHeadline: 'Every screen with intention. Down to the last icon.',
+    showcaseSub:
+      'Not a single screen that just turned out that way. Everything is there for a reason, and you feel it with every tap.',
     showcaseBoardLabel: 'Style Board',
     showcaseCardTitle: 'Crafted, not assembled.',
     showcaseCardBody:
@@ -142,7 +144,9 @@ const UI = {
         body: 'Het systeem, de modellen, de configuratie. Helemaal van u: om te houden, te verhuizen, of door te geven aan een ander team.',
       },
     ],
-    showcaseHeadline: 'Elk scherm ontworpen met intentie. Elk icoon een statement.',
+    showcaseHeadline: 'Elk scherm met intentie. Tot het laatste icoon.',
+    showcaseSub:
+      'Geen scherm dat toevallig zo geworden is. Alles staat er met een reden, en dat voelt u bij elke tik.',
     showcaseBoardLabel: 'Style Board',
     showcaseCardTitle: 'Vakwerk, geen montage.',
     showcaseCardBody:
@@ -858,13 +862,23 @@ function Capabilities({ content }: { content: ServiceContent }) {
 function AppShowcase() {
   const { lang } = useLang()
   const t = UI[lang]
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  // The right column drifts down as you scroll, travelling alongside the tall left board.
+  const rightY = useTransform(scrollYProgress, [0, 1], [-24, 96])
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
-      <Reveal>
-        <p className="mx-auto mb-10 max-w-2xl text-center font-serif text-[24px] leading-[1.28] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
-          {t.showcaseHeadline}
-        </p>
-      </Reveal>
+    <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
+      <div className="mx-auto mb-12 max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[24px] leading-[1.22] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[36px]">
+            {t.showcaseHeadline}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{t.showcaseSub}</p>
+        </Reveal>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         {/* Style board — main feature */}
@@ -884,8 +898,11 @@ function AppShowcase() {
           </div>
         </Reveal>
 
-        {/* Right column: icons + copy card */}
-        <div className="flex flex-col gap-4">
+        {/* Right column: icons + copy card, drifting down with scroll */}
+        <motion.div
+          style={reduced ? undefined : { y: rightY }}
+          className="flex flex-col gap-4 will-change-transform"
+        >
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
               <img
@@ -907,7 +924,7 @@ function AppShowcase() {
               </p>
             </div>
           </Reveal>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -990,16 +1007,23 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
   // Fade in as the row enters, hold through the middle, fade out as it leaves.
   const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0])
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
+  // The bead lights up as the white line reaches it: a soft dot pops in.
+  const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
+  const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
 
   return (
     <div ref={ref} className="relative py-20 lg:py-44">
-      {/* node: a black disc that blends into the page, so it is not a visible dot.
-         It sits over the centre line, so the white line passes behind it and reads
-         as a soft gap where the bead is (desktop) */}
+      {/* node: a black disc that masks the centre line (so the line reads as a gap),
+         with a light bead that pops in as the line reaches it (desktop) */}
       <span
         aria-hidden
-        className="absolute left-1/2 top-1/2 z-10 hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg lg:block"
-      />
+        className="absolute left-1/2 top-1/2 z-10 hidden h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-bg lg:flex"
+      >
+        <motion.span
+          style={reduced ? undefined : { opacity: beadOpacity, scale: beadScale }}
+          className="h-3 w-3 rounded-full bg-ink shadow-[0_0_14px_rgba(245,245,245,0.7)]"
+        />
+      </span>
 
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
         <motion.div
@@ -1240,12 +1264,56 @@ function ComparisonBand() {
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
+  // App Design: the home-page "Our Services" treatment — free-standing frosted-glass
+  // cards over a sharp, visible mountain peak (crisp in the gaps, blurred through
+  // each card via real backdrop-blur).
+  if (meta.slug === 'app-design') {
+    return (
+      <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
+        <div className="relative mx-auto w-full max-w-[1200px] px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <Reveal>
+              <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+                {content.differentiators.title}
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="relative mt-12 sm:mt-16">
+            {/* Sharp mountain peak, clipped to the band and faded at the edges, shown
+                crisp in the gaps between the cards */}
+            <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+              <img
+                src="/services/whyus-appdesign.webp"
+                alt=""
+                className="h-full w-full object-cover object-[50%_78%] opacity-[0.55] [mask-image:radial-gradient(94%_88%_at_50%_50%,black_42%,transparent_92%)] [-webkit-mask-image:radial-gradient(94%_88%_at_50%_50%,black_42%,transparent_92%)]"
+              />
+            </div>
+
+            <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:gap-6">
+              {content.differentiators.items.map((d, i) => (
+                <Reveal key={d.title} delay={(i % 2) * 0.08}>
+                  <div className="group relative h-full overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/35 p-7 backdrop-blur-2xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)]">
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/30 via-[#0a0a0d]/25 to-[#0a0a0d]/55" />
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                    <div className="relative">
+                      <h3 className="text-[17px] font-semibold tracking-tight text-ink">{d.title}</h3>
+                      <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{d.body}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-28">
-      <ParallaxImage
-        src={meta.slug === 'app-design' ? '/services/whyus-appdesign.webp' : meta.photo}
-        range={['-10%', '10%']}
-      />
+      <ParallaxImage src={meta.photo} range={['-10%', '10%']} />
       <div className="absolute inset-0 bg-bg/80" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
