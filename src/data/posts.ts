@@ -8,10 +8,17 @@
  */
 import type { Lang, Localized } from '@/i18n'
 
+/** Per-block typography the AIOS editor can write.
+ *  `serif` = Hedvig (font-serif), `sans` = Inter (font-sans). */
+export type BlockFont = 'serif' | 'sans'
+
 export type PostBlock =
   | string
-  | { h2: string }
-  | { quote: string }
+  /** Paragraph with optional per-block font/size (a bare string is the same,
+   *  using the defaults). */
+  | { p: string; font?: BlockFont; size?: number }
+  | { h2: string; font?: BlockFont; size?: number }
+  | { quote: string; font?: BlockFont; size?: number }
   | { image: string; alt: string; caption?: string; feather?: boolean }
   /** Inline call to action, e.g. a link to the waiting list. */
   | { cta: { label: string; href: string } }

@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, type CSSProperties } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import type { BlockFont } from '@/data/posts'
 import { Reveal } from '@/components/animations/Reveal'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
@@ -24,6 +25,21 @@ const COPY = {
     bookCall: 'Boek een gesprek',
   },
 } as const
+
+/** Per-block font override → Tailwind class. `fallback` is the block's current
+ *  default, so a block without an explicit font stays byte-identical. */
+function blockFontClass(font?: BlockFont, fallback = ''): string {
+  if (font === 'serif') return 'font-serif'
+  if (font === 'sans') return 'font-sans'
+  return fallback
+}
+
+/** Per-block size override → inline fontSize (px), clamped to a sane range.
+ *  No/invalid size returns undefined, so the block keeps its default CSS size. */
+function blockSizeStyle(size?: number): CSSProperties | undefined {
+  if (typeof size !== 'number' || !Number.isFinite(size)) return undefined
+  return { fontSize: `${Math.min(72, Math.max(12, size))}px` }
+}
 
 export function BlogPost() {
   const { slug } = useParams()
@@ -106,11 +122,25 @@ export function BlogPost() {
                   </p>
                 )
               }
+              if ('p' in block) {
+                // New object paragraph: same look as a bare string, plus an
+                // optional per-block font (serif/sans) and size (px).
+                return (
+                  <p
+                    key={i}
+                    className={`${blockFontClass(block.font)} text-[17px] leading-[1.8] text-muted sm:text-[18px]`.trim()}
+                    style={blockSizeStyle(block.size)}
+                  >
+                    {block.p}
+                  </p>
+                )
+              }
               if ('h2' in block) {
                 return (
                   <h2
                     key={i}
-                    className="mt-4 font-serif text-[26px] leading-[1.2] tracking-[-0.01em] text-ink sm:text-[30px]"
+                    className={`mt-4 ${blockFontClass(block.font, 'font-serif')} text-[26px] leading-[1.2] tracking-[-0.01em] text-ink sm:text-[30px]`}
+                    style={blockSizeStyle(block.size)}
                   >
                     {block.h2}
                   </h2>
@@ -120,7 +150,8 @@ export function BlogPost() {
                 return (
                   <blockquote
                     key={i}
-                    className="my-2 border-l-2 border-line-strong pl-5 font-serif text-[22px] leading-[1.4] tracking-[-0.01em] text-ink sm:text-[26px]"
+                    className={`my-2 border-l-2 border-line-strong pl-5 ${blockFontClass(block.font, 'font-serif')} text-[22px] leading-[1.4] tracking-[-0.01em] text-ink sm:text-[26px]`}
+                    style={blockSizeStyle(block.size)}
                   >
                     {block.quote}
                   </blockquote>
