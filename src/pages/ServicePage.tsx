@@ -1790,22 +1790,22 @@ const SERVER_STEPS: Record<
       {
         title: 'We look at what you need',
         body: 'Which data matters, which tasks cost the most time today, and how many people will work with it. That decides what kind of system fits you, not the other way around. A small team needs something very different from a large one.',
-        image: '/IMG_0883.jpg',
+        image: '/services/timeline-1.webp',
       },
       {
         title: 'We put the AI in your place',
         body: "The intelligence runs on your own server, in your own building. No connection to anyone else's servers, no data going out. We handle the hardware and make sure everything sits exactly as it should.",
-        image: '/IMG_0890.jpg',
+        image: '/services/timeline-2.webp',
       },
       {
         title: 'We let it get to know your company',
         body: 'This is where it truly becomes yours. The AI learns from your own documents, your own way of working, your own data. You get no generic AI but one that understands your company, and that knowledge stays in.',
-        image: '/IMG_0896.JPG',
+        image: '/services/timeline-3.webp',
       },
       {
         title: 'We build the apps around it',
         body: 'An AI on its own does nothing yet. We build the applications your people actually work with. Pulling up documents and emails, asking questions about your own data, work that happens by itself. All through your own AI, nothing through the outside.',
-        image: '/IMG_0887.jpg',
+        image: '/services/timeline-4.webp',
       },
     ],
   },
@@ -1817,22 +1817,22 @@ const SERVER_STEPS: Record<
       {
         title: 'We kijken wat u nodig hebt',
         body: 'Welke data telt, welke taken kosten nu het meeste tijd, en hoeveel mensen gaan ermee werken. Dat bepaalt wat voor systeem bij u past, niet andersom. Een klein team heeft iets heel anders nodig dan een groot.',
-        image: '/IMG_0883.jpg',
+        image: '/services/timeline-1.webp',
       },
       {
         title: 'We zetten de AI bij u neer',
         body: 'De intelligentie komt op uw eigen server, in uw eigen gebouw. Geen verbinding met servers van iemand anders, geen data die naar buiten gaat. Wij regelen de hardware en zorgen dat alles staat zoals het hoort.',
-        image: '/IMG_0890.jpg',
+        image: '/services/timeline-2.webp',
       },
       {
         title: 'We laten hem uw bedrijf leren kennen',
         body: 'Dit is waar het echt van u wordt. De AI leert van uw eigen documenten, uw eigen manier van werken, uw eigen data. Zo krijgt u geen algemene AI maar een die uw bedrijf begrijpt, en die kennis blijft binnen.',
-        image: '/IMG_0896.JPG',
+        image: '/services/timeline-3.webp',
       },
       {
         title: 'We bouwen de apps eromheen',
         body: 'Een AI op zich doet nog niks. Wij bouwen de toepassingen waarmee uw mensen er echt mee werken. Documenten en e-mails ophalen, vragen stellen over uw eigen data, werk dat vanzelf gebeurt. Alles via uw eigen AI, niets via buiten.',
-        image: '/IMG_0887.jpg',
+        image: '/services/timeline-4.webp',
       },
     ],
   },
