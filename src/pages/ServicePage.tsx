@@ -871,40 +871,8 @@ function Capabilities({ content }: { content: ServiceContent }) {
 function AppShowcase() {
   const { lang } = useLang()
   const t = UI[lang]
-  const reduced = usePrefersReducedMotion()
-  const ref = useRef<HTMLElement>(null)
-  const bandRef = useRef<HTMLDivElement>(null)
-  const rightRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // Both right cards drift down together as you scroll, settling aligned with the
-  // bottom of the tall left style board. travelRef holds the live travel distance
-  // (the empty space below them) so the transform always reads the latest measure.
-  const travelRef = useRef(0)
-  useLayoutEffect(() => {
-    const band = bandRef.current
-    const inner = rightRef.current
-    if (!band || !inner) return
-    const measure = () => {
-      // Only on the two-column desktop layout; stacked on mobile, so no drift.
-      if (window.innerWidth < 1024) {
-        travelRef.current = 0
-        return
-      }
-      const { y } = offsetWithin(inner, band)
-      travelRef.current = Math.max(0, band.offsetHeight - y - inner.offsetHeight)
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(band)
-    ro.observe(inner)
-    return () => ro.disconnect()
-  }, [])
-  const rightY = useTransform(scrollYProgress, (v) => {
-    const p = Math.min(1, Math.max(0, (v - 0.1) / 0.75))
-    return p * travelRef.current
-  })
   return (
-    <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
       <div className="mx-auto mb-12 max-w-2xl text-center">
         <Reveal>
           <h2 className="font-serif text-[24px] leading-[1.22] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[36px]">
@@ -916,7 +884,7 @@ function AppShowcase() {
         </Reveal>
       </div>
 
-      <div ref={bandRef} className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         {/* Style board — main feature */}
         <Reveal delay={0.06}>
           <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
@@ -934,14 +902,10 @@ function AppShowcase() {
           </div>
         </Reveal>
 
-        {/* Right column: both cards drift down together as you scroll, settling
-            aligned with the bottom of the tall style board */}
+        {/* Right column: the two cards stick under the header and travel down with
+            you as the tall style board scrolls past, releasing at its bottom */}
         <div className="relative">
-          <motion.div
-            ref={rightRef}
-            style={reduced ? undefined : { y: rightY }}
-            className="flex flex-col gap-4 will-change-transform"
-          >
+          <div className="flex flex-col gap-4 lg:sticky lg:top-28">
             <Reveal delay={0.1}>
               <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                 <img
@@ -963,7 +927,7 @@ function AppShowcase() {
                 </p>
               </div>
             </Reveal>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -1322,7 +1286,7 @@ const WHY_GLOW = '/services/whyus-band.webp'
 const WHY_GLOW_W = 1200
 const WHY_GLOW_H = 750
 const WHY_POS_X = 0.5
-const WHY_POS_Y = 0.46
+const WHY_POS_Y = 0.5
 
 function AppWhyCard({
   title,
@@ -1421,33 +1385,36 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
       : 'No agency passing you around. The people who shape your app are the same people who build it.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
-      <div className="relative mx-auto w-full max-w-[1280px] px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              {content.differentiators.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{sub}</p>
-          </Reveal>
+      {/* bandRef wraps the backdrop AND the cards, so the peak reads across the whole
+          section (the background is back, clearly visible) and the per-card frosted
+          blur still lines up exactly with it. */}
+      <div ref={bandRef} className="relative mx-auto w-full max-w-[1280px]">
+        {/* The sharp peak, faded into the page on every edge so it blends in */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <img
+            src={WHY_GLOW}
+            alt=""
+            className="h-full w-full object-cover object-[50%_50%] opacity-[0.72]"
+          />
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg via-bg/65 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg via-bg/65 to-transparent" />
+          <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-bg to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-bg to-transparent" />
         </div>
 
-        {/* Cards band. The sharp peak is confined to this row and faded into the
-            page (radial mask + top/bottom fade), so it blends and never looks like
-            a hard rectangle — shown crisp in the gaps between the cards. */}
-        <div ref={bandRef} className="relative mt-12 sm:mt-16">
-          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-            <img
-              src={WHY_GLOW}
-              alt=""
-              className="h-full w-full object-cover object-[50%_46%] opacity-[0.6] [mask-image:radial-gradient(92%_86%_at_50%_50%,black_46%,transparent_92%)] [-webkit-mask-image:radial-gradient(92%_86%_at_50%_50%,black_46%,transparent_92%)]"
-            />
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-bg to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg to-transparent" />
+        <div className="relative z-10 px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <Reveal>
+              <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+                {content.differentiators.title}
+              </h2>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{sub}</p>
+            </Reveal>
           </div>
 
-          <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
             {content.differentiators.items.map((d, i) => (
               <Reveal key={d.title} delay={(i % 4) * 0.08}>
                 <AppWhyCard title={d.title} body={d.body} bandRef={bandRef} />
