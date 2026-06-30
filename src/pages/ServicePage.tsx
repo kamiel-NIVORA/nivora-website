@@ -1509,6 +1509,48 @@ const LOCAL_COMPARE: Record<
 
 /** One side of the comparison as a home-style framed card: a big photo panel with
  *  a label chip, then the title and the points (no buttons, the points fill it). */
+const CLOUD_PROVIDERS = [
+  { src: '/services/providers/openai.svg', left: '50%', top: '45%', size: 60, pad: 15 },
+  { src: '/services/providers/claude.svg', left: '22%', top: '29%', size: 50, pad: 12 },
+  { src: '/services/providers/gemini.svg', left: '77%', top: '27%', size: 50, pad: 11 },
+  { src: '/services/providers/meta.svg', left: '27%', top: '72%', size: 48, pad: 13 },
+  { src: '/services/providers/copilot.svg', left: '73%', top: '69%', size: 48, pad: 11 },
+]
+
+/** One provider logo in a dark glass badge, drifting slowly on its own phase. */
+function FloatingBadge({
+  src,
+  left,
+  top,
+  size,
+  pad,
+  i,
+}: {
+  src: string
+  left: string
+  top: string
+  size: number
+  pad: number
+  i: number
+}) {
+  const reduced = usePrefersReducedMotion()
+  return (
+    <motion.div
+      className="absolute will-change-transform"
+      style={{ left, top, width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
+      animate={reduced ? undefined : { x: [0, 5, 0, -5, 0], y: [0, -7, 0, 7, 0] }}
+      transition={{ duration: 11 + (i % 3) * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.7 }}
+    >
+      <div
+        className="flex h-full w-full items-center justify-center rounded-[14px] border border-white/12 bg-white/[0.07] shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
+        style={{ padding: pad }}
+      >
+        <img src={src} alt="" className="h-full w-full object-contain" />
+      </div>
+    </motion.div>
+  )
+}
+
 function CompareCard({
   side,
 }: {
@@ -1526,26 +1568,35 @@ function CompareCard({
       >
         <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
           <img src={side.image} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
-          {/* gentle vignette so the floating mark always reads on either photo */}
+          {/* gentle vignette so the floating marks always read on either photo */}
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(62% 62% at 50% 50%, rgba(0,0,0,0.22), transparent 74%)' }}
+            style={{ background: 'radial-gradient(64% 64% at 50% 50%, rgba(0,0,0,0.30), transparent 76%)' }}
           />
-          {/* the Nivora mark, drifting slowly and smoothly around the centre */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <motion.div
-              animate={reduced ? undefined : { x: [0, 9, 0, -9, 0], y: [-9, 0, 9, 0, -9], scale: [1, 1.05, 1, 1.05, 1] }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative will-change-transform"
-            >
-              <div aria-hidden className="absolute -inset-6 rounded-full bg-white/12 blur-2xl" />
-              <img
-                src="/services/nivora-mark.png"
-                alt=""
-                className="relative h-[72px] w-[72px] rounded-[18px] shadow-[0_16px_44px_rgba(0,0,0,0.55)] sm:h-[84px] sm:w-[84px]"
-              />
-            </motion.div>
-          </div>
+          {local ? (
+            // Your own AI: the single Nivora mark, drifting smoothly around the centre.
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <motion.div
+                animate={reduced ? undefined : { x: [0, 9, 0, -9, 0], y: [-9, 0, 9, 0, -9], scale: [1, 1.05, 1, 1.05, 1] }}
+                transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative will-change-transform"
+              >
+                <div aria-hidden className="absolute -inset-6 rounded-full bg-white/12 blur-2xl" />
+                <img
+                  src="/services/nivora-mark.png"
+                  alt=""
+                  className="relative h-[72px] w-[72px] rounded-[18px] shadow-[0_16px_44px_rgba(0,0,0,0.55)] sm:h-[84px] sm:w-[84px]"
+                />
+              </motion.div>
+            </div>
+          ) : (
+            // The big models: a slow-drifting constellation of the cloud providers.
+            <div className="pointer-events-none absolute inset-0">
+              {CLOUD_PROVIDERS.map((p, i) => (
+                <FloatingBadge key={p.src} src={p.src} left={p.left} top={p.top} size={p.size} pad={p.pad} i={i} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-1 flex-col px-2 pb-1 pt-6 lg:px-3">
