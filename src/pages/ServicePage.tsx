@@ -256,6 +256,7 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
+        {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         <Problem content={content} />
         <Solution content={content} meta={meta} />
@@ -1150,6 +1151,96 @@ function AppBuildShapes() {
         {data.items.map((it, i) => (
           <AppShapeRow key={it.title} title={it.title} body={it.body} reverse={i % 2 === 1} />
         ))}
+      </div>
+    </section>
+  )
+}
+
+/* App Design · who we build for ──────────────────────────────────────────────── */
+
+/* Mirror of the "your idea" opener: copy on the right, the dithered globe gif on
+   the left. The gif is white-on-black, so mix-blend-screen drops the black and only
+   the luminous motion blends into the page, its edges feathered with a radial mask.
+   App Design only. */
+
+const APP_WHO: Record<Lang, { title: string; subtitle: string; lines: string[] }> = {
+  en: {
+    title: 'Who we build for',
+    subtitle:
+      'Whether it is for your customers, your own team, or the companies you work with. If the idea is complex and it has to be genuinely good, this is exactly where you belong.',
+    lines: [
+      'A product you bring to your customers.',
+      'A tool your own team uses all day.',
+      'A system you deliver to the companies you work with.',
+    ],
+  },
+  nl: {
+    title: 'Voor wie we bouwen',
+    subtitle:
+      'Of het nu voor uw klanten is, voor uw eigen team, of voor de bedrijven waar u mee werkt. Als het idee complex is en het moet écht goed zijn, dan bent u hier juist.',
+    lines: [
+      'Een product dat u naar uw klanten brengt.',
+      'Een tool die uw eigen team de hele dag gebruikt.',
+      'Een systeem dat u levert aan de bedrijven waar u mee werkt.',
+    ],
+  },
+}
+
+const APP_WHO_GIF = '/services/who-appdesign.gif'
+
+function AppWhoFor() {
+  const { lang } = useLang()
+  const data = APP_WHO[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* The spinning globe gif — left on desktop */}
+        <div ref={ref} className="relative order-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
+          />
+          <Reveal y={24}>
+            <motion.div
+              style={{ y }}
+              className="relative mx-auto aspect-square w-full max-w-[440px] overflow-hidden will-change-transform"
+            >
+              <img
+                src={APP_WHO_GIF}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)] [-webkit-mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)]"
+                style={{ mixBlendMode: 'screen' }}
+              />
+            </motion.div>
+          </Reveal>
+        </div>
+
+        {/* Copy — right on desktop */}
+        <div className="order-2">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
+              {data.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
+          </Reveal>
+          <ul className="mt-8 flex flex-col gap-4">
+            {data.lines.map((line, i) => (
+              <Reveal as="li" key={line} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
+                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                <span className="text-[15.5px] leading-relaxed text-ink-soft">{line}</span>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )
