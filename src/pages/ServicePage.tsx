@@ -252,6 +252,7 @@ export function ServicePage() {
         <Hero content={content} meta={meta} />
         <WhatYouGet meta={meta} />
         <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+        {meta.slug === 'app-design' && <AppBuildShapes />}
         <Problem content={content} />
         <Solution content={content} meta={meta} />
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
@@ -998,6 +999,146 @@ function AppShowcase() {
             </div>
           </Reveal>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* App Design · three build shapes ───────────────────────────────────────────── */
+
+/* A clean, white centre timeline (the AIOS-proposal style) with feature rows that
+   alternate left/right. Each image is wiped in with a clip-path parallax reveal as
+   it scrolls past, the copy drifts gently, and the centre line fills white with
+   scroll progress. App Design only. Images are placeholders, the same one
+   everywhere, until the client supplies per-shape art. */
+
+const APP_SHAPES: Record<
+  Lang,
+  { title: string; subtitle: string; items: { title: string; body: string }[] }
+> = {
+  en: {
+    title: 'Three shapes your app can take',
+    subtitle:
+      'No fixed list of packages. We look at what you need first and build the right thing for it. Usually it lands in one of these three.',
+    items: [
+      {
+        title: 'An app in your pocket',
+        body: 'Something people open every day without thinking about it. Fast, familiar, and it does exactly what it should. For iOS, Android, or both at once from the same foundation.',
+      },
+      {
+        title: 'Work that lives in the browser',
+        body: 'Not a pretty storefront, but a real tool you work in. Dashboards, systems, places where your team gets things done all day. Built to stay fast, even when a lot happens at once.',
+      },
+      {
+        title: 'Everything that talks to each other',
+        body: 'Mobile and web that speak the same language, share the same data, and feel the same everywhere. One whole, instead of separate pieces you have to stitch together later.',
+      },
+    ],
+  },
+  nl: {
+    title: 'Drie vormen die uw app kan aannemen',
+    subtitle:
+      'Geen vast lijstje met pakketten. We kijken eerst naar wat u nodig hebt en bouwen daar het juiste voor. Meestal valt dat in een van deze drie.',
+    items: [
+      {
+        title: 'Een app in de broekzak',
+        body: 'Iets dat mensen elke dag openen zonder erover na te denken. Snel, vertrouwd, en het doet precies wat het moet doen. Voor iOS, Android, of allebei tegelijk vanuit dezelfde basis.',
+      },
+      {
+        title: 'Werk dat in de browser leeft',
+        body: 'Geen mooie etalage, maar een echte tool waar u in werkt. Dashboards, systemen, plekken waar uw team de hele dag iets voor elkaar krijgt. Gebouwd om snel te zijn, ook als er veel tegelijk gebeurt.',
+      },
+      {
+        title: 'Alles dat met elkaar praat',
+        body: 'Mobiel en web die dezelfde taal spreken, dezelfde data delen en overal hetzelfde aanvoelen. Eén geheel in plaats van losse stukken die u later met moeite aan elkaar moet knopen.',
+      },
+    ],
+  },
+}
+
+/** Placeholder image, intentionally the same for all three rows. The client will
+ *  swap in per-shape art later. */
+const APP_SHAPE_IMAGE = '/services/showcase-appdesign.jpg'
+
+function AppShapeRow({ title, body, reverse }: { title: string; body: string; reverse: boolean }) {
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] })
+  // Wipe the image in from the edge nearest the centre line, outward.
+  const clipFrom = reverse ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
+  const clip = useTransform(scrollYProgress, [0, 0.65], [clipFrom, 'inset(0 0% 0 0)'])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.15, 1])
+  const ty = useTransform(scrollYProgress, [0, 1], [26, -8])
+
+  return (
+    <div ref={ref} className="relative py-10 lg:py-14">
+      {/* node on the centre line (desktop) */}
+      <span
+        aria-hidden
+        className="absolute left-1/2 top-1/2 z-10 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-bg lg:flex"
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-ink" />
+      </span>
+
+      <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-24">
+        <motion.div
+          style={reduced ? undefined : { y: ty }}
+          className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
+        >
+          <h3 className="font-serif text-[26px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[34px]">
+            {title}
+          </h3>
+          <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint">{body}</p>
+        </motion.div>
+
+        <motion.div
+          style={reduced ? undefined : { clipPath: clip, opacity }}
+          className={cn(
+            'relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)]',
+            reverse ? 'lg:order-1' : 'lg:order-2',
+          )}
+        >
+          <img src={APP_SHAPE_IMAGE} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+function AppBuildShapes() {
+  const { lang } = useLang()
+  const data = APP_SHAPES[lang]
+  const lineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 55%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
+        </Reveal>
+      </div>
+
+      <div ref={lineRef} className="relative mx-auto mt-10 max-w-[1080px] lg:mt-14">
+        {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 lg:block">
+          <div className="absolute inset-0 bg-line" />
+          <motion.div
+            style={{ scaleY: fill }}
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/80 via-white/45 to-white/15"
+          />
+        </div>
+
+        {data.items.map((it, i) => (
+          <AppShapeRow key={it.title} title={it.title} body={it.body} reverse={i % 2 === 1} />
+        ))}
       </div>
     </section>
   )
