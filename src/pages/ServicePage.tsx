@@ -1302,78 +1302,169 @@ function LocalWhoFor() {
 
 /* Cloud vs Local comparison · only for local-ai ─────────────────────────────── */
 
+const COMPARE: Record<
+  Lang,
+  {
+    title: string
+    subtitle: string
+    cloudTitle: string
+    cloudSub: string
+    cloud: string[]
+    localTitle: string
+    localSub: string
+    local: string[]
+    honest: string
+  }
+> = {
+  en: {
+    title: 'Why your AI belongs with you',
+    subtitle:
+      'Most companies send their data to a handful of big tech companies. It works, but you give away more than you think. Here is the difference.',
+    cloudTitle: 'The big models',
+    cloudSub: 'Cloud AI from a big tech company',
+    cloud: [
+      'Your data leaves your building with every question you ask.',
+      'It is sometimes used to train their model further, unless you pay a steep premium.',
+      'You pay again every month, and that bill grows with your team.',
+      "You depend on someone else's servers, prices and rules.",
+    ],
+    localTitle: 'Your own local AI',
+    localSub: 'Inside your own walls',
+    local: [
+      'Your data stays in, with every question, without exception.',
+      'It learns only from you, and that knowledge stays yours.',
+      'You mostly pay once, for the hardware, and then it is yours.',
+      'You depend on no one, it sits inside your own walls.',
+    ],
+    honest:
+      'A local model is not the single most powerful one out there. But for what most companies actually need it is more than good enough, and the big advantage is that it is entirely yours.',
+  },
+  nl: {
+    title: 'Waarom uw AI bij u hoort te staan',
+    subtitle:
+      'De meeste bedrijven sturen hun data naar een handvol grote techbedrijven. Het werkt, maar u geeft er meer voor weg dan u denkt. Zo zit het verschil.',
+    cloudTitle: 'De grote modellen',
+    cloudSub: 'Cloud-AI van een groot techbedrijf',
+    cloud: [
+      'Uw data verlaat uw gebouw bij elke vraag die u stelt.',
+      'Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
+      'U betaalt elke maand opnieuw, en die rekening groeit mee met uw team.',
+      'U bent afhankelijk van de servers, prijzen en regels van iemand anders.',
+    ],
+    localTitle: 'Uw eigen lokale AI',
+    localSub: 'Binnen uw eigen muren',
+    local: [
+      'Uw data blijft binnen, bij elke vraag, zonder uitzondering.',
+      'Ze leert alleen van u, en die kennis blijft van u.',
+      'U betaalt vooral een keer, voor de hardware, daarna is het van u.',
+      'U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+    ],
+    honest:
+      'Een lokaal model is niet het allerkrachtigste dat er bestaat. Maar voor wat de meeste bedrijven echt nodig hebben is het meer dan goed genoeg, en het grote voordeel is dat het volledig van u is.',
+  },
+}
+
 function ComparisonBand() {
   const { lang } = useLang()
-  const t = UI[lang]
-  const COMPARISON_ROWS = t.comparisonRows
+  const t = COMPARE[lang]
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
+    <section className="relative w-full overflow-hidden border-y border-line py-20 sm:py-24 lg:py-32">
+      {/* Bigger scenic backdrop, drifting on scroll, faded deep into the page */}
+      <ParallaxImage src="/backgrounds/bg-waves-mono.jpg" range={['-6%', '6%']} />
+      <div className="absolute inset-0 bg-bg/85" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(60% 55% at 50% 36%, rgba(245,245,245,0.06), transparent 70%)' }}
+      />
+
+      <div className="relative mx-auto w-full max-w-[1100px] px-6">
+        {/* One big header card with title + subtitle */}
         <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {t.comparisonHeadline}
-          </h2>
+          <div className="mx-auto max-w-3xl rounded-[24px] border border-line bg-white/[0.03] p-8 text-center backdrop-blur-xl sm:p-10">
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
+              {t.title}
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-faint sm:text-[16px]">
+              {t.subtitle}
+            </p>
+          </div>
         </Reveal>
-      </div>
 
-      <div className="mt-14 grid gap-3 lg:grid-cols-2">
-        {/* Cloud AI column */}
-        <div className="rounded-[22px] border border-line bg-white/[0.01] p-6 lg:p-8">
-          <div className="mb-7 flex items-center gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04]">
-              <svg viewBox="0 0 24 24" className="h-4 w-4 text-faint" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
-              </svg>
-            </span>
-            <div>
-              <span className="block text-[15px] font-semibold text-faint">{t.cloudTitle}</span>
-              <span className="block text-[12.5px] text-dim">{t.cloudSub}</span>
-            </div>
-          </div>
-          <div className="flex flex-col divide-y divide-line/50">
-            {COMPARISON_ROWS.map((row) => (
-              <div key={row.label} className="flex items-start gap-3 py-4">
-                <svg viewBox="0 0 16 16" className="mt-0.5 h-4 w-4 shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
-                </svg>
+        {/* Two sides: the big cloud models vs your own local AI */}
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          {/* The big models, cloud */}
+          <Reveal y={20}>
+            <div className="h-full rounded-[22px] border border-line bg-[#0a0a0d]/40 p-6 backdrop-blur-xl lg:p-8">
+              <div className="mb-7 flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.04]">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 text-faint" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                  </svg>
+                </span>
                 <div>
-                  <span className="block text-[14px] font-medium text-faint sm:text-[13px]">{row.label}</span>
-                  <span className="block text-[14px] leading-relaxed text-dim sm:text-[13px]">{row.cloud}</span>
+                  <span className="block text-[15px] font-semibold text-faint">{t.cloudTitle}</span>
+                  <span className="block text-[12.5px] text-dim">{t.cloudSub}</span>
                 </div>
               </div>
-            ))}
-          </div>
+              <ul className="flex flex-col divide-y divide-line/50">
+                {t.cloud.map((line) => (
+                  <li key={line} className="flex items-start gap-3 py-4">
+                    <svg viewBox="0 0 16 16" className="mt-0.5 h-4 w-4 shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
+                    </svg>
+                    <span className="text-[14px] leading-relaxed text-dim sm:text-[14.5px]">{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          {/* Your own local AI */}
+          <Reveal y={20} delay={0.08}>
+            <div className="relative h-full overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.05] p-6 backdrop-blur-xl lg:p-8">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="mb-7 flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.08]">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                    <rect x="2" y="2" width="20" height="8" rx="2" />
+                    <rect x="2" y="14" width="20" height="8" rx="2" />
+                    <line x1="6" y1="6" x2="6.01" y2="6" />
+                    <line x1="6" y1="18" x2="6.01" y2="18" />
+                  </svg>
+                </span>
+                <div>
+                  <span className="block text-[15px] font-semibold text-ink">{t.localTitle}</span>
+                  <span className="block text-[12.5px] text-faint">{t.localSub}</span>
+                </div>
+              </div>
+              <ul className="flex flex-col divide-y divide-line/50">
+                {t.local.map((line) => (
+                  <li key={line} className="flex items-start gap-3 py-4">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2.2} />
+                    <span className="text-[14px] leading-relaxed text-ink-soft/90 sm:text-[14.5px]">{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
 
-        {/* Local AI column */}
-        <div className="relative overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 lg:p-8">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          <div className="mb-7 flex items-center gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.08]">
+        {/* The honest bar: the one real trade-off, owned and turned around */}
+        <Reveal y={16}>
+          <div className="mt-4 flex items-start gap-4 rounded-[22px] border border-line-strong bg-white/[0.03] p-6 backdrop-blur-xl sm:items-center sm:p-7">
+            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
               <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                <rect x="2" y="2" width="20" height="8" rx="2" />
-                <rect x="2" y="14" width="20" height="8" rx="2" />
-                <line x1="6" y1="6" x2="6.01" y2="6" />
-                <line x1="6" y1="18" x2="6.01" y2="18" />
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v5" strokeLinecap="round" />
+                <path d="M12 16.5h.01" strokeLinecap="round" />
               </svg>
             </span>
-            <div>
-              <span className="block text-[15px] font-semibold text-ink">{t.localTitle}</span>
-              <span className="block text-[12.5px] text-faint">{t.localSub}</span>
-            </div>
+            <p className="text-[14.5px] leading-relaxed text-ink-soft/90 sm:text-[15.5px]">{t.honest}</p>
           </div>
-          <div className="flex flex-col divide-y divide-line/50">
-            {COMPARISON_ROWS.map((row) => (
-              <div key={row.label} className="flex items-start gap-3 py-4">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" strokeWidth={2.2} />
-                <div>
-                  <span className="block text-[14px] font-medium text-ink sm:text-[13px]">{row.label}</span>
-                  <span className="block text-[14px] leading-relaxed text-ink-soft/80 sm:text-[13px]">{row.local}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   )
