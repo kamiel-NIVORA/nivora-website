@@ -251,7 +251,11 @@ export function ServicePage() {
     >
         <Hero content={content} meta={meta} />
         <WhatYouGet meta={meta} />
-        <ScrollStatement image={meta.photo} copy={content.reveal} accent={meta.accent} />
+        <ScrollStatement
+          image={meta.slug === 'app-design' ? '/services/statement-appdesign.webp' : meta.photo}
+          copy={content.reveal}
+          accent={meta.accent}
+        />
         {meta.slug === 'app-design' && <AppBuildShapes />}
         <Problem content={content} />
         <Solution content={content} meta={meta} />
