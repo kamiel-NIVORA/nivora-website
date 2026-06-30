@@ -29,7 +29,7 @@ const COPY = {
     boxAria: 'Box, get notified at launch',
     voiceAria: 'Voice, get notified at launch',
     boxDesc: 'Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.',
-    boxCta: 'Get notified at launch',
+    boxCta: 'Keep me posted',
     voiceDesc: 'Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.',
     phoneNotifAria: (name: string) => `${name}, coming soon, get notified at launch`,
     now: 'now',
@@ -290,10 +290,13 @@ function BoxCard() {
         </div>
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">{t.boxDesc}</p>
         {/* Presentational — the whole card is already the link, so this just
-            reads as the call to action (avoids a duplicate keyboard tab stop). */}
-        <span className="mt-6 inline-flex h-10 w-fit items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-[14px] font-medium text-[#0a0a0a] transition-colors group-hover:bg-white/90">
+            reads as the call to action (avoids a duplicate keyboard tab stop).
+            White pill with a dark arrow chip that lifts and nudges on hover. */}
+        <span className="mt-6 inline-flex h-11 w-fit items-center gap-2.5 whitespace-nowrap rounded-full bg-white py-1.5 pl-5 pr-1.5 text-[14px] font-medium text-[#0a0a0a] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.45)] transition-all duration-300 group-hover:-translate-y-px group-hover:shadow-[0_8px_22px_-4px_rgba(0,0,0,0.55)]">
           {t.boxCta}
-          <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={1.8} />
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#0a0a0a] text-white transition-transform duration-300 group-hover:translate-x-0.5">
+            <ArrowRight className="h-4 w-4" strokeWidth={2} />
+          </span>
         </span>
       </div>
     </>
