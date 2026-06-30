@@ -15,8 +15,8 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     name: 'App Design',
     hero: {
       eyebrow: 'App Design & Development',
-      headline: 'The app you have been picturing. Designed and built, from first idea to final screen.',
-      subhead: 'Consumer apps, business tools, and anything too refined for a template. Built in your brand, owned by you.',
+      headline: 'The app you have been picturing. Truly built, fully yours.',
+      subhead: 'Consumer apps, business tools, and anything that goes beyond off-the-shelf. Built in your brand, owned by you.',
       primaryCta: 'Book a strategy call',
       secondaryCta: 'Contact us',
     },
@@ -468,8 +468,8 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     name: 'App Design',
     hero: {
       eyebrow: 'App Design & Ontwikkeling',
-      headline: 'De app die u voor ogen hebt. Ontworpen en gebouwd, van eerste idee tot laatste scherm.',
-      subhead: 'Consumenten-apps, zakelijke tools, en alles wat te verfijnd is voor een template. Gebouwd in uw merk, in uw bezit.',
+      headline: 'De app die u voor ogen hebt. Echt gebouwd, helemaal van u.',
+      subhead: 'Consumenten-apps, zakelijke tools, en alles wat verder gaat dan een standaardoplossing. Gebouwd in uw merk, in uw bezit.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
     },
