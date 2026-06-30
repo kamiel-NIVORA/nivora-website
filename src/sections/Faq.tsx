@@ -54,7 +54,7 @@ const COPY = {
       },
       {
         q: 'Moet ik technisch zijn om met u samen te werken?',
-        a: 'Nee. U brengt het probleem, of het idee dat u niet gebouwd krijgt, en wij regelen de rest, van ontwerp tot bouw tot het installeren binnen uw tools. U blijft de hele weg in gewone taal.',
+        a: 'Nee. U brengt het probleem, of het idee dat u niet gebouwd krijgt, en wij regelen de rest, van ontwerp tot bouw tot het installeren binnen uw tools. Van begin tot eind houden we het in gewone taal.',
       },
       {
         q: 'Hoe bepaalt u uw prijs?',
