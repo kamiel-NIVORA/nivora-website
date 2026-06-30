@@ -10,13 +10,14 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion'
-import { ArrowUpRight, Check, ChevronDown, Minus } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, CloudOff, Minus, Scale, ShieldCheck } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
+import { JourneyTimeline } from '@/components/ui/JourneyTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -260,7 +261,9 @@ export function ServicePage() {
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
-        {meta.slug !== 'app-design' && <Problem content={content} />}
+        {meta.slug === 'local-ai'
+          ? <LocalAiTension content={content} />
+          : meta.slug !== 'app-design' && <Problem content={content} />}
         {meta.slug !== 'app-design' && <Solution content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
@@ -268,6 +271,7 @@ export function ServicePage() {
         {meta.slug === 'app-design' && <AppShowcase />}
         <WhyUs content={content} meta={meta} />
         {meta.slug !== 'app-design' && <Process content={content} meta={meta} />}
+        {meta.slug === 'local-ai' && <JourneyTimeline />}
         <RoiBand meta={meta} />
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
@@ -816,6 +820,113 @@ function Problem({ content }: { content: ServiceContent }) {
             </GlassCard>
           </Reveal>
         ))}
+      </div>
+    </section>
+  )
+}
+
+/* Local AI · the privacy tension and the promise, side by side ──────────────── */
+
+/** Two elegant frames (one tension, one promise) plus a confident accent bar.
+ *  Replaces the generic two-negative Problem on the Local AI page. Self-contained
+ *  bilingual copy; the heading/intro still come from the service data. */
+const TENSION: Record<
+  Lang,
+  { tension: { title: string; body: string }; promise: { title: string; body: string }; bar: string }
+> = {
+  en: {
+    tension: {
+      title: 'Cloud AI lets your data leave the building',
+      body: 'Every prompt your team sends to a cloud model leaves your perimeter. And afterwards you cannot prove where that data went, who saw it, or what happened to it. For anyone handling confidential work, that is a risk you do not see until it goes wrong.',
+    },
+    promise: {
+      title: 'The same power, but inside your walls',
+      body: 'You get real AI power on your own hardware, not a watered-down version. Your data stays in, every answer is computed behind your own walls, and you own the whole system. No cloud in the chain, no per-seat meter, nothing you have to take on a promise.',
+    },
+    bar: 'Not every model has to be the biggest. We pick the AI that fits what you need: powerful enough for the work, never heavier than it has to be.',
+  },
+  nl: {
+    tension: {
+      title: 'Cloud-AI laat je data je gebouw uit',
+      body: 'Elke prompt die je team naar een cloudmodel stuurt, verlaat je perimeter. En achteraf kun je niet hard maken waar die data heen ging, wie ze zag of wat ermee gebeurde. Voor wie met vertrouwelijk werk bezig is, is dat een risico dat je niet ziet tot het misgaat.',
+    },
+    promise: {
+      title: 'Dezelfde kracht, maar binnen je muren',
+      body: 'Je krijgt echte AI-kracht op je eigen hardware, niet een afgezwakte versie. Je data blijft binnen, elk antwoord wordt achter je eigen muren berekend, en je bezit het volledige systeem. Geen cloud in de keten, geen teller per gebruiker, niets dat je op een belofte moet vertrouwen.',
+    },
+    bar: 'Niet elk model hoeft het grootste te zijn. We kiezen de AI die past bij wat je nodig hebt: krachtig genoeg voor het werk, niet zwaarder dan nodig.',
+  },
+}
+
+function LocalAiTension({ content }: { content: ServiceContent }) {
+  const { lang } = useLang()
+  const t = TENSION[lang]
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {content.problem.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.problem.intro}</p>
+        </Reveal>
+      </div>
+
+      {/* Two frames: one tension, one promise. Narrower + taller than a standard grid. */}
+      <div className="mx-auto mt-12 grid max-w-[940px] gap-5 md:grid-cols-2 lg:mt-16 lg:gap-6">
+        {/* Tension */}
+        <Reveal>
+          <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.015] p-7 transition-colors duration-300 hover:border-line-strong lg:p-10">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white/[0.03] text-faint">
+              <CloudOff className="h-[22px] w-[22px]" strokeWidth={1.6} />
+            </span>
+            <h3 className="mt-7 font-serif text-[23px] leading-[1.18] tracking-[-0.01em] text-ink lg:text-[26px]">
+              {t.tension.title}
+            </h3>
+            <p className="mt-4 text-[15px] leading-relaxed text-faint">{t.tension.body}</p>
+          </div>
+        </Reveal>
+
+        {/* Promise — elevated */}
+        <Reveal delay={0.1}>
+          <div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-7 transition-colors duration-300 hover:border-white/20 lg:p-10">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'radial-gradient(60% 50% at 50% 0%, rgba(245,245,245,0.06), transparent 70%)' }}
+            />
+            <span className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-white/[0.07] text-ink">
+              <ShieldCheck className="h-[22px] w-[22px]" strokeWidth={1.6} />
+            </span>
+            <h3 className="relative mt-7 font-serif text-[23px] leading-[1.18] tracking-[-0.01em] text-ink lg:text-[26px]">
+              {t.promise.title}
+            </h3>
+            <p className="relative mt-4 text-[15px] leading-relaxed text-ink-soft/80">{t.promise.body}</p>
+          </div>
+        </Reveal>
+      </div>
+
+      {/* Confident accent bar, brought out front and centre */}
+      <div className="mx-auto mt-5 max-w-[940px] lg:mt-6">
+        <Reveal delay={0.16}>
+          <div className="relative overflow-hidden rounded-2xl border border-line-strong bg-white/[0.025] px-6 py-5 sm:px-8 sm:py-6">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'radial-gradient(70% 130% at 0% 50%, rgba(245,245,245,0.05), transparent 60%)' }}
+            />
+            <div className="relative flex items-center gap-4 sm:gap-5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line-strong bg-white/[0.05] text-ink">
+                <Scale className="h-[19px] w-[19px]" strokeWidth={1.6} />
+              </span>
+              <p className="text-[15px] leading-relaxed text-ink-soft sm:text-[16px] lg:text-[17px]">{t.bar}</p>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   )
