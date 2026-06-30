@@ -215,7 +215,7 @@ function ServiceCard({
           </h3>
         </div>
 
-        {/* Bottom: a short line + a button through to the service page */}
+        {/* Bottom: a short line + a plain "Learn more" pill (no trailing arrow) to the service page */}
         <div style={{ transform: 'translateZ(35px)' }} className="relative">
           {desc && (
             <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
