@@ -1080,13 +1080,13 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
 
   return (
     <div ref={ref} className="relative py-20 lg:py-44">
-      {/* node on the centre line (desktop) */}
+      {/* node: a black disc that blends into the page, so it is not a visible dot.
+         It sits over the centre line, so the white line passes behind it and reads
+         as a soft gap where the bead is (desktop) */}
       <span
         aria-hidden
-        className="absolute left-1/2 top-1/2 z-10 hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-line-strong bg-bg lg:flex"
-      >
-        <span className="h-4 w-4 rounded-full bg-ink" />
-      </span>
+        className="absolute left-1/2 top-1/2 z-10 hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg lg:block"
+      />
 
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
         <motion.div
@@ -1138,12 +1138,12 @@ function AppBuildShapes() {
         ref={lineRef}
         className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)]"
       >
-        {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
+        {/* centre timeline: ONLY the white line that grows with scroll, no grey
+           track underneath, so you never see where the line will go (desktop) */}
         <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
-          <div className="absolute inset-0 bg-line" />
           <motion.div
             style={{ scaleY: fill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/80 via-white/45 to-white/15"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/55 to-white/25"
           />
         </div>
 
