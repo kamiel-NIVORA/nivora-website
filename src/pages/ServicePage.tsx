@@ -196,16 +196,6 @@ const UI = {
   },
 } as const
 
-/** Image shown per capability index on the App Design accordion. */
-const APP_CAPABILITY_IMAGES = [
-  '/services/showcase-appdesign.jpg',
-  '/services/service-appdesign.webp',
-  '/services/icons-appdesign.jpg',
-  '/services/service-appdesign.webp',
-  '/services/showcase-appdesign.jpg',
-  '/services/service-appdesign.webp',
-]
-
 /** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
 function phaseWord(title: string): string {
   const w = title.replace(/^We\s+/i, '').split(' ')[0]
@@ -258,15 +248,15 @@ export function ServicePage() {
         />
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
-        <Problem content={content} />
-        <Solution content={content} meta={meta} />
+        {meta.slug !== 'app-design' && <Problem content={content} />}
+        {meta.slug !== 'app-design' && <Solution content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
-        {meta.slug === 'app-design' ? <AppCapabilities content={content} /> : <Capabilities content={content} />}
+        {meta.slug !== 'app-design' && <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         <WhyUs content={content} meta={meta} />
-        <Process content={content} meta={meta} />
+        {meta.slug !== 'app-design' && <Process content={content} meta={meta} />}
         <RoiBand meta={meta} />
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
@@ -863,92 +853,6 @@ function Capabilities({ content }: { content: ServiceContent }) {
   )
 }
 
-/* App Design: accordion capabilities + sticky image preview ──────────────────── */
-
-function AppCapabilities({ content }: { content: ServiceContent }) {
-  const [activeIdx, setActiveIdx] = useState(0)
-
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {content.capabilities.title}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
-        </Reveal>
-      </div>
-
-      <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-14">
-        {/* Left: accordion list */}
-        <div className="flex flex-col">
-          {content.capabilities.items.map((it, i) => (
-            <button
-              key={it.title}
-              type="button"
-              onClick={() => setActiveIdx(i)}
-              className="group flex items-start gap-5 border-b border-line py-5 text-left first:border-t"
-            >
-              <span className={cn('shrink-0 font-serif text-[14px] tabular-nums transition-colors duration-200', activeIdx === i ? 'text-ink/60' : 'text-dim')}>
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className={cn('text-[17px] font-semibold tracking-tight transition-colors duration-200', activeIdx === i ? 'text-ink' : 'text-muted')}>
-                  {it.title}
-                </div>
-                <AnimatePresence initial={false}>
-                  {activeIdx === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <p className="mt-2 text-[14px] leading-relaxed text-faint">{it.body}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <span className={cn('shrink-0 text-[20px] font-light transition-all duration-300', activeIdx === i ? 'rotate-45 text-ink' : 'text-dim')}>
-                +
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Right: sticky image preview (desktop only) */}
-        <div className="hidden lg:block">
-          <div className="sticky top-28">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIdx}
-                initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.7)]"
-                style={{ aspectRatio: '4/3' }}
-              >
-                <img
-                  src={APP_CAPABILITY_IMAGES[activeIdx]}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#070709]/50 to-transparent" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* App Design showcase · editorial two-column image grid ─────────────────────── */
 
 function AppShowcase() {
@@ -1019,7 +923,7 @@ function AppShowcase() {
 
 const APP_SHAPES: Record<
   Lang,
-  { title: string; subtitle: string; items: { eyebrow: string; title: string; body: string }[] }
+  { title: string; subtitle: string; items: { title: string; body: string }[] }
 > = {
   en: {
     title: 'From idea to something that keeps working',
@@ -1027,22 +931,18 @@ const APP_SHAPES: Record<
       'We never build off a template. We look at what you need first, then make the right thing for it. Here is what that involves.',
     items: [
       {
-        eyebrow: '01 · Untangle',
         title: 'We untangle your idea',
         body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order. The more complex it starts, the more this part matters.',
       },
       {
-        eyebrow: '02 · Design',
         title: 'We design how it feels',
         body: 'We draw every screen ourselves, never an off-the-shelf design you see everywhere. How someone moves through your app, where everything sits, what happens at each step. This decides whether people enjoy using it or click away after a week.',
       },
       {
-        eyebrow: '03 · Build',
         title: 'We build what it actually has to do',
         body: 'This is about what it actually does. Not a pretty screen that does nothing, but an app that genuinely gets the work done. Built on a foundation that holds up as more people come on and as you add to it later. This is the difference from quickly clicked-together apps that break the moment they are used for real.',
       },
       {
-        eyebrow: '04 · Automate',
         title: 'We let the work run itself',
         body: 'Where it saves time, we let the app think along instead of leaving the work to you. Tasks that handle themselves, things that fill in automatically, work that keeps running in the background while you do something else. Not so we can say there is AI in it, but because it wins you hours every day.',
       },
@@ -1054,22 +954,18 @@ const APP_SHAPES: Record<
       'We bouwen niets van een sjabloon af. We kijken eerst naar wat u nodig hebt, en maken daar het juiste voor. Dit is wat daarbij komt kijken.',
     items: [
       {
-        eyebrow: '01 · Ontwarren',
         title: 'We ontwarren uw idee',
         body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde. Hoe complexer het begint, hoe belangrijker dit deel.',
       },
       {
-        eyebrow: '02 · Ontwerpen',
         title: 'We ontwerpen hoe het voelt',
         body: 'Elk scherm tekenen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. Hoe iemand door uw app beweegt, waar alles staat, wat er gebeurt bij elke stap. Dit bepaalt of mensen het graag gebruiken of na een week wegklikken.',
       },
       {
-        eyebrow: '03 · Bouwen',
         title: 'We bouwen wat het echt moet doen',
         body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het werk ook echt af krijgt. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
       },
       {
-        eyebrow: '04 · Automatiseren',
         title: 'We laten het werk voor u doen',
         body: 'Waar het tijd scheelt, laten we de app meedenken in plaats van u het werk te laten doen. Taken die zichzelf afhandelen, dingen die vanzelf ingevuld worden, werk dat op de achtergrond doorloopt terwijl u iets anders doet. Niet om te kunnen zeggen dat er AI in zit, maar omdat u er elke dag uren mee wint.',
       },
@@ -1081,17 +977,7 @@ const APP_SHAPES: Record<
  *  in per-step art later. */
 const APP_SHAPE_IMAGE = '/services/showcase-appdesign.jpg'
 
-function AppShapeRow({
-  eyebrow,
-  title,
-  body,
-  reverse,
-}: {
-  eyebrow: string
-  title: string
-  body: string
-  reverse: boolean
-}) {
+function AppShapeRow({ title, body, reverse }: { title: string; body: string; reverse: boolean }) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -1120,8 +1006,7 @@ function AppShapeRow({
           style={reduced ? undefined : { y: ty }}
           className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
         >
-          <span className="block text-[11px] font-medium uppercase tracking-[0.2em] text-faint/80">{eyebrow}</span>
-          <h3 className="mt-3 font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
+          <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
             {title}
           </h3>
           <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
@@ -1176,7 +1061,7 @@ function AppBuildShapes() {
         </div>
 
         {data.items.map((it, i) => (
-          <AppShapeRow key={it.title} eyebrow={it.eyebrow} title={it.title} body={it.body} reverse={i % 2 === 0} />
+          <AppShapeRow key={it.title} title={it.title} body={it.body} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
@@ -1453,6 +1338,76 @@ function FitFaq({ content }: { content: ServiceContent }) {
   const { lang } = useLang()
   const t = UI[lang]
   const [openIdx, setOpenIdx] = useState<number | null>(0)
+
+  // App Design: stripped to just the FAQ, centred, with a warm-red (terracotta)
+  // heading like the homepage. No "is this the right fit" comparison block.
+  if (content.slug === 'app-design') {
+    return (
+      <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
+        <Reveal>
+          <h2 className="text-center font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-[var(--color-terracotta)] sm:text-[38px] lg:text-[44px]">
+            {t.goodToKnow}
+          </h2>
+        </Reveal>
+
+        <div className="mx-auto mt-12 flex w-full max-w-[760px] flex-col gap-3">
+          {content.faq.map((item, i) => {
+            const isOpen = openIdx === i
+            return (
+              <Reveal key={item.q} delay={(i % 4) * 0.04}>
+                <div className="overflow-hidden rounded-[18px] border border-line bg-white/[0.02]">
+                  <button
+                    type="button"
+                    onClick={() => setOpenIdx(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                  >
+                    <span className="text-[15px] font-medium text-ink">{item.q}</span>
+                    <ChevronDown
+                      className={cn('h-4 w-4 shrink-0 text-faint transition-transform duration-300', isOpen && 'rotate-180')}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.32, ease }}
+                      >
+                        <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-faint">{item.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </Reveal>
+            )
+          })}
+        </div>
+
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-10 max-w-xl text-center text-[14px] leading-relaxed text-faint">
+            {t.stillQuestion}{' '}
+            <button
+              type="button"
+              onClick={open}
+              className="inline-block py-1 -my-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+            >
+              {t.reachPerson}
+            </button>{' '}
+            {t.orVisit}{' '}
+            <Link
+              to="/help"
+              className="inline-block py-1 -my-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"
+            >
+              {t.helpCenter}
+            </Link>
+            .
+          </p>
+        </Reveal>
+      </section>
+    )
+  }
 
   return (
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
