@@ -598,27 +598,55 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
   const ask = SERVICE_ASK[lang][meta.slug]
   const [hover, setHover] = useState(false)
   const [teaser, setTeaser] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const peeked = useRef(false)
 
-  // Peek open by itself shortly after the page loads, then close again. Hover
-  // keeps it open. One frame (the box) just lengthens, no second element.
+  // The button stays hidden while the hero fills the screen. It fades in once
+  // the hero is scrolled past, then fades back out as soon as the footer comes
+  // into view at the very bottom of the page.
   useEffect(() => {
-    const openAt = setTimeout(() => setTeaser(true), 600)
-    const closeAt = setTimeout(() => setTeaser(false), 3600)
+    const footer = document.querySelector('footer')
+    const update = () => {
+      const pastHero = window.scrollY > window.innerHeight * 0.6
+      const atFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight : false
+      setVisible(pastHero && !atFooter)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  // Peek the question open by itself once, the first time the button appears.
+  // Hover keeps it open. One frame (the box) just lengthens, no second element.
+  useEffect(() => {
+    if (!visible || peeked.current) return
+    peeked.current = true
+    const openAt = setTimeout(() => setTeaser(true), 400)
+    const closeAt = setTimeout(() => setTeaser(false), 3400)
     return () => {
       clearTimeout(openAt)
       clearTimeout(closeAt)
     }
-  }, [])
+  }, [visible])
 
-  const open = hover || teaser
+  const open = (hover || teaser) && visible
 
   return (
     <Link
       to={`/help?ask=${encodeURIComponent(ask.prompt)}`}
       aria-label={ask.label}
+      aria-hidden={!visible}
+      tabIndex={visible ? undefined : -1}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-40 flex items-center rounded-[18px] border border-line bg-black/50 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-[background-color,border-color] duration-300 hover:border-line-strong hover:bg-black/60 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-[calc(1.5rem+env(safe-area-inset-right))]"
+      className={cn(
+        'fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-40 flex items-center rounded-[18px] border border-line bg-black/50 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-[opacity,transform,background-color,border-color] duration-[600ms] ease-out hover:border-line-strong hover:bg-black/60 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-[calc(1.5rem+env(safe-area-inset-right))]',
+        visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
+      )}
     >
       <span
         className={cn(
