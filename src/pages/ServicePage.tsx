@@ -259,6 +259,7 @@ export function ServicePage() {
         />
         {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
+        {meta.slug === 'local-ai' && <ServerTimeline />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug === 'local-ai'
@@ -1418,7 +1419,7 @@ const LOCAL_COMPARE: Record<
   {
     title: string
     subtitle: string
-    rows: { title: string; body: string; image: string }[]
+    sides: { kind: 'cloud' | 'local'; label: string; tag: string; image: string; points: string[] }[]
     honest: string
   }
 > = {
@@ -1426,16 +1427,30 @@ const LOCAL_COMPARE: Record<
     title: 'Why your AI belongs with you',
     subtitle:
       'Most companies send their data to a handful of big tech companies. It works, but you give away more than you think. Here is the difference.',
-    rows: [
+    sides: [
       {
-        title: 'The big models',
-        body: "With every question you ask, your data leaves the building. It is sometimes used to train their model further, unless you pay a steep premium. You pay again every month, and that bill grows with every new colleague. And you stay dependent on someone else's servers, prices and rules.",
+        kind: 'cloud',
+        label: 'The big models',
+        tag: 'Cloud AI',
         image: '/IMG_0886.jpg',
+        points: [
+          'Your data leaves your building with every question you ask.',
+          'It is sometimes used to train their model further, unless you pay a steep premium.',
+          'You pay again every month, and that bill grows with your team.',
+          "You depend on someone else's servers, prices and rules.",
+        ],
       },
       {
-        title: 'Your own local AI',
-        body: 'Your data stays in, with every question, without exception. It learns only from you, and that knowledge stays yours. You mostly pay once, for the hardware, and after that it is yours. You depend on no one, it sits inside your own walls.',
+        kind: 'local',
+        label: 'Your own local AI',
+        tag: 'Local',
         image: '/IMG_0914.jpg',
+        points: [
+          'Your data stays in, with every question, without exception.',
+          'It learns only from you, and that knowledge stays yours.',
+          'You mostly pay once, for the hardware, and after that it is yours.',
+          'You depend on no one, it sits inside your own walls.',
+        ],
       },
     ],
     honest:
@@ -1445,16 +1460,30 @@ const LOCAL_COMPARE: Record<
     title: 'Waarom uw AI bij u hoort te staan',
     subtitle:
       'De meeste bedrijven sturen hun data naar een handvol grote techbedrijven. Het werkt, maar u geeft er meer voor weg dan u denkt. Zo zit het verschil.',
-    rows: [
+    sides: [
       {
-        title: 'De grote modellen',
-        body: 'Bij elke vraag die u stelt, verlaat uw data het gebouw. Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt. U betaalt elke maand opnieuw, en die rekening groeit mee met elke nieuwe collega. En u blijft afhankelijk van de servers, prijzen en regels van iemand anders.',
+        kind: 'cloud',
+        label: 'De grote modellen',
+        tag: 'Cloud-AI',
         image: '/IMG_0886.jpg',
+        points: [
+          'Uw data verlaat uw gebouw bij elke vraag die u stelt.',
+          'Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
+          'U betaalt elke maand opnieuw, en die rekening groeit mee met uw team.',
+          'U bent afhankelijk van de servers, prijzen en regels van iemand anders.',
+        ],
       },
       {
-        title: 'Uw eigen lokale AI',
-        body: 'Uw data blijft binnen, bij elke vraag, zonder uitzondering. Ze leert alleen van u, en die kennis blijft van u. U betaalt vooral een keer, voor de hardware, en daarna is het van u. U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+        kind: 'local',
+        label: 'Uw eigen lokale AI',
+        tag: 'Lokaal',
         image: '/IMG_0914.jpg',
+        points: [
+          'Uw data blijft binnen, bij elke vraag, zonder uitzondering.',
+          'Ze leert alleen van u, en die kennis blijft van u.',
+          'U betaalt vooral een keer, voor de hardware, en daarna is het van u.',
+          'U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+        ],
       },
     ],
     honest:
@@ -1462,20 +1491,169 @@ const LOCAL_COMPARE: Record<
   },
 }
 
-/** One timeline row: copy on the left, photo on the right (wipes in from the
- *  centre line), with a bead that lights up as the white line reaches it. */
-function CompareRow({ title, body, image }: { title: string; body: string; image: string }) {
+/** One side of the comparison as a home-style framed card: a big photo panel with
+ *  a label chip, then the title and the points (no buttons, the points fill it). */
+function CompareCard({
+  side,
+}: {
+  side: { kind: 'cloud' | 'local'; label: string; tag: string; image: string; points: string[] }
+}) {
+  const local = side.kind === 'local'
+  return (
+    <Reveal>
+      <div
+        className={cn(
+          'flex h-full flex-col rounded-[28px] border p-4 lg:p-5',
+          local ? 'border-line-strong bg-white/[0.03]' : 'border-line bg-white/[0.015]',
+        )}
+      >
+        <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
+          <img src={side.image} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+          <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[11px] font-medium text-ink-soft backdrop-blur-md">
+            <span className={cn('h-1.5 w-1.5 rounded-full', local ? 'bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]' : 'bg-white/40')} />
+            {side.tag}
+          </span>
+        </div>
+
+        <div className="flex flex-1 flex-col px-2 pb-1 pt-6 lg:px-3">
+          <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[28px]">{side.label}</h3>
+          <ul className="mt-5 flex flex-col gap-3.5">
+            {side.points.map((p) => (
+              <li key={p} className="flex items-start gap-3">
+                {local ? (
+                  <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                ) : (
+                  <svg viewBox="0 0 16 16" className="mt-1 h-[15px] w-[15px] shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path d="M12 4L4 12M4 4l8 8" strokeLinecap="round" />
+                  </svg>
+                )}
+                <span className={cn('text-[14.5px] leading-relaxed', local ? 'text-ink-soft/90' : 'text-faint')}>{p}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
+
+function ComparisonBand() {
+  const { lang } = useLang()
+  const data = LOCAL_COMPARE[lang]
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
+        </Reveal>
+      </div>
+
+      <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
+        {data.sides.map((s) => (
+          <CompareCard key={s.kind} side={s} />
+        ))}
+      </div>
+
+      {/* The honest line, owned and turned straight back into the point. */}
+      <Reveal y={16}>
+        <div className="relative mx-auto mt-6 flex max-w-[1100px] items-start gap-4 overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 backdrop-blur-xl sm:items-center sm:p-8">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
+            <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8v5" strokeLinecap="round" />
+              <path d="M12 16.5h.01" strokeLinecap="round" />
+            </svg>
+          </span>
+          <p className="text-[15px] leading-relaxed text-ink-soft/90 sm:text-[16px]">{data.honest}</p>
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
+/* Local AI · build timeline (from your own server to your own AI) ─────────────── */
+
+const SERVER_STEPS: Record<
+  Lang,
+  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
+> = {
+  en: {
+    title: 'From your own server to your own AI',
+    subtitle:
+      'We do not just drop in a model. We build a complete intelligence of your own, shaped around how you work and entirely within your own walls.',
+    items: [
+      {
+        title: 'We look at what you need',
+        body: 'Which data matters, which tasks cost the most time today, and how many people will work with it. That decides what kind of system fits you, not the other way around. A small team needs something very different from a large one.',
+        image: '/IMG_0883.jpg',
+      },
+      {
+        title: 'We put the AI in your place',
+        body: "The intelligence runs on your own server, in your own building. No connection to anyone else's servers, no data going out. We handle the hardware and make sure everything sits exactly as it should.",
+        image: '/IMG_0890.jpg',
+      },
+      {
+        title: 'We let it get to know your company',
+        body: 'This is where it truly becomes yours. The AI learns from your own documents, your own way of working, your own data. You get no generic AI but one that understands your company, and that knowledge stays in.',
+        image: '/IMG_0896.JPG',
+      },
+      {
+        title: 'We build the apps around it',
+        body: 'An AI on its own does nothing yet. We build the applications your people actually work with. Pulling up documents and emails, asking questions about your own data, work that happens by itself. All through your own AI, nothing through the outside.',
+        image: '/IMG_0887.jpg',
+      },
+    ],
+  },
+  nl: {
+    title: 'Van uw eigen server tot uw eigen AI',
+    subtitle:
+      'We zetten niet zomaar een model neer. We bouwen een complete eigen intelligentie, op maat van hoe u werkt en volledig binnen uw eigen muren.',
+    items: [
+      {
+        title: 'We kijken wat u nodig hebt',
+        body: 'Welke data telt, welke taken kosten nu het meeste tijd, en hoeveel mensen gaan ermee werken. Dat bepaalt wat voor systeem bij u past, niet andersom. Een klein team heeft iets heel anders nodig dan een groot.',
+        image: '/IMG_0883.jpg',
+      },
+      {
+        title: 'We zetten de AI bij u neer',
+        body: 'De intelligentie komt op uw eigen server, in uw eigen gebouw. Geen verbinding met servers van iemand anders, geen data die naar buiten gaat. Wij regelen de hardware en zorgen dat alles staat zoals het hoort.',
+        image: '/IMG_0890.jpg',
+      },
+      {
+        title: 'We laten hem uw bedrijf leren kennen',
+        body: 'Dit is waar het echt van u wordt. De AI leert van uw eigen documenten, uw eigen manier van werken, uw eigen data. Zo krijgt u geen algemene AI maar een die uw bedrijf begrijpt, en die kennis blijft binnen.',
+        image: '/IMG_0896.JPG',
+      },
+      {
+        title: 'We bouwen de apps eromheen',
+        body: 'Een AI op zich doet nog niks. Wij bouwen de toepassingen waarmee uw mensen er echt mee werken. Documenten en e-mails ophalen, vragen stellen over uw eigen data, werk dat vanzelf gebeurt. Alles via uw eigen AI, niets via buiten.',
+        image: '/IMG_0887.jpg',
+      },
+    ],
+  },
+}
+
+function ServerStepRow({ title, body, image, reverse }: { title: string; body: string; image: string; reverse: boolean }) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const clip = useTransform(scrollYProgress, [0, 0.4], ['inset(0 100% 0 0)', 'inset(0 0% 0 0)'])
+  const clipFrom = reverse ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
+  const clipTo = reverse ? 'inset(0 0 0 0%)' : 'inset(0 0% 0 0)'
+  const clip = useTransform(scrollYProgress, [0, 0.4], [clipFrom, clipTo])
   const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0])
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
 
   return (
-    <div ref={ref} className="relative py-16 lg:py-32">
+    <div ref={ref} className="relative py-16 lg:py-40">
       <span
         aria-hidden
         className="absolute left-1/2 top-1/2 z-10 hidden h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-bg lg:flex"
@@ -1487,18 +1665,22 @@ function CompareRow({ title, body, image }: { title: string; body: string; image
       </span>
 
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
-        {/* copy — left */}
-        <motion.div style={reduced ? undefined : { y: ty }} className="lg:order-1 lg:px-2">
+        <motion.div
+          style={reduced ? undefined : { y: ty }}
+          className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
+        >
           <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
             {title}
           </h3>
           <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
         </motion.div>
 
-        {/* photo — right */}
         <motion.div
           style={reduced ? undefined : { clipPath: clip, opacity }}
-          className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)] lg:order-2"
+          className={cn(
+            'relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)]',
+            reverse ? 'lg:order-1' : 'lg:order-2',
+          )}
         >
           <img src={image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
@@ -1508,11 +1690,11 @@ function CompareRow({ title, body, image }: { title: string; body: string; image
   )
 }
 
-function ComparisonBand() {
+function ServerTimeline() {
   const { lang } = useLang()
-  const data = LOCAL_COMPARE[lang]
+  const data = SERVER_STEPS[lang]
   const lineRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 60%'] })
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 55%'] })
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
 
   return (
@@ -1530,7 +1712,7 @@ function ComparisonBand() {
 
       <div
         ref={lineRef}
-        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_92%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_92%,transparent_100%)]"
+        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)]"
       >
         <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <motion.div
@@ -1539,26 +1721,10 @@ function ComparisonBand() {
           />
         </div>
 
-        {data.rows.map((r) => (
-          <CompareRow key={r.title} title={r.title} body={r.body} image={r.image} />
+        {data.items.map((it, i) => (
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
         ))}
       </div>
-
-      {/* The third element is not another feature but a band: the honest line,
-         the one real trade-off owned and turned straight back into the point. */}
-      <Reveal y={16}>
-        <div className="relative mx-auto mt-2 flex max-w-[1160px] items-start gap-4 overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 backdrop-blur-xl sm:items-center sm:p-8 lg:mt-6">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
-            <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v5" strokeLinecap="round" />
-              <path d="M12 16.5h.01" strokeLinecap="round" />
-            </svg>
-          </span>
-          <p className="text-[15px] leading-relaxed text-ink-soft/90 sm:text-[16px]">{data.honest}</p>
-        </div>
-      </Reveal>
     </section>
   )
 }
