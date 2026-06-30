@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   AnimatePresence,
@@ -871,25 +871,31 @@ function AppShowcase() {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const bandRef = useRef<HTMLDivElement>(null)
-  const copyRef = useRef<HTMLDivElement>(null)
+  const rightRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // The "Vakwerk" copy card slides down to the bottom of the tall left board as you
-  // scroll, so it is carried cleanly to the end of the style board.
-  const [copyTravel, setCopyTravel] = useState(0)
+  // Both right cards drift down together as you scroll, so they settle aligned with
+  // the bottom of the tall left style board (travel = the empty space below them).
+  const [rightTravel, setRightTravel] = useState(0)
   useLayoutEffect(() => {
     const band = bandRef.current
-    const copy = copyRef.current
-    if (!band || !copy) return
+    const inner = rightRef.current
+    if (!band || !inner) return
     const measure = () => {
-      const { y } = offsetWithin(copy, band)
-      setCopyTravel(Math.max(0, band.offsetHeight - y - copy.offsetHeight))
+      // Only on the two-column desktop layout; stacked on mobile, so no drift.
+      if (window.innerWidth < 1024) {
+        setRightTravel(0)
+        return
+      }
+      const { y } = offsetWithin(inner, band)
+      setRightTravel(Math.max(0, band.offsetHeight - y - inner.offsetHeight))
     }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(band)
+    ro.observe(inner)
     return () => ro.disconnect()
   }, [])
-  const copyY = useTransform(scrollYProgress, [0, 0.9], [0, copyTravel])
+  const rightY = useTransform(scrollYProgress, [0.1, 0.85], [0, rightTravel])
   return (
     <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
       <div className="mx-auto mb-12 max-w-2xl text-center">
@@ -921,25 +927,25 @@ function AppShowcase() {
           </div>
         </Reveal>
 
-        {/* Right column: the icons card stays at the top, the copy card slides down
-            to the bottom of the tall style board as you scroll */}
+        {/* Right column: both cards drift down together as you scroll, settling
+            aligned with the bottom of the tall style board */}
         <div className="relative">
-          <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
-              <img
-                src="/services/icons-appdesign.jpg"
-                alt=""
-                loading="lazy"
-                className="block w-full"
-              />
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-            </div>
-          </Reveal>
           <motion.div
-            ref={copyRef}
-            style={reduced ? undefined : { y: copyY }}
-            className="mt-4 will-change-transform"
+            ref={rightRef}
+            style={reduced ? undefined : { y: rightY }}
+            className="flex flex-col gap-4 will-change-transform"
           >
+            <Reveal delay={0.1}>
+              <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                <img
+                  src="/services/icons-appdesign.jpg"
+                  alt=""
+                  loading="lazy"
+                  className="block w-full"
+                />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+              </div>
+            </Reveal>
             <Reveal delay={0.14}>
               <div className="rounded-[20px] border border-line bg-surface p-6">
                 <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
@@ -1288,17 +1294,6 @@ function ComparisonBand() {
   )
 }
 
-/* App Design why-us · the home-page "Our Services" treatment, reused for the
-   differentiators: free-standing frosted-glass cards over a sharp, faded peak,
-   crisp in the gaps and blurred through each card via an aligned blurred copy of
-   the peak, with a cursor-driven 3D tilt. ─────────────────────────────────────── */
-
-const WHY_GLOW = '/services/whyus-band.webp'
-const WHY_GLOW_W = 1200
-const WHY_GLOW_H = 750
-const WHY_POS_X = 0.5
-const WHY_POS_Y = 0.5
-
 /** Layout offset of `el` relative to `ancestor`, ignoring transforms in between. */
 function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
   let x = 0
@@ -1312,125 +1307,52 @@ function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
   return { x, y }
 }
 
-function AppWhyCard({
-  title,
-  body,
-  bandRef,
-}: {
-  title: string
-  body: string
-  bandRef: RefObject<HTMLDivElement | null>
-}) {
-  const reduced = usePrefersReducedMotion()
-  const cardRef = useRef<HTMLDivElement>(null)
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const spring = { damping: 18, stiffness: 160 }
-  const sx = useSpring(mouseX, spring)
-  const sy = useSpring(mouseY, spring)
-  const rotateX = useTransform(sy, [-0.5, 0.5], ['6deg', '-6deg'])
-  const rotateY = useTransform(sx, [-0.5, 0.5], ['-6deg', '6deg'])
-
-  // Frosted blur: a blurred copy of the peak, sized to the band and offset so it
-  // lines up with the sharp peak behind THIS card (same cover-scale + position).
-  const [frost, setFrost] = useState<{ w: number; h: number; left: number; top: number } | null>(null)
-  useLayoutEffect(() => {
-    const band = bandRef.current
-    const card = cardRef.current
-    if (!band || !card) return
-    const measure = () => {
-      const bw = band.offsetWidth
-      const bh = band.offsetHeight
-      const scale = Math.max(bw / WHY_GLOW_W, bh / WHY_GLOW_H)
-      const sw = WHY_GLOW_W * scale
-      const sh = WHY_GLOW_H * scale
-      const bandX = (bw - sw) * WHY_POS_X
-      const bandY = (bh - sh) * WHY_POS_Y
-      const { x: cardX, y: cardY } = offsetWithin(card, band)
-      setFrost({ w: sw, h: sh, left: bandX - cardX, top: bandY - cardY })
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(band)
-    return () => ro.disconnect()
-  }, [bandRef])
-
-  return (
-    <div style={{ perspective: '1000px' }} className="h-full">
-      <motion.div
-        ref={cardRef}
-        onMouseMove={
-          reduced
-            ? undefined
-            : (e) => {
-                const r = e.currentTarget.getBoundingClientRect()
-                mouseX.set((e.clientX - r.left) / r.width - 0.5)
-                mouseY.set((e.clientY - r.top) / r.height - 0.5)
-              }
-        }
-        onMouseLeave={() => {
-          mouseX.set(0)
-          mouseY.set(0)
-        }}
-        style={reduced ? undefined : { rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="group relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/30 p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[260px] lg:p-7"
-      >
-        {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
-        {frost && (
-          <img
-            src={WHY_GLOW}
-            alt=""
-            aria-hidden
-            style={{ width: frost.w, height: frost.h, left: frost.left, top: frost.top }}
-            className="pointer-events-none absolute max-w-none object-cover opacity-[0.7] blur-2xl"
-          />
-        )}
-        {/* Frosted tint + gloss + top hairline — same feel as the home cards */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/35 via-[#0a0a0d]/30 to-[#0a0a0d]/55" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-
-        <div style={reduced ? undefined : { transform: 'translateZ(45px)' }} className="relative">
-          <h3 className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink lg:text-[22px]">{title}</h3>
-          <p className="mt-3 text-[13.5px] leading-relaxed text-faint">{body}</p>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
+/* App Design why-us · a full-bleed peak that blends into the page top and bottom
+   (the same background treatment as the final CTA), with frosted-glass cards
+   floating on top. */
 function AppWhyUs({ content }: { content: ServiceContent }) {
-  const bandRef = useRef<HTMLDivElement>(null)
+  const { lang } = useLang()
+  const sub =
+    lang === 'nl'
+      ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
+      : 'No agency passing you around. The people who shape your app are the same people who build it.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
-      <div className="relative mx-auto w-full max-w-[1280px] px-6">
+      <ParallaxImage src="/services/whyus-band.webp" range={['-8%', '8%']} />
+      <div className="absolute inset-0 bg-black/45" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(70% 80% at 50% 45%, rgba(245,245,245,0.06), transparent 60%)' }}
+      />
+      {/* Blend the photo into the page at the top and bottom, like the CTA */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg via-bg/55 to-bg" />
+
+      <div className="relative mx-auto w-full max-w-[1200px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               {content.differentiators.title}
             </h2>
           </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{sub}</p>
+          </Reveal>
         </div>
 
-        {/* Cards band. The sharp peak is confined to exactly this row and faded at
-            the edges, so it never bleeds into the page — shown crisp in the gaps. */}
-        <div ref={bandRef} className="relative mt-12 sm:mt-16">
-          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-            <img
-              src={WHY_GLOW}
-              alt=""
-              className="h-full w-full object-cover object-[50%_50%] opacity-[0.5] [mask-image:radial-gradient(90%_84%_at_50%_50%,black_40%,transparent_92%)] [-webkit-mask-image:radial-gradient(90%_84%_at_50%_50%,black_40%,transparent_92%)]"
-            />
-          </div>
-
-          <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {content.differentiators.items.map((d, i) => (
-              <Reveal key={d.title} delay={(i % 4) * 0.08}>
-                <AppWhyCard title={d.title} body={d.body} bandRef={bandRef} />
-              </Reveal>
-            ))}
-          </div>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16">
+          {content.differentiators.items.map((d, i) => (
+            <Reveal key={d.title} delay={(i % 2) * 0.08}>
+              <div className="group relative h-full overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/40 p-7 backdrop-blur-xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)]">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="relative">
+                  <h3 className="text-[17px] font-semibold tracking-tight text-ink">{d.title}</h3>
+                  <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{d.body}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
