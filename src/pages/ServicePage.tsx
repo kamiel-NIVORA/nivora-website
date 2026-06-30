@@ -1063,15 +1063,16 @@ const APP_SHAPE_IMAGE = '/services/showcase-appdesign.jpg'
 function AppShapeRow({ title, body, reverse }: { title: string; body: string; reverse: boolean }) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   // Wipe the image in from the edge nearest the centre line, outward. The animating
   // inset side must run a clean 100% -> 0% (the static sides stay unitless 0), or
   // framer cannot interpolate the reversed rows and the image stays hidden.
   const clipFrom = reverse ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
   const clipTo = reverse ? 'inset(0 0 0 0%)' : 'inset(0 0% 0 0)'
-  const clip = useTransform(scrollYProgress, [0, 0.65], [clipFrom, clipTo])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.15, 1])
-  const ty = useTransform(scrollYProgress, [0, 1], [26, -8])
+  const clip = useTransform(scrollYProgress, [0, 0.4], [clipFrom, clipTo])
+  // Fade in as the row enters, hold through the middle, fade out as it leaves.
+  const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0])
+  const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
 
   return (
     <div ref={ref} className="relative py-20 lg:py-44">
@@ -1088,10 +1089,10 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
           style={reduced ? undefined : { y: ty }}
           className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
         >
-          <h3 className="font-serif text-[34px] leading-[1.08] tracking-[-0.01em] text-ink sm:text-[40px] lg:text-[48px]">
+          <h3 className="font-serif text-[26px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[34px]">
             {title}
           </h3>
-          <p className="mt-7 max-w-xl text-[18.5px] leading-relaxed text-faint">{body}</p>
+          <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-faint">{body}</p>
         </motion.div>
 
         <motion.div
@@ -1131,7 +1132,7 @@ function AppBuildShapes() {
 
       <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16">
         {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
-        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-2 -translate-x-1/2 overflow-hidden rounded-full lg:block">
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1.5 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <div className="absolute inset-0 bg-line" />
           <motion.div
             style={{ scaleY: fill }}
