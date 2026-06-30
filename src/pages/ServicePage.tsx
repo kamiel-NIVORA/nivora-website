@@ -1282,9 +1282,9 @@ function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
    differentiators: free-standing frosted-glass cards over a sharp peak, crisp in
    the gaps and blurred through each card via an aligned blurred copy of the peak,
    with a cursor-driven 3D tilt. The peak is faded into the page so it blends. */
-const WHY_GLOW = '/services/whyus-band.webp'
-const WHY_GLOW_W = 1200
-const WHY_GLOW_H = 750
+const WHY_GLOW = '/services/whyus-wave.webp'
+const WHY_GLOW_W = 800
+const WHY_GLOW_H = 448
 const WHY_POS_X = 0.5
 const WHY_POS_Y = 0.5
 
@@ -1718,7 +1718,7 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
   return (
     <section className="relative grid w-full place-items-center overflow-hidden px-6 py-20 sm:py-24 lg:py-36">
       <ParallaxImage
-        src={meta.slug === 'app-design' ? '/services/cta-appdesign.webp' : meta.photo}
+        src={meta.slug === 'app-design' ? '/services/whyus-wave.webp' : meta.photo}
         range={['-8%', '8%']}
       />
       <div className="absolute inset-0 bg-black/40" />
