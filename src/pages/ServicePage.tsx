@@ -1071,24 +1071,24 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
   const ty = useTransform(scrollYProgress, [0, 1], [26, -8])
 
   return (
-    <div ref={ref} className="relative py-10 lg:py-14">
+    <div ref={ref} className="relative py-14 lg:py-24">
       {/* node on the centre line (desktop) */}
       <span
         aria-hidden
-        className="absolute left-1/2 top-1/2 z-10 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong bg-bg lg:flex"
+        className="absolute left-1/2 top-1/2 z-10 hidden h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-line-strong bg-bg lg:flex"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-ink" />
+        <span className="h-2.5 w-2.5 rounded-full bg-ink" />
       </span>
 
-      <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-24">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
         <motion.div
           style={reduced ? undefined : { y: ty }}
           className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
         >
-          <h3 className="font-serif text-[26px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[34px]">
+          <h3 className="font-serif text-[30px] leading-[1.1] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
             {title}
           </h3>
-          <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint">{body}</p>
+          <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-faint">{body}</p>
         </motion.div>
 
         <motion.div
@@ -1126,9 +1126,9 @@ function AppBuildShapes() {
         </Reveal>
       </div>
 
-      <div ref={lineRef} className="relative mx-auto mt-10 max-w-[1080px] lg:mt-14">
+      <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1120px] lg:mt-16">
         {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
-        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 lg:block">
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <div className="absolute inset-0 bg-line" />
           <motion.div
             style={{ scaleY: fill }}
