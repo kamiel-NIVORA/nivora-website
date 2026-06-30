@@ -256,6 +256,7 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
+        {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug !== 'app-design' && <Problem content={content} />}
@@ -724,7 +725,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
         variants={heroContainer}
         initial={reduced ? false : 'hidden'}
         animate="show"
-        className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
+        className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center"
       >
         <h1 className="mt-6 font-serif text-[38px] leading-[1.05] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[66px] lg:leading-[1.03]">
           {content.hero.headline.split(' ').map((w, i) => (
@@ -1152,6 +1153,91 @@ function AppWhoFor() {
             >
               <img
                 src={APP_WHO_GIF}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)] [-webkit-mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)]"
+                style={{ mixBlendMode: 'screen' }}
+              />
+            </motion.div>
+          </Reveal>
+        </div>
+
+        {/* Copy — right on desktop */}
+        <div className="order-2">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
+              {data.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
+          </Reveal>
+          <ul className="mt-8 flex flex-col gap-4">
+            {data.lines.map((line, i) => (
+              <Reveal as="li" key={line} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
+                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                <span className="text-[15.5px] leading-relaxed text-ink-soft">{line}</span>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Who this is for · particle terrain gif + checklist, only for local-ai ─────── */
+
+const LOCAL_WHO: Record<Lang, { title: string; subtitle: string; lines: string[] }> = {
+  en: {
+    title: 'Who this is built for',
+    subtitle:
+      'The more sensitive your data, the more this is for you. Not everyone needs their own AI, but for some companies it is the only approach that holds up.',
+    lines: [
+      'Companies working with data that simply cannot leave the building, because clients, regulation or competition will not allow it.',
+      'Teams that want to work with AI every day, without a monthly bill that grows with every new colleague.',
+      'Companies that want to build their own intelligence, something that stays theirs, instead of forever renting it from someone else.',
+    ],
+  },
+  nl: {
+    title: 'Voor wie dit gemaakt is',
+    subtitle:
+      'Hoe gevoeliger uw data, hoe meer dit voor u is. Niet iedereen heeft een eigen AI nodig, maar voor sommige bedrijven is het de enige manier die klopt.',
+    lines: [
+      'Bedrijven die werken met data die simpelweg niet naar buiten mag, omdat klanten, wetgeving of concurrentie dat niet toelaten.',
+      'Teams die elke dag met AI willen werken, zonder een maandelijkse rekening die meegroeit met elke nieuwe collega.',
+      'Bedrijven die hun eigen intelligentie willen opbouwen, iets dat van hen blijft, in plaats van het te blijven huren bij iemand anders.',
+    ],
+  },
+}
+
+const LOCAL_WHO_GIF = '/services/who-localai.gif'
+
+function LocalWhoFor() {
+  const { lang } = useLang()
+  const data = LOCAL_WHO[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* Particle-terrain gif — left on desktop */}
+        <div ref={ref} className="relative order-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
+          />
+          <Reveal y={24}>
+            <motion.div
+              style={{ y }}
+              className="relative mx-auto aspect-square w-full max-w-[440px] overflow-hidden will-change-transform"
+            >
+              <img
+                src={LOCAL_WHO_GIF}
                 alt=""
                 aria-hidden
                 loading="lazy"
