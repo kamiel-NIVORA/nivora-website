@@ -54,24 +54,24 @@ function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
       transition={{ type: 'spring', stiffness: 240, damping: 30, mass: 0.85 }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
-      className="group flex cursor-pointer items-center gap-3 rounded-[20px] border border-white/25 bg-white/[0.14] px-3.5 py-2.5 backdrop-blur-md transition-colors duration-200 hover:border-white/50 hover:bg-white/[0.22]"
+      className="group flex cursor-pointer items-center gap-3 rounded-[20px] border border-white/70 bg-white/55 px-3.5 py-2.5 backdrop-blur-xl transition-colors duration-200 hover:border-white/90 hover:bg-white/70"
       style={{
         boxShadow:
-          'inset 1px 1px 1.5px rgba(255,255,255,0.45), inset -1px -1px 1.5px rgba(255,255,255,0.12), 0 10px 26px rgba(0,0,0,0.24)',
+          'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.06), 0 12px 28px -10px rgba(0,0,0,0.45)',
       }}
     >
       <img
         src={logo}
         alt={app}
-        className="h-10 w-10 shrink-0 rounded-[11px] object-cover shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
+        className="h-10 w-10 shrink-0 rounded-[11px] border border-black/10 object-cover shadow-[0_2px_5px_rgba(0,0,0,0.25)]"
       />
-      <div className="min-w-0 flex-1 [text-shadow:0_1px_2px_rgba(0,0,0,0.38)]">
+      <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
-          <span className="text-[14px] font-semibold leading-tight text-white">{app}</span>
-          <span className="shrink-0 text-[11.5px] text-white/70">{time}</span>
+          <span className="text-[14px] font-semibold leading-tight text-[#0c0c0c]">{app}</span>
+          <span className="shrink-0 text-[11.5px] text-black/40">{time}</span>
         </div>
-        <p className="truncate text-[12.5px] leading-snug text-white/85">
-          <span className="font-bold tracking-tight text-white">{t.comingSoon}</span> · {blurb}
+        <p className="truncate text-[12.5px] leading-snug text-black/55">
+          <span className="font-semibold tracking-tight text-black/75">{t.comingSoon}</span> · {blurb}
         </p>
       </div>
     </motion.a>
@@ -94,14 +94,14 @@ export function NotificationStack() {
 
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden">
-      {/* dark grain wallpaper — zoomed to fill the whole frame, like an Apple lockscreen. */}
+      {/* zachte mos-wallpaper op lichtgrijs — vult het hele kader, Apple-lockscreen-stijl. */}
       <img
-        src="/products/products-bg.webp"
+        src="/products/products-bg-moss.webp"
         alt=""
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
-      {/* leesbaarheid: lichte verdonkering achter de meldingen (beeld is al donker) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/15" />
+      {/* leesbaarheid: heel zachte witte wash zodat de glass-meldingen loskomen van de lichte achtergrond */}
+      <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-white/10" />
 
       {/* iPhone-lockscreen: nieuwe melding schuift van onder in, duwt de stack
           omhoog (bottom-anchored). 1 → 2 → 3, telkens van onderen erbij. */}
