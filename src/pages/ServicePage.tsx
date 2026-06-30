@@ -1432,7 +1432,7 @@ const LOCAL_COMPARE: Record<
         kind: 'cloud',
         label: 'The big models',
         tag: 'Cloud AI',
-        image: '/IMG_0886.jpg',
+        image: '/services/compare-cloud.webp',
         points: [
           'Your data leaves your building with every question you ask.',
           'It is sometimes used to train their model further, unless you pay a steep premium.',
@@ -1444,7 +1444,7 @@ const LOCAL_COMPARE: Record<
         kind: 'local',
         label: 'Your own local AI',
         tag: 'Local',
-        image: '/IMG_0914.jpg',
+        image: '/services/compare-local.webp',
         points: [
           'Your data stays in, with every question, without exception.',
           'It learns only from you, and that knowledge stays yours.',
@@ -1465,7 +1465,7 @@ const LOCAL_COMPARE: Record<
         kind: 'cloud',
         label: 'De grote modellen',
         tag: 'Cloud-AI',
-        image: '/IMG_0886.jpg',
+        image: '/services/compare-cloud.webp',
         points: [
           'Uw data verlaat uw gebouw bij elke vraag die u stelt.',
           'Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
@@ -1477,7 +1477,7 @@ const LOCAL_COMPARE: Record<
         kind: 'local',
         label: 'Uw eigen lokale AI',
         tag: 'Lokaal',
-        image: '/IMG_0914.jpg',
+        image: '/services/compare-local.webp',
         points: [
           'Uw data blijft binnen, bij elke vraag, zonder uitzondering.',
           'Ze leert alleen van u, en die kennis blijft van u.',
@@ -1499,6 +1499,7 @@ function CompareCard({
   side: { kind: 'cloud' | 'local'; label: string; tag: string; image: string; points: string[] }
 }) {
   const local = side.kind === 'local'
+  const reduced = usePrefersReducedMotion()
   return (
     <Reveal>
       <div
@@ -1509,11 +1510,26 @@ function CompareCard({
       >
         <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
           <img src={side.image} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-          <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-[11px] font-medium text-ink-soft backdrop-blur-md">
-            <span className={cn('h-1.5 w-1.5 rounded-full', local ? 'bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]' : 'bg-white/40')} />
-            {side.tag}
-          </span>
+          {/* gentle vignette so the floating mark always reads on either photo */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(62% 62% at 50% 50%, rgba(0,0,0,0.22), transparent 74%)' }}
+          />
+          {/* the Nivora mark, drifting slowly and smoothly around the centre */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <motion.div
+              animate={reduced ? undefined : { x: [0, 9, 0, -9, 0], y: [-9, 0, 9, 0, -9], scale: [1, 1.05, 1, 1.05, 1] }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative will-change-transform"
+            >
+              <div aria-hidden className="absolute -inset-6 rounded-full bg-white/12 blur-2xl" />
+              <img
+                src="/services/nivora-mark.png"
+                alt=""
+                className="relative h-[72px] w-[72px] rounded-[18px] shadow-[0_16px_44px_rgba(0,0,0,0.55)] sm:h-[84px] sm:w-[84px]"
+              />
+            </motion.div>
+          </div>
         </div>
 
         <div className="flex flex-1 flex-col px-2 pb-1 pt-6 lg:px-3">
