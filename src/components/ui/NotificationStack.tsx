@@ -100,7 +100,7 @@ export function NotificationStack() {
       <img
         src="/products/products-bg-moss.webp"
         alt=""
-        className="pointer-events-none absolute inset-0 h-full w-full scale-[1.15] object-cover"
+        className="pointer-events-none absolute inset-0 h-full w-full scale-[1.25] object-cover"
       />
       {/* leesbaarheid: heel zachte witte wash zodat de glass-meldingen loskomen van de lichte achtergrond */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-white/10" />
