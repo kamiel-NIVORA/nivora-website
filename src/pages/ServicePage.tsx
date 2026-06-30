@@ -727,7 +727,7 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center"
       >
-        <h1 className="mt-6 font-serif text-[38px] leading-[1.05] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[66px] lg:leading-[1.03]">
+        <h1 className="mt-6 font-serif text-[35px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[48px] lg:text-[60px] lg:leading-[1.05]">
           {content.hero.headline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
@@ -1804,7 +1804,7 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
   return (
     <section className="relative grid w-full place-items-center overflow-hidden px-6 py-20 sm:py-24 lg:py-36">
       <ParallaxImage
-        src={meta.slug === 'app-design' ? '/services/whyus-wave.webp' : meta.photo}
+        src={meta.slug === 'app-design' ? '/services/cta-appdesign.webp' : meta.photo}
         range={['-8%', '8%']}
       />
       <div className="absolute inset-0 bg-black/40" />
