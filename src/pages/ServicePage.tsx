@@ -577,6 +577,12 @@ const SERVICE_ASK: Record<Lang, Record<ServiceSlug, { label: string; prompt: str
   },
 }
 
+/** Small grey helper above the question, telling people where it goes. */
+const ASK_HELPER: Record<Lang, string> = {
+  en: 'Ask the help center',
+  nl: 'Vraag aan de helpcenter',
+}
+
 function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
   const { lang } = useLang()
   const ask = SERVICE_ASK[lang][meta.slug]
@@ -606,11 +612,12 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
     >
       <span
         className={cn(
-          'overflow-hidden whitespace-nowrap text-[14.5px] font-medium leading-none text-ink-soft transition-all duration-[420ms] ease-out',
+          'flex flex-col justify-center overflow-hidden whitespace-nowrap transition-all duration-[420ms] ease-out',
           open ? 'max-w-[340px] pl-5 opacity-100' : 'max-w-0 opacity-0',
         )}
       >
-        {ask.label}
+        <span className="text-[11px] font-medium leading-none text-faint">{ASK_HELPER[lang]}</span>
+        <span className="mt-1.5 text-[14.5px] font-medium leading-none text-ink-soft">{ask.label}</span>
       </span>
       <span className="flex h-14 w-14 shrink-0 items-center justify-center">
         <img src="/brand/ask-icon.png" alt="" className="h-7 w-7 object-contain" />
