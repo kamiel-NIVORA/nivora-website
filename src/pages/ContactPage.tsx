@@ -67,16 +67,12 @@ function ContactCard({
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 
       <div className="relative z-10 flex flex-1 flex-col justify-between">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <span className="grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.16] bg-white/[0.08] text-ink shadow-[0_6px_18px_rgba(0,0,0,0.35)] transition-colors group-hover:bg-white/[0.12]">
             <Icon className="h-6 w-6" strokeWidth={1.5} />
           </span>
-          <ArrowUpRight
-            className="h-5 w-5 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
-            strokeWidth={1.7}
-          />
         </div>
-        <div>
+        <div className="text-center">
           <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{label}</p>
           <p className="mt-2.5 break-words text-[18px] font-medium leading-snug tracking-[-0.01em] text-ink sm:text-[20px]">
             {value}
