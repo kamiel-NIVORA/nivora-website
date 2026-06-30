@@ -25,7 +25,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       chips: ['Own the product', 'Any platform', 'No templates'],
     },
     reveal:
-      'The apps people actually use were not assembled from parts. They were designed with intention, built on solid foundations, and shipped to earn their place on someone\'s screen.',
+      'Anyone can have an app made. An app that grows with you, one you can still extend a year from now without a fight, that is where the real work lives. In the choices you never see and the foundation beneath them. That is what we build for.',
     problem: {
       title: 'Your app idea deserves better than the shortcuts',
       intro: 'Most app ideas stall at the build, not because the idea is wrong, but because turning a concept into a product people love is harder than it looks.',
@@ -478,7 +478,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['Eigenaar van het product', 'Elk platform', 'Geen templates'],
     },
     reveal:
-      'De apps die mensen echt gebruiken zijn niet uit onderdelen samengesteld. Ze zijn met intentie ontworpen, op stevige fundamenten gebouwd, en gelanceerd om hun plek op iemands scherm te verdienen.',
+      'Een app láten maken kan iedereen. Een app die meegroeit en die u over een jaar nog rustig kunt uitbreiden, dat is waar het echte werk zit. In de keuzes die u niet ziet en de basis eronder. Daar bouwen wij voor.',
     problem: {
       title: 'Uw app-idee verdient beter dan de shortcuts',
       intro: 'De meeste app-ideeën stranden bij het bouwen, niet omdat het idee verkeerd is, maar omdat een concept omzetten in een product waar mensen van houden moeilijker is dan het lijkt.',

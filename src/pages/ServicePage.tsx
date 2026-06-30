@@ -437,7 +437,7 @@ const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string
 const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: string; body: string }>> = {
   en: {
     'app-design': {
-      eyebrow: 'From idea to app',
+      eyebrow: '',
       title: 'Your idea, sharpened into an app that lives.',
       body: 'Bring us your idea, even the boldest one. We sharpen it together and take it from concept to a living, working app: business-grade, ready to ship as an internal B2B tool or a B2C product for your customers.',
     },
@@ -459,7 +459,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
   },
   nl: {
     'app-design': {
-      eyebrow: 'Van idee tot app',
+      eyebrow: '',
       title: 'Uw idee, aangescherpt tot een app die leeft.',
       body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk solide, klaar om in te zetten als interne B2B-tool of als B2C-product voor uw klanten.',
     },
@@ -493,9 +493,11 @@ function WhatYouGet({ meta }: { meta: ServiceMeta }) {
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 lg:order-1">
-          <Reveal>
-            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{copy.eyebrow}</p>
-          </Reveal>
+          {copy.eyebrow && (
+            <Reveal>
+              <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{copy.eyebrow}</p>
+            </Reveal>
+          )}
           <Reveal delay={0.06}>
             <h2 className="mt-4 font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
               {copy.title}
