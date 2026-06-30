@@ -440,13 +440,13 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
 /* Product showcase · the real product floating on the page's own black. Generalises
    the BrandObject pattern to any service with a product shot (e.g. AIOS on an iPad):
    a headline, one line, and the top outcomes as proof. Self-gates per slug. */
-const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string }> = {
+const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; gif?: string; alt?: string }> = {
   'app-design': { video: '/services/anim-appdesign.mp4' },
   'local-ai': {
     img: '/services/showcase-localai.webp',
     alt: 'A hand holding a private folder, your own data turned into an AI that works for you.',
   },
-  aios: { img: '/services/mockup-aios-ipad.png', alt: 'The Nivora AIOS interface on an iPad.' },
+  aios: { gif: '/services/aios-network.gif' },
   'ai-consulting': { video: '/media/threads.mp4' },
 }
 const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: string; body: string }>> = {
@@ -462,9 +462,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Everything your company knows is now scattered across folders, documents and inboxes, quiet and hard to find right when you need it. We bring it together into one intelligence you can simply ask. It learns from your own data, grows more useful every day, and never leaves your own walls.',
     },
     aios: {
-      eyebrow: 'What we build',
-      title: 'One system your team actually opens.',
-      body: 'This is AIOS on a real workflow. Your CRM, projects, operations and knowledge in one place, with AI doing the work across all of it.',
+      eyebrow: '',
+      title: 'You pay for ten tools and glue them together yourself.',
+      body: 'Every part of your business lives in a different program, and none of them know what the others are doing. We bring it all together into one smart whole that knows your entire company and takes the work off your hands, so your team can focus on what matters and your business runs on AI instead of reaching for it now and then.',
     },
     'ai-consulting': {
       eyebrow: 'What you get',
@@ -484,9 +484,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Alles wat uw bedrijf weet ligt nu verspreid over mappen, documenten en inboxen, stil en moeilijk te vinden net op het moment dat u het nodig hebt. Wij brengen dat samen tot één intelligentie die u gewoon iets kunt vragen. Ze leert van uw eigen data, wordt elke dag bruikbaarder, en verlaat nooit uw eigen muren.',
     },
     aios: {
-      eyebrow: 'Wat we bouwen',
-      title: 'Eén systeem dat uw team echt opent.',
-      body: 'Dit is AIOS op een echte workflow. Uw CRM, projecten, operations en kennis op één plek, met AI die er het werk in doet.',
+      eyebrow: '',
+      title: 'Je betaalt voor tien tools en plakt ze zelf aan elkaar.',
+      body: 'Elk stuk van je bedrijf zit in een ander programma, en niemand weet van elkaar wat er speelt. Wij brengen alles samen in één slim geheel dat je hele bedrijf kent en het werk overneemt, zodat je team focust op wat telt en je bedrijf voortaan op AI draait in plaats van het er af en toe bij te pakken.',
     },
     'ai-consulting': {
       eyebrow: 'Wat u krijgt',
@@ -529,7 +529,23 @@ function WhatYouGet({ meta }: { meta: ServiceMeta }) {
             className="pointer-events-none absolute inset-0 blur-[90px]"
             style={{ background: `radial-gradient(52% 46% at 50% 44%, ${meta.accent}1f, transparent 72%)` }}
           />
-          {asset.img ? (
+          {asset.gif ? (
+            <Reveal y={24}>
+              <motion.div
+                style={{ y }}
+                className="relative mx-auto aspect-square w-full max-w-[460px] overflow-hidden will-change-transform"
+              >
+                <img
+                  src={asset.gif}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)] [-webkit-mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)]"
+                  style={{ mixBlendMode: 'screen' }}
+                />
+              </motion.div>
+            </Reveal>
+          ) : asset.img ? (
             <Reveal y={32}>
               <motion.img
                 src={asset.img}

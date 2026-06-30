@@ -283,7 +283,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       chips: ['You own it', 'Private by design', 'One source of truth'],
     },
     reveal:
-      'All your disconnected tools, replaced by one system your whole company runs on. You enter it once, and it stays true everywhere.',
+      'All your tools in one place, instead of scattered everywhere. You spend less time keeping it all running, and keep more for what truly matters.',
     problem: {
       title: "Your company runs on a tangle of tools that don't talk to each other",
       intro: 'It grew one app at a time, each one sensible alone, and together they cost your team hours every single day.',
@@ -736,7 +736,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['U bezit het', 'Privé vanaf het ontwerp', 'Eén bron van waarheid'],
     },
     reveal:
-      'Al uw losstaande tools, vervangen door één systeem waar uw hele bedrijf op draait. U voert het één keer in, en het klopt overal.',
+      'Al uw tools op één plek, in plaats van overal apart. U bent minder tijd kwijt aan het draaiend houden, en houdt meer over voor wat er echt toe doet.',
     problem: {
       title: 'Uw bedrijf draait op een kluwen van tools die niet met elkaar praten',
       intro: 'Het groeide één app per keer, elk apart logisch, en samen kosten ze uw team elke dag uren.',
