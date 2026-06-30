@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import {
   AnimatePresence,
@@ -436,7 +436,10 @@ function BrandObject({ meta }: { meta: ServiceMeta }) {
    a headline, one line, and the top outcomes as proof. Self-gates per slug. */
 const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; alt?: string }> = {
   'app-design': { video: '/services/anim-appdesign.mp4' },
-  'local-ai': { video: '/media/mesh.mp4' },
+  'local-ai': {
+    img: '/services/showcase-localai.webp',
+    alt: 'A hand holding a private folder, your own data turned into an AI that works for you.',
+  },
   aios: { img: '/services/mockup-aios-ipad.png', alt: 'The Nivora AIOS interface on an iPad.' },
   'ai-consulting': { video: '/media/threads.mp4' },
 }
@@ -448,9 +451,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Bring us your idea, even the boldest one. We sharpen it together and take it from concept to a living, working app: business-grade, ready to ship as an internal B2B tool or a B2C product for your customers.',
     },
     'local-ai': {
-      eyebrow: 'What we build',
-      title: 'The same AI, inside your own walls.',
-      body: 'Capable models running on hardware you control. Every prompt and document stays in your building, nothing leaves for a public cloud.',
+      eyebrow: '',
+      title: 'Your data becomes an AI that works for you.',
+      body: 'Everything your company knows is now scattered across folders, documents and inboxes, quiet and hard to find right when you need it. We bring it together into one intelligence you can simply ask. It learns from your own data, grows more useful every day, and never leaves your own walls.',
     },
     aios: {
       eyebrow: 'What we build',
@@ -470,9 +473,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk solide, klaar om in te zetten als interne B2B-tool of als B2C-product voor uw klanten.',
     },
     'local-ai': {
-      eyebrow: 'Wat we bouwen',
-      title: 'Dezelfde AI, binnen uw eigen muren.',
-      body: 'Krachtige modellen op hardware die u beheert. Elke prompt en elk document blijft in uw gebouw, niets gaat naar een publieke cloud.',
+      eyebrow: '',
+      title: 'Uw data wordt een AI die voor u werkt.',
+      body: 'Alles wat uw bedrijf weet ligt nu verspreid over mappen, documenten en inboxen, stil en moeilijk te vinden net op het moment dat u het nodig hebt. Wij brengen dat samen tot één intelligentie die u gewoon iets kunt vragen. Ze leert van uw eigen data, wordt elke dag bruikbaarder, en verlaat nooit uw eigen muren.',
     },
     aios: {
       eyebrow: 'Wat we bouwen',
@@ -873,9 +876,10 @@ function AppShowcase() {
   const bandRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // Both right cards drift down together as you scroll, so they settle aligned with
-  // the bottom of the tall left style board (travel = the empty space below them).
-  const [rightTravel, setRightTravel] = useState(0)
+  // Both right cards drift down together as you scroll, settling aligned with the
+  // bottom of the tall left style board. travelRef holds the live travel distance
+  // (the empty space below them) so the transform always reads the latest measure.
+  const travelRef = useRef(0)
   useLayoutEffect(() => {
     const band = bandRef.current
     const inner = rightRef.current
@@ -883,11 +887,11 @@ function AppShowcase() {
     const measure = () => {
       // Only on the two-column desktop layout; stacked on mobile, so no drift.
       if (window.innerWidth < 1024) {
-        setRightTravel(0)
+        travelRef.current = 0
         return
       }
       const { y } = offsetWithin(inner, band)
-      setRightTravel(Math.max(0, band.offsetHeight - y - inner.offsetHeight))
+      travelRef.current = Math.max(0, band.offsetHeight - y - inner.offsetHeight)
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -895,7 +899,10 @@ function AppShowcase() {
     ro.observe(inner)
     return () => ro.disconnect()
   }, [])
-  const rightY = useTransform(scrollYProgress, [0.1, 0.85], [0, rightTravel])
+  const rightY = useTransform(scrollYProgress, (v) => {
+    const p = Math.min(1, Math.max(0, (v - 0.1) / 0.75))
+    return p * travelRef.current
+  })
   return (
     <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
       <div className="mx-auto mb-12 max-w-2xl text-center">
@@ -1307,28 +1314,114 @@ function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
   return { x, y }
 }
 
-/* App Design why-us · a full-bleed peak that blends into the page top and bottom
-   (the same background treatment as the final CTA), with frosted-glass cards
-   floating on top. */
+/* App Design why-us · the home-page "Our Services" card treatment, reused for the
+   differentiators: free-standing frosted-glass cards over a sharp peak, crisp in
+   the gaps and blurred through each card via an aligned blurred copy of the peak,
+   with a cursor-driven 3D tilt. The peak is faded into the page so it blends. */
+const WHY_GLOW = '/services/whyus-band.webp'
+const WHY_GLOW_W = 1200
+const WHY_GLOW_H = 750
+const WHY_POS_X = 0.5
+const WHY_POS_Y = 0.46
+
+function AppWhyCard({
+  title,
+  body,
+  bandRef,
+}: {
+  title: string
+  body: string
+  bandRef: RefObject<HTMLDivElement | null>
+}) {
+  const reduced = usePrefersReducedMotion()
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const spring = { damping: 18, stiffness: 160 }
+  const sx = useSpring(mouseX, spring)
+  const sy = useSpring(mouseY, spring)
+  const rotateX = useTransform(sy, [-0.5, 0.5], ['8deg', '-8deg'])
+  const rotateY = useTransform(sx, [-0.5, 0.5], ['-8deg', '8deg'])
+
+  // A blurred copy of the peak, sized to the band and offset so it lines up with
+  // the sharp peak behind THIS card (same cover-scale + position) — real frost.
+  const [frost, setFrost] = useState<{ w: number; h: number; left: number; top: number } | null>(null)
+  useLayoutEffect(() => {
+    const band = bandRef.current
+    const card = cardRef.current
+    if (!band || !card) return
+    const measure = () => {
+      const bw = band.offsetWidth
+      const bh = band.offsetHeight
+      const scale = Math.max(bw / WHY_GLOW_W, bh / WHY_GLOW_H)
+      const sw = WHY_GLOW_W * scale
+      const sh = WHY_GLOW_H * scale
+      const bandX = (bw - sw) * WHY_POS_X
+      const bandY = (bh - sh) * WHY_POS_Y
+      const { x: cardX, y: cardY } = offsetWithin(card, band)
+      setFrost({ w: sw, h: sh, left: bandX - cardX, top: bandY - cardY })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(band)
+    return () => ro.disconnect()
+  }, [bandRef])
+
+  return (
+    <div style={{ perspective: '1000px' }} className="h-full">
+      <motion.div
+        ref={cardRef}
+        onMouseMove={
+          reduced
+            ? undefined
+            : (e) => {
+                const r = e.currentTarget.getBoundingClientRect()
+                mouseX.set((e.clientX - r.left) / r.width - 0.5)
+                mouseY.set((e.clientY - r.top) / r.height - 0.5)
+              }
+        }
+        onMouseLeave={() => {
+          mouseX.set(0)
+          mouseY.set(0)
+        }}
+        style={reduced ? undefined : { rotateX, rotateY, transformStyle: 'preserve-3d' }}
+        className="group relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/30 p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] lg:min-h-[250px] lg:p-7"
+      >
+        {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
+        {frost && (
+          <img
+            src={WHY_GLOW}
+            alt=""
+            aria-hidden
+            style={{ width: frost.w, height: frost.h, left: frost.left, top: frost.top }}
+            className="pointer-events-none absolute max-w-none object-cover opacity-[0.7] blur-2xl"
+          />
+        )}
+        {/* Frosted tint + gloss + top hairline — the same frosted feel as the home cards */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0d]/35 via-[#0a0a0d]/30 to-[#0a0a0d]/55" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.12),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+
+        <div style={reduced ? undefined : { transform: 'translateZ(45px)' }} className="relative">
+          <h3 className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink lg:text-[22px]">{title}</h3>
+          <p className="mt-3 text-[13.5px] leading-relaxed text-faint">{body}</p>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
 function AppWhyUs({ content }: { content: ServiceContent }) {
   const { lang } = useLang()
+  const bandRef = useRef<HTMLDivElement>(null)
   const sub =
     lang === 'nl'
       ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
       : 'No agency passing you around. The people who shape your app are the same people who build it.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
-      <ParallaxImage src="/services/whyus-band.webp" range={['-8%', '8%']} />
-      <div className="absolute inset-0 bg-black/45" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(70% 80% at 50% 45%, rgba(245,245,245,0.06), transparent 60%)' }}
-      />
-      {/* Blend the photo into the page at the top and bottom, like the CTA */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg via-bg/55 to-bg" />
-
-      <div className="relative mx-auto w-full max-w-[1200px] px-6">
+      <div className="relative mx-auto w-full max-w-[1280px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
             <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
@@ -1340,19 +1433,27 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
           </Reveal>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16">
-          {content.differentiators.items.map((d, i) => (
-            <Reveal key={d.title} delay={(i % 2) * 0.08}>
-              <div className="group relative h-full overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/40 p-7 backdrop-blur-xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)]">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]" />
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <div className="relative">
-                  <h3 className="text-[17px] font-semibold tracking-tight text-ink">{d.title}</h3>
-                  <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{d.body}</p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
+        {/* Cards band. The sharp peak is confined to this row and faded into the
+            page (radial mask + top/bottom fade), so it blends and never looks like
+            a hard rectangle — shown crisp in the gaps between the cards. */}
+        <div ref={bandRef} className="relative mt-12 sm:mt-16">
+          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+            <img
+              src={WHY_GLOW}
+              alt=""
+              className="h-full w-full object-cover object-[50%_46%] opacity-[0.6] [mask-image:radial-gradient(92%_86%_at_50%_50%,black_46%,transparent_92%)] [-webkit-mask-image:radial-gradient(92%_86%_at_50%_50%,black_46%,transparent_92%)]"
+            />
+            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-bg to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg to-transparent" />
+          </div>
+
+          <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {content.differentiators.items.map((d, i) => (
+              <Reveal key={d.title} delay={(i % 4) * 0.08}>
+                <AppWhyCard title={d.title} body={d.body} bandRef={bandRef} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
