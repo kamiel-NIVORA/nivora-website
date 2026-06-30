@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState, type MouseEvent, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -221,12 +220,8 @@ function ServiceCard({
           {desc && (
             <p className="text-[13px] leading-relaxed text-faint">{desc}</p>
           )}
-          <RippleButton as="span" variant="ghost" className="mt-4 gap-2">
+          <RippleButton as="span" variant="ghost" className="mt-4">
             {learnMore}
-            <ArrowRight
-              className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
-              strokeWidth={1.8}
-            />
           </RippleButton>
         </div>
       </MotionLink>
