@@ -870,9 +870,26 @@ function AppShowcase() {
   const t = UI[lang]
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLElement>(null)
+  const bandRef = useRef<HTMLDivElement>(null)
+  const copyRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // The right column drifts down as you scroll, travelling alongside the tall left board.
-  const rightY = useTransform(scrollYProgress, [0, 1], [-24, 96])
+  // The "Vakwerk" copy card slides down to the bottom of the tall left board as you
+  // scroll, so it is carried cleanly to the end of the style board.
+  const [copyTravel, setCopyTravel] = useState(0)
+  useLayoutEffect(() => {
+    const band = bandRef.current
+    const copy = copyRef.current
+    if (!band || !copy) return
+    const measure = () => {
+      const { y } = offsetWithin(copy, band)
+      setCopyTravel(Math.max(0, band.offsetHeight - y - copy.offsetHeight))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(band)
+    return () => ro.disconnect()
+  }, [])
+  const copyY = useTransform(scrollYProgress, [0, 0.9], [0, copyTravel])
   return (
     <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 py-12 lg:py-20">
       <div className="mx-auto mb-12 max-w-2xl text-center">
@@ -886,7 +903,7 @@ function AppShowcase() {
         </Reveal>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+      <div ref={bandRef} className="grid gap-4 lg:grid-cols-[2fr_1fr]">
         {/* Style board — main feature */}
         <Reveal delay={0.06}>
           <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
@@ -904,11 +921,9 @@ function AppShowcase() {
           </div>
         </Reveal>
 
-        {/* Right column: icons + copy card, drifting down with scroll */}
-        <motion.div
-          style={reduced ? undefined : { y: rightY }}
-          className="flex flex-col gap-4 will-change-transform"
-        >
+        {/* Right column: the icons card stays at the top, the copy card slides down
+            to the bottom of the tall style board as you scroll */}
+        <div className="relative">
           <Reveal delay={0.1}>
             <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
               <img
@@ -920,17 +935,23 @@ function AppShowcase() {
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
             </div>
           </Reveal>
-          <Reveal delay={0.14}>
-            <div className="rounded-[20px] border border-line bg-surface p-6">
-              <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
-                {t.showcaseCardTitle}
-              </p>
-              <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
-                {t.showcaseCardBody}
-              </p>
-            </div>
-          </Reveal>
-        </motion.div>
+          <motion.div
+            ref={copyRef}
+            style={reduced ? undefined : { y: copyY }}
+            className="mt-4 will-change-transform"
+          >
+            <Reveal delay={0.14}>
+              <div className="rounded-[20px] border border-line bg-surface p-6">
+                <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
+                  {t.showcaseCardTitle}
+                </p>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
+                  {t.showcaseCardBody}
+                </p>
+              </div>
+            </Reveal>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
