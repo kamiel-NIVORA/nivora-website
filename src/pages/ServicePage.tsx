@@ -1353,7 +1353,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-[#c0443b] sm:text-[38px] lg:text-[44px]">
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               {t.goodToKnow}
             </h2>
           </Reveal>
