@@ -154,7 +154,7 @@ export const SERVICE_META: Record<ServiceSlug, ServiceMeta> = {
     name: 'AI Consulting',
     icon: '/services/icon-consulting.png',
     tile: '/services/service-consulting.webp',
-    heroImage: '/IMG_0886.jpg',
+    heroImage: '/services/hero-consulting.jpg',
     photo: '/IMG_0894.jpg',
     anim: '/services/anim-consulting.mp4',
     mockup: '/services/mockup-consulting.webp',
