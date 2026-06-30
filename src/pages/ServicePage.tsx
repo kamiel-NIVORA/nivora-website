@@ -1019,53 +1019,79 @@ function AppShowcase() {
 
 const APP_SHAPES: Record<
   Lang,
-  { title: string; subtitle: string; items: { title: string; body: string }[] }
+  { title: string; subtitle: string; items: { eyebrow: string; title: string; body: string }[] }
 > = {
   en: {
-    title: 'Three shapes your app can take',
+    title: 'From idea to something that keeps working',
     subtitle:
-      'No fixed list of packages. We look at what you need first and build the right thing for it. Usually it lands in one of these three.',
+      'We never build off a template. We look at what you need first, then make the right thing for it. Here is what that involves.',
     items: [
       {
-        title: 'An app in your pocket',
-        body: 'Something people open every day without thinking about it. Fast, familiar, and it does exactly what it should. For iOS, Android, or both at once from the same foundation.',
+        eyebrow: '01 · Untangle',
+        title: 'We untangle your idea',
+        body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order. The more complex it starts, the more this part matters.',
       },
       {
-        title: 'Work that lives in the browser',
-        body: 'Not a pretty storefront, but a real tool you work in. Dashboards, systems, places where your team gets things done all day. Built to stay fast, even when a lot happens at once.',
+        eyebrow: '02 · Design',
+        title: 'We design how it feels',
+        body: 'We draw every screen ourselves, never an off-the-shelf design you see everywhere. How someone moves through your app, where everything sits, what happens at each step. This decides whether people enjoy using it or click away after a week.',
       },
       {
-        title: 'Everything that talks to each other',
-        body: 'Mobile and web that speak the same language, share the same data, and feel the same everywhere. One whole, instead of separate pieces you have to stitch together later.',
+        eyebrow: '03 · Build',
+        title: 'We build what it actually has to do',
+        body: 'This is about what it actually does. Not a pretty screen that does nothing, but an app that genuinely gets the work done. Built on a foundation that holds up as more people come on and as you add to it later. This is the difference from quickly clicked-together apps that break the moment they are used for real.',
+      },
+      {
+        eyebrow: '04 · Automate',
+        title: 'We let the work run itself',
+        body: 'Where it saves time, we let the app think along instead of leaving the work to you. Tasks that handle themselves, things that fill in automatically, work that keeps running in the background while you do something else. Not so we can say there is AI in it, but because it wins you hours every day.',
       },
     ],
   },
   nl: {
-    title: 'Drie vormen die uw app kan aannemen',
+    title: 'Van idee tot iets dat blijft werken',
     subtitle:
-      'Geen vast lijstje met pakketten. We kijken eerst naar wat u nodig hebt en bouwen daar het juiste voor. Meestal valt dat in een van deze drie.',
+      'We bouwen niets van een sjabloon af. We kijken eerst naar wat u nodig hebt, en maken daar het juiste voor. Dit is wat daarbij komt kijken.',
     items: [
       {
-        title: 'Een app in de broekzak',
-        body: 'Iets dat mensen elke dag openen zonder erover na te denken. Snel, vertrouwd, en het doet precies wat het moet doen. Voor iOS, Android, of allebei tegelijk vanuit dezelfde basis.',
+        eyebrow: '01 · Ontwarren',
+        title: 'We ontwarren uw idee',
+        body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde. Hoe complexer het begint, hoe belangrijker dit deel.',
       },
       {
-        title: 'Werk dat in de browser leeft',
-        body: 'Geen mooie etalage, maar een echte tool waar u in werkt. Dashboards, systemen, plekken waar uw team de hele dag iets voor elkaar krijgt. Gebouwd om snel te zijn, ook als er veel tegelijk gebeurt.',
+        eyebrow: '02 · Ontwerpen',
+        title: 'We ontwerpen hoe het voelt',
+        body: 'Elk scherm tekenen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. Hoe iemand door uw app beweegt, waar alles staat, wat er gebeurt bij elke stap. Dit bepaalt of mensen het graag gebruiken of na een week wegklikken.',
       },
       {
-        title: 'Alles dat met elkaar praat',
-        body: 'Mobiel en web die dezelfde taal spreken, dezelfde data delen en overal hetzelfde aanvoelen. Eén geheel in plaats van losse stukken die u later met moeite aan elkaar moet knopen.',
+        eyebrow: '03 · Bouwen',
+        title: 'We bouwen wat het echt moet doen',
+        body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het werk ook echt af krijgt. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
+      },
+      {
+        eyebrow: '04 · Automatiseren',
+        title: 'We laten het werk voor u doen',
+        body: 'Waar het tijd scheelt, laten we de app meedenken in plaats van u het werk te laten doen. Taken die zichzelf afhandelen, dingen die vanzelf ingevuld worden, werk dat op de achtergrond doorloopt terwijl u iets anders doet. Niet om te kunnen zeggen dat er AI in zit, maar omdat u er elke dag uren mee wint.',
       },
     ],
   },
 }
 
-/** Placeholder image, intentionally the same for all three rows. The client will
- *  swap in per-shape art later. */
+/** Placeholder image, intentionally the same for every row. The client will swap
+ *  in per-step art later. */
 const APP_SHAPE_IMAGE = '/services/showcase-appdesign.jpg'
 
-function AppShapeRow({ title, body, reverse }: { title: string; body: string; reverse: boolean }) {
+function AppShapeRow({
+  eyebrow,
+  title,
+  body,
+  reverse,
+}: {
+  eyebrow: string
+  title: string
+  body: string
+  reverse: boolean
+}) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -1094,7 +1120,8 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
           style={reduced ? undefined : { y: ty }}
           className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
         >
-          <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
+          <span className="block text-[11px] font-medium uppercase tracking-[0.2em] text-faint/80">{eyebrow}</span>
+          <h3 className="mt-3 font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
             {title}
           </h3>
           <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
@@ -1149,7 +1176,7 @@ function AppBuildShapes() {
         </div>
 
         {data.items.map((it, i) => (
-          <AppShapeRow key={it.title} title={it.title} body={it.body} reverse={i % 2 === 1} />
+          <AppShapeRow key={it.title} eyebrow={it.eyebrow} title={it.title} body={it.body} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
