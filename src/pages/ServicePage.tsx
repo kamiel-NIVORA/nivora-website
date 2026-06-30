@@ -259,6 +259,7 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
+        {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
         {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
@@ -267,7 +268,7 @@ export function ServicePage() {
         {meta.slug === 'local-ai'
           ? <LocalAiTension content={content} />
           : meta.slug !== 'app-design' && <Problem content={content} />}
-        {meta.slug !== 'app-design' && <Solution content={content} meta={meta} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Solution content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
         {meta.slug !== 'app-design' && <Capabilities content={content} />}
@@ -1340,6 +1341,88 @@ function AppWhoFor() {
             ))}
           </ul>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* AIOS · who we build this for · three calm situation cards, each with a short bold
+   heading so a visitor sees at a glance which one is them. The system animation that
+   used to live in the Solution section sits here now. AIOS only. ───────────────── */
+
+const AIOS_WHO: Record<
+  Lang,
+  { title: string; subtitle: string; cards: { head: string; body: string }[] }
+> = {
+  en: {
+    title: 'Who we build this for',
+    subtitle:
+      'Not for someone who wants to try an AI tool, but for those who want to ready the way they work for what is coming.',
+    cards: [
+      {
+        head: 'You are stuck on manual work',
+        body: 'The more clients you take on, the more people you need for the same kind of work. That does not last, and you feel it already.',
+      },
+      {
+        head: 'You do not know where to start',
+        body: 'You want to get going with AI and you can see it is possible, just not how all the pieces come together into something that truly works.',
+      },
+      {
+        head: 'You want to grow without hiring',
+        body: 'You want to work faster without taking on someone new each time. To grow in what you can handle, not in how many people it takes to do the same.',
+      },
+    ],
+  },
+  nl: {
+    title: 'Voor wie we dit bouwen',
+    subtitle:
+      'Niet voor wie een AI-tool wil uitproberen, maar voor wie zijn manier van werken klaar wil maken voor wat komt.',
+    cards: [
+      {
+        head: 'U loopt vast op handwerk',
+        body: 'Hoe meer klanten erbij komen, hoe meer mensen u nodig hebt voor hetzelfde soort werk. Dat blijft niet duren, en u voelt het nu al.',
+      },
+      {
+        head: 'U weet niet waar te beginnen',
+        body: 'U wil met AI aan de slag en ziet dat het kan, alleen niet hoe alle stukken samenkomen tot iets dat echt werkt.',
+      },
+      {
+        head: 'U wil groeien zonder bij te nemen',
+        body: 'U wil sneller werken zonder telkens iemand bij te nemen. Groeien in wat u aankan, niet in hoeveel mensen er nodig zijn om hetzelfde te doen.',
+      },
+    ],
+  },
+}
+
+function AiosWhoFor({ meta }: { meta: ServiceMeta }) {
+  const { lang } = useLang()
+  const data = AIOS_WHO[lang]
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
+        </Reveal>
+      </div>
+
+      <Reveal delay={0.1}>
+        <AnimFrame src={meta.anim} className="mx-auto mt-12 aspect-square w-full max-w-[420px]" />
+      </Reveal>
+
+      <div className="mt-12 grid gap-5 sm:grid-cols-3">
+        {data.cards.map((c, i) => (
+          <Reveal key={c.head} delay={i * 0.08}>
+            <GlassCard className="h-full">
+              <h3 className="text-[17px] font-semibold tracking-tight text-ink">{c.head}</h3>
+              <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{c.body}</p>
+            </GlassCard>
+          </Reveal>
+        ))}
       </div>
     </section>
   )
