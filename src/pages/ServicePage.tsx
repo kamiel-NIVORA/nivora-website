@@ -1064,14 +1064,17 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center center'] })
-  // Wipe the image in from the edge nearest the centre line, outward.
+  // Wipe the image in from the edge nearest the centre line, outward. The animating
+  // inset side must run a clean 100% -> 0% (the static sides stay unitless 0), or
+  // framer cannot interpolate the reversed rows and the image stays hidden.
   const clipFrom = reverse ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
-  const clip = useTransform(scrollYProgress, [0, 0.65], [clipFrom, 'inset(0 0% 0 0)'])
+  const clipTo = reverse ? 'inset(0 0 0 0%)' : 'inset(0 0% 0 0)'
+  const clip = useTransform(scrollYProgress, [0, 0.65], [clipFrom, clipTo])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0.15, 1])
   const ty = useTransform(scrollYProgress, [0, 1], [26, -8])
 
   return (
-    <div ref={ref} className="relative py-16 lg:py-32">
+    <div ref={ref} className="relative py-20 lg:py-44">
       {/* node on the centre line (desktop) */}
       <span
         aria-hidden
