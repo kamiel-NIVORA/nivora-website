@@ -1512,38 +1512,37 @@ const LOCAL_COMPARE: Record<
 /** One side of the comparison as a home-style framed card: a big photo panel with
  *  a label chip, then the title and the points (no buttons, the points fill it). */
 const CLOUD_PROVIDERS = [
-  { src: '/services/providers/openai.svg', left: '50%', top: '46%', size: 76, pad: 17 },
-  { src: '/services/providers/claude.svg', left: '20%', top: '27%', size: 62, pad: 14 },
-  { src: '/services/providers/gemini.svg', left: '79%', top: '25%', size: 62, pad: 13 },
-  { src: '/services/providers/meta.svg', left: '25%', top: '74%', size: 60, pad: 15 },
-  { src: '/services/providers/copilot.svg', left: '75%', top: '71%', size: 60, pad: 13 },
+  { src: '/services/providers/openai.svg', left: '50%', top: '46%', size: 78, pad: 17 },
+  { src: '/services/providers/claude.svg', left: '20%', top: '27%', size: 64, pad: 14 },
+  { src: '/services/providers/gemini.svg', left: '79%', top: '25%', size: 64, pad: 13 },
+  { src: '/services/providers/meta.svg', left: '25%', top: '74%', size: 62, pad: 15 },
+  { src: '/services/providers/copilot.svg', left: '75%', top: '71%', size: 62, pad: 13 },
 ]
 
-/** A perfectly smooth, constant-speed circular drift (rotate a pivot, offset the
- *  child, counter-rotate it to stay upright). Staggered per `phase`. */
+/** A perfectly smooth, constant-speed circular drift: a pivot rotates linearly,
+ *  the child is offset by `radius` and counter-rotates to stay upright. Sizes to
+ *  its child (inline-flex) so it works centred or absolutely placed. */
 function Drift({
   radius,
   duration,
   phase,
-  className,
   children,
 }: {
   radius: number
   duration: number
   phase: number
-  className?: string
   children: ReactNode
 }) {
   const reduced = usePrefersReducedMotion()
-  if (reduced) return <div className={className}>{children}</div>
+  if (reduced) return <span className="inline-flex">{children}</span>
   return (
     <motion.div
-      className={className}
+      className="inline-flex"
       animate={{ rotate: [phase, phase + 360] }}
       transition={{ duration, repeat: Infinity, ease: 'linear' }}
     >
       <motion.div
-        className="h-full w-full will-change-transform"
+        className="will-change-transform"
         style={{ x: radius }}
         animate={{ rotate: [-phase, -phase - 360] }}
         transition={{ duration, repeat: Infinity, ease: 'linear' }}
@@ -1571,14 +1570,11 @@ function FloatingBadge({
   i: number
 }) {
   return (
-    <div
-      className="absolute"
-      style={{ left, top, width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
-    >
-      <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 72} className="h-full w-full">
+    <div className="absolute" style={{ left, top, marginLeft: -size / 2, marginTop: -size / 2 }}>
+      <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 72}>
         <div
-          className="flex h-full w-full items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.07] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
-          style={{ padding: pad }}
+          className="flex items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.07] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          style={{ width: size, height: size, padding: pad }}
         >
           <img src={src} alt="" className="h-full w-full object-contain" />
         </div>
@@ -1612,15 +1608,17 @@ function CompareCard({
           {local ? (
             // Your own AI: the single Nivora mark, drifting smoothly around the centre.
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <Drift radius={10} duration={30} phase={0} className="relative">
-                <div aria-hidden className="absolute -inset-7 rounded-full bg-white/12 blur-2xl" />
-                <motion.img
-                  src="/services/nivora-mark.png"
-                  alt=""
-                  animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-                  className="relative block h-[96px] w-[96px] rounded-[21px] shadow-[0_18px_50px_rgba(0,0,0,0.55)] sm:h-[112px] sm:w-[112px]"
-                />
+              <Drift radius={10} duration={30} phase={0}>
+                <div className="relative">
+                  <div aria-hidden className="absolute -inset-7 rounded-full bg-white/12 blur-2xl" />
+                  <motion.img
+                    src="/services/nivora-mark.png"
+                    alt=""
+                    animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
+                    transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                    className="relative block h-[96px] w-[96px] rounded-[21px] shadow-[0_18px_50px_rgba(0,0,0,0.55)] sm:h-[112px] sm:w-[112px]"
+                  />
+                </div>
               </Drift>
             </div>
           ) : (
