@@ -1510,14 +1510,49 @@ const LOCAL_COMPARE: Record<
 /** One side of the comparison as a home-style framed card: a big photo panel with
  *  a label chip, then the title and the points (no buttons, the points fill it). */
 const CLOUD_PROVIDERS = [
-  { src: '/services/providers/openai.svg', left: '50%', top: '45%', size: 60, pad: 15 },
-  { src: '/services/providers/claude.svg', left: '22%', top: '29%', size: 50, pad: 12 },
-  { src: '/services/providers/gemini.svg', left: '77%', top: '27%', size: 50, pad: 11 },
-  { src: '/services/providers/meta.svg', left: '27%', top: '72%', size: 48, pad: 13 },
-  { src: '/services/providers/copilot.svg', left: '73%', top: '69%', size: 48, pad: 11 },
+  { src: '/services/providers/openai.svg', left: '50%', top: '46%', size: 76, pad: 17 },
+  { src: '/services/providers/claude.svg', left: '20%', top: '27%', size: 62, pad: 14 },
+  { src: '/services/providers/gemini.svg', left: '79%', top: '25%', size: 62, pad: 13 },
+  { src: '/services/providers/meta.svg', left: '25%', top: '74%', size: 60, pad: 15 },
+  { src: '/services/providers/copilot.svg', left: '75%', top: '71%', size: 60, pad: 13 },
 ]
 
-/** One provider logo in a dark glass badge, drifting slowly on its own phase. */
+/** A perfectly smooth, constant-speed circular drift (rotate a pivot, offset the
+ *  child, counter-rotate it to stay upright). Staggered per `phase`. */
+function Drift({
+  radius,
+  duration,
+  phase,
+  className,
+  children,
+}: {
+  radius: number
+  duration: number
+  phase: number
+  className?: string
+  children: ReactNode
+}) {
+  const reduced = usePrefersReducedMotion()
+  if (reduced) return <div className={className}>{children}</div>
+  return (
+    <motion.div
+      className={className}
+      animate={{ rotate: [phase, phase + 360] }}
+      transition={{ duration, repeat: Infinity, ease: 'linear' }}
+    >
+      <motion.div
+        className="h-full w-full will-change-transform"
+        style={{ x: radius }}
+        animate={{ rotate: [-phase, -phase - 360] }}
+        transition={{ duration, repeat: Infinity, ease: 'linear' }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/** One provider logo in a dark glass badge, drifting smoothly on its own phase. */
 function FloatingBadge({
   src,
   left,
@@ -1533,21 +1568,20 @@ function FloatingBadge({
   pad: number
   i: number
 }) {
-  const reduced = usePrefersReducedMotion()
   return (
-    <motion.div
-      className="absolute will-change-transform"
+    <div
+      className="absolute"
       style={{ left, top, width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
-      animate={reduced ? undefined : { x: [0, 5, 0, -5, 0], y: [0, -7, 0, 7, 0] }}
-      transition={{ duration: 11 + (i % 3) * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.7 }}
     >
-      <div
-        className="flex h-full w-full items-center justify-center rounded-[14px] border border-white/12 bg-white/[0.07] shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
-        style={{ padding: pad }}
-      >
-        <img src={src} alt="" className="h-full w-full object-contain" />
-      </div>
-    </motion.div>
+      <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 72} className="h-full w-full">
+        <div
+          className="flex h-full w-full items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.07] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          style={{ padding: pad }}
+        >
+          <img src={src} alt="" className="h-full w-full object-contain" />
+        </div>
+      </Drift>
+    </div>
   )
 }
 
@@ -1576,18 +1610,16 @@ function CompareCard({
           {local ? (
             // Your own AI: the single Nivora mark, drifting smoothly around the centre.
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <motion.div
-                animate={reduced ? undefined : { x: [0, 9, 0, -9, 0], y: [-9, 0, 9, 0, -9], scale: [1, 1.05, 1, 1.05, 1] }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative will-change-transform"
-              >
-                <div aria-hidden className="absolute -inset-6 rounded-full bg-white/12 blur-2xl" />
-                <img
+              <Drift radius={10} duration={30} phase={0} className="relative">
+                <div aria-hidden className="absolute -inset-7 rounded-full bg-white/12 blur-2xl" />
+                <motion.img
                   src="/services/nivora-mark.png"
                   alt=""
-                  className="relative h-[72px] w-[72px] rounded-[18px] shadow-[0_16px_44px_rgba(0,0,0,0.55)] sm:h-[84px] sm:w-[84px]"
+                  animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
+                  transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                  className="relative block h-[96px] w-[96px] rounded-[21px] shadow-[0_18px_50px_rgba(0,0,0,0.55)] sm:h-[112px] sm:w-[112px]"
                 />
-              </motion.div>
+              </Drift>
             </div>
           ) : (
             // The big models: a slow-drifting constellation of the cloud providers.
