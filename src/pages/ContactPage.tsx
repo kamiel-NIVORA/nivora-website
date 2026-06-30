@@ -59,12 +59,12 @@ function ContactCard({
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      className="group relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-white/[0.05] p-7 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.08] hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.8)] sm:p-8"
+      className="group relative flex h-full min-h-[230px] flex-col overflow-hidden rounded-[26px] border border-white/[0.16] bg-white/[0.07] p-7 backdrop-blur-[36px] backdrop-saturate-[1.2] transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.10] hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.8)] sm:p-8"
     >
       {/* Gloss — same recipe as the Our Services cards: frosted tint, diagonal sheen, top hairline */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-black/25" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_18%_-12%,rgba(255,255,255,0.16),transparent_56%)]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.16] via-white/[0.05] to-black/[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_18%_-12%,rgba(255,255,255,0.22),transparent_56%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 
       <div className="relative z-10 flex flex-1 flex-col justify-between">
         <div className="flex items-center justify-between">
@@ -114,13 +114,13 @@ export function ContactPage() {
           <div className="absolute inset-0 bg-bg/[0.34]" />
           <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-bg via-bg/55 to-transparent" />
           {/* Soft focal scrim so the white heading reads over the bright horizon */}
-          <div className="absolute inset-0 bg-[radial-gradient(120%_64%_at_50%_62%,rgba(6,6,6,0.6),transparent_64%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(120%_70%_at_50%_47%,rgba(6,6,6,0.62),transparent_60%)]" />
           <div className="absolute inset-x-0 bottom-0 h-[34svh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-[1120px] px-6">
-          {/* Heading block — tall, content pushed toward the lower part of the screen */}
-          <div className="flex min-h-[calc(100svh-150px)] flex-col items-center justify-end pb-12 text-center">
+          {/* Heading block — centered at normal hero height, like the home Hero */}
+          <div className="flex min-h-[100svh] flex-col items-center justify-center text-center">
             <Reveal mode="mount">
               <h1 className="mx-auto max-w-4xl font-serif text-[52px] leading-[0.98] tracking-[-0.03em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[76px] lg:text-[92px]">
                 {t.heading}
@@ -144,8 +144,8 @@ export function ContactPage() {
             </Reveal>
           </div>
 
-          {/* Three glossy cards — only their top (the icon) peeks above the fold */}
-          <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Three glossy cards — pulled up so only their top (the icon) peeks above the fold */}
+          <div className="-mt-24 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Reveal mode="mount" delay={0.2}>
               <ContactCard icon={Mail} label={t.labelEmail} value={CONTACT.email} href={`mailto:${CONTACT.email}`} />
             </Reveal>
