@@ -1134,7 +1134,10 @@ function AppBuildShapes() {
         </Reveal>
       </div>
 
-      <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16">
+      <div
+        ref={lineRef}
+        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)]"
+      >
         {/* centre timeline: faint rail + white scroll-progress fill (desktop) */}
         <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <div className="absolute inset-0 bg-line" />
