@@ -1801,11 +1801,11 @@ function ComparisonBand() {
 const SAFE_APPROACH: Record<Lang, { title: string; body: string }> = {
   en: {
     title: 'More than one path to safe AI',
-    body: 'Most of the time everything runs entirely on your own server, and your data simply stays inside. But when a certain job needs the most powerful models, we connect them over a shielded link, without your data being stored or reused. That way you get maximum power exactly when you need it. The trade-off: it adds a cost per use, so this is the more expensive route.',
+    body: 'With local models everything stays on your own server, and your data never leaves. But for very large tasks you can also use the strongest models from the big AI players, like OpenAI, Anthropic or Google. You pay more then, precisely to keep your data with you: it is not stored and not reused. That way you get the greatest power when you need it, with the only downside being the higher cost.',
   },
   nl: {
     title: 'Meerdere benaderingen voor veilige AI',
-    body: 'Meestal draait alles volledig op uw eigen server, en blijft uw data gewoon binnen. Maar heeft u voor bepaald werk de allerkrachtigste modellen nodig, dan sluiten we die aan via een afgeschermde verbinding, zonder dat uw data bewaard of hergebruikt wordt. Zo krijgt u maximale kracht wanneer u die nodig hebt. Het nadeel: er komt een kost per gebruik bij, dus dit is de duurdere weg.',
+    body: 'Met lokale modellen blijft alles op uw eigen server, en gaat uw data nooit naar buiten. Maar voor heel grote taken kunt u ook de sterkste modellen van de grote AI-spelers gebruiken, zoals OpenAI, Anthropic of Google. U betaalt dan meer, precies om uw data bij u te houden: ze wordt niet bewaard en niet hergebruikt. Zo krijgt u de grootste kracht wanneer u die nodig hebt, met als enige nadeel de hogere kost.',
   },
 }
 
@@ -1813,83 +1813,81 @@ function LocalSafeApproaches() {
   const { lang } = useLang()
   const t = SAFE_APPROACH[lang]
   const reduced = usePrefersReducedMotion()
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 82%', 'end 45%'] })
-  const p = useSpring(scrollYProgress, { stiffness: 110, damping: 30, mass: 0.4 })
-  // First the centre line drops from the timeline into the card, then the border
-  // draws all the way around it as you keep scrolling.
-  const connectorFill = useTransform(p, [0, 0.4], [0, 1])
-  const sweepDeg = useTransform(p, [0.34, 0.92], [0, 360])
-  const borderBg = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.62) ${sweepDeg}deg, rgba(255,255,255,0) ${sweepDeg}deg)`
+  const cardRef = useRef<HTMLDivElement>(null)
+  // Progress runs from the card entering the viewport to the card sitting dead centre,
+  // so the line has drawn all the way round by the time the card is centred.
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ['start 88%', 'center center'] })
+  const p = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.45 })
+  const connectorFill = useTransform(p, [0, 0.5], [0, 1])
+  const sweepDeg = useTransform(p, [0.42, 1], [0, 360])
+  const ring = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(245,245,245,0.85) 0deg, rgba(245,245,245,0.85) ${sweepDeg}deg, transparent ${sweepDeg}deg)`
 
   return (
-    <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-8 sm:pb-20 lg:pb-28 lg:pt-16">
-      <div className="relative mx-auto max-w-[1100px]">
-        {/* connector: the timeline centre line continues down into the card */}
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-8 sm:pb-20 lg:pb-28 lg:pt-24">
+      <div ref={cardRef} className="relative mx-auto max-w-[1100px]">
+        {/* the timeline centre line, continuing down into the top of the card */}
         <div
           aria-hidden
-          className="absolute left-1/2 -top-24 hidden h-24 w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent,#000_45%)]"
+          className="absolute left-1/2 -top-[196px] z-20 hidden h-[202px] w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent,#000_22%)]"
         >
           <motion.div
             style={reduced ? { scaleY: 1 } : { scaleY: connectorFill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/25 via-white/50 to-white/80"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/12 via-white/55 to-white/90"
           />
         </div>
 
+        {/* soft light that traces around BEHIND the card as you scroll — never a hard edge line */}
+        {!reduced && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -inset-[9px] rounded-[36px] blur-[22px]"
+            style={{ background: ring, opacity: 0.55 }}
+          />
+        )}
+        {/* ambient backlight seeping out from under the card */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-12 bottom-[-26px] h-28 rounded-[50%] bg-white/[0.09] blur-[56px]" />
+
         <Reveal y={16}>
-          <div className="relative grid items-center gap-8 overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-12">
+          <div className="relative overflow-hidden rounded-[28px] border border-line-strong bg-[#0a0a0c] p-8 shadow-[0_45px_110px_-50px_rgba(0,0,0,0.9)] sm:p-10 lg:p-12">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            {/* the border that closes around the card as you scroll past it */}
-            {!reduced && (
-              <motion.div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-[28px]"
-                style={{
-                  background: borderBg,
-                  padding: 1.5,
-                  WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-                  WebkitMaskComposite: 'xor',
-                  maskComposite: 'exclude',
-                }}
-              />
-            )}
-
-            {/* left: the grass, settled into the card rather than pasted on top */}
-            <div className="relative flex items-center justify-center">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 h-[76%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
-                style={{ background: 'radial-gradient(closest-side, rgba(150,167,102,0.18), transparent)' }}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute bottom-[14%] left-1/2 h-7 w-[64%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
-              />
-              <img
-                src="/services/grass-mound.png"
-                alt=""
-                loading="lazy"
-                className="relative w-full max-w-[440px] object-contain [mask-image:linear-gradient(to_bottom,#000_74%,transparent_99%)]"
-              />
-              {/* glossy badge floating on the scene, same treatment as the 'De grote modellen' logos */}
-              <div className="absolute left-1/2 top-[14%] -translate-x-1/2 sm:top-[10%]">
-                <Drift radius={7} duration={28} phase={40}>
-                  <div
-                    className="flex items-center justify-center rounded-[16px] border border-white/12 bg-white/[0.07] shadow-[0_14px_36px_rgba(0,0,0,0.55)] backdrop-blur-md"
-                    style={{ width: 78, height: 78, padding: 18 }}
-                  >
-                    <img src="/services/web-white.png" alt="" className="h-full w-full object-contain" />
-                  </div>
-                </Drift>
+            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+              {/* left: the grass, settled into the card rather than pasted on top */}
+              <div className="relative flex items-center justify-center">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-[76%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+                  style={{ background: 'radial-gradient(closest-side, rgba(150,167,102,0.18), transparent)' }}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-[14%] left-1/2 h-7 w-[64%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
+                />
+                <img
+                  src="/services/grass-mound.png"
+                  alt=""
+                  loading="lazy"
+                  className="relative w-full max-w-[440px] object-contain [mask-image:linear-gradient(to_bottom,#000_74%,transparent_99%)]"
+                />
+                {/* glossy web badge floating on the scene, same treatment as the 'De grote modellen' logos */}
+                <div className="absolute left-[46%] top-[20%] -translate-x-1/2 sm:top-[16%]">
+                  <Drift radius={7} duration={28} phase={40}>
+                    <div
+                      className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.07] shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-md"
+                      style={{ width: 94, height: 94, padding: 21 }}
+                    >
+                      <img src="/services/web-white.png" alt="" className="h-full w-full object-contain" />
+                    </div>
+                  </Drift>
+                </div>
               </div>
-            </div>
 
-            {/* right: title + text */}
-            <div className="relative lg:pr-2">
-              <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
-                {t.title}
-              </h2>
-              <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+              {/* right: title + text */}
+              <div className="relative lg:pr-2">
+                <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
+                  {t.title}
+                </h2>
+                <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+              </div>
             </div>
           </div>
         </Reveal>
