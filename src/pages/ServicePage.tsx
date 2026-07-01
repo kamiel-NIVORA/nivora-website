@@ -2651,7 +2651,9 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
               ? '/services/cta-aios.webp'
               : meta.slug === 'local-ai'
                 ? '/services/cta-localai.webp'
-                : meta.photo
+                : meta.slug === 'ai-consulting'
+                  ? '/services/cta-consulting.webp'
+                  : meta.photo
         }
         range={['-8%', '8%']}
       />
