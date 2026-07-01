@@ -114,11 +114,8 @@ export function Footer() {
       <div className="relative mx-auto w-full max-w-[1200px] px-6 pt-16">
         {/* Top: brand + columns */}
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
-          {/* Nivora arrow mark + language toggle */}
-          <div className="flex shrink-0 flex-col items-start gap-6">
-            <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-36 max-w-full opacity-90" />
-            <LanguageSwitch />
-          </div>
+          {/* Nivora arrow mark */}
+          <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-44 max-w-full shrink-0 opacity-90" />
 
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 md:w-auto md:flex-1 md:max-w-[900px] md:pl-12">
             {columns.map((col) => (
@@ -166,10 +163,10 @@ export function Footer() {
           </span>
         </div>
 
-        {/* Bottom bar */}
-        <div className="relative flex flex-col items-center justify-between gap-4 border-t border-line py-6 sm:flex-row">
-          <p className="text-sm text-faint">{t.rights}</p>
-          <div className="flex items-center gap-4">
+        {/* Bottom bar: rights left, socials centred, language toggle right */}
+        <div className="relative flex flex-col items-center gap-5 border-t border-line py-6 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4">
+          <p className="text-sm text-faint sm:justify-self-start">{t.rights}</p>
+          <div className="flex items-center gap-4 sm:justify-self-center">
             {SOCIALS.map((s) => {
               const icon = (
                 <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="currentColor" aria-hidden="true">
@@ -198,6 +195,9 @@ export function Footer() {
                 </span>
               )
             })}
+          </div>
+          <div className="sm:justify-self-end">
+            <LanguageSwitch />
           </div>
         </div>
       </div>
