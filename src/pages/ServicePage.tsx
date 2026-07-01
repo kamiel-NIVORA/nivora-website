@@ -1704,11 +1704,11 @@ function WorkColumn({
               <div
                 key={i}
                 className="absolute"
-                style={{ left: WORK_BADGE_POS[i].left, top: WORK_BADGE_POS[i].top, marginLeft: -26, marginTop: -26 }}
+                style={{ left: WORK_BADGE_POS[i].left, top: WORK_BADGE_POS[i].top, marginLeft: -34, marginTop: -34 }}
               >
                 <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 90}>
-                  <div className="flex h-[52px] w-[52px] items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md">
-                    <Icon className="h-[22px] w-[22px] text-white/90" strokeWidth={1.6} />
+                  <div className="flex h-[68px] w-[68px] items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <Icon className="h-[30px] w-[30px] text-white/90" strokeWidth={1.6} />
                   </div>
                 </Drift>
               </div>
