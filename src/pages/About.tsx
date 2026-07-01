@@ -40,8 +40,8 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
-    heroHeadline: 'It started with one frustration.',
-    heroSub: "We're Nivora, a small studio in Brugge, building software and AI the way technology should feel.",
+    heroHeadline: 'Technology can be fun again.',
+    heroSub: "We're Nivora, and that is exactly what we build.",
     voiceStory:
       'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around: you speak, and out comes text that reads like you actually write. Ready to send, not to rewrite.',
     boxStory:
@@ -67,11 +67,11 @@ const COPY = {
     founderEyebrow: 'The person behind it',
     founderHeading: 'The story behind Nivora',
     founderP1:
-      "Hi, I'm Kamiel. I started Nivora after seeing the same thing happen again and again: companies being sold AI, but almost no one building it around what those companies actually do all day.",
+      "I'm Kamiel. I started Nivora because I kept seeing the same thing: AI sold like some miracle, while almost no one stopped to look at what a company actually does all day. The tool came first, and you were supposed to bend everything around it. That always felt backwards to me.",
     founderP2:
-      'So we do the opposite. We start with the work, shape the software and AI around it, and give people tools they genuinely reach for, all on systems they own and control.',
+      "So we do it the other way round. Work first, technology second. Not AI because it is AI, but because it takes something off your plate that you feel every single day. And always on something that is yours, not rented, not sitting in a cloud you cannot see into.",
     founderP3:
-      'Whether we polish something you already have or build it from the ground up, the goal never changes. Technology that quietly does its job, so you and your team can get on with yours.',
+      "Sometimes we sharpen what you already have, sometimes we build from scratch. Honestly, that part does not matter much. What matters is that the thing just works, quietly, so you can get on with your day instead of fighting your tools. That is the whole point.",
     founderSign: 'Founder, based in Brugge, Belgium',
     ctaHeading: "Let's build the right thing",
     ctaBody:
@@ -83,8 +83,8 @@ const COPY = {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
-    heroHeadline: 'Het begon met één frustratie.',
-    heroSub: 'Wij zijn Nivora, een kleine studio uit Brugge, die software en AI bouwt zoals technologie hoort te voelen.',
+    heroHeadline: 'Technologie mag weer leuk zijn.',
+    heroSub: 'Wij zijn Nivora, en dat is precies wat we bouwen.',
     voiceStory:
       'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en er komt tekst uit die klinkt zoals u écht schrijft. Klaar om te versturen, niet om over te doen.',
     boxStory:
@@ -110,11 +110,11 @@ const COPY = {
     founderEyebrow: 'De persoon erachter',
     founderHeading: 'Het verhaal achter Nivora',
     founderP1:
-      'Hallo, ik ben Kamiel. Ik startte Nivora nadat ik telkens hetzelfde zag gebeuren: bedrijven kregen AI verkocht, maar bijna niemand bouwde het rond wat die bedrijven de hele dag echt doen.',
+      'Ik ben Kamiel. Ik begon Nivora omdat ik telkens hetzelfde zag: AI verkocht als een wondermiddel, terwijl bijna niemand eerst keek naar wat een bedrijf de hele dag écht doet. De tool kwam eerst, en het bedrijf moest zich er maar naar plooien. Dat voelde voor mij altijd omgekeerd.',
     founderP2:
-      'Dus doen wij het omgekeerd. We beginnen bij het werk, vormen de software en AI eromheen, en geven mensen tools die ze echt vastpakken, allemaal op systemen die zij bezitten en beheren.',
+      'Dus doen wij het andersom. Eerst het werk, dan pas de technologie. Geen AI omdat het AI is, maar omdat het iets van uw bord haalt dat u elke dag voelt. En altijd op iets dat van u is, niet gehuurd, niet ergens in een cloud waar u geen zicht op hebt.',
     founderP3:
-      'Of we nu iets bijschaven dat u al hebt of het van de grond af bouwen, het doel verandert nooit. Technologie die stilletjes haar werk doet, zodat u en uw team verder kunnen met het uwe.',
+      'Soms scherpen we bij wat u al hebt, soms bouwen we van nul. Eerlijk, dat deel maakt niet zoveel uit. Wat telt, is dat het gewoon werkt, in stilte, zodat u met uw dag bezig kunt zijn in plaats van met uw tools. Daar draait het om.',
     founderSign: 'Oprichter, gevestigd in Brugge, België',
     ctaHeading: 'Laat ons het juiste bouwen',
     ctaBody:
@@ -223,14 +223,14 @@ function Hero() {
   return (
     <section className="relative grid min-h-[90svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
       <ParallaxImage src={HERO_IMG} range={['-5%', '5%']} />
-      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-black/20" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(78% 60% at 50% 46%, rgba(0,0,0,0.5), rgba(0,0,0,0.18) 58%, transparent 80%)' }}
+        style={{ background: 'radial-gradient(80% 62% at 50% 46%, rgba(0,0,0,0.34), rgba(0,0,0,0.08) 60%, transparent 82%)' }}
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/55 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42vh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[40vh] bg-gradient-to-t from-bg via-bg/60 to-transparent" />
 
       <motion.div
         variants={heroContainer}
@@ -407,7 +407,7 @@ function Founder() {
                 src="/about/founder-kamiel.webp"
                 alt={t.founderAlt}
                 style={reduced ? undefined : { y }}
-                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_20%] will-change-transform"
+                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_20%] will-change-transform [filter:brightness(1.12)_saturate(1.06)_sepia(0.05)]"
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
