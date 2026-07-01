@@ -16,7 +16,6 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
-import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -200,12 +199,6 @@ const UI = {
   },
 } as const
 
-/** A short phase word for the process timeline, from the step title ("We listen first" → "Listen"). */
-function phaseWord(title: string): string {
-  const w = title.replace(/^We\s+/i, '').split(' ')[0]
-  return w.charAt(0).toUpperCase() + w.slice(1)
-}
-
 /* ──────────────────────────────────────────────────────────────────────────
    Service page · scenic, image-led, home-page branding
    Flow: hero → statement → scroll-reveal → problem → solution → capabilities
@@ -260,7 +253,6 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
-        {meta.slug === 'ai-consulting' && <ConsultingWhoFor />}
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
         {meta.slug === 'aios' && <AiosWorkGrid />}
         {meta.slug === 'aios' && <AiosTimeline />}
@@ -271,12 +263,8 @@ export function ServicePage() {
         {meta.slug === 'local-ai' && <ServerTimeline />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Problem content={content} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Solution content={content} meta={meta} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
         {meta.slug !== 'aios' && <WhyUs content={content} meta={meta} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Process content={content} meta={meta} />}
         {meta.slug !== 'aios' && <RoiBand meta={meta} />}
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
@@ -729,34 +717,6 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
 
 /* Problem · clean cards, no rails ───────────────────────────────────────────── */
 
-function Problem({ content }: { content: ServiceContent }) {
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {content.problem.title}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.problem.intro}</p>
-        </Reveal>
-      </div>
-
-      <div className="mx-auto mt-14 grid max-w-3xl gap-5 sm:grid-cols-2">
-        {content.problem.points.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.08}>
-            <GlassCard className="h-full">
-              <h3 className="text-[18px] font-semibold tracking-tight text-ink">{p.title}</h3>
-              <p className="mt-3 text-[14.5px] leading-relaxed text-faint">{p.body}</p>
-            </GlassCard>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 /* Local AI · the privacy tension and the promise, side by side ──────────────── */
 
 /** Two elegant frames (one tension, one promise) plus a confident accent bar.
@@ -764,77 +724,7 @@ function Problem({ content }: { content: ServiceContent }) {
  *  bilingual copy; the heading/intro still come from the service data. */
 /* Solution · sticky media + outcomes checklist (the "sold" moment) ──────────── */
 
-function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  const { lang } = useLang()
-  const t = UI[lang]
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-        <div className="lg:sticky lg:top-28">
-          <Reveal>
-            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              {content.solution.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <AnimFrame src={meta.anim} className="mt-8 aspect-[5/4]" />
-          </Reveal>
-        </div>
-
-        <div>
-          <Reveal delay={0.08}>
-            <p className="text-[15.5px] leading-relaxed text-faint lg:text-base">{content.solution.body}</p>
-          </Reveal>
-          <div className="mt-9 rounded-[22px] border border-line bg-white/[0.02] p-7 lg:p-8">
-            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-faint">{t.walkAway}</span>
-            <ul className="mt-6 flex flex-col gap-4.5">
-              {content.solution.outcomes.map((o, i) => (
-                <Reveal as="li" key={o} delay={i * 0.07} className="flex items-start gap-3.5">
-                  <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
-                  <span className="text-[15px] leading-relaxed text-ink-soft">{o}</span>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
-          <Reveal delay={0.12}>
-            <BookCallButton className="mt-8 h-11 px-6 text-[14px]">{t.bookCall}</BookCallButton>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* Capabilities · a calm, even grid of what's included ───────────────────────── */
-
-function Capabilities({ content }: { content: ServiceContent }) {
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {content.capabilities.title}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.capabilities.intro}</p>
-        </Reveal>
-      </div>
-
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {content.capabilities.items.map((it, i) => (
-          <Reveal key={it.title} delay={(i % 3) * 0.07}>
-            <GlassCard className="h-full">
-              <span className="font-serif text-[30px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-4 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink lg:text-[20px]">{it.title}</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-faint">{it.body}</p>
-            </GlassCard>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  )
-}
 
 /* App Design showcase · editorial two-column image grid ─────────────────────── */
 
@@ -1858,84 +1748,6 @@ function LocalWhoFor() {
    Local AI (particle gif + three lines with bold heads), with its own copy: the
    three kinds of doubters, so each reader recognises themselves in one. ─────── */
 
-const CONSULTING_WHO: Record<Lang, { title: string; subtitle: string; lines: { head: string; body: string }[] }> = {
-  en: {
-    title: 'Who this is for',
-    subtitle:
-      'For those serious about putting AI to work, but who want to know where it truly pays off first.',
-    lines: [
-      { head: 'You do not know where to start', body: 'Companies that feel they should do something with AI, but do not know where to begin. They see it is possible, just not where it makes the difference for them.' },
-      { head: 'You have tried without results', body: 'Companies that have tried all sorts of things, without it really changing anything. A tool here, an experiment there, and afterwards the question of what it actually changed.' },
-      { head: 'You want to invest with certainty', body: 'Companies that want to invest in AI, but first want to be sure they put it into the right things, and not into whatever happens to be popular.' },
-    ],
-  },
-  nl: {
-    title: 'Voor wie hier klaar voor is',
-    subtitle:
-      'Voor wie serieus met AI aan de slag wil, maar eerst wil weten waar het echt loont.',
-    lines: [
-      { head: 'Je weet niet waar te beginnen', body: 'Bedrijven die voelen dat ze iets moeten met AI, maar niet weten waar te beginnen. Ze zien dat het kan, alleen niet waar het voor hén het verschil maakt.' },
-      { head: 'Je hebt al geprobeerd zonder resultaat', body: 'Bedrijven die al van alles geprobeerd hebben, zonder dat het echt iets opleverde. Een tool hier, een experiment daar, en achteraf de vraag wat het nu eigenlijk veranderd heeft.' },
-      { head: 'Je wil zeker investeren', body: 'Bedrijven die willen investeren in AI, maar eerst zeker willen zijn dat ze het in de juiste dingen steken, en niet in wat toevallig populair is.' },
-    ],
-  },
-}
-
-function ConsultingWhoFor() {
-  const { lang } = useLang()
-  const data = CONSULTING_WHO[lang]
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
-
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
-      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* the particle animation — left on desktop, melts into the page */}
-        <div ref={ref} className="relative order-1">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 blur-[90px]"
-            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
-          />
-          <Reveal y={24}>
-            <motion.div style={{ y }} className="will-change-transform">
-              <img
-                src="/services/whofor-consulting.gif"
-                alt=""
-                loading="lazy"
-                className="mx-auto aspect-square w-full max-w-[440px] object-contain"
-              />
-            </motion.div>
-          </Reveal>
-        </div>
-
-        {/* copy — right on desktop */}
-        <div className="order-2">
-          <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
-              {data.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
-          </Reveal>
-          <ul className="mt-8 flex flex-col gap-4">
-            {data.lines.map((line, i) => (
-              <Reveal as="li" key={line.head} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
-                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
-                <span className="text-[15.5px] leading-relaxed text-ink-soft">
-                  <span className="font-semibold text-ink">{line.head}.</span> {line.body}
-                </span>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 function ComparisonBand() {
   const { lang } = useLang()
   const data = LOCAL_COMPARE[lang]
@@ -2479,27 +2291,6 @@ function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }
 
 /* Process · numbered step cards, no rails ───────────────────────────────────── */
 
-function Process({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {content.process.title}
-          </h2>
-        </Reveal>
-      </div>
-
-      <div className="mt-16">
-        <ProcessTimeline
-          accent={meta.accent}
-          steps={content.process.steps.map((s) => ({ phase: phaseWord(s.title), title: s.title, body: s.body }))}
-        />
-      </div>
-    </section>
-  )
-}
-
 /* ROI band · only where money-saved is the honest pitch (not consulting) ────── */
 
 function RoiBand({ meta }: { meta: ServiceMeta }) {
@@ -2532,7 +2323,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
 
   // App Design: stripped to just the FAQ, centred, with a warm-red (terracotta)
   // heading like the homepage. No "is this the right fit" comparison block.
-  if (content.slug === 'app-design' || content.slug === 'aios' || content.slug === 'local-ai') {
+  if (content.slug === 'app-design' || content.slug === 'aios' || content.slug === 'local-ai' || content.slug === 'ai-consulting') {
     const faqSub =
       content.slug === 'aios'
         ? lang === 'nl'
@@ -2542,9 +2333,13 @@ function FitFaq({ content }: { content: ServiceContent }) {
           ? lang === 'nl'
             ? 'De dingen die u waarschijnlijk wilt weten voordat we uw private AI installeren.'
             : 'The things you probably want to know before we install your private AI.'
-          : lang === 'nl'
-            ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
-            : 'The things you probably want to know before we start on your app.'
+          : content.slug === 'ai-consulting'
+            ? lang === 'nl'
+              ? 'De dingen die u waarschijnlijk wilt weten voordat we samenwerken.'
+              : 'The things you probably want to know before we work together.'
+            : lang === 'nl'
+              ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
+              : 'The things you probably want to know before we start on your app.'
     return (
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
