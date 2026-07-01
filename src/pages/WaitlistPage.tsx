@@ -202,7 +202,7 @@ export function WaitlistPage() {
                   <img
                     src={brandIcon}
                     alt={product ?? 'Nivora'}
-                    className={product ? 'mb-8 h-12 w-12 object-contain' : 'mb-8 h-9 w-auto object-contain opacity-90'}
+                    className={product ? 'mb-8 h-20 w-20 object-contain md:h-24 md:w-24' : 'mb-8 h-9 w-auto object-contain opacity-90'}
                   />
                   <h2 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h2>
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{t.subtitle}</p>
