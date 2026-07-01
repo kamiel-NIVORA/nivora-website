@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { motion, useMotionTemplate, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Gift } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -20,10 +20,27 @@ const LOOP_GIF = '/affiliate/loop.gif' // the gift ribbon
  *  right. Kept grayscale on purpose: the green scenics are the hero and the close,
  *  the middle of the page stays calm and clean. */
 const STEP_IMAGES = [
-  '/backgrounds/bg-dunes-mist.jpg',
-  '/backgrounds/bg-peak-mono.webp',
-  '/backgrounds/bg-peak-stars.webp',
-  '/affiliate/IMG_0694.webp',
+  '/affiliate/timeline-1.webp',
+  '/affiliate/timeline-2.webp',
+  '/affiliate/timeline-3.webp',
+  '/affiliate/timeline-4.webp',
+]
+
+/** The un-glossy source, shown first; the glossy blur then fades in on scroll. */
+const CLEAN_IMAGES = [
+  '/affiliate/timeline-clean-1.webp',
+  '/affiliate/timeline-clean-2.webp',
+  '/affiliate/timeline-clean-3.webp',
+  '/affiliate/timeline-clean-4.webp',
+]
+
+/** White step marks: link, share, customer for the first three; the last row shows
+ *  the reward number instead of an icon. */
+const STEP_ICONS: (string | null)[] = [
+  '/affiliate/icons/step-link.png',
+  '/affiliate/icons/step-share.png',
+  '/affiliate/icons/step-customer.png',
+  null,
 ]
 
 /** Backgrounds for the two "how you share" cards (landscape photos). */
@@ -51,7 +68,7 @@ const COPY = {
   en: {
     docTitle: 'Affiliate · Nivora',
     facts: [
-      { big: '20%', label: 'of every payment from the customers you refer' },
+      { big: '10%', label: 'of every payment from the customers you refer' },
       { big: 'Every month', label: 'you keep earning for as long as they stay' },
       { big: 'Your link', label: 'a personal link that tracks everyone you send' },
     ] as Fact[],
@@ -72,9 +89,9 @@ const COPY = {
         keyword: 'Clients',
       },
       {
-        title: 'You earn 20%',
-        body: 'You keep 20% of what they pay, every month they stay a customer. No cap, no expiry. It keeps coming in as long as they do.',
-        keyword: '20%',
+        title: 'You earn 10%',
+        body: 'You keep 10% of what they pay, every month they stay a customer. No cap, no expiry. It keeps coming in as long as they do.',
+        keyword: '10%',
       },
     ] as Step[],
     apps: [
@@ -91,9 +108,9 @@ const COPY = {
     ] as App[],
     badgeSoon: 'Coming soon',
     heroLine1: 'Share Box and Voice.',
-    heroLine2: 'Earn 20%.',
+    heroLine2: 'Earn 10%.',
     heroSub:
-      'Post about it, or simply tell the right people. You keep 20% of every customer you bring in, every month they stay.',
+      'Post about it, or simply tell the right people. You keep 10% of every customer you bring in, every month they stay.',
     beFirst: 'Be the first to know',
     eyebrowHow: 'How it works',
     howHeading: 'From your link to your first payout',
@@ -127,7 +144,7 @@ const COPY = {
   nl: {
     docTitle: 'Affiliate · Nivora',
     facts: [
-      { big: '20%', label: 'van elke betaling van de klanten die u aanbrengt' },
+      { big: '10%', label: 'van elke betaling van de klanten die u aanbrengt' },
       { big: 'Elke maand', label: 'u blijft verdienen zolang ze klant blijven' },
       { big: 'Uw link', label: 'een persoonlijke link die iedereen volgt die u doorstuurt' },
     ] as Fact[],
@@ -148,9 +165,9 @@ const COPY = {
         keyword: 'Klanten',
       },
       {
-        title: 'U verdient 20%',
-        body: 'U houdt 20% van wat ze betalen, elke maand dat ze klant blijven. Zonder limiet, zonder einddatum. Het blijft binnenkomen zolang zij dat doen.',
-        keyword: '20%',
+        title: 'U verdient 10%',
+        body: 'U houdt 10% van wat ze betalen, elke maand dat ze klant blijven. Zonder limiet, zonder einddatum. Het blijft binnenkomen zolang zij dat doen.',
+        keyword: '10%',
       },
     ] as Step[],
     apps: [
@@ -167,9 +184,9 @@ const COPY = {
     ] as App[],
     badgeSoon: 'Binnenkort',
     heroLine1: 'Deel Box en Voice.',
-    heroLine2: 'Verdien 20%.',
+    heroLine2: 'Verdien 10%.',
     heroSub:
-      'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 20% van elke klant die u aanbrengt, elke maand opnieuw.',
+      'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 10% van elke klant die u aanbrengt, elke maand opnieuw.',
     beFirst: 'Wees als eerste op de hoogte',
     eyebrowHow: 'Hoe het werkt',
     howHeading: 'Van uw link tot uw eerste uitbetaling',
@@ -367,7 +384,23 @@ function Facts() {
    feature rows that alternate left and right. Each photo wipes in with a
    clip-path reveal as it passes, the copy drifts, a bead lights on the line. */
 
-function HowRow({ index, title, body, image, keyword }: { index: number; title: string; body: string; image: string; keyword: string }) {
+function HowRow({
+  index,
+  title,
+  body,
+  image,
+  clean,
+  icon,
+  keyword,
+}: {
+  index: number
+  title: string
+  body: string
+  image: string
+  clean?: string
+  icon?: string | null
+  keyword: string
+}) {
   const reduced = usePrefersReducedMotion()
   const reverse = index % 2 === 1 // even rows: image right; odd rows: image left
   const ref = useRef<HTMLDivElement>(null)
@@ -379,9 +412,10 @@ function HowRow({ index, title, body, image, keyword }: { index: number; title: 
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
-  // Local-AI timeline feel: the photo sharpens out of a soft blur as the frame settles.
-  const blurAmt = useTransform(scrollYProgress, [0.06, 0.46], [14, 0])
-  const imgFilter = useMotionTemplate`blur(${blurAmt}px)`
+  // Local-AI reveal: the clean photo shows first, then a quick scroll fades the glossy
+  // blur in, then the mark (icon, or the one big word), all before the line reaches the bead.
+  const blurReveal = useTransform(scrollYProgress, [0.24, 0.36], [0, 1])
+  const markReveal = useTransform(scrollYProgress, [0.31, 0.43], [0, 1])
 
   return (
     <div ref={ref} className="relative py-14 sm:py-20 lg:py-36">
@@ -407,8 +441,7 @@ function HowRow({ index, title, body, image, keyword }: { index: number; title: 
           <p className="mt-4 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
         </motion.div>
 
-        {/* Frosted frame: the landscape softly blurred, one powerful word set big in
-            the hero serif on top. Same blurred-frame idea as the service pages. */}
+        {/* Glossy frame: clean photo -> glossy glass blur fades in -> the mark fades in. */}
         <motion.div
           style={reduced ? undefined : { clipPath: clip, opacity }}
           className={cn(
@@ -416,25 +449,48 @@ function HowRow({ index, title, body, image, keyword }: { index: number; title: 
             reverse ? 'lg:order-1' : 'lg:order-2',
           )}
         >
-          <motion.img
-            src={image}
+          <img
+            src={clean ?? image}
             alt=""
             aria-hidden
             loading="lazy"
-            style={reduced ? undefined : { filter: imgFilter }}
-            className="absolute inset-0 h-full w-full scale-[1.06] object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
+          {clean && (
+            <motion.img
+              src={image}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              style={reduced ? { opacity: 1 } : { opacity: blurReveal }}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
           <div className="pointer-events-none absolute inset-0 bg-black/30" />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(58% 58% at 50% 50%, rgba(0,0,0,0.4), transparent 78%)' }}
           />
-          <div className="absolute inset-0 flex items-center justify-center px-6">
-            <span className="font-serif text-[52px] leading-none tracking-[-0.02em] text-ink [text-shadow:0_4px_30px_rgba(0,0,0,0.7)] sm:text-[64px] lg:text-[76px]">
-              {keyword}
-            </span>
-          </div>
+          <motion.div
+            style={reduced ? { opacity: 1 } : { opacity: markReveal }}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
+          >
+            {icon ? (
+              <>
+                <span aria-hidden className="absolute h-28 w-28 rounded-full bg-black/25 blur-2xl sm:h-36 sm:w-36" />
+                <img
+                  src={icon}
+                  alt=""
+                  className="relative h-20 w-20 drop-shadow-[0_8px_22px_rgba(0,0,0,0.6)] sm:h-28 sm:w-28"
+                />
+              </>
+            ) : (
+              <span className="font-serif text-[52px] leading-none tracking-[-0.02em] text-ink [text-shadow:0_4px_30px_rgba(0,0,0,0.7)] sm:text-[64px] lg:text-[76px]">
+                {keyword}
+              </span>
+            )}
+          </motion.div>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
         </motion.div>
       </div>
@@ -473,7 +529,7 @@ function HowItWorks() {
           </div>
 
           {t.steps.map((s, i) => (
-            <HowRow key={s.title} index={i} title={s.title} body={s.body} image={STEP_IMAGES[i]} keyword={s.keyword} />
+            <HowRow key={s.title} index={i} title={s.title} body={s.body} image={STEP_IMAGES[i]} clean={CLEAN_IMAGES[i]} icon={STEP_ICONS[i]} keyword={s.keyword} />
           ))}
         </div>
       </div>
