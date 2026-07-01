@@ -1,76 +1,70 @@
 import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { ProcessTimeline, type ProcessStep } from '@/components/ui/ProcessTimeline'
-import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
-import { CONTACT } from '@/data/contact'
+import { CONTACT, waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
 const ACCENT = '#f5f5f5'
 const ease = [0.16, 1, 0.3, 1] as const
 
-/** Scenic photos, on the same quiet-morning palette as the service pages. */
+/** Scenic photos + product / service marks. */
 const HERO_IMG = '/about/hero.jpg'
+const VOICE_IMG = '/backgrounds/bg-dunes-mist.jpg'
+const VOICE_ICON = '/products/voice-logo.webp'
+const BOX_IMG = '/home/hero-nivora.webp'
+const BOX_ICON = '/products/box-logo.webp'
 const CTA_IMG = '/home/cta-landscape.webp'
+
+const SERVICE_ICON: Record<string, string> = {
+  'app-design': '/services/icon-appdesign.png',
+  'local-ai': '/services/icon-localai.png',
+  aios: '/services/icon-aios.png',
+  'ai-consulting': '/services/icon-consulting.png',
+}
 
 /** Company LinkedIn (kept in sync with the footer/contact data). */
 const LINKEDIN_URL = 'https://www.linkedin.com/company/116050071'
 const LINKEDIN_PATH =
   'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'
 
-type PromiseItem = { title: string; body: string }
+type Svc = { slug: string; name: string; desc: string }
 
 const COPY = {
   en: {
     docTitle: 'About · Nivora',
     metaDescription:
-      'Nivora is a software and AI studio in Brugge. We build custom software and AI around how your business actually works, and we make our own products, Box and Voice.',
+      'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
     heroHeadline: 'Software and AI that shapes itself around people, not the other way around.',
     heroSub:
-      "We're Nivora, a small studio in Brugge. We care about technology that feels like it was always meant to be there, quiet, useful, and truly yours. And we make our own products too. Box and Voice are on the way.",
-    bookCall: 'Book a call',
-    getInTouch: 'Get in touch',
-    promisesEyebrow: 'Why we exist',
-    promisesLead:
-      "We didn't start Nivora to sell AI. We started it to build the software and AI that actually fits a business, around the way it already runs, and where it hurts. We don't lead with a tool, we lead with a conversation. And the only test that matters to us is a simple one. Does it make the day genuinely easier?",
-    promises: [
-      {
-        title: 'We build around you',
-        body: 'We shape the software to the way your team already works, never the other way around. You never bend your day to fit a tool.',
-      },
-      {
-        title: 'You see the value first',
-        body: 'We show you what is worth building, and what it is worth, before you commit a cent. No leap of faith, no long contract to find out.',
-      },
-      {
-        title: 'Your data stays yours',
-        body: 'We can run the AI on your servers or ours, so the sensitive things never have to leave your walls. Private by default, not as an upsell.',
-      },
-    ] as PromiseItem[],
-    howHeading: 'How we work',
-    howSub: 'No heavy process, no account managers in between. Three steps, and we stay close through all of them.',
-    steps: [
-      {
-        phase: 'Listen',
-        title: 'We get how you work',
-        body: 'We start with your business and your team, not a pitch, and find where the real friction sits.',
-      },
-      {
-        phase: 'Build',
-        title: 'We build it around you',
-        body: 'We design and build the system, sharpening what you have or starting fresh, and put something real in front of you early.',
-      },
-      {
-        phase: 'Stay',
-        title: 'We stick around',
-        body: 'We do not vanish once it ships. We maintain it, refine it, and let it grow right along with you.',
-      },
-    ] as ProcessStep[],
+      "We're Nivora, a small studio in Brugge. We started because technology so often gets in people's way instead of helping. So we build the opposite: our own products, Box and Voice, and custom software and AI for companies that want to get everything out of it.",
+    soon: 'Coming soon',
+    ourProducts: 'Our products',
+    voiceEyebrow: 'Voice',
+    voiceHeading: 'Your voice, instantly clean text.',
+    voiceBody:
+      'Voice turns speech into text that reads like you write, not like a machine. Dictate once, and get back clean, finished copy, tuned to how you talk and how you write.',
+    boxEyebrow: 'Box',
+    boxHeading: 'All your communication, one calm inbox.',
+    boxBody:
+      'Email, chat and DMs come together in one place. Read, sort and reply without ever switching apps. One calm inbox, instead of ten open tabs.',
+    joinWaitlist: 'Join the waiting list',
+    servicesEyebrow: 'What we do for companies',
+    servicesHeading: 'Custom software and AI, built around your business.',
+    servicesIntro:
+      'For teams that want to get everything out of AI and stay ahead, not just dabble with it. We design, build and install exactly what fits the way you already work.',
+    services: [
+      { slug: 'app-design', name: 'App Design', desc: 'Custom apps built around your idea.' },
+      { slug: 'local-ai', name: 'Local AI', desc: 'Secure AI on your own servers or ours.' },
+      { slug: 'aios', name: 'AIOS', desc: 'A custom AI operating system for your company.' },
+      { slug: 'ai-consulting', name: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.' },
+    ] as Svc[],
+    learnMore: 'Learn more',
     founderAlt: 'Kamiel Niville, founder of Nivora',
     founderName: 'Kamiel Niville',
     founderRole: 'Founder of Nivora',
@@ -87,53 +81,38 @@ const COPY = {
     ctaHeading: "Let's build the right thing",
     ctaBody:
       'Tell us where the friction is. We will show you what is worth building, and what it is worth, before you commit to anything.',
+    bookCall: 'Book a call',
     ctaFootPre: 'Based in Brugge, working with companies wherever they are. Or just email ',
   },
   nl: {
     docTitle: 'Over ons · Nivora',
     metaDescription:
-      'Nivora is een software- en AI-studio in Brugge. We bouwen software en AI op maat, rond de manier waarop uw bedrijf echt werkt, en we maken onze eigen producten, Box en Voice.',
+      'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
     heroHeadline: 'Software en AI die zich naar mensen vormt, niet andersom.',
     heroSub:
-      'Wij zijn Nivora, een kleine studio in Brugge. We geven om technologie die aanvoelt alsof ze er altijd al thuishoorde, stil, bruikbaar en echt van u. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
-    bookCall: 'Boek een gesprek',
-    getInTouch: 'Neem contact op',
-    promisesEyebrow: 'Waarom we bestaan',
-    promisesLead:
-      'We zijn Nivora niet begonnen om AI te verkopen. We begonnen het om de software en AI te bouwen die echt bij een bedrijf past, rond hoe het al draait en waar het pijn doet. We beginnen niet met een tool, maar met een gesprek. En de enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
-    promises: [
-      {
-        title: 'We bouwen rond u',
-        body: 'We vormen de software naar hoe uw team al werkt, nooit andersom. U buigt uw dag nooit om naar een tool.',
-      },
-      {
-        title: 'U ziet eerst de waarde',
-        body: 'We tonen u wat de moeite waard is om te bouwen, en wat het waard is, voordat u een euro uitgeeft. Geen sprong in het diepe, geen lang contract om erachter te komen.',
-      },
-      {
-        title: 'Uw data blijft van u',
-        body: 'We draaien de AI op uw servers of de onze, zodat het gevoelige nooit uw muren hoeft te verlaten. Privé vanaf de start, niet als duurdere optie.',
-      },
-    ] as PromiseItem[],
-    howHeading: 'Hoe we werken',
-    howSub: 'Geen zwaar proces, geen accountmanagers ertussen. Drie stappen, en bij alle drie blijven we dicht bij u.',
-    steps: [
-      {
-        phase: 'Luisteren',
-        title: 'We snappen hoe u werkt',
-        body: 'We beginnen bij uw bedrijf en uw team, niet bij een verkooppraatje, en zoeken waar de echte wrijving zit.',
-      },
-      {
-        phase: 'Bouwen',
-        title: 'We bouwen het rond u',
-        body: 'We ontwerpen en bouwen het systeem, scherpen aan wat u hebt of starten opnieuw, en zetten vroeg al iets echts voor u neer.',
-      },
-      {
-        phase: 'Blijven',
-        title: 'We blijven erbij',
-        body: 'We verdwijnen niet zodra het live staat. We onderhouden het, verfijnen het, en laten het meegroeien met u.',
-      },
-    ] as ProcessStep[],
+      'Wij zijn Nivora, een kleine studio uit Brugge. We begonnen omdat technologie mensen te vaak in de weg zit in plaats van vooruithelpt. Dus bouwen we het omgekeerde: onze eigen producten, Box en Voice, en software en AI op maat voor bedrijven die er echt alles uit willen halen.',
+    soon: 'Binnenkort',
+    ourProducts: 'Onze producten',
+    voiceEyebrow: 'Voice',
+    voiceHeading: 'Uw stem, meteen nette tekst.',
+    voiceBody:
+      'Voice zet spraak om naar tekst die leest zoals u schrijft, niet zoals een machine. Dicteer één keer, en krijg nette, afgewerkte tekst terug, afgestemd op hoe u praat en hoe u schrijft.',
+    boxEyebrow: 'Box',
+    boxHeading: 'Al uw communicatie, één rustige inbox.',
+    boxBody:
+      'E-mail, chat en DMs komen samen op één plek. Lees, sorteer en antwoord zonder ooit van app te wisselen. Eén rustige inbox, in plaats van tien open tabbladen.',
+    joinWaitlist: 'Schrijf u in op de wachtlijst',
+    servicesEyebrow: 'Wat we voor bedrijven doen',
+    servicesHeading: 'Software en AI op maat, gebouwd rond uw bedrijf.',
+    servicesIntro:
+      'Voor teams die er echt alles uit willen halen en vooropwillen lopen, niet er wat mee prutsen. We ontwerpen, bouwen en installeren precies wat past bij hoe u al werkt.',
+    services: [
+      { slug: 'app-design', name: 'App Design', desc: 'Apps op maat, gebouwd rond uw idee.' },
+      { slug: 'local-ai', name: 'Local AI', desc: 'Veilige AI op uw eigen servers of de onze.' },
+      { slug: 'aios', name: 'AIOS', desc: 'Een AI-besturingssysteem op maat voor uw bedrijf.' },
+      { slug: 'ai-consulting', name: 'AI Consulting', desc: 'Ontdek waar AI past en welke strategie wint.' },
+    ] as Svc[],
+    learnMore: 'Lees meer',
     founderAlt: 'Kamiel Niville, oprichter van Nivora',
     founderName: 'Kamiel Niville',
     founderRole: 'Oprichter van Nivora',
@@ -150,6 +129,7 @@ const COPY = {
     ctaHeading: 'Laat ons het juiste bouwen',
     ctaBody:
       'Vertel ons waar de wrijving zit. We tonen u wat de moeite waard is om te bouwen, en wat het waard is, voordat u zich ergens aan vastlegt.',
+    bookCall: 'Boek een gesprek',
     ctaFootPre: 'Gevestigd in Brugge, we werken met bedrijven waar ze ook zijn. Of mail gewoon ',
   },
 } as const
@@ -183,23 +163,6 @@ function ParallaxImage({
   )
 }
 
-/** Frosted glass card, echoing the service pages: a soft top-left highlight, a top
- *  hairline and a gentle hover lift. No brand colour, no glow. */
-function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <div
-      className={cn(
-        'group relative h-full overflow-hidden rounded-[22px] border border-line bg-white/[0.02] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-white/[0.035] hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.8)] lg:p-8',
-        className,
-      )}
-    >
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_18%_-12%,rgba(255,255,255,0.06),transparent_56%)]" />
-      <div className="relative">{children}</div>
-    </div>
-  )
-}
-
 /* ──────────────────────────────────────────────────────────────────────────
    Page
    ────────────────────────────────────────────────────────────────────────── */
@@ -224,15 +187,35 @@ export function About() {
       style={{ ['--accent' as string]: ACCENT } as CSSProperties}
     >
       <Hero />
-      <Promises />
-      <HowWeWork />
+      <ProductStory
+        eyebrow={t.voiceEyebrow}
+        heading={t.voiceHeading}
+        body={t.voiceBody}
+        icon={VOICE_ICON}
+        image={VOICE_IMG}
+        soon={t.soon}
+        cta={t.joinWaitlist}
+        ctaHref={waitlistHref('voice')}
+      />
+      <ProductStory
+        reverse
+        eyebrow={t.boxEyebrow}
+        heading={t.boxHeading}
+        body={t.boxBody}
+        icon={BOX_ICON}
+        image={BOX_IMG}
+        soon={t.soon}
+        cta={t.joinWaitlist}
+        ctaHref={waitlistHref('box')}
+      />
+      <Services />
       <Founder />
       <FinalCta />
     </main>
   )
 }
 
-/* Hero · scenic, drifting on scroll ─────────────────────────────────────────── */
+/* Hero · the Nivora story, scenic and drifting ───────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
@@ -248,13 +231,11 @@ const heroFade: Variants = {
 }
 
 function Hero() {
-  const { open } = useContactModal()
   const { lang } = useLang()
   const t = COPY[lang]
   const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative grid min-h-[92svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
-      {/* Scenic backdrop, drifting on scroll like the service heroes */}
+    <section className="relative grid min-h-[90svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
       <ParallaxImage src={HERO_IMG} range={['-5%', '5%']} />
       <div className="absolute inset-0 bg-black/45" />
       <div
@@ -285,60 +266,101 @@ function Hero() {
         >
           {t.heroSub}
         </motion.p>
-
-        <motion.div variants={heroFade} className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <BookCallButton className="h-11 px-6 text-[14px]">{t.bookCall}</BookCallButton>
-          <RippleButton
-            href="#contact"
-            variant="ghost"
-            className="h-11 px-6 text-[14px]"
-            onClick={(e) => {
-              e.preventDefault()
-              open()
-            }}
-          >
-            {t.getInTouch}
-          </RippleButton>
-        </motion.div>
       </motion.div>
     </section>
   )
 }
 
-/* Promises · why we exist + three frosted glass cards ────────────────────────── */
+/* Product story · a blurred nature frame with the product mark floating on it,
+   copy alongside. Voice and Box each get one, mirrored. Not a timeline. ──────── */
 
-function Promises() {
-  const { lang } = useLang()
-  const t = COPY[lang]
+function ProductStory({
+  eyebrow,
+  heading,
+  body,
+  icon,
+  image,
+  soon,
+  cta,
+  ctaHref,
+  reverse,
+}: {
+  eyebrow: string
+  heading: string
+  body: string
+  icon: string
+  image: string
+  soon: string
+  cta: string
+  ctaHref: string
+  reverse?: boolean
+}) {
+  const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
-      <div className="max-w-2xl">
-        <Reveal>
-          <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.promisesEyebrow}</p>
+    <section className="relative mx-auto w-full max-w-[1150px] px-6 py-14 sm:py-20 lg:py-24">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        {/* Blurred nature frame with the floating product mark */}
+        <Reveal className={cn(reverse ? 'lg:order-2' : 'lg:order-1')}>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
+            <img src={image} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full scale-[1.12] object-cover opacity-70 blur-[8px]" />
+            <div className="absolute inset-0 bg-black/45" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'radial-gradient(58% 58% at 50% 48%, rgba(0,0,0,0.35), transparent 78%)' }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.span
+                animate={reduced ? undefined : { y: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                className="flex h-[104px] w-[104px] items-center justify-center rounded-[26px] border border-white/20 bg-white/[0.12] shadow-[0_18px_46px_rgba(0,0,0,0.55)] backdrop-blur-md"
+              >
+                <img src={icon} alt="" className="h-14 w-14 object-contain" />
+              </motion.span>
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+          </div>
         </Reveal>
-        <Reveal delay={0.08}>
-          <p className="mt-6 text-[16px] leading-relaxed text-muted lg:text-[17px]">{t.promisesLead}</p>
-        </Reveal>
-      </div>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-        {t.promises.map((p, i) => (
-          <Reveal key={p.title} delay={(i % 3) * 0.08}>
-            <GlassCard>
-              <span className="font-serif text-[30px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-4 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink lg:text-[20px]">{p.title}</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-faint">{p.body}</p>
-            </GlassCard>
+        {/* Copy */}
+        <div className={cn(reverse ? 'lg:order-1' : 'lg:order-2')}>
+          <Reveal>
+            <div className="flex items-center gap-2.5">
+              <span className="text-[12px] uppercase tracking-[0.2em] text-faint">{eyebrow}</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-0.5 text-[11px] text-ink-soft/80">
+                <span className="h-1 w-1 rounded-full bg-white/70" />
+                {soon}
+              </span>
+            </div>
           </Reveal>
-        ))}
+          <Reveal delay={0.06}>
+            <h2 className="mt-4 font-serif text-[27px] leading-[1.16] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
+              {heading}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-muted lg:text-base">{body}</p>
+          </Reveal>
+          <Reveal delay={0.18}>
+            <RippleButton
+              href={ctaHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="ghost"
+              className="mt-7 h-11 px-6 text-[14px]"
+            >
+              {cta}
+            </RippleButton>
+          </Reveal>
+        </div>
       </div>
     </section>
   )
 }
 
-/* How we work ──────────────────────────────────────────────────────────────── */
+/* Services · what we build for companies ─────────────────────────────────────── */
 
-function HowWeWork() {
+function Services() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
@@ -346,16 +368,39 @@ function HowWeWork() {
       <div className="relative mx-auto w-full max-w-[1100px]">
         <div className="max-w-2xl">
           <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px] lg:text-[44px]">
-              {t.howHeading}
+            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.servicesEyebrow}</p>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-4 font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px] lg:text-[44px]">
+              {t.servicesHeading}
             </h2>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{t.howSub}</p>
+          <Reveal delay={0.12}>
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-faint lg:text-base">{t.servicesIntro}</p>
           </Reveal>
         </div>
-        <div className="mt-14">
-          <ProcessTimeline steps={t.steps} accent={ACCENT} />
+
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:gap-6">
+          {t.services.map((s, i) => (
+            <Reveal key={s.slug} delay={(i % 2) * 0.08}>
+              <a
+                href={`/services/${s.slug}`}
+                className="group relative flex h-full items-start gap-5 overflow-hidden rounded-[22px] border border-line bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-white/[0.035] hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.8)] lg:p-7"
+              >
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-line bg-white/[0.03]">
+                  <img src={SERVICE_ICON[s.slug]} alt="" className="h-8 w-8 object-contain" loading="lazy" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink lg:text-[22px]">{s.name}</h3>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink" strokeWidth={1.7} />
+                  </div>
+                  <p className="mt-2 text-[14px] leading-relaxed text-faint">{s.desc}</p>
+                </div>
+              </a>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
