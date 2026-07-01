@@ -5,7 +5,7 @@
       "source": "/nivora-api/:path*",
       "destination": "https://nivora-api.srv938837.hstgr.cloud/:path*"
     },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/((?!api/)(?!.*\\.).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
