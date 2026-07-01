@@ -267,7 +267,6 @@ export function ServicePage() {
         {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
-        {meta.slug === 'local-ai' && <LocalSafeApproaches />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Problem content={content} />}
@@ -1811,90 +1810,75 @@ const SAFE_APPROACH: Record<Lang, { title: string; body: string }> = {
   },
 }
 
-function LocalSafeApproaches() {
+function LocalSafeCard() {
   const { lang } = useLang()
   const t = SAFE_APPROACH[lang]
   const reduced = usePrefersReducedMotion()
   const cardRef = useRef<HTMLDivElement>(null)
-  // Progress runs from the card entering the viewport to the card sitting dead centre,
-  // so the line has drawn all the way round by the time the card is centred.
-  const { scrollYProgress } = useScroll({ target: cardRef, offset: ['start 88%', 'center center'] })
+  // The soft light finishes tracing all the way around the card by the time it is centred.
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ['start 85%', 'center center'] })
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.45 })
-  const connectorFill = useTransform(p, [0, 0.5], [0, 1])
-  const sweepDeg = useTransform(p, [0.42, 1], [0, 360])
+  const sweepDeg = useTransform(p, [0.35, 1], [0, 360])
   const ring = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(245,245,245,0.58) 0deg, rgba(245,245,245,0.58) ${sweepDeg}deg, transparent ${sweepDeg}deg)`
 
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-8 sm:pb-20 lg:pb-28 lg:pt-24">
-      <div ref={cardRef} className="relative mx-auto max-w-[1100px]">
-        {/* the timeline centre line, continuing down into the top of the card */}
-        <div
+    <div ref={cardRef} className="relative z-10 mx-auto mt-4 max-w-[1100px] lg:mt-10">
+      {/* soft light that traces around BEHIND the card as you scroll — never a hard edge line */}
+      {!reduced && (
+        <motion.div
           aria-hidden
-          className="absolute left-1/2 -top-[360px] hidden h-[368px] w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block"
-        >
-          <motion.div
-            style={reduced ? { scaleY: 1 } : { scaleY: connectorFill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/72 via-white/80 to-white/90"
-          />
-        </div>
+          className="pointer-events-none absolute -inset-[9px] rounded-[36px] blur-[22px]"
+          style={{ background: ring, opacity: 0.36 }}
+        />
+      )}
+      {/* ambient backlight seeping out from under the card */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-12 bottom-[-26px] h-28 rounded-[50%] bg-white/[0.055] blur-[56px]" />
 
-        {/* soft light that traces around BEHIND the card as you scroll — never a hard edge line */}
-        {!reduced && (
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute -inset-[9px] rounded-[36px] blur-[22px]"
-            style={{ background: ring, opacity: 0.36 }}
-          />
-        )}
-        {/* ambient backlight seeping out from under the card */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-12 bottom-[-26px] h-28 rounded-[50%] bg-white/[0.055] blur-[56px]" />
-
-        <Reveal y={16}>
-          <div className="relative z-10 overflow-hidden rounded-[28px] border border-line-strong bg-[#0a0a0c] p-8 shadow-[0_45px_110px_-50px_rgba(0,0,0,0.9)] sm:p-10 lg:p-12">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
-              {/* left: the grass, settled into the card rather than pasted on top */}
-              <div className="relative flex items-center justify-center">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-1/2 h-[76%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
-                  style={{ background: 'radial-gradient(closest-side, rgba(150,167,102,0.18), transparent)' }}
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute bottom-[14%] left-1/2 h-7 w-[64%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
-                />
-                <img
-                  src="/services/grass-mound.png"
-                  alt=""
-                  loading="lazy"
-                  className="relative w-full max-w-[440px] object-contain [mask-image:linear-gradient(to_bottom,#000_74%,transparent_99%)]"
-                />
-                {/* glossy web badge floating on the scene, same treatment as the 'De grote modellen' logos */}
-                <div className="absolute left-[46%] top-[20%] -translate-x-1/2 sm:top-[16%]">
-                  <Drift radius={7} duration={28} phase={40}>
-                    <div
-                      className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.07] shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-md"
-                      style={{ width: 94, height: 94, padding: 21 }}
-                    >
-                      <img src="/services/web-white.png" alt="" className="h-full w-full object-contain" />
-                    </div>
-                  </Drift>
-                </div>
-              </div>
-
-              {/* right: title + text */}
-              <div className="relative lg:pr-2">
-                <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
-                  {t.title}
-                </h2>
-                <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+      <Reveal y={16}>
+        <div className="relative z-10 overflow-hidden rounded-[28px] border border-line-strong bg-[#0a0a0c] p-8 shadow-[0_45px_110px_-50px_rgba(0,0,0,0.9)] sm:p-10 lg:p-12">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+            {/* left: the grass, settled into the card rather than pasted on top */}
+            <div className="relative flex items-center justify-center">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 h-[76%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+                style={{ background: 'radial-gradient(closest-side, rgba(150,167,102,0.18), transparent)' }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute bottom-[14%] left-1/2 h-7 w-[64%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
+              />
+              <img
+                src="/services/grass-mound.png"
+                alt=""
+                loading="lazy"
+                className="relative w-full max-w-[440px] object-contain [mask-image:linear-gradient(to_bottom,#000_74%,transparent_99%)]"
+              />
+              {/* glossy web badge floating on the scene, same treatment as the 'De grote modellen' logos */}
+              <div className="absolute left-[46%] top-[20%] -translate-x-1/2 sm:top-[16%]">
+                <Drift radius={7} duration={28} phase={40}>
+                  <div
+                    className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.07] shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-md"
+                    style={{ width: 94, height: 94, padding: 21 }}
+                  >
+                    <img src="/services/web-white.png" alt="" className="h-full w-full object-contain" />
+                  </div>
+                </Drift>
               </div>
             </div>
+
+            {/* right: title + text */}
+            <div className="relative lg:pr-2">
+              <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
+                {t.title}
+              </h2>
+              <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+            </div>
           </div>
-        </Reveal>
-      </div>
-    </section>
+        </div>
+      </Reveal>
+    </div>
   )
 }
 
@@ -2069,7 +2053,7 @@ function ServerTimeline() {
   const { lang } = useLang()
   const data = SERVER_STEPS[lang]
   const lineRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 55%'] })
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 62%'] })
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
 
   return (
@@ -2085,20 +2069,25 @@ function ServerTimeline() {
         </Reveal>
       </div>
 
-      <div
-        ref={lineRef}
-        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_8%,#000_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_8%,#000_100%)]"
-      >
-        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
+      <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16">
+        {/* ONE centre line for the whole block: it runs through the steps and simply
+            keeps going, on down behind the safe-AI card. Literally the same line, so
+            there is never a gap or a second lane. The card (z-10) covers its lower end. */}
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent_0%,#000_5%,#000_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_5%,#000_100%)]"
+        >
           <motion.div
             style={{ scaleY: fill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/74 to-white/72"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/80 to-white/80"
           />
         </div>
 
         {data.items.map((it, i) => (
           <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} clean={it.clean} icon={it.icon} reverse={i % 2 === 0} />
         ))}
+
+        <LocalSafeCard />
       </div>
     </section>
   )
