@@ -1243,7 +1243,7 @@ const AIOS_WORK: Record<
         heading: 'Customer-facing',
         items: [
           { label: 'Sales', body: 'Quotes and proposals ready to send, leads followed up so none slip through.' },
-          { label: 'Marketing', body: 'Content creation and content planning, all in your own trained tone.' },
+          { label: 'Marketing', body: 'Content creation and content planning, from email marketing to SEO and blog copywriting, all in your own trained tone.' },
           { label: 'Support', body: 'Customer questions answered at once, only the hard ones reach a person.' },
           { label: 'Communication', body: 'Every message in one place, replies prepared and on point.' },
         ],
@@ -1272,7 +1272,7 @@ const AIOS_WORK: Record<
         heading: 'Klantgericht',
         items: [
           { label: 'Sales', body: 'Offertes en voorstellen klaar om te versturen, leads opgevolgd zonder er een te vergeten.' },
-          { label: 'Marketing', body: 'Content creatie en contentplanning, alles in uw eigen getrainde toon.' },
+          { label: 'Marketing', body: 'Content creatie en contentplanning, van e-mailmarketing tot SEO en blogteksten, alles in uw eigen getrainde toon.' },
           { label: 'Support', body: 'Klantvragen meteen beantwoord, alleen de moeilijke naar een mens.' },
           { label: 'Communicatie', body: 'Alle berichten op één plek, antwoorden staan klaar en kloppen.' },
         ],
