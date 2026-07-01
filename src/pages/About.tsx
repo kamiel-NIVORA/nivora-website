@@ -32,10 +32,9 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We build custom software and AI around how your business actually works, and we make our own products, Box and Voice.',
-    heroEyebrow: 'A software & AI studio',
-    heroHeadline: 'Software and AI, shaped around how you really work.',
+    heroHeadline: 'Software and AI that shapes itself around people, not the other way around.',
     heroSub:
-      "We're Nivora, a small studio in Brugge. We design and build custom software and AI that fits the way your team already works, and we make our own products too. Box and Voice are on the way.",
+      "We're Nivora, a small studio in Brugge. We care about technology that feels like it was always meant to be there, quiet, useful, and truly yours. And we make our own products too. Box and Voice are on the way.",
     bookCall: 'Book a call',
     getInTouch: 'Get in touch',
     missionStatement:
@@ -98,10 +97,9 @@ const COPY = {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We bouwen software en AI op maat, rond de manier waarop uw bedrijf echt werkt, en we maken onze eigen producten, Box en Voice.',
-    heroEyebrow: 'Een software- & AI-studio',
-    heroHeadline: 'Software en AI, gevormd rond hoe u echt werkt.',
+    heroHeadline: 'Software en AI die zich naar mensen vormt, niet andersom.',
     heroSub:
-      'Wij zijn Nivora, een kleine studio in Brugge. We ontwerpen en bouwen software en AI op maat die past bij hoe uw team al werkt, en we maken ook onze eigen producten. Box en Voice zijn onderweg.',
+      'Wij zijn Nivora, een kleine studio in Brugge. We geven om technologie die aanvoelt alsof ze er altijd al thuishoorde, stil, bruikbaar en echt van u. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
     bookCall: 'Boek een gesprek',
     getInTouch: 'Neem contact op',
     missionStatement:
@@ -280,10 +278,6 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <motion.p variants={heroFade} className="mb-6 text-[12px] uppercase tracking-[0.2em] text-ink-soft/70">
-          {t.heroEyebrow}
-        </motion.p>
-
         <h1 className="font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
           {t.heroHeadline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
