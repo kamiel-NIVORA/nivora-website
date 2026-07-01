@@ -680,7 +680,15 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center text-center"
       >
-        <h1 className="mt-6 font-serif text-[35px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[48px] lg:text-[60px] lg:leading-[1.05]">
+        {/* The service's own mark, clean (no frame), sitting above the title */}
+        <motion.img
+          variants={heroFade}
+          src={meta.icon}
+          alt=""
+          aria-hidden
+          className="h-16 w-16 object-contain opacity-95 drop-shadow-[0_6px_26px_rgba(0,0,0,0.5)] sm:h-[72px] sm:w-[72px] lg:h-20 lg:w-20"
+        />
+        <h1 className="mt-5 font-serif text-[35px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[48px] lg:text-[60px] lg:leading-[1.05]">
           {content.hero.headline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
