@@ -1782,21 +1782,6 @@ function ComparisonBand() {
           <CompareCard key={s.kind} side={s} />
         ))}
       </div>
-
-      {/* The honest line, owned and turned straight back into the point. */}
-      <Reveal y={16}>
-        <div className="relative mx-auto mt-6 flex max-w-[1100px] items-start gap-4 overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 backdrop-blur-xl sm:items-center sm:p-8">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
-            <svg viewBox="0 0 24 24" className="h-4 w-4 text-ink-soft" fill="none" stroke="currentColor" strokeWidth={1.8}>
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v5" strokeLinecap="round" />
-              <path d="M12 16.5h.01" strokeLinecap="round" />
-            </svg>
-          </span>
-          <p className="text-[15px] leading-relaxed text-ink-soft/90 sm:text-[16px]">{data.honest}</p>
-        </div>
-      </Reveal>
     </section>
   )
 }
