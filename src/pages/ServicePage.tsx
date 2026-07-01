@@ -1124,7 +1124,7 @@ function AppShowcase() {
 
 const APP_SHAPES: Record<
   Lang,
-  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
+  { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
     title: 'From idea to something that keeps working',
@@ -1475,7 +1475,7 @@ function AiosWhoFor({ meta }: { meta: ServiceMeta }) {
 
 const AIOS_STEPS: Record<
   Lang,
-  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
+  { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
     title: 'From an ordinary company to one that runs on AI',
@@ -1565,7 +1565,7 @@ function AiosTimeline() {
         </div>
 
         {data.items.map((it, i) => (
-          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} clean={it.clean} icon={it.icon} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
@@ -2120,7 +2120,7 @@ function ComparisonBand() {
 
 const SERVER_STEPS: Record<
   Lang,
-  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
+  { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
     title: 'From your own server to your own AI',
@@ -2131,21 +2131,29 @@ const SERVER_STEPS: Record<
         title: 'We look at what you need',
         body: 'Which data matters, which tasks cost the most time today, and how many people will work with it. That decides what kind of system fits you, not the other way around. A small team needs something very different from a large one.',
         image: '/services/timeline-1.webp',
+        clean: '/services/timeline-clean-1.webp',
+        icon: '/services/icon-step-1.png',
       },
       {
         title: 'We put the AI in your place',
         body: "The intelligence runs on your own server, in your own building. No connection to anyone else's servers, no data going out. We handle the hardware and make sure everything sits exactly as it should.",
         image: '/services/timeline-2.webp',
+        clean: '/services/timeline-clean-2.webp',
+        icon: '/services/icon-step-2.png',
       },
       {
         title: 'We let it get to know your company',
         body: 'This is where it truly becomes yours. The AI learns from your own documents, your own way of working, your own data. You get no generic AI but one that understands your company, and that knowledge stays in.',
         image: '/services/timeline-3.webp',
+        clean: '/services/timeline-clean-3.webp',
+        icon: '/services/icon-step-3.png',
       },
       {
         title: 'We build the apps around it',
         body: 'An AI on its own does nothing yet. We build the applications your people actually work with. Pulling up documents and emails, asking questions about your own data, work that happens by itself. All through your own AI, nothing through the outside.',
         image: '/services/timeline-4.webp',
+        clean: '/services/timeline-clean-4.webp',
+        icon: '/services/icon-step-4.png',
       },
     ],
   },
@@ -2158,27 +2166,49 @@ const SERVER_STEPS: Record<
         title: 'We kijken wat u nodig hebt',
         body: 'Welke data telt, welke taken kosten nu het meeste tijd, en hoeveel mensen gaan ermee werken. Dat bepaalt wat voor systeem bij u past, niet andersom. Een klein team heeft iets heel anders nodig dan een groot.',
         image: '/services/timeline-1.webp',
+        clean: '/services/timeline-clean-1.webp',
+        icon: '/services/icon-step-1.png',
       },
       {
         title: 'We zetten de AI bij u neer',
         body: 'De intelligentie komt op uw eigen server, in uw eigen gebouw. Geen verbinding met servers van iemand anders, geen data die naar buiten gaat. Wij regelen de hardware en zorgen dat alles staat zoals het hoort.',
         image: '/services/timeline-2.webp',
+        clean: '/services/timeline-clean-2.webp',
+        icon: '/services/icon-step-2.png',
       },
       {
         title: 'We laten hem uw bedrijf leren kennen',
         body: 'Dit is waar het echt van u wordt. De AI leert van uw eigen documenten, uw eigen manier van werken, uw eigen data. Zo krijgt u geen algemene AI maar een die uw bedrijf begrijpt, en die kennis blijft binnen.',
         image: '/services/timeline-3.webp',
+        clean: '/services/timeline-clean-3.webp',
+        icon: '/services/icon-step-3.png',
       },
       {
         title: 'We bouwen de apps eromheen',
         body: 'Een AI op zich doet nog niks. Wij bouwen de toepassingen waarmee uw mensen er echt mee werken. Documenten en e-mails ophalen, vragen stellen over uw eigen data, werk dat vanzelf gebeurt. Alles via uw eigen AI, niets via buiten.',
         image: '/services/timeline-4.webp',
+        clean: '/services/timeline-clean-4.webp',
+        icon: '/services/icon-step-4.png',
       },
     ],
   },
 }
 
-function ServerStepRow({ title, body, image, reverse }: { title: string; body: string; image: string; reverse: boolean }) {
+function ServerStepRow({
+  title,
+  body,
+  image,
+  clean,
+  icon,
+  reverse,
+}: {
+  title: string
+  body: string
+  image: string
+  clean?: string
+  icon?: string
+  reverse: boolean
+}) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -2189,6 +2219,9 @@ function ServerStepRow({ title, body, image, reverse }: { title: string; body: s
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
+  // Once the frame has settled, a quick scroll fades the glossy blur in, then the icon.
+  const blurReveal = useTransform(scrollYProgress, [0.44, 0.54], [0, 1])
+  const iconReveal = useTransform(scrollYProgress, [0.52, 0.62], [0, 1])
 
   return (
     <div ref={ref} className="relative py-16 lg:py-40">
@@ -2220,7 +2253,29 @@ function ServerStepRow({ title, body, image, reverse }: { title: string; body: s
             reverse ? 'lg:order-1' : 'lg:order-2',
           )}
         >
-          <img src={image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+          <img src={clean ?? image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+          {clean && (
+            <motion.img
+              src={image}
+              alt=""
+              loading="lazy"
+              style={reduced ? { opacity: 1 } : { opacity: blurReveal }}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
+          {icon && (
+            <motion.div
+              style={reduced ? { opacity: 1 } : { opacity: iconReveal }}
+              className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            >
+              <div aria-hidden className="absolute h-24 w-24 rounded-full bg-black/25 blur-xl sm:h-28 sm:w-28" />
+              <img
+                src={icon}
+                alt=""
+                className="relative h-14 w-14 drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)] sm:h-[68px] sm:w-[68px]"
+              />
+            </motion.div>
+          )}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
         </motion.div>
       </div>
@@ -2260,7 +2315,7 @@ function ServerTimeline() {
         </div>
 
         {data.items.map((it, i) => (
-          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} clean={it.clean} icon={it.icon} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
