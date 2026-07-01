@@ -1106,7 +1106,7 @@ function AppShowcase() {
 
 const APP_SHAPES: Record<
   Lang,
-  { title: string; subtitle: string; items: { title: string; body: string }[] }
+  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
 > = {
   en: {
     title: 'From idea to something that keeps working',
@@ -1115,18 +1115,22 @@ const APP_SHAPES: Record<
     items: [
       {
         title: 'We untangle your idea',
+        image: '/services/timeline-app-1.webp',
         body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order. The more complex it starts, the more this part matters.',
       },
       {
         title: 'We design how it feels',
+        image: '/services/timeline-app-2.webp',
         body: 'We draw every screen ourselves, never an off-the-shelf design you see everywhere. How someone moves through your app, where everything sits, what happens at each step. This decides whether people enjoy using it or click away after a week.',
       },
       {
         title: 'We build what it actually has to do',
+        image: '/services/timeline-app-3.webp',
         body: 'This is about what it actually does. Not a pretty screen that does nothing, but an app that genuinely gets the work done. Built on a foundation that holds up as more people come on and as you add to it later. This is the difference from quickly clicked-together apps that break the moment they are used for real.',
       },
       {
         title: 'We let the work run itself',
+        image: '/services/timeline-app-4.webp',
         body: 'Where it saves time, we let the app think along instead of leaving the work to you. Tasks that handle themselves, things that fill in automatically, work that keeps running in the background while you do something else. Not so we can say there is AI in it, but because it wins you hours every day.',
       },
     ],
@@ -1138,29 +1142,29 @@ const APP_SHAPES: Record<
     items: [
       {
         title: 'We ontwarren uw idee',
+        image: '/services/timeline-app-1.webp',
         body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde. Hoe complexer het begint, hoe belangrijker dit deel.',
       },
       {
         title: 'We ontwerpen hoe het voelt',
+        image: '/services/timeline-app-2.webp',
         body: 'Elk scherm tekenen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. Hoe iemand door uw app beweegt, waar alles staat, wat er gebeurt bij elke stap. Dit bepaalt of mensen het graag gebruiken of na een week wegklikken.',
       },
       {
         title: 'We bouwen wat het echt moet doen',
+        image: '/services/timeline-app-3.webp',
         body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het werk ook echt af krijgt. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
       },
       {
         title: 'We laten het werk voor u doen',
+        image: '/services/timeline-app-4.webp',
         body: 'Waar het tijd scheelt, laten we de app meedenken in plaats van u het werk te laten doen. Taken die zichzelf afhandelen, dingen die vanzelf ingevuld worden, werk dat op de achtergrond doorloopt terwijl u iets anders doet. Niet om te kunnen zeggen dat er AI in zit, maar omdat u er elke dag uren mee wint.',
       },
     ],
   },
 }
 
-/** Placeholder image, intentionally the same for every row. The client will swap
- *  in per-step art later. */
-const APP_SHAPE_IMAGE = '/services/showcase-appdesign.jpg'
-
-function AppShapeRow({ title, body, reverse }: { title: string; body: string; reverse: boolean }) {
+function AppShapeRow({ title, body, image, reverse }: { title: string; body: string; image: string; reverse: boolean }) {
   const reduced = usePrefersReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
@@ -1209,7 +1213,7 @@ function AppShapeRow({ title, body, reverse }: { title: string; body: string; re
             reverse ? 'lg:order-1' : 'lg:order-2',
           )}
         >
-          <img src={APP_SHAPE_IMAGE} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
+          <img src={image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
         </motion.div>
       </div>
@@ -1251,7 +1255,7 @@ function AppBuildShapes() {
         </div>
 
         {data.items.map((it, i) => (
-          <AppShapeRow key={it.title} title={it.title} body={it.body} reverse={i % 2 === 0} />
+          <AppShapeRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
