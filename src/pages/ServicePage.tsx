@@ -10,7 +10,25 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion'
-import { ArrowUpRight, Check, ChevronDown, CloudOff, Minus, Scale, ShieldCheck } from 'lucide-react'
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  CloudOff,
+  Handshake,
+  Headset,
+  Mail,
+  Megaphone,
+  Minus,
+  Plus,
+  Receipt,
+  Scale,
+  ShieldCheck,
+  UserPlus,
+  Workflow,
+  type LucideIcon,
+} from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -1554,15 +1572,14 @@ function AiosTimeline() {
   )
 }
 
-/* AIOS · where work piles up · a clean, glossy map of the work the system takes off
-   your hands, laid over the sun-horizon background. Two columns (customer-facing /
-   internal) of frosted-glass cards, then a full-width maatwerk closing card that
-   catches everyone the four boxes miss. AIOS only. ──────────────────────────────── */
+/* AIOS · where work piles up · same framed two-card shape as Local AI's comparison:
+   two light nature-photo panels (customer-facing / internal), each a column heading
+   and its departments as glossy icon rows, then a maatwerk closing kader that catches
+   everyone the two columns miss. AIOS only. ──────────────────────────────────────── */
 
 const AIOS_WORK: Record<
   Lang,
   {
-    eyebrow: string
     title: string
     subtitle: string
     columns: { heading: string; items: { label: string; body: string }[] }[]
@@ -1570,120 +1587,122 @@ const AIOS_WORK: Record<
   }
 > = {
   en: {
-    eyebrow: 'Set up, you review it',
-    title: 'Everywhere work piles up',
+    title: 'The work that piles up, already done',
     subtitle:
-      'Think of the work that comes back every day and eats time. These are the places the system can take over, set up and ready, so all that is left for you is to check it.',
+      'The recurring work that eats time every day, customer-facing and internal. The system sets it up, you only review it.',
     columns: [
       {
         heading: 'Customer-facing',
         items: [
-          {
-            label: 'Sales',
-            body: 'Quotes and proposals are drawn up automatically, ready to send. You review and approve them, the rest is already done. Leads are followed up without a single one being forgotten.',
-          },
-          {
-            label: 'Marketing',
-            body: 'Copy written, posts made and scheduled, content followed up and the numbers behind it analysed. All in your own tone, ready to post.',
-          },
-          {
-            label: 'Support',
-            body: "Customer questions answered right away, in your company's tone, so it sounds like your own people replying. Only the hard cases reach a person.",
-          },
-          {
-            label: 'Communication',
-            body: 'Every incoming message and email in one place, with replies prepared and in line with what was agreed before. Nothing is left unanswered.',
-          },
+          { label: 'Sales', body: 'Quotes and proposals ready to send, leads followed up so none slip through.' },
+          { label: 'Marketing', body: 'Copy, posts and scheduling, all in your own tone.' },
+          { label: 'Support', body: 'Customer questions answered at once, only the hard ones reach a person.' },
+          { label: 'Communication', body: 'Every message in one place, replies prepared and on point.' },
         ],
       },
       {
         heading: 'Internal',
         items: [
-          {
-            label: 'Finance',
-            body: 'The system knows all your numbers and keeps most of the bookkeeping itself, so you no longer have to outsource it. Your accountant still checks it, instead of doing everything by hand. And because it has the context of all your data, it can think along, flag things and suggest adjustments.',
-          },
-          {
-            label: 'Operations',
-            body: 'Everything that keeps your company running goes more smoothly. Client onboarding, project tracking, customer satisfaction, KPIs and trackers. It keeps the overview, so you need no technical people or extra hands to make sense of it.',
-          },
-          {
-            label: 'HR and planning',
-            body: 'Rosters, planning and reporting that stay in sync, plus the first screening and follow-up when hiring people.',
-          },
+          { label: 'Finance', body: 'Most bookkeeping kept up, your accountant only checks it.' },
+          { label: 'Operations', body: 'Onboarding, projects and KPIs running smoothly, always an overview.' },
+          { label: 'HR', body: 'Hiring, first screening and follow-up.' },
+          { label: 'Planning', body: 'Rosters, planning and reporting kept in sync.' },
         ],
       },
     ],
     closing: {
       title: 'And whatever else your business needs',
-      body: 'Every business is different. What costs you the most time may not matter to someone else. We look together at what piles up in your business, and build the right thing for it. These are examples, not a fixed list.',
+      body: 'Every business is different. We look together at what piles up in yours, and build the right thing for it. These are examples, not a fixed list.',
     },
   },
   nl: {
-    eyebrow: 'Klaargezet, u kijkt het na',
-    title: 'Op elke plek waar werk blijft liggen',
+    title: 'Het werk dat blijft liggen, voortaan al gedaan',
     subtitle:
-      'Denk aan het werk dat elke dag terugkomt en tijd opslokt. Dit zijn plekken waar het systeem dat kan overnemen, klaargezet en wel, zodat u het enkel nog moet nakijken.',
+      'Het terugkerende werk dat elke dag tijd kost, klantgericht en intern. Het systeem zet het klaar, u kijkt het enkel nog na.',
     columns: [
       {
         heading: 'Klantgericht',
         items: [
-          {
-            label: 'Sales',
-            body: 'Offertes en voorstellen worden automatisch opgesteld, klaar om te versturen. U kijkt ze na en keurt ze goed, de rest is al gebeurd. Leads worden opgevolgd zonder dat er een vergeten wordt.',
-          },
-          {
-            label: 'Marketing',
-            body: 'Teksten geschreven, posts gemaakt en ingepland, content opgevolgd en de cijfers erachter geanalyseerd. Alles in uw eigen toon, klaar om te plaatsen.',
-          },
-          {
-            label: 'Support',
-            body: 'Vragen van klanten meteen beantwoord, in de toon van uw bedrijf, zodat het klinkt alsof uw eigen mensen antwoorden. Alleen de moeilijke gevallen komen bij een mens terecht.',
-          },
-          {
-            label: 'Communicatie',
-            body: 'Alle inkomende berichten en mails op één plek, met antwoorden die voorbereid klaarstaan en kloppen met wat er eerder is afgesproken. Niets blijft meer onbeantwoord liggen.',
-          },
+          { label: 'Sales', body: 'Offertes en voorstellen klaar om te versturen, leads opgevolgd zonder er een te vergeten.' },
+          { label: 'Marketing', body: 'Teksten, posts en planning, alles in uw eigen toon.' },
+          { label: 'Support', body: 'Klantvragen meteen beantwoord, alleen de moeilijke naar een mens.' },
+          { label: 'Communicatie', body: 'Alle berichten op één plek, antwoorden staan klaar en kloppen.' },
         ],
       },
       {
         heading: 'Intern',
         items: [
-          {
-            label: 'Finance',
-            body: 'Het systeem kent al uw cijfers en houdt het meeste boekhoudwerk zelf bij, zodat u dat niet langer hoeft uit te besteden. Uw boekhouder controleert het nog, in plaats van alles zelf te doen. En omdat het de context van al uw data heeft, kan het meedenken, dingen signaleren en voorstellen om bij te sturen.',
-          },
-          {
-            label: 'Operations',
-            body: "Alles wat uw bedrijf draaiende houdt, loopt soepeler. Client onboarding, projectopvolging, klanttevredenheid, KPI's en trackers. Het houdt overzicht zodat u er geen technische mensen of extra handen voor nodig hebt om het te begrijpen.",
-          },
-          {
-            label: 'HR en planning',
-            body: 'Roosters, planning en rapportage die op elkaar afgestemd blijven, plus de eerste screening en opvolging bij het aannemen van mensen.',
-          },
+          { label: 'Finance', body: 'Het meeste boekhoudwerk bijgehouden, uw boekhouder controleert enkel nog.' },
+          { label: 'Operations', body: "Onboarding, projecten en KPI's lopen soepel, altijd overzicht." },
+          { label: 'HR', body: 'Aanwerving, eerste screening en opvolging.' },
+          { label: 'Planning', body: 'Roosters, planning en rapportage op elkaar afgestemd.' },
         ],
       },
     ],
     closing: {
       title: 'En wat uw bedrijf verder nodig heeft',
-      body: 'Elk bedrijf is anders. Wat bij u het meeste tijd kost, hoeft bij een ander niet te spelen. We kijken samen wat in úw bedrijf blijft liggen, en bouwen daar het juiste voor. Dit zijn voorbeelden, geen vaste lijst.',
+      body: 'Elk bedrijf is anders. We kijken samen wat in úw bedrijf blijft liggen, en bouwen daar het juiste voor. Dit zijn voorbeelden, geen vaste lijst.',
     },
   },
 }
 
-const AIOS_WORK_BG = '/services/aios-work-bg.webp'
+const WORK_PHOTOS = ['/services/work-klantgericht.webp', '/services/work-intern.webp']
+const WORK_ICONS: LucideIcon[][] = [
+  [Handshake, Megaphone, Headset, Mail],
+  [Receipt, Workflow, UserPlus, CalendarDays],
+]
 
-/** One frosted glass-slat card in the work map: label + body over the background. */
-function WorkCard({ label, body }: { label: string; body: string }) {
+/** One department row: a glossy icon badge matching the department, then the name and
+ *  a short line. Icon badges instead of check marks keep it clean and scannable. */
+function WorkItem({ Icon, label, body }: { Icon: LucideIcon; label: string; body: string }) {
   return (
-    <div className="group relative h-full overflow-hidden rounded-[20px] border border-line bg-[#0b0b0f]/40 p-6 backdrop-blur-xl transition-[border-color,box-shadow] duration-300 hover:border-line-strong hover:shadow-[0_28px_70px_-30px_rgba(0,0,0,0.8)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_20%_-10%,rgba(255,255,255,0.10),transparent_55%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/22 to-transparent" />
-      <div className="relative">
-        <h4 className="font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink">{label}</h4>
-        <p className="mt-2.5 text-[13.5px] leading-relaxed text-faint">{body}</p>
+    <li className="flex items-start gap-3.5">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] border border-white/12 bg-white/[0.07] shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-md">
+        <Icon className="h-[17px] w-[17px] text-ink-soft" strokeWidth={1.7} />
+      </span>
+      <div>
+        <p className="text-[15px] font-medium leading-tight text-ink">{label}</p>
+        <p className="mt-1 text-[13px] leading-relaxed text-faint">{body}</p>
       </div>
-    </div>
+    </li>
+  )
+}
+
+/** One side of the work map as a home-style framed card: a light nature photo panel,
+ *  the column heading, then the departments as glossy icon rows. */
+function WorkColumn({
+  heading,
+  image,
+  items,
+  icons,
+}: {
+  heading: string
+  image: string
+  items: { label: string; body: string }[]
+  icons: LucideIcon[]
+}) {
+  return (
+    <Reveal>
+      <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.02] p-4 lg:p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
+          <img src={image} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(78% 78% at 50% 40%, transparent 46%, rgba(0,0,0,0.30))' }}
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        </div>
+
+        <div className="flex flex-1 flex-col px-2 pb-1 pt-6 lg:px-3">
+          <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[28px]">{heading}</h3>
+          <ul className="mt-6 flex flex-col gap-4">
+            {items.map((it, i) => (
+              <WorkItem key={it.label} Icon={icons[i]} label={it.label} body={it.body} />
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Reveal>
   )
 }
 
@@ -1691,69 +1710,36 @@ function AiosWorkGrid() {
   const { lang } = useLang()
   const data = AIOS_WORK[lang]
   return (
-    <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
-      {/* big background: the sun-horizon field, faded softly into the page */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <img
-          src={AIOS_WORK_BG}
-          alt=""
-          className="h-full w-full object-cover opacity-[0.5] [mask-image:radial-gradient(120%_100%_at_50%_36%,black_42%,transparent_92%)] [-webkit-mask-image:radial-gradient(120%_100%_at_50%_36%,black_42%,transparent_92%)]"
-        />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-bg/55" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg to-transparent" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent" />
-
-      <div className="relative mx-auto w-full max-w-[1200px] px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{data.eyebrow}</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-4 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              {data.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
-          </Reveal>
-        </div>
-
-        <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {data.columns.map((col) => (
-            <div key={col.heading}>
-              <Reveal>
-                <div className="mb-6">
-                  <h3 className="font-serif text-[21px] leading-none tracking-[-0.01em] text-ink sm:text-[23px]">
-                    {col.heading}
-                  </h3>
-                  <div className="mt-3 h-px w-10 bg-gradient-to-r from-white/35 to-transparent" />
-                </div>
-              </Reveal>
-              <div className="flex flex-col gap-4">
-                {col.items.map((it, i) => (
-                  <Reveal key={it.label} delay={i * 0.06}>
-                    <WorkCard label={it.label} body={it.body} />
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <Reveal delay={0.06}>
-          <div className="relative mt-6 overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/40 p-8 backdrop-blur-xl sm:p-10">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-20%,rgba(255,255,255,0.08),transparent_60%)]" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/22 to-transparent" />
-            <div className="relative mx-auto max-w-2xl text-center">
-              <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[26px]">
-                {data.closing.title}
-              </h3>
-              <p className="mx-auto mt-4 max-w-xl text-[14.5px] leading-relaxed text-faint">{data.closing.body}</p>
-            </div>
-          </div>
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
         </Reveal>
       </div>
+
+      <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
+        {data.columns.map((col, ci) => (
+          <WorkColumn key={col.heading} heading={col.heading} image={WORK_PHOTOS[ci]} items={col.items} icons={WORK_ICONS[ci]} />
+        ))}
+      </div>
+
+      <Reveal y={16}>
+        <div className="relative mx-auto mt-6 flex max-w-[1100px] items-start gap-4 overflow-hidden rounded-[22px] border border-line-strong bg-white/[0.04] p-6 backdrop-blur-xl sm:items-center sm:p-8">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-white/[0.06] sm:mt-0">
+            <Plus className="h-4 w-4 text-ink-soft" strokeWidth={1.8} />
+          </span>
+          <div>
+            <h3 className="font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink">{data.closing.title}</h3>
+            <p className="mt-2 text-[14.5px] leading-relaxed text-ink-soft/90">{data.closing.body}</p>
+          </div>
+        </div>
+      </Reveal>
     </section>
   )
 }
