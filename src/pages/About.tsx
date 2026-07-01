@@ -98,8 +98,8 @@ const COPY = {
     morePost: '.',
     services: [
       { slug: 'app-design', name: 'App Design', desc: 'Apps op maat, gebouwd rond uw idee.' },
-      { slug: 'local-ai', name: 'Local AI', desc: 'Veilige AI op uw eigen servers of de onze.' },
-      { slug: 'aios', name: 'AIOS', desc: 'Een AI-besturingssysteem op maat voor uw bedrijf.' },
+      { slug: 'local-ai', name: 'Local AI', desc: 'AI die uw data veilig houdt.' },
+      { slug: 'aios', name: 'AIOS', desc: 'Een AI-operating systeem afgestemd op uw bedrijf.' },
       { slug: 'ai-consulting', name: 'AI Consulting', desc: 'Ontdek waar AI past en welke strategie wint.' },
     ] as Svc[],
     learnMore: 'Lees meer',

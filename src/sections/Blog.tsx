@@ -13,7 +13,7 @@ const COPY = {
   nl: {
     title: 'Onze meest recente artikelen',
     subtitle:
-      'Notities van binnenuit Nivora, de tools die we uitbrengen, het denken erachter, en wat we leren terwijl we bouwen.',
+      'Notities vanuit Nivora, de tools die we uitbrengen, het denken erachter, en wat we leren terwijl we bouwen. Over de echte economische waarde van AI, niet de zoveelste hypetool.',
   },
 } as const
 

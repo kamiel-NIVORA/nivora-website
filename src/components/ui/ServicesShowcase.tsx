@@ -79,7 +79,7 @@ function SlideContent({ img, tagline }: Slide) {
   )
 }
 
-export function ServicesShowcase() {
+export function ServicesShowcase({ onIndexChange }: { onIndexChange?: (index: number) => void } = {}) {
   const { lang } = useLang()
   const SLIDES = SLIDES_COPY[lang]
   const ref = useRef<HTMLDivElement>(null)
@@ -92,6 +92,11 @@ export function ServicesShowcase() {
     const t = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 4400)
     return () => clearInterval(t)
   }, [inView, SLIDES.length])
+
+  // Houd de knop naast de kaart in de pas met de zichtbare slide.
+  useEffect(() => {
+    onIndexChange?.(index)
+  }, [index, onIndexChange])
 
   return (
     <div ref={ref} className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/10]">

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { waitlistHref } from '@/data/contact'
 import { useLang, type Lang } from '@/i18n'
 
 /**
@@ -11,16 +12,16 @@ import { useLang, type Lang } from '@/i18n'
  * wachtlijst.
  */
 
-type Notif = { app: string; logo: string; blurb: string }
+type Notif = { app: string; logo: string; blurb: string; href: string }
 
 const NOTIFS: Record<Lang, Notif[]> = {
   en: [
-    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.' },
-    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.' },
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.', href: waitlistHref('box') },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.', href: waitlistHref('voice') },
   ],
   nl: [
-    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'Al uw communicatie op één plek.' },
-    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Spraak naar tekst, afgestemd op uw stem.' },
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'Al uw communicatie op één plek.', href: waitlistHref('box') },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Spraak naar tekst, afgestemd op uw stem.', href: waitlistHref('voice') },
   ],
 }
 
@@ -41,12 +42,14 @@ function useClock(locale: string): string {
   return now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
-function NotifCard({ app, logo, blurb, time }: Notif & { time: string }) {
+function NotifCard({ app, logo, blurb, href, time }: Notif & { time: string }) {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
     <motion.a
-      href="#contact"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       aria-label={t.notifAria(app)}
       layout
       initial={{ opacity: 0, y: 34, scale: 0.965, filter: 'blur(6px)' }}

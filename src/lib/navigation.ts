@@ -37,8 +37,8 @@ const SERVICES_EN: NavItem[] = [
 ]
 const SERVICES_NL: NavItem[] = [
   { title: 'App Design', desc: 'Apps op maat, gebouwd rond uw idee.', href: '/services/app-design', img: '/services/service-appdesign.webp' },
-  { title: 'Local AI', desc: 'Veilige AI op uw eigen servers of de onze.', href: '/services/local-ai', img: '/services/service-localai.webp' },
-  { title: 'AIOS', desc: 'Een AI-besturingssysteem op maat voor uw bedrijf.', href: '/services/aios', img: '/services/service-aios.webp' },
+  { title: 'Local AI', desc: 'AI die uw data veilig houdt.', href: '/services/local-ai', img: '/services/service-localai.webp' },
+  { title: 'AIOS', desc: 'Een AI-operating systeem afgestemd op uw bedrijf.', href: '/services/aios', img: '/services/service-aios.webp' },
   { title: 'AI Consulting', desc: 'Ontdek waar AI past en welke strategie wint.', href: '/services/ai-consulting', img: '/services/service-consulting.webp' },
 ]
 

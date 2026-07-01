@@ -12,7 +12,7 @@ const COPY = {
   },
   nl: {
     title: 'Laten we het juiste bouwen',
-    body: 'Vertel ons de uitdaging, of het idee dat u niet gebouwd krijgt. We tonen u wat de moeite waard is, bewijzen de waarde voordat u zich vastlegt, en bouwen het samen met u.',
+    body: 'Vertel ons jullie uitdagingen, of de ideeën die jullie niet gebouwd krijgen. We tonen jullie wat de moeite waard is, bewijzen de waarde voordat jullie je vastleggen, en bouwen het samen met jullie.',
     bookCall: 'Boek een strategiegesprek',
     contact: 'Neem contact op',
   },
@@ -55,7 +55,7 @@ export function FinalCTA() {
       {/* Rocks cutout, resting on the dark with a soft grounding fade, pulled up nearer the CTA */}
       <div className="pointer-events-none relative mx-auto -mt-2 h-56 w-full max-w-4xl sm:h-64 lg:h-80">
         <img
-          src="/home/rocks.png"
+          src="/home/cta-steps.png"
           alt=""
           className="absolute inset-0 h-full w-full object-contain object-bottom opacity-95 [mask-image:linear-gradient(to_bottom,#000_72%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_72%,transparent_100%)]"
         />

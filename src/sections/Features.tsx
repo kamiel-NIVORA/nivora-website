@@ -5,7 +5,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { NotificationStack } from '@/components/ui/NotificationStack'
 import { ServicesShowcase } from '@/components/ui/ServicesShowcase'
-import { getServices } from '@/lib/navigation'
+import { getServices, type NavItem } from '@/lib/navigation'
 import { WAITLIST_URL } from '@/data/contact'
 import { useLang } from '@/i18n'
 
@@ -13,12 +13,15 @@ const cycleEase = [0.22, 1, 0.36, 1] as const
 
 /** A single word that rolls over to the next on a timer; width stays fixed to the
  *  longest entry so the surrounding button never reflows. */
-function CyclingWord({ words, interval = 2200 }: { words: string[]; interval?: number }) {
-  const [i, setI] = useState(0)
+function CyclingWord({ words, index, interval = 2200 }: { words: string[]; index?: number; interval?: number }) {
+  const [internal, setInternal] = useState(0)
+  const controlled = index !== undefined
   useEffect(() => {
-    const id = setInterval(() => setI((v) => (v + 1) % words.length), interval)
+    if (controlled) return
+    const id = setInterval(() => setInternal((v) => (v + 1) % words.length), interval)
     return () => clearInterval(id)
-  }, [words.length, interval])
+  }, [words.length, interval, controlled])
+  const i = controlled ? index! : internal
   const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '')
   return (
     <span className="relative ml-1 inline-block whitespace-nowrap font-semibold">
@@ -84,14 +87,14 @@ const COPY = {
   nl: {
     headingTitle: 'De tools die u nodig hebt. De systemen die u wilt.',
     headingSubtitle:
-      'Gebruik onze software meteen, of laat ons precies bouwen en installeren wat uw bedrijf nodig heeft. Klaar voor gebruik of op maat gebouwd, allebei passen ze naadloos in uw dag.',
+      'Gebruik onze software meteen, of laat ons precies bouwen en installeren wat uw bedrijf nodig heeft. Klaar voor gebruik of op maat gebouwd.',
     comingSoon: 'Binnenkort',
     learnMoreAbout: 'Lees meer over',
     altPrefix: 'Visual van',
     features: [
       {
         title: 'Onze producten',
-        body: 'Intelligente software gebouwd door Nivora, klaar voor gebruik vanaf dag één. Kies de tool die bij uw workflow past en ga meteen aan de slag. Geen ingewikkelde setup, geen langdradige onboarding.',
+        body: 'Intelligente software gebouwd door Nivora, klaar voor gebruik vanaf dag één. Kies de tool die bij uw workflow past en ga meteen aan de slag.',
         notifications: true,
         comingSoon: true,
         cta: 'Word op de hoogte gebracht bij de lancering',
@@ -101,7 +104,7 @@ const COPY = {
       },
       {
         title: 'Onze diensten',
-        body: 'U brengt de uitdaging, wij regelen de rest. Van het installeren van private AI binnen uw infrastructuur tot het bouwen van apps op maat en complete ERP-systemen.',
+        body: 'U brengt jullie uitdagingen, wij regelen de rest. Van het installeren van private AI binnen uw infrastructuur tot het bouwen van apps op maat en complete ERP-systemen.',
         services: true,
         cta: 'Lees meer over AIOS',
         href: '#aios',
@@ -115,13 +118,17 @@ type Labels = { comingSoon: string; learnMoreAbout: string; altPrefix: string }
 function FeatureCard({
   feature,
   labels,
-  serviceTitles,
+  serviceItems,
 }: {
   feature: Feature
   labels: Labels
-  serviceTitles: string[]
+  serviceItems: NavItem[]
 }) {
   const { title, body, image, notifications, services, comingSoon, cta, href, secondaryCta, secondaryHref } = feature
+  const serviceTitles = serviceItems.map((s) => s.title)
+  // Welke dienst nu in de showcase-carousel te zien is; knop-label + link volgen mee.
+  const [activeService, setActiveService] = useState(0)
+  const activeSvc = serviceItems[activeService] ?? serviceItems[0]
   return (
     <Reveal>
       <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.015] p-4 lg:p-5">
@@ -130,7 +137,7 @@ function FeatureCard({
           {notifications ? (
             <NotificationStack />
           ) : services ? (
-            <ServicesShowcase />
+            <ServicesShowcase onIndexChange={setActiveService} />
           ) : (
             <img
               src={image}
@@ -156,9 +163,9 @@ function FeatureCard({
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-faint">{body}</p>
           {services ? (
-            <RippleButton variant="ghost" href={href} className="mt-7 min-h-11 max-w-full self-start px-5 py-2.5 text-sm">
+            <RippleButton variant="ghost" href={activeSvc?.href ?? href} className="mt-7 min-h-11 max-w-full self-start px-5 py-2.5 text-sm">
               {labels.learnMoreAbout}
-              <CyclingWord words={serviceTitles} />
+              <CyclingWord words={serviceTitles} index={activeService} />
             </RippleButton>
           ) : (
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -187,7 +194,7 @@ function FeatureCard({
 export function Features() {
   const { lang } = useLang()
   const t = COPY[lang]
-  const serviceTitles = getServices(lang).map((s) => s.title)
+  const serviceItems = getServices(lang)
   const labels: Labels = {
     comingSoon: t.comingSoon,
     learnMoreAbout: t.learnMoreAbout,
@@ -198,7 +205,7 @@ export function Features() {
       <SectionHeading title={t.headingTitle} subtitle={t.headingSubtitle} />
       <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
         {t.features.map((f) => (
-          <FeatureCard key={f.title} feature={f} labels={labels} serviceTitles={serviceTitles} />
+          <FeatureCard key={f.title} feature={f} labels={labels} serviceItems={serviceItems} />
         ))}
       </div>
     </section>

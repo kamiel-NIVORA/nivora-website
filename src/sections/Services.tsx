@@ -15,7 +15,7 @@ const COPY = {
   },
   nl: {
     title: 'Onze diensten',
-    subtitle: 'Vertel ons de uitdaging. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
+    subtitle: 'Vertel ons jullie uitdagingen. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
     learnMore: 'Lees meer',
   },
 } as const

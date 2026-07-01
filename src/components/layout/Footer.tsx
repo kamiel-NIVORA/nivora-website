@@ -118,7 +118,7 @@ export function Footer() {
 
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 md:w-auto md:flex-1 md:max-w-[900px] md:pl-12">
             {columns.map((col) => (
-              <div key={col.title}>
+              <div key={col.title} className={col.title === t.contact ? 'col-span-2 sm:col-span-1' : undefined}>
                 <p className="text-sm text-faint">{col.title}</p>
                 <ul className="mt-4 flex flex-col gap-3">
                   {col.links.map((l) => (
