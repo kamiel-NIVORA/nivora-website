@@ -367,8 +367,8 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     name: 'AI Consulting',
     hero: {
       eyebrow: 'AI Consulting & Flows',
-      headline: 'Know exactly where AI pays off before you spend a cent building it.',
-      subhead: 'We learn how your team works, find where AI earns its place, and hand you a ranked roadmap with pilots that prove value first.',
+      headline: 'Know exactly where AI pays off before you invest in it.',
+      subhead: 'We first gather enough context on your business, find where AI genuinely earns its place, and hand you a ranked roadmap with pilots that prove the value first.',
       primaryCta: 'Book a strategy call',
       secondaryCta: 'Contact us',
     },
@@ -377,7 +377,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       chips: ['Plan first', 'Honest ROI', 'You own it'],
     },
     reveal:
-      'AI advice is easy to give, and usually worthless. What matters is knowing what actually pays off for your business, and you only see that up close. So that is where we start. Not a list of trends, but a direction that fits how you really operate.',
+      'Everyone has an opinion about AI, but almost nobody looks at how your business actually runs with enough context. That is exactly where the difference sits. We get inside your operations first, and only then tell you where AI can make the difference for you. Not a list of trends, but a direction that fits how you really operate.',
     problem: {
       title: "You feel the pressure to do something with AI. You just don't know where to start.",
       intro: 'Most founders we talk to are in the same spot: the expectation is loud, the path is silent.',
@@ -393,7 +393,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
         'Clear answers on where AI helps you, and where it does not',
         'A ranked roadmap ordered by impact, effort, and honest ROI',
         'Quick automation wins your team feels in weeks',
-        'A plan in hand before you spend, so the build is the safe part',
+        'A plan in hand before you invest, so the build is the safe part',
       ],
     },
     capabilities: {
@@ -418,12 +418,12 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Why a builder, not a consultancy',
+      title: 'Why work with us?',
       items: [
-        { title: 'We build, so the plan is buildable', body: 'Our roadmaps come from people who ship real systems. Nothing in your plan is a slide that cannot survive contact with reality.' },
-        { title: 'We have no tool to sell you', body: 'Our build vs buy calls are honest because we do not win when you over-build. If an off-the-shelf tool is the right answer, we say so.' },
-        { title: 'Proof before spend', body: 'We would rather show you a working pilot than promise an outcome. You commit budget once you have seen it work, not before.' },
-        { title: 'Clarity over jargon', body: 'You will understand every recommendation and the reason behind it, in plain language. No black boxes, no buzzwords.' },
+        { title: 'Our help starts with listening', body: 'We do not give advice before we truly understand your business. First we gather enough context on how you work, and only then do we tell you where AI pays off for you.' },
+        { title: 'We can actually build it too', body: 'Our advice does not stop at a report. Whatever you want in your business, we can execute ourselves, and because we build it, we understand the plan all the better.' },
+        { title: 'We go deep on AI', body: 'We follow the developments in AI closely and keep upskilling continuously, however fast it moves. So you always get advice that matches what is genuinely possible today.' },
+        { title: 'Everything stays private', body: 'We work fully discreetly. Whatever we see or discuss of your operations and flows never goes further than us. How you work stays yours, and stays with us.' },
       ],
     },
     audience: {
@@ -441,15 +441,15 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     faq: [
-      { q: 'How long does this take?', a: 'Most engagements run a few weeks from first conversation to roadmap, with early pilots inside that window. We scope it on the strategy call once we understand your situation, and we do not pad it.' },
+      { q: 'How long does this take?', a: 'It depends on how far you want to take the consulting. It is not necessarily a few weeks: sometimes a short review is enough, sometimes we go deeper. We scope it together on the strategy call once we understand your situation, and it can happen with no obligation to have us build it afterwards.' },
       { q: 'Do we own what you produce?', a: 'Yes. The audit, the roadmap, the pilots, all of it is yours. You can act on it with us, with another team, or in-house, with no lock-in built into the plan.' },
-      { q: 'How do you handle our data and security?', a: 'We treat your data as yours. We only access what we need to do the work, we are explicit about where anything runs, and if privacy is critical we design around keeping things on your own infrastructure.' },
+      { q: 'How do you handle our data and security?', a: 'We treat your data as yours. We only access what we need to do the work, and we are explicit about where anything runs. Privacy is not an add-on but the standard with us: whatever we see or discuss of your operations and flows simply does not go further than us.' },
       { q: 'We already have some AI tools in place. Is this still worth it?', a: 'Often more so. Part of the audit is judging what is already working, what is quietly failing, and what to keep, drop, or replace, so you stop paying for things that do not stick.' },
       { q: "What if the honest answer is that AI doesn't help us much?", a: "Then we tell you, plainly. Knowing where AI does not fit saves you more than another vendor's roadmap ever will. That is a real outcome, not a failed engagement." },
       { q: 'How do we get started?', a: 'Book a strategy call. We talk through where you are and give you a straight answer on whether this is the right fit. We usually reply within a day.' },
     ],
     finalCta: {
-      title: 'Get a plan before you spend.',
+      title: 'Get a plan before you invest.',
       body: 'Bring us the pressure and the uncertainty. We will come back with clarity on where AI fits, what it is worth, and what to do first.',
       button: 'Book a strategy call',
       reassurance: 'A 30-minute call. No pitch, no obligation, just a straight answer on whether this is the right fit. We usually reply within a day.',
@@ -820,8 +820,8 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     name: 'AI Consulting',
     hero: {
       eyebrow: 'AI Consulting & Flows',
-      headline: 'Weet precies waar AI loont voordat u er één cent aan bouwt.',
-      subhead: 'We leren hoe uw team werkt, vinden waar AI zijn plek verdient, en geven u een geprioriteerde roadmap met pilots die eerst de waarde bewijzen.',
+      headline: 'Weet precies waar AI loont voordat u erin investeert.',
+      subhead: 'We verzamelen eerst genoeg context over uw bedrijf, vinden waar AI echt zijn plek verdient, en geven u een geprioriteerde roadmap met pilots die de waarde eerst bewijzen.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
     },
@@ -830,7 +830,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['Eerst een plan', 'Eerlijke ROI', 'U bezit het'],
     },
     reveal:
-      'Advies over AI is makkelijk te geven en meestal waardeloos. Wat echt telt is weten wat voor jouw bedrijf loont, en dat zie je pas van dichtbij. Daarom beginnen wij daar. Geen lijstje met trends, maar een richting die klopt met jouw praktijk.',
+      'Iedereen heeft wel een mening over AI, maar bijna niemand kijkt met genoeg context naar hoe uw bedrijf echt draait. Daar zit precies het verschil. Wij kruipen eerst in uw operations, en zeggen pas dan waar AI voor u het verschil kan maken. Geen lijstje met trends, maar een richting die klopt met uw praktijk.',
     problem: {
       title: 'U voelt de druk om iets met AI te doen. U weet alleen niet waar te beginnen.',
       intro: 'De meeste oprichters met wie we praten zitten in dezelfde situatie: de verwachting is luid, het pad is stil.',
@@ -846,7 +846,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
         'Heldere antwoorden over waar AI u helpt, en waar niet',
         'Een geprioriteerde roadmap, geordend op impact, inspanning en eerlijke ROI',
         'Snelle automatiseringswinsten die uw team voelt in weken',
-        'Een plan in handen voordat u uitgeeft, zodat de build het veilige deel is',
+        'Een plan in handen voordat u investeert, zodat de build het veilige deel is',
       ],
     },
     capabilities: {
@@ -871,12 +871,12 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Waarom een bouwer, geen consultancy',
+      title: 'Waarom hulp van ons?',
       items: [
-        { title: 'Wij bouwen, dus het plan is bouwbaar', body: 'Onze roadmaps komen van mensen die echte systemen lanceren. Niets in uw plan is een slide die het contact met de realiteit niet overleeft.' },
-        { title: 'We hebben geen tool om u te verkopen', body: 'Onze bouwen-of-kopen-beslissingen zijn eerlijk omdat wij er niet bij winnen als u te veel bouwt. Als een kant-en-klare tool het juiste antwoord is, zeggen we dat.' },
-        { title: 'Bewijs voor uitgave', body: 'We tonen u liever een werkende pilot dan een uitkomst te beloven. U legt budget vast nadat u het hebt zien werken, niet ervoor.' },
-        { title: 'Helderheid boven jargon', body: 'U begrijpt elke aanbeveling en de reden erachter, in heldere taal. Geen black boxes, geen buzzwords.' },
+        { title: 'Onze hulp begint met luisteren', body: 'We geven geen advies voordat we uw bedrijf echt begrijpen. Eerst halen we genoeg context op over hoe u werkt, en pas dan zeggen we waar AI voor u loont.' },
+        { title: 'We kunnen het ook echt bouwen', body: 'Ons advies blijft niet bij een rapport. Wat u in uw bedrijf wilt, kunnen wij zelf uitvoeren, en juist omdat we het bouwen begrijpen we het plan des te beter.' },
+        { title: 'We zitten diep in de AI', body: 'We volgen de ontwikkelingen in AI op de voet en blijven ons continu bijscholen, hoe snel het ook gaat. Zo krijgt u altijd advies dat klopt met wat vandaag echt kan.' },
+        { title: 'Alles blijft privé', body: 'We werken volledig discreet. Wat we van uw operations en flows zien of bespreken, gaat nooit verder dan ons. Uw manier van werken blijft van u, en blijft bij ons.' },
       ],
     },
     audience: {
@@ -894,15 +894,15 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     faq: [
-      { q: 'Hoe lang duurt dit?', a: 'De meeste samenwerkingen lopen enkele weken van eerste gesprek tot roadmap, met vroege pilots binnen dat venster. We bakenen het af tijdens het strategiegesprek zodra we uw situatie begrijpen, en we rekken het niet kunstmatig.' },
+      { q: 'Hoe lang duurt dit?', a: 'Dat hangt af van hoe ver u in de consulting wilt gaan. Het is niet per se enkele weken: soms volstaat een korte doorlichting, soms gaan we dieper. We bakenen het samen af tijdens het strategiegesprek zodra we uw situatie begrijpen, en dat kan volledig zonder verplichting om de bouw daarna bij ons te laten uitvoeren.' },
       { q: 'Bezitten we wat jullie maken?', a: 'Ja. De audit, de roadmap, de pilots, alles is van u. U kunt ermee aan de slag met ons, met een ander team, of in eigen huis, zonder lock-in in het plan.' },
-      { q: 'Hoe gaan jullie om met onze data en beveiliging?', a: 'We behandelen uw data als de uwe. We raadplegen alleen wat we nodig hebben om het werk te doen, we zijn duidelijk over waar alles draait, en als privacy cruciaal is ontwerpen we eromheen om dingen op uw eigen infrastructuur te houden.' },
+      { q: 'Hoe gaan jullie om met onze data en beveiliging?', a: 'We behandelen uw data als de uwe. We raadplegen alleen wat we nodig hebben om het werk te doen, en we zijn duidelijk over waar alles draait. Privacy is bij ons geen extra optie maar de standaard: wat we van uw operations en flows zien of bespreken, gaat gewoon niet verder dan ons.' },
       { q: 'We hebben al enkele AI-tools draaien. Is dit dan nog de moeite?', a: 'Vaak des te meer. Een deel van de audit is beoordelen wat al werkt, wat stilletjes faalt, en wat te houden, te schrappen of te vervangen, zodat u stopt met betalen voor dingen die niet beklijven.' },
       { q: 'Wat als het eerlijke antwoord is dat AI ons niet veel helpt?', a: 'Dan zeggen we het u, rechtuit. Weten waar AI niet past, bespaart u meer dan de roadmap van nog een leverancier ooit zal doen. Dat is een echt resultaat, geen mislukte samenwerking.' },
       { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen waar u staat en geven u een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.' },
     ],
     finalCta: {
-      title: 'Krijg een plan voordat u uitgeeft.',
+      title: 'Krijg een plan voordat u investeert.',
       body: 'Breng ons de druk en de onzekerheid. Wij komen terug met helderheid over waar AI past, wat het waard is, en wat eerst te doen.',
       button: 'Boek een strategiegesprek',
       reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',

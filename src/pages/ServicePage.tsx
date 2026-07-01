@@ -408,7 +408,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'ai-consulting': {
       eyebrow: '',
       title: 'We go deep into your business before we recommend anything',
-      body: 'No generic advice from a distance. We look closely at how you really work, where it gets stuck and where time disappears, and only once we understand that do we tell you where AI makes the difference for you.',
+      body: 'No generic advice from a distance. We look closely at how you really work, where it gets stuck and where time disappears, and only once we have enough context on your business do we tell you where AI can make the difference for you.',
     },
   },
   nl: {
@@ -430,7 +430,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'ai-consulting': {
       eyebrow: '',
       title: 'We duiken diep in je bedrijf voor we iets aanraden',
-      body: 'Geen algemeen advies van een afstand. We kijken van dichtbij hoe je echt werkt, waar het stroef loopt en waar tijd verdwijnt, en pas als we dat begrijpen zeggen we waar AI voor jou het verschil maakt.',
+      body: 'Geen algemeen advies van een afstand. We kijken van dichtbij hoe je echt werkt, waar het stroef loopt en waar tijd verdwijnt, en pas als we genoeg context van je bedrijf hebben zeggen we waar AI voor jou het verschil kan maken.',
     },
   },
 }
@@ -2073,19 +2073,19 @@ const CONSULTING_STEPS: Record<
   { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
-    title: 'From a question to a plan that fits',
+    title: 'From confusion to a plan that fits your operations',
     subtitle: 'We do not start with answers, but with understanding how you work.',
     items: [
       {
         title: 'We listen to how you work',
-        body: 'We map what happens every day, where time slips away, and where the frustration sits. Not only with the leadership, but with the people who really do the work. The better we understand how your business runs, the sharper we can see where AI can mean something.',
+        body: 'We really listen to how the work flows, and hear where time slips away and where the confusion sits. Not only with the leadership, but with the people who really do the work. The better we understand how your business runs, the sharper we can see where AI can mean something.',
         image: '/services/timeline-consult-1.webp',
         clean: '/services/timeline-consult-clean-1.webp',
         icon: '/services/icon-consulting-1.png',
       },
       {
         title: 'We find where AI truly pays off',
-        body: 'Not everywhere it could, but where it returns the most. We weigh what it costs against what it brings in, and line the opportunities up from most to least valuable. So you know where to put it first.',
+        body: 'We first look where it pays off fastest and most, not everywhere at once. We weigh what it costs against what it brings in, and line the opportunities up from most to least valuable. So you know where to put it first.',
         image: '/services/timeline-consult-2.webp',
         clean: '/services/timeline-consult-clean-2.webp',
         icon: '/services/icon-consulting-2.png',
@@ -2107,19 +2107,19 @@ const CONSULTING_STEPS: Record<
     ],
   },
   nl: {
-    title: 'Van vraag naar een plan dat klopt',
-    subtitle: 'We beginnen niet met antwoorden, maar met begrijpen hoe jij werkt.',
+    title: 'Van verward zijn naar een plan dat klopt voor jullie operations',
+    subtitle: 'We beginnen niet met antwoorden, maar met begrijpen hoe jullie werken.',
     items: [
       {
-        title: 'We luisteren naar hoe je werkt',
-        body: 'We brengen in kaart wat er elke dag gebeurt, waar tijd verloren gaat, en waar de frustratie zit. Niet alleen bij de leiding, maar bij de mensen die het werk echt doen. Hoe beter we begrijpen hoe je bedrijf draait, hoe scherper we kunnen zien waar AI iets kan betekenen.',
+        title: 'We luisteren naar hoe jullie werken',
+        body: 'We luisteren echt naar hoe het werk verloopt, en horen zo waar tijd verloren gaat en waar de verwarring zit. Niet alleen bij de leiding, maar bij de mensen die het werk echt doen. Hoe beter we begrijpen hoe jullie bedrijf draait, hoe scherper we kunnen zien waar AI iets kan betekenen.',
         image: '/services/timeline-consult-1.webp',
         clean: '/services/timeline-consult-clean-1.webp',
         icon: '/services/icon-consulting-1.png',
       },
       {
         title: 'We zoeken waar AI echt loont',
-        body: 'Niet overal waar het kan, maar waar het het meeste oplevert. We wegen wat het kost tegen wat het opbrengt, en zetten de kansen op een rij van meest naar minst waardevol. Zo weet je waar je het eerst op moet inzetten.',
+        body: 'We kijken eerst waar het het snelst het meeste oplevert, niet overal tegelijk. We wegen wat het kost tegen wat het opbrengt, en zetten de kansen op een rij van meest naar minst waardevol. Zo weet je waar je het eerst op inzet.',
         image: '/services/timeline-consult-2.webp',
         clean: '/services/timeline-consult-clean-2.webp',
         icon: '/services/icon-consulting-2.png',
