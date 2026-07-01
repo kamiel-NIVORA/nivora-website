@@ -935,21 +935,29 @@ const APP_SHAPES: Record<
       {
         title: 'We untangle your idea',
         image: '/services/timeline-app-1.webp',
+        clean: '/services/timeline-app-clean-1.webp',
+        icon: '/services/icon-app-1.png',
         body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order. The more complex it starts, the more this part matters.',
       },
       {
         title: 'We design how it feels',
         image: '/services/timeline-app-2.webp',
+        clean: '/services/timeline-app-clean-2.webp',
+        icon: '/services/icon-app-2.png',
         body: 'We draw every screen ourselves, never an off-the-shelf design you see everywhere. How someone moves through your app, where everything sits, what happens at each step. This decides whether people enjoy using it or click away after a week.',
       },
       {
         title: 'We build what it actually has to do',
         image: '/services/timeline-app-3.webp',
+        clean: '/services/timeline-app-clean-3.webp',
+        icon: '/services/icon-app-3.png',
         body: 'This is about what it actually does. Not a pretty screen that does nothing, but an app that genuinely gets the work done. Built on a foundation that holds up as more people come on and as you add to it later. This is the difference from quickly clicked-together apps that break the moment they are used for real.',
       },
       {
         title: 'We let the work run itself',
         image: '/services/timeline-app-4.webp',
+        clean: '/services/timeline-app-clean-4.webp',
+        icon: '/services/icon-app-4.png',
         body: 'Where it saves time, we let the app think along instead of leaving the work to you. Tasks that handle themselves, things that fill in automatically, work that keeps running in the background while you do something else. Not so we can say there is AI in it, but because it wins you hours every day.',
       },
     ],
@@ -962,82 +970,33 @@ const APP_SHAPES: Record<
       {
         title: 'We ontwarren uw idee',
         image: '/services/timeline-app-1.webp',
+        clean: '/services/timeline-app-clean-1.webp',
+        icon: '/services/icon-app-1.png',
         body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde. Hoe complexer het begint, hoe belangrijker dit deel.',
       },
       {
         title: 'We ontwerpen hoe het voelt',
         image: '/services/timeline-app-2.webp',
+        clean: '/services/timeline-app-clean-2.webp',
+        icon: '/services/icon-app-2.png',
         body: 'Elk scherm tekenen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. Hoe iemand door uw app beweegt, waar alles staat, wat er gebeurt bij elke stap. Dit bepaalt of mensen het graag gebruiken of na een week wegklikken.',
       },
       {
         title: 'We bouwen wat het echt moet doen',
         image: '/services/timeline-app-3.webp',
+        clean: '/services/timeline-app-clean-3.webp',
+        icon: '/services/icon-app-3.png',
         body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het werk ook echt af krijgt. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
       },
       {
         title: 'We laten het werk voor u doen',
         image: '/services/timeline-app-4.webp',
+        clean: '/services/timeline-app-clean-4.webp',
+        icon: '/services/icon-app-4.png',
         body: 'Waar het tijd scheelt, laten we de app meedenken in plaats van u het werk te laten doen. Taken die zichzelf afhandelen, dingen die vanzelf ingevuld worden, werk dat op de achtergrond doorloopt terwijl u iets anders doet. Niet om te kunnen zeggen dat er AI in zit, maar omdat u er elke dag uren mee wint.',
       },
     ],
   },
-}
-
-function AppShapeRow({ title, body, image, reverse }: { title: string; body: string; image: string; reverse: boolean }) {
-  const reduced = usePrefersReducedMotion()
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // Wipe the image in from the edge nearest the centre line, outward. The animating
-  // inset side must run a clean 100% -> 0% (the static sides stay unitless 0), or
-  // framer cannot interpolate the reversed rows and the image stays hidden.
-  const clipFrom = reverse ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
-  const clipTo = reverse ? 'inset(0 0 0 0%)' : 'inset(0 0% 0 0)'
-  const clip = useTransform(scrollYProgress, [0, 0.4], [clipFrom, clipTo])
-  // Fade in as the row enters, hold through the middle, fade out as it leaves.
-  const opacity = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0])
-  const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
-  // The bead lights up as the white line reaches it: a soft dot pops in.
-  const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
-  const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
-
-  return (
-    <div ref={ref} className="relative py-20 lg:py-44">
-      {/* node: a black disc that masks the centre line (so the line reads as a gap),
-         with a light bead that pops in as the line reaches it (desktop) */}
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-1/2 z-10 hidden h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-bg lg:flex"
-      >
-        <motion.span
-          style={reduced ? undefined : { opacity: beadOpacity, scale: beadScale }}
-          className="h-3 w-3 rounded-full bg-ink shadow-[0_0_14px_rgba(245,245,245,0.7)]"
-        />
-      </span>
-
-      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
-        <motion.div
-          style={reduced ? undefined : { y: ty }}
-          className={cn('lg:px-2', reverse ? 'lg:order-2' : 'lg:order-1')}
-        >
-          <h3 className="font-serif text-[22px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[25px] lg:text-[28px]">
-            {title}
-          </h3>
-          <p className="mt-5 max-w-lg text-[15.5px] leading-relaxed text-faint">{body}</p>
-        </motion.div>
-
-        <motion.div
-          style={reduced ? undefined : { clipPath: clip, opacity }}
-          className={cn(
-            'relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)]',
-            reverse ? 'lg:order-1' : 'lg:order-2',
-          )}
-        >
-          <img src={image} alt="" loading="lazy" className="block aspect-[4/3] w-full object-cover" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-        </motion.div>
-      </div>
-    </div>
-  )
 }
 
 function AppBuildShapes() {
@@ -1074,7 +1033,7 @@ function AppBuildShapes() {
         </div>
 
         {data.items.map((it, i) => (
-          <AppShapeRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} clean={it.clean} icon={it.icon} reverse={i % 2 === 0} />
         ))}
       </div>
     </section>
@@ -1287,21 +1246,29 @@ const AIOS_STEPS: Record<
         title: 'We look at how your business really works',
         body: "Before we build anything, we map what happens every day. Which tasks keep coming back, where time slips away, which steps get in each other's way. We talk to the people who do the work, not only to those above them. The better we understand why something exists, the better we know what we may take over.",
         image: '/services/timeline-aios-1.webp',
+        clean: '/services/timeline-aios-clean-1.webp',
+        icon: '/services/icon-aios-1.png',
       },
       {
         title: 'We build the brain of your company',
         body: "We bring all of your company's knowledge into one place. Your way of working, your brand, your tone, the things that now live only in your people's heads. From that moment everything works from the same memory, and what comes out matches who you are.",
         image: '/services/timeline-aios-2.webp',
+        clean: '/services/timeline-aios-clean-2.webp',
+        icon: '/services/icon-aios-2.png',
       },
       {
         title: 'We take over the recurring work, department by department',
         body: 'Now the real work begins. Department by department, we take on what keeps coming back. In marketing, support, finance, operations. The system takes over the slow, repeated work, so your people keep time for what does need their attention.',
         image: '/services/timeline-aios-3.webp',
+        clean: '/services/timeline-aios-clean-3.webp',
+        icon: '/services/icon-aios-3.png',
       },
       {
         title: 'We make everything work together as one',
         body: 'Finally we connect it all, with a layer above that steers the whole. No more loose pieces you tie together yourself, but one company that runs as a single system, with you at the wheel.',
         image: '/services/timeline-aios-4.webp',
+        clean: '/services/timeline-aios-clean-4.webp',
+        icon: '/services/icon-aios-4.png',
       },
     ],
   },
@@ -1314,21 +1281,29 @@ const AIOS_STEPS: Record<
         title: 'We kijken hoe uw bedrijf echt werkt',
         body: 'Voor we iets bouwen, brengen we in kaart wat er elke dag gebeurt. Welke taken keren steeds terug, waar gaat tijd verloren, welke stappen zitten elkaar in de weg. We praten met de mensen die het werk doen, niet alleen met wie erboven zit. Hoe beter we begrijpen waarom iets bestaat, hoe beter we weten wat we mogen overnemen.',
         image: '/services/timeline-aios-1.webp',
+        clean: '/services/timeline-aios-clean-1.webp',
+        icon: '/services/icon-aios-1.png',
       },
       {
         title: 'We bouwen het brein van uw bedrijf',
         body: 'We zetten alle kennis van uw bedrijf op één plek. Uw manier van werken, uw merk, uw toon, de dingen die nu alleen in de hoofden van uw mensen zitten. Vanaf dat moment werkt alles vanuit hetzelfde geheugen, en klopt wat eruit komt met wie u bent.',
         image: '/services/timeline-aios-2.webp',
+        clean: '/services/timeline-aios-clean-2.webp',
+        icon: '/services/icon-aios-2.png',
       },
       {
         title: 'We nemen het terugkerende werk over, afdeling per afdeling',
         body: 'Nu begint het echte werk. Per afdeling pakken we aan wat steeds terugkomt. In marketing, support, finance, operations. Het systeem neemt het trage, herhaalde werk over, zodat uw mensen tijd houden voor wat wél hun aandacht vraagt.',
         image: '/services/timeline-aios-3.webp',
+        clean: '/services/timeline-aios-clean-3.webp',
+        icon: '/services/icon-aios-3.png',
       },
       {
         title: 'We laten alles samenwerken als één geheel',
         body: 'Tot slot verbinden we alles, met daarboven een laag die het geheel aanstuurt. Geen losse stukken meer die u zelf aan elkaar knoopt, maar één bedrijf dat als één systeem draait, met u aan het stuur.',
         image: '/services/timeline-aios-4.webp',
+        clean: '/services/timeline-aios-clean-4.webp',
+        icon: '/services/icon-aios-4.png',
       },
     ],
   },
