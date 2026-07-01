@@ -18,7 +18,7 @@ import {
 import { useLang, type Lang } from '@/i18n'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { useScrollLock } from '@/lib/useScrollLock'
-import { BOOKING_URL } from '@/data/contact'
+import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -216,7 +216,9 @@ function LaunchBanner() {
   return (
     <div className="mx-auto mb-2 flex w-full max-w-[1200px] items-stretch gap-2">
       <a
-        href="/waitlist"
+        href={WAITLIST_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         className="group flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-center text-[12.5px] leading-snug text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
       >
         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />

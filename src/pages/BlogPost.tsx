@@ -7,7 +7,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { BlogCover } from '@/components/BlogCover'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
-import { BOOKING_URL } from '@/data/contact'
+import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
 import { usePost } from '@/lib/blog'
 import { useLang } from '@/i18n'
 
@@ -169,9 +169,10 @@ export function BlogPost() {
                   'group mx-auto inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-white/90'
                 return (
                   <div key={i} className="my-3 flex justify-center">
-                    {href.startsWith('/') ? (
+                    {href.startsWith('/') && href !== WAITLIST_URL ? (
                       <Link to={href} className={cls}>{inner}</Link>
                     ) : (
+                      // The waiting page opens in its own tab, like the booking page.
                       <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>
                     )}
                   </div>

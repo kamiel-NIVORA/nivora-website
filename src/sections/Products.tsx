@@ -7,8 +7,8 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight, Lock, QrCode } from 'lucide-react'
+import { waitlistHref } from '@/data/contact'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -127,7 +127,7 @@ export function Products() {
             progress={progress}
             dx={-44}
             dark
-            href="/waitlist?product=box"
+            href={waitlistHref('box')}
             ariaLabel={t.boxAria}
             className="min-h-[460px] lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2 lg:min-h-0"
           >
@@ -151,7 +151,7 @@ export function Products() {
             dy={-20}
             start={0.06}
             dark
-            href="/waitlist?product=voice"
+            href={waitlistHref('voice')}
             ariaLabel={t.voiceAria}
             className="min-h-[300px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
@@ -238,7 +238,13 @@ function BentoCard({
         )}
       />
       {href && (
-        <Link to={href} aria-label={ariaLabel} className="absolute inset-0 z-[1] rounded-[28px]" />
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={ariaLabel}
+          className="absolute inset-0 z-[1] rounded-[28px]"
+        />
       )}
       <div className={cn('relative z-[2] flex h-full flex-col', href && 'pointer-events-none')}>
         {children}
@@ -330,8 +336,8 @@ function VoiceCard() {
 
 /* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneBox', href: '/waitlist?product=box' },
-  { src: '/products/voice-logo.webp', name: 'Voice', bodyKey: 'phoneVoice', href: '/waitlist?product=voice' },
+  { src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneBox', href: waitlistHref('box') },
+  { src: '/products/voice-logo.webp', name: 'Voice', bodyKey: 'phoneVoice', href: waitlistHref('voice') },
 ] as const
 
 /** A single glossy notification — a button to the waiting list. Styled to match
@@ -346,8 +352,10 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
       animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
       transition={{ type: 'spring', stiffness: 140, damping: 26, mass: 1.1 }}
     >
-      <Link
-        to={href}
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={t.phoneNotifAria(name)}
         className="pointer-events-auto flex min-h-[40px] items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70 lg:min-h-0"
         style={{
@@ -369,7 +377,7 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
             <span className="font-semibold text-black/75">{t.comingSoon}</span> · {t[bodyKey]}
           </p>
         </div>
-      </Link>
+      </a>
     </motion.div>
   )
 }
@@ -449,7 +457,6 @@ const getDockApps = (lang: Lang): DockApp[] => [
 ]
 
 function DesktopCard() {
-  const navigate = useNavigate()
   const { lang } = useLang()
   const t = COPY[lang]
   return (
@@ -458,7 +465,11 @@ function DesktopCard() {
           The dock measures and fits this column, but a hidden-scrollbar x-rail on
           phone/tablet is a safety net so it can never clip its card. */}
       <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-hidden">
-        <MacOSDock apps={getDockApps(lang)} openApps={['box', 'voice']} onAppClick={() => navigate('/waitlist')} />
+        <MacOSDock
+          apps={getDockApps(lang)}
+          openApps={['box', 'voice']}
+          onAppClick={() => window.open(waitlistHref(), '_blank', 'noopener,noreferrer')}
+        />
       </div>
 
       <div className="pt-5">
@@ -531,15 +542,17 @@ function DownloadCard() {
         </motion.div>
 
         {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
-        <Link
-          to={`/waitlist?product=${tab}`}
+        <a
+          href={waitlistHref(tab)}
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label={t.lockAria(appName)}
           className="group/lock absolute inset-0 grid place-items-center rounded-[14px]"
         >
           <span className="grid h-12 w-12 place-items-center rounded-full border border-line-strong bg-[#0f0f0f]/85 text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.8)] backdrop-blur-md transition-transform duration-300 group-hover/lock:scale-105">
             <Lock className="h-[18px] w-[18px]" strokeWidth={1.8} />
           </span>
-        </Link>
+        </a>
       </div>
     </>
   )

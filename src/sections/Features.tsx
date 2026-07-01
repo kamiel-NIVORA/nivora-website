@@ -6,6 +6,7 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { NotificationStack } from '@/components/ui/NotificationStack'
 import { ServicesShowcase } from '@/components/ui/ServicesShowcase'
 import { getServices } from '@/lib/navigation'
+import { WAITLIST_URL } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 const cycleEase = [0.22, 1, 0.36, 1] as const
@@ -67,7 +68,7 @@ const COPY = {
         notifications: true,
         comingSoon: true,
         cta: 'Get notified at launch',
-        href: '/waitlist',
+        href: WAITLIST_URL,
         secondaryCta: 'See more',
         secondaryHref: '#products',
       },
@@ -94,7 +95,7 @@ const COPY = {
         notifications: true,
         comingSoon: true,
         cta: 'Word op de hoogte gebracht bij de lancering',
-        href: '/waitlist',
+        href: WAITLIST_URL,
         secondaryCta: 'Bekijk meer',
         secondaryHref: '#products',
       },
@@ -161,7 +162,13 @@ function FeatureCard({
             </RippleButton>
           ) : (
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              <RippleButton variant="solid" href={href} className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto">
+              <RippleButton
+                variant="solid"
+                href={href}
+                target={href === WAITLIST_URL ? '_blank' : undefined}
+                rel={href === WAITLIST_URL ? 'noopener noreferrer' : undefined}
+                className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto"
+              >
                 {cta}
               </RippleButton>
               {secondaryCta && secondaryHref && (
