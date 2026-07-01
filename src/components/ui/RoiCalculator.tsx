@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useMotionTemplate, useSpring, useTransform } from 'framer-motion'
-import { CalendarDays, Check, Handshake, Headset, Mail, Megaphone, Receipt, UserPlus, Workflow, type LucideIcon } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useCountUp } from '@/lib/useCountUp'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -23,15 +23,15 @@ const nf = (opts?: Intl.NumberFormatOptions) => new Intl.NumberFormat('nl-BE', o
 const eur = nf({ style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
 
 type AreaKey = 'sales' | 'marketing' | 'support' | 'communication' | 'finance' | 'operations' | 'hr' | 'planning'
-const AREAS: { key: AreaKey; Icon: LucideIcon; nl: string; en: string }[] = [
-  { key: 'sales', Icon: Handshake, nl: 'Sales', en: 'Sales' },
-  { key: 'marketing', Icon: Megaphone, nl: 'Marketing', en: 'Marketing' },
-  { key: 'support', Icon: Headset, nl: 'Support', en: 'Support' },
-  { key: 'communication', Icon: Mail, nl: 'Communicatie', en: 'Communication' },
-  { key: 'finance', Icon: Receipt, nl: 'Finance', en: 'Finance' },
-  { key: 'operations', Icon: Workflow, nl: 'Operations', en: 'Operations' },
-  { key: 'hr', Icon: UserPlus, nl: 'HR', en: 'HR' },
-  { key: 'planning', Icon: CalendarDays, nl: 'Planning', en: 'Planning' },
+const AREAS: { key: AreaKey; icon: string; nl: string; en: string }[] = [
+  { key: 'sales', icon: '/services/aios-icons/sales.png', nl: 'Sales', en: 'Sales' },
+  { key: 'marketing', icon: '/services/aios-icons/marketing.png', nl: 'Marketing', en: 'Marketing' },
+  { key: 'support', icon: '/services/aios-icons/support.png', nl: 'Support', en: 'Support' },
+  { key: 'communication', icon: '/services/aios-icons/communication.png', nl: 'Communicatie', en: 'Communication' },
+  { key: 'finance', icon: '/services/aios-icons/finance.png', nl: 'Finance', en: 'Finance' },
+  { key: 'operations', icon: '/services/aios-icons/operations.png', nl: 'Operations', en: 'Operations' },
+  { key: 'hr', icon: '/services/aios-icons/hr.png', nl: 'HR', en: 'HR' },
+  { key: 'planning', icon: '/services/aios-icons/planning.png', nl: 'Planning', en: 'Planning' },
 ]
 
 const COPY = {
@@ -250,7 +250,7 @@ export function RoiCalculator() {
                                 )}
                               >
                                 <span className={cn('flex h-9 w-9 items-center justify-center rounded-[10px] border transition-colors', on ? 'border-white/25 bg-white/[0.1]' : 'border-line bg-white/[0.03]')}>
-                                  <a.Icon className={cn('h-[18px] w-[18px]', on ? 'text-ink' : 'text-faint')} strokeWidth={1.7} />
+                                  <img src={a.icon} alt="" className={cn('h-[18px] w-[18px] object-contain transition-opacity', on ? 'opacity-100' : 'opacity-45')} />
                                 </span>
                                 <span className={cn('text-[13.5px] font-medium', on ? 'text-ink' : 'text-muted')}>{a[lang]}</span>
                                 <span className={cn('absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full border transition-all', on ? 'border-white/50 bg-white/90' : 'border-line')}>
@@ -264,7 +264,7 @@ export function RoiCalculator() {
                         <div>
                           <div className="flex items-center gap-3">
                             <span className="flex h-10 w-10 items-center justify-center rounded-[12px] border border-white/20 bg-white/[0.08]">
-                              <dept.Icon className="h-5 w-5 text-ink" strokeWidth={1.7} />
+                              <img src={dept.icon} alt="" className="h-5 w-5 object-contain" />
                             </span>
                             <h3 className="font-serif text-[22px] leading-none tracking-[-0.01em] text-ink">{dept[lang]}</h3>
                           </div>

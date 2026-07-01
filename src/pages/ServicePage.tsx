@@ -10,22 +10,7 @@ import {
   useTransform,
   type Variants,
 } from 'framer-motion'
-import {
-  ArrowUpRight,
-  CalendarDays,
-  Check,
-  ChevronDown,
-  Handshake,
-  Headset,
-  Mail,
-  Megaphone,
-  Minus,
-  Plus,
-  Receipt,
-  UserPlus,
-  Workflow,
-  type LucideIcon,
-} from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, Minus, Plus } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -1423,18 +1408,18 @@ const AIOS_WORK: Record<
 }
 
 const WORK_PHOTOS = ['/services/work-klantgericht.webp', '/services/work-intern.webp']
-const WORK_ICONS: LucideIcon[][] = [
-  [Handshake, Megaphone, Headset, Mail],
-  [Receipt, Workflow, UserPlus, CalendarDays],
+const WORK_ICONS: string[][] = [
+  ['/services/aios-icons/sales.png', '/services/aios-icons/marketing.png', '/services/aios-icons/support.png', '/services/aios-icons/communication.png'],
+  ['/services/aios-icons/finance.png', '/services/aios-icons/operations.png', '/services/aios-icons/hr.png', '/services/aios-icons/planning.png'],
 ]
 
-/** Where the four glossy icon badges sit on the photo, a calm constellation like
- *  Local AI's provider marks. */
-const WORK_BADGE_POS = [
-  { left: '25%', top: '31%' },
-  { left: '72%', top: '26%' },
-  { left: '30%', top: '71%' },
-  { left: '75%', top: '67%' },
+/** Where the four glossy icon badges float on the photo — varied sizes, more spread
+ *  out, so they really float like a calm constellation. */
+const WORK_BADGES = [
+  { left: '18%', top: '23%', size: 74 },
+  { left: '74%', top: '18%', size: 56 },
+  { left: '30%', top: '74%', size: 62 },
+  { left: '80%', top: '64%', size: 84 },
 ]
 
 /** One department row: a clean dot, the name and a short line. */
@@ -1462,7 +1447,7 @@ function WorkColumn({
   heading: string
   image: string
   items: { label: string; body: string }[]
-  icons: LucideIcon[]
+  icons: string[]
 }) {
   return (
     <Reveal>
@@ -1476,19 +1461,25 @@ function WorkColumn({
           />
           {/* the department icons, floating on the photo as glossy badges */}
           <div className="pointer-events-none absolute inset-0">
-            {icons.map((Icon, i) => (
-              <div
-                key={i}
-                className="absolute"
-                style={{ left: WORK_BADGE_POS[i].left, top: WORK_BADGE_POS[i].top, marginLeft: -34, marginTop: -34 }}
-              >
-                <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 90}>
-                  <div className="flex h-[68px] w-[68px] items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md">
-                    <Icon className="h-[30px] w-[30px] text-white/90" strokeWidth={1.6} />
-                  </div>
-                </Drift>
-              </div>
-            ))}
+            {icons.map((icon, i) => {
+              const b = WORK_BADGES[i]
+              return (
+                <div
+                  key={i}
+                  className="absolute"
+                  style={{ left: b.left, top: b.top, marginLeft: -b.size / 2, marginTop: -b.size / 2 }}
+                >
+                  <Drift radius={8} duration={24 + (i % 4) * 5} phase={i * 90}>
+                    <div
+                      className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
+                      style={{ width: b.size, height: b.size }}
+                    >
+                      <img src={icon} alt="" className="object-contain opacity-95" style={{ width: b.size * 0.46, height: b.size * 0.46 }} />
+                    </div>
+                  </Drift>
+                </div>
+              )
+            })}
           </div>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
         </div>
