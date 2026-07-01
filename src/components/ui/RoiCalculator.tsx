@@ -135,13 +135,6 @@ function Slider({ id, label, value, valueText, min, max, step, onChange }: { id:
   )
 }
 
-const BORDER_MASK = {
-  WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-  WebkitMaskComposite: 'xor',
-  mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-  maskComposite: 'exclude',
-} as const
-
 function PillButton({ children, onClick, primary = false, glow = false, disabled = false, className }: { children: React.ReactNode; onClick: () => void; primary?: boolean; glow?: boolean; disabled?: boolean; className?: string }) {
   return (
     <button
@@ -211,14 +204,14 @@ export function RoiCalculator() {
 
   return (
     <div className="relative mx-auto mt-10 max-w-[900px]">
-      {/* the light lives BEHIND the card and seeps out from under the edges */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-8 bottom-[-26px] h-32 rounded-[50%] bg-white/[0.13] blur-[56px]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-[-4px] top-24 bottom-[-14px] rounded-[42px] bg-white/[0.04] blur-[50px]" />
+      {/* progress light — a soft glow BEHIND the card that traces around from the
+          top-left and slides further with each step; never a hard line on the border */}
+      <motion.div aria-hidden className="pointer-events-none absolute -inset-[6px] rounded-[34px] blur-[19px]" style={{ background: ring, opacity: 0.6 }} />
+      {/* ambient backlight seeping out from behind and from under the card */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-6 bottom-[-30px] h-36 rounded-[50%] bg-white/[0.13] blur-[58px]" />
+      <div aria-hidden className="pointer-events-none absolute -inset-x-2 top-20 bottom-[-16px] rounded-[42px] bg-white/[0.03] blur-[52px]" />
 
-      <div className="relative overflow-hidden rounded-[30px] border border-white/[0.09] bg-[#0a0a0c]/95 p-7 shadow-[0_50px_120px_-45px_rgba(0,0,0,0.9)] sm:p-9">
-        {/* border light — a soft, vague glow that traces around, starting top-left */}
-        <motion.div aria-hidden className="pointer-events-none absolute inset-0 rounded-[30px]" style={{ background: ring, padding: 3, opacity: 0.6, filter: 'blur(5px)', ...BORDER_MASK }} />
-
+      <div className="relative overflow-hidden rounded-[30px] border border-white/[0.07] bg-[#0a0a0c] p-7 shadow-[0_45px_110px_-45px_rgba(0,0,0,0.9)] sm:p-9">
         <div className="relative flex min-h-[392px] flex-col">
           <AnimatePresence mode="wait">
             {!done ? (
