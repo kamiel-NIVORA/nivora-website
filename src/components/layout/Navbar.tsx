@@ -84,7 +84,11 @@ function ComingSoonTag({ className }: { className?: string }) {
 /* ── Item primitives ── */
 function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   return (
-    <a href={href} className="group/i flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-white/[0.06]">
+    <a
+      href={href}
+      {...(href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className="group/i flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-white/[0.06]"
+    >
       {img ? (
         <img
           src={img}
@@ -357,7 +361,7 @@ export function Navbar() {
             <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
               <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
               {getProducts(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+                <a key={l.title} href={l.href} {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
               <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
               {getServices(lang).map((l) => (

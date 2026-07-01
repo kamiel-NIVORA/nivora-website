@@ -1,4 +1,5 @@
 import { HelpCircle, Leaf, type LucideIcon } from 'lucide-react'
+import { waitlistHref } from '@/data/contact'
 import type { Lang, Localized } from '@/i18n'
 
 /** Shared navigation source of truth — used by both the Navbar and the Footer
@@ -19,12 +20,12 @@ export type NavItem = {
 
 /* ── Products ── */
 const PRODUCTS_EN: NavItem[] = [
-  { title: 'Box', desc: 'All your communication, brought together in one place.', href: '/#features', img: '/products/box-logo.webp', comingSoon: true },
-  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: '/#features', img: '/products/voice-logo.webp', comingSoon: true },
+  { title: 'Box', desc: 'All your communication, brought together in one place.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 const PRODUCTS_NL: NavItem[] = [
-  { title: 'Box', desc: 'Al uw communicatie, samengebracht op één plek.', href: '/#features', img: '/products/box-logo.webp', comingSoon: true },
-  { title: 'Voice', desc: 'Spraak naar tekst, afgestemd op uw stem en schrijfstijl.', href: '/#features', img: '/products/voice-logo.webp', comingSoon: true },
+  { title: 'Box', desc: 'Al uw communicatie, samengebracht op één plek.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Spraak naar tekst, afgestemd op uw stem en schrijfstijl.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 
 /* ── Services ── */

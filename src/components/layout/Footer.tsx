@@ -4,6 +4,7 @@ import {
   getServices,
   type NavItem,
 } from '@/lib/navigation'
+import { WAITLIST_URL } from '@/data/contact'
 import { useLang, type Lang } from '@/i18n'
 
 const toLinks = (items: NavItem[]) => items.map((i) => ({ label: i.title, href: i.href }))
@@ -124,6 +125,7 @@ export function Footer() {
                     <li key={l.label}>
                       <a
                         href={l.href}
+                        {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         className="inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors [overflow-wrap:anywhere] hover:text-ink"
                       >
                         {l.label}
