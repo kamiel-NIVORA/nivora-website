@@ -1,6 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Inbox, Mic, type LucideIcon } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -13,12 +13,10 @@ import { useLang } from '@/i18n'
 const ACCENT = '#f5f5f5'
 const ease = [0.16, 1, 0.3, 1] as const
 
-/** Scenic photos + product / service marks. */
+/** Scenic photos, incl. the glossy glass-slat frames for the product stories. */
 const HERO_IMG = '/about/hero.jpg'
-const VOICE_IMG = '/backgrounds/bg-dunes-mist.jpg'
-const VOICE_ICON = '/products/voice-logo.webp'
-const BOX_IMG = '/home/hero-nivora.webp'
-const BOX_ICON = '/products/box-logo.webp'
+const VOICE_IMG = '/about/voice-glossy.webp'
+const BOX_IMG = '/about/box-glossy.webp'
 const CTA_IMG = '/home/cta-landscape.webp'
 
 const SERVICE_ICON: Record<string, string> = {
@@ -40,24 +38,19 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
-    heroHeadline: 'Software and AI that shapes itself around people, not the other way around.',
-    heroSub:
-      "We're Nivora, a small studio in Brugge. We started because technology so often gets in people's way instead of helping. So we build the opposite: our own products, Box and Voice, and custom software and AI for companies that want to get everything out of it.",
-    soon: 'Coming soon',
-    ourProducts: 'Our products',
-    voiceEyebrow: 'Voice',
-    voiceHeading: 'Your voice, instantly clean text.',
-    voiceBody:
-      'Voice turns speech into text that reads like you write, not like a machine. Dictate once, and get back clean, finished copy, tuned to how you talk and how you write.',
-    boxEyebrow: 'Box',
-    boxHeading: 'All your communication, one calm inbox.',
-    boxBody:
-      'Email, chat and DMs come together in one place. Read, sort and reply without ever switching apps. One calm inbox, instead of ten open tabs.',
+    heroHeadline: 'It started with one frustration.',
+    heroSub: "We're Nivora, a small studio in Brugge, building software and AI the way technology should feel.",
+    voiceStory:
+      'We watched people fight dictation tools that made them sound like a machine, never like themselves. A shame, because typing eats time no one has. So we are making Voice: you talk, and clean text comes out that reads exactly like you write. Finished, right away.',
+    boxStory:
+      'We watched people jump between ten apps just to keep up with their messages. Email here, chat there, DMs somewhere else. So we are building Box: one calm inbox where it all comes together. Read, sort and reply, without ever switching again.',
     joinWaitlist: 'Join the waiting list',
-    servicesEyebrow: 'What we do for companies',
     servicesHeading: 'Custom software and AI, built around your business.',
     servicesIntro:
       'For teams that want to get everything out of AI and stay ahead, not just dabble with it. We design, build and install exactly what fits the way you already work.',
+    morePre: 'And this is only the beginning. We want to build so much more, and we share every step on the ',
+    moreLink: 'blog',
+    morePost: '.',
     services: [
       { slug: 'app-design', name: 'App Design', desc: 'Custom apps built around your idea.' },
       { slug: 'local-ai', name: 'Local AI', desc: 'Secure AI on your own servers or ours.' },
@@ -88,24 +81,19 @@ const COPY = {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
-    heroHeadline: 'Software en AI die zich naar mensen vormt, niet andersom.',
-    heroSub:
-      'Wij zijn Nivora, een kleine studio uit Brugge. We begonnen omdat technologie mensen te vaak in de weg zit in plaats van vooruithelpt. Dus bouwen we het omgekeerde: onze eigen producten, Box en Voice, en software en AI op maat voor bedrijven die er echt alles uit willen halen.',
-    soon: 'Binnenkort',
-    ourProducts: 'Onze producten',
-    voiceEyebrow: 'Voice',
-    voiceHeading: 'Uw stem, meteen nette tekst.',
-    voiceBody:
-      'Voice zet spraak om naar tekst die leest zoals u schrijft, niet zoals een machine. Dicteer één keer, en krijg nette, afgewerkte tekst terug, afgestemd op hoe u praat en hoe u schrijft.',
-    boxEyebrow: 'Box',
-    boxHeading: 'Al uw communicatie, één rustige inbox.',
-    boxBody:
-      'E-mail, chat en DMs komen samen op één plek. Lees, sorteer en antwoord zonder ooit van app te wisselen. Eén rustige inbox, in plaats van tien open tabbladen.',
+    heroHeadline: 'Het begon met één frustratie.',
+    heroSub: 'Wij zijn Nivora, een kleine studio uit Brugge, die software en AI bouwt zoals technologie hoort te voelen.',
+    voiceStory:
+      'We zagen mensen worstelen met dicteersoftware die hen liet klinken als een machine, nooit als zichzelf. Zonde, want typen kost tijd die niemand heeft. Dus maken we Voice: u praat, en er komt nette tekst uit die leest precies zoals u schrijft. Meteen af.',
+    boxStory:
+      'We zagen mensen springen tussen tien apps, alleen al om hun berichten bij te houden. E-mail hier, chat daar, DMs ergens anders. Dus bouwen we Box: één rustige inbox waar alles samenkomt. Lezen, sorteren en antwoorden, zonder ooit nog te wisselen.',
     joinWaitlist: 'Schrijf u in op de wachtlijst',
-    servicesEyebrow: 'Wat we voor bedrijven doen',
     servicesHeading: 'Software en AI op maat, gebouwd rond uw bedrijf.',
     servicesIntro:
       'Voor teams die er echt alles uit willen halen en vooropwillen lopen, niet er wat mee prutsen. We ontwerpen, bouwen en installeren precies wat past bij hoe u al werkt.',
+    morePre: 'En dit is nog maar het begin. We willen nog veel meer bouwen, en we delen elke stap op de ',
+    moreLink: 'blog',
+    morePost: '.',
     services: [
       { slug: 'app-design', name: 'App Design', desc: 'Apps op maat, gebouwd rond uw idee.' },
       { slug: 'local-ai', name: 'Local AI', desc: 'Veilige AI op uw eigen servers of de onze.' },
@@ -188,23 +176,19 @@ export function About() {
     >
       <Hero />
       <ProductStory
-        eyebrow={t.voiceEyebrow}
-        heading={t.voiceHeading}
-        body={t.voiceBody}
-        icon={VOICE_ICON}
+        name="Voice"
+        story={t.voiceStory}
+        Icon={Mic}
         image={VOICE_IMG}
-        soon={t.soon}
         cta={t.joinWaitlist}
         ctaHref={waitlistHref('voice')}
       />
       <ProductStory
         reverse
-        eyebrow={t.boxEyebrow}
-        heading={t.boxHeading}
-        body={t.boxBody}
-        icon={BOX_ICON}
+        name="Box"
+        story={t.boxStory}
+        Icon={Inbox}
         image={BOX_IMG}
-        soon={t.soon}
         cta={t.joinWaitlist}
         ctaHref={waitlistHref('box')}
       />
@@ -275,79 +259,53 @@ function Hero() {
    copy alongside. Voice and Box each get one, mirrored. Not a timeline. ──────── */
 
 function ProductStory({
-  eyebrow,
-  heading,
-  body,
-  icon,
+  name,
+  story,
+  Icon,
   image,
-  soon,
   cta,
   ctaHref,
   reverse,
 }: {
-  eyebrow: string
-  heading: string
-  body: string
-  icon: string
+  name: string
+  story: string
+  Icon: LucideIcon
   image: string
-  soon: string
   cta: string
   ctaHref: string
   reverse?: boolean
 }) {
-  const reduced = usePrefersReducedMotion()
   return (
     <section className="relative mx-auto w-full max-w-[1150px] px-6 py-14 sm:py-20 lg:py-24">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        {/* Blurred nature frame with the floating product mark */}
+        {/* Glossy glass-slat frame: a sharp scenic with a fluted-glass pane baked in,
+            with the product mark set on the pane. */}
         <Reveal className={cn(reverse ? 'lg:order-2' : 'lg:order-1')}>
           <div className="relative aspect-[4/3] overflow-hidden rounded-[26px] border border-line bg-[#070709] shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
-            <img src={image} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full scale-[1.12] object-cover opacity-70 blur-[8px]" />
-            <div className="absolute inset-0 bg-black/45" />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{ background: 'radial-gradient(58% 58% at 50% 48%, rgba(0,0,0,0.35), transparent 78%)' }}
-            />
+            <img src={image} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <motion.span
-                animate={reduced ? undefined : { y: [0, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="flex h-[104px] w-[104px] items-center justify-center rounded-[26px] border border-white/20 bg-white/[0.12] shadow-[0_18px_46px_rgba(0,0,0,0.55)] backdrop-blur-md"
-              >
-                <img src={icon} alt="" className="h-14 w-14 object-contain" />
-              </motion.span>
+              <div aria-hidden className="absolute h-40 w-40 rounded-full bg-black/35 blur-2xl" />
+              <Icon className="relative h-[76px] w-[76px] text-white drop-shadow-[0_8px_22px_rgba(0,0,0,0.6)] sm:h-[88px] sm:w-[88px]" strokeWidth={1.3} />
             </div>
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
           </div>
         </Reveal>
 
-        {/* Copy */}
+        {/* The story */}
         <div className={cn(reverse ? 'lg:order-1' : 'lg:order-2')}>
           <Reveal>
-            <div className="flex items-center gap-2.5">
-              <span className="text-[12px] uppercase tracking-[0.2em] text-faint">{eyebrow}</span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-0.5 text-[11px] text-ink-soft/80">
-                <span className="h-1 w-1 rounded-full bg-white/70" />
-                {soon}
-              </span>
-            </div>
+            <h2 className="font-serif text-[44px] leading-none tracking-[-0.02em] text-ink sm:text-[56px] lg:text-[64px]">{name}</h2>
           </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-4 font-serif text-[27px] leading-[1.16] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
-              {heading}
-            </h2>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-muted lg:text-[17px]">{story}</p>
           </Reveal>
-          <Reveal delay={0.12}>
-            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-muted lg:text-base">{body}</p>
-          </Reveal>
-          <Reveal delay={0.18}>
+          <Reveal delay={0.16}>
             <RippleButton
               href={ctaHref}
               target="_blank"
               rel="noopener noreferrer"
               variant="ghost"
-              className="mt-7 h-11 px-6 text-[14px]"
+              className="mt-8 h-11 px-6 text-[14px]"
             >
               {cta}
             </RippleButton>
@@ -368,14 +326,11 @@ function Services() {
       <div className="relative mx-auto w-full max-w-[1100px]">
         <div className="max-w-2xl">
           <Reveal>
-            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.servicesEyebrow}</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-4 font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px] lg:text-[44px]">
+            <h2 className="font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px] lg:text-[44px]">
               {t.servicesHeading}
             </h2>
           </Reveal>
-          <Reveal delay={0.12}>
+          <Reveal delay={0.08}>
             <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-faint lg:text-base">{t.servicesIntro}</p>
           </Reveal>
         </div>
@@ -402,6 +357,19 @@ function Services() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.1}>
+          <p className="mt-10 max-w-xl text-[15px] leading-relaxed text-faint lg:text-base">
+            {t.morePre}
+            <a
+              href="/blog"
+              className="text-ink underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-ink"
+            >
+              {t.moreLink}
+            </a>
+            {t.morePost}
+          </p>
+        </Reveal>
       </div>
     </section>
   )
