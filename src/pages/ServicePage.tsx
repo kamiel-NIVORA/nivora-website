@@ -2210,7 +2210,7 @@ const WHY_BG: Record<string, WhyBg> = {
   'app-design': { src: '/services/whyus-wave.webp', w: 800, h: 448, posY: 0.5, opacity: 0.72 },
   aios: { src: '/services/whyus-aios.webp', w: 1500, h: 841, posY: 0.28, opacity: 0.48 },
   'local-ai': { src: '/services/why-localai.webp', w: 1200, h: 675, posY: 0.5, opacity: 0.55 },
-  'ai-consulting': { src: '/services/whyus-consulting.webp', w: 1200, h: 915, posY: 0.5, opacity: 0.5 },
+  'ai-consulting': { src: '/services/whyus-consulting.webp', w: 1200, h: 915, posY: 0.5, opacity: 0.3 },
 }
 const whyBg = (slug: string): WhyBg => WHY_BG[slug] ?? WHY_BG['app-design']
 const WHY_POS_X = 0.5
