@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from 'react'
+import { useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
@@ -245,17 +245,9 @@ function Hero() {
         variants={heroContainer}
         initial={reduced ? false : 'hidden'}
         animate="show"
-        className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
+        className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center"
       >
-        <motion.img
-          variants={heroFade}
-          src="/brand/nivora-mark.webp"
-          alt=""
-          aria-hidden
-          className="mb-6 h-12 w-auto object-contain opacity-95 drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)] sm:mb-8 sm:h-14 lg:mb-10 lg:h-[68px]"
-        />
-
-        <h1 className="font-serif text-[64px] leading-[1.02] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[92px] lg:text-[132px] lg:leading-[0.98]">
+        <h1 className="font-serif text-[76px] leading-[1.0] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[112px] lg:text-[164px] lg:leading-[0.95]">
           {t.heroHeadline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
