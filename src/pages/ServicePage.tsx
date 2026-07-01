@@ -265,6 +265,7 @@ export function ServicePage() {
         {meta.slug === 'aios' && <AiosWorkGrid />}
         {meta.slug === 'aios' && <RoiBand meta={meta} />}
         {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
+        {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
         {meta.slug === 'app-design' && <AppWhoFor />}
@@ -1769,6 +1770,86 @@ function CompareCard({
         </div>
       </div>
     </Reveal>
+  )
+}
+
+/* Local AI · who this is for (three quiet lines + particle animation), only local-ai */
+
+const LOCAL_WHO: Record<Lang, { title: string; subtitle: string; lines: { head: string; body: string }[] }> = {
+  en: {
+    title: 'Who we build this for',
+    subtitle:
+      'The more sensitive your data, the more this is for you. Not every company needs its own AI, but for some it is the only way that fits.',
+    lines: [
+      { head: 'Your data cannot leave', body: 'Companies working with data that simply cannot go out, because clients, regulation or competition will not allow it.' },
+      { head: 'You want no monthly bill', body: 'Companies that want to work with AI every day, without a monthly bill that grows with every new colleague.' },
+      { head: 'You want to own it', body: 'Companies that want to build their own intelligence, something that stays theirs, instead of forever renting it from someone else.' },
+    ],
+  },
+  nl: {
+    title: 'Voor wie we dit bouwen',
+    subtitle:
+      'Hoe gevoeliger uw data, hoe meer dit voor u is. Niet elk bedrijf heeft een eigen AI nodig, maar voor sommige is het de enige manier die klopt.',
+    lines: [
+      { head: 'Uw data mag niet naar buiten', body: 'Bedrijven die werken met data die simpelweg niet naar buiten mag, omdat klanten, wetgeving of concurrentie dat niet toelaten.' },
+      { head: 'U wilt geen maandkosten', body: 'Bedrijven die elke dag met AI willen werken, zonder een maandelijkse rekening die meegroeit met elke nieuwe collega.' },
+      { head: 'U wilt het zelf bezitten', body: 'Bedrijven die hun eigen intelligentie willen opbouwen, iets dat van hen blijft, in plaats van het te blijven huren bij iemand anders.' },
+    ],
+  },
+}
+
+function LocalWhoFor() {
+  const { lang } = useLang()
+  const data = LOCAL_WHO[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* the particle animation — left on desktop, melts into the page */}
+        <div ref={ref} className="relative order-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
+          />
+          <Reveal y={24}>
+            <motion.div style={{ y }} className="will-change-transform">
+              <img
+                src="/services/whofor-localai.gif"
+                alt=""
+                loading="lazy"
+                className="mx-auto aspect-square w-full max-w-[440px] object-contain"
+              />
+            </motion.div>
+          </Reveal>
+        </div>
+
+        {/* copy — right on desktop */}
+        <div className="order-2">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
+              {data.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
+          </Reveal>
+          <ul className="mt-8 flex flex-col gap-4">
+            {data.lines.map((line, i) => (
+              <Reveal as="li" key={line.head} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
+                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                <span className="text-[15.5px] leading-relaxed text-ink-soft">
+                  <span className="font-semibold text-ink">{line.head}.</span> {line.body}
+                </span>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   )
 }
 
