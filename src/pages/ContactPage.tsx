@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
+import { Mail, Phone, MapPin } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { LocationMap } from '@/components/ui/LocationMap'
