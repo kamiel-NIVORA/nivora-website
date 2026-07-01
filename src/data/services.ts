@@ -109,8 +109,8 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     name: 'Local AI',
     hero: {
       eyebrow: 'Private AI Installation',
-      headline: 'The same AI capability, running inside your own walls.',
-      subhead: 'Capable open models, installed on hardware you control. Real AI for your team, with confidential data that never leaves the building.',
+      headline: 'Full AI capability, entirely in-house.',
+      subhead: 'Capable local AI models, installed on hardware you control. Real AI for your team, with your confidential data that never leaves your servers.',
       primaryCta: 'Book a strategy call',
       secondaryCta: 'Contact us',
     },
@@ -119,13 +119,13 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       chips: ['Your hardware', 'No cloud exposure', 'Owned outright'],
     },
     reveal:
-      'Every prompt your team sends to a cloud model leaves your building. We build the version that stays.',
+      'Every prompt your team sends to a cloud model leaves your server. We build the version that stays, and that keeps your data safe.',
     problem: {
       title: 'You need AI. Your data is not negotiable.',
       intro: 'The teams that need AI most are often the ones who cannot use the easy tools, and there is a structural reason for that.',
       points: [
         {
-          title: 'Every cloud prompt leaves your building',
+          title: 'Every cloud prompt leaves your server',
           body: 'Contracts, client records, financial models, source code: the moment any of it goes into ChatGPT, it has left your control. You agreed to that in the terms, and most companies never think about it until something goes wrong.',
         },
         {
@@ -136,7 +136,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     },
     solution: {
       title: 'Private AI, installed on hardware you control.',
-      body: 'We deploy capable AI models inside your environment, on your own servers or dedicated hardware we manage for you. The system reasons over your documents, and every prompt stays in the building: no public API in the chain, no data leaving your perimeter. You get real capability with privacy that holds up under actual scrutiny.',
+      body: 'We deploy capable AI models inside your environment, on your own servers or dedicated hardware we manage for you. The system reasons over your documents, and every prompt stays on your server: no public API in the chain, no data leaving your perimeter. You get real capability with privacy that holds up under actual scrutiny.',
       outcomes: [
         'AI on infrastructure you control, no cloud API in the chain',
         'Every prompt and answer stays inside your perimeter',
@@ -200,23 +200,23 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Why a builder, not a vendor',
+      title: 'Why work with us',
       items: [
         {
           title: 'You own the system outright',
-          body: 'When we finish, the AI runs on your infrastructure under your control. No per-seat meter, no switch a provider can flip to change your terms.',
+          body: 'When we finish, the AI runs entirely on your own infrastructure. The system, the models and the configuration are yours: to keep, adjust and build out further, fully in your own hands.',
         },
         {
           title: 'Privacy that holds up under scrutiny',
-          body: 'We build the architecture so the data genuinely cannot leave, a stronger claim than promising not to use it. Your auditors and clients deserve that version.',
+          body: 'We build the architecture so the data genuinely cannot leave, a stronger claim than promising not to use it.',
         },
         {
           title: 'Built around your specific constraints',
-          body: 'Every industry has different obligations and different confidential material. We design the deployment around what you actually cannot expose, not a generic template.',
+          body: 'Every industry has different obligations and different confidential material. We design the deployment around what you actually cannot expose.',
         },
         {
-          title: 'We stay after launch',
-          body: 'Private AI needs upkeep as models and threats evolve. We keep your system current so you keep the capability without the burden of running it alone.',
+          title: 'Close support, even after launch',
+          body: 'Private AI needs upkeep as the models evolve. We keep your system current so you keep the capability without the burden of keeping it running well alone.',
         },
       ],
     },
@@ -246,7 +246,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       },
       {
         q: 'How private is it, really?',
-        a: 'Nothing goes to OpenAI or any public cloud model. The models run inside your environment, every prompt and answer stays behind your own walls, and the access control and audit trail show exactly who accessed what and when.',
+        a: 'Nothing goes to OpenAI or any public cloud model. The models run inside your environment, every prompt and answer stays on your own servers, and the access control and audit trail show exactly who accessed what and when.',
       },
       {
         q: 'We already use ChatGPT. Why change?',
@@ -254,15 +254,15 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       },
       {
         q: 'Do we need our own servers?',
-        a: 'No. We can deploy on your existing hardware, or on dedicated infrastructure we manage for you. Either way, we handle the technical side and hand you a system that just works.',
+        a: 'If your existing servers are powerful enough to run the local models smoothly, we simply use those. If they are not, we add attachable hardware that strengthens your setup. We look together at what delivers the most and pick the best option for your situation.',
       },
       {
-        q: 'How capable are self-hosted models compared to cloud AI?',
-        a: 'Strong enough for serious business work: document analysis, drafting, internal Q&A, classification, research. We match the model to your actual tasks and hardware, so what you get is genuinely useful.',
+        q: 'How fast are local AI models improving?',
+        a: 'Enormously fast. Open, locally running models are improving at a remarkable pace right now and are getting ever closer to the largest cloud models. The big tech companies do not like to talk about it, because they earn nothing from AI you own yourself. For the real work most companies do, document analysis, drafting, internal Q&A and classification, they are already more than capable, and it gets better every month.',
       },
     ],
     finalCta: {
-      title: 'Real AI, without giving up your data.',
+      title: 'Impactful AI, without giving up your data.',
       body: 'If your business cannot send confidential information into the cloud, you do not have to fall behind. Let us look at your setup and find the private AI that fits.',
       button: 'Book a strategy call',
       reassurance: 'A 30-minute call. No pitch, no obligation, just a straight answer on whether this is the right fit. We usually reply within a day.',
@@ -562,8 +562,8 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     name: 'Local AI',
     hero: {
       eyebrow: 'Private AI-installatie',
-      headline: 'Dezelfde AI-kracht, draaiend binnen uw eigen muren.',
-      subhead: 'Krachtige open modellen, geïnstalleerd op hardware die u beheert. Echte AI voor uw team, met vertrouwelijke data die nooit het gebouw verlaat.',
+      headline: 'Volwaardige AI-kracht, volledig in eigen huis.',
+      subhead: 'Krachtige lokale AI-modellen, geïnstalleerd op hardware die u beheert. Echte AI voor uw team, met uw vertrouwelijke data die nooit uw servers verlaat.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
     },
@@ -572,13 +572,13 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['Uw hardware', 'Geen cloudblootstelling', 'Volledig in eigen bezit'],
     },
     reveal:
-      'Elke prompt die uw team naar een cloudmodel stuurt, verlaat uw gebouw. Wij bouwen de versie die binnen blijft.',
+      'Elke prompt die uw team naar een cloudmodel stuurt, verlaat uw server. Wij bouwen de versie die binnen blijft, en die veilig is voor uw data.',
     problem: {
       title: 'U hebt AI nodig. Over uw data valt niet te onderhandelen.',
       intro: 'De teams die AI het hardst nodig hebben, zijn vaak degene die de makkelijke tools niet kunnen gebruiken, en daar is een structurele reden voor.',
       points: [
         {
-          title: 'Elke cloudprompt verlaat uw gebouw',
+          title: 'Elke cloudprompt verlaat uw server',
           body: 'Contracten, klantgegevens, financiële modellen, broncode: op het moment dat het in ChatGPT terechtkomt, heeft het uw controle verlaten. Daar bent u in de voorwaarden mee akkoord gegaan, en de meeste bedrijven staan er pas bij stil als er iets misgaat.',
         },
         {
@@ -589,7 +589,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     },
     solution: {
       title: 'Private AI, geïnstalleerd op hardware die u beheert.',
-      body: 'We zetten krachtige AI-modellen op binnen uw omgeving, op uw eigen servers of dedicated hardware die wij voor u beheren. Het systeem redeneert over uw documenten, en elke prompt blijft in het gebouw: geen publieke API in de keten, geen data die uw perimeter verlaat. U krijgt echte kracht met privacy die standhoudt onder echte controle.',
+      body: 'We zetten krachtige AI-modellen op binnen uw omgeving, op uw eigen servers of dedicated hardware die wij voor u beheren. Het systeem redeneert over uw documenten, en elke prompt blijft op uw server: geen publieke API in de keten, geen data die uw perimeter verlaat. U krijgt echte kracht met privacy die standhoudt onder echte controle.',
       outcomes: [
         'AI op infrastructuur die u beheert, geen cloud-API in de keten',
         'Elke prompt en elk antwoord blijft binnen uw perimeter',
@@ -653,23 +653,23 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Waarom een bouwer, geen leverancier',
+      title: 'Waarom werken met ons',
       items: [
         {
           title: 'U bezit het systeem volledig',
-          body: 'Wanneer we klaar zijn, draait de AI op uw infrastructuur onder uw beheer. Geen teller per gebruiker, geen knop die een leverancier kan omzetten om uw voorwaarden te wijzigen.',
+          body: 'Wanneer we klaar zijn, draait de AI volledig op uw eigen infrastructuur. Het systeem, de modellen en de configuratie zijn van u: om te houden, aan te passen en verder uit te bouwen, helemaal in eigen hand.',
         },
         {
           title: 'Privacy die standhoudt onder controle',
-          body: 'We bouwen de architectuur zo dat de data echt niet weg kan, een sterkere belofte dan beloven het niet te gebruiken. Uw auditors en klanten verdienen die versie.',
+          body: 'We bouwen de architectuur zo dat de data echt niet weg kan, een sterkere belofte dan beloven het niet te gebruiken.',
         },
         {
           title: 'Gebouwd rond uw specifieke grenzen',
-          body: 'Elke sector heeft andere verplichtingen en ander vertrouwelijk materiaal. We ontwerpen de uitrol rond wat u echt niet mag blootgeven, niet rond een generieke template.',
+          body: 'Elke sector heeft andere verplichtingen en ander vertrouwelijk materiaal. We ontwerpen de uitrol rond wat u echt niet mag blootgeven.',
         },
         {
-          title: 'We blijven na de lancering',
-          body: 'Private AI vraagt onderhoud naarmate modellen en dreigingen evolueren. We houden uw systeem actueel zodat u de kracht behoudt zonder de last om het alleen draaiende te houden.',
+          title: 'Close support, ook na de lancering',
+          body: 'Private AI vraagt onderhoud naarmate de modellen evolueren. We houden uw systeem actueel zodat u de kracht behoudt zonder de last om het alleen goed draaiende te houden.',
         },
       ],
     },
@@ -699,7 +699,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       },
       {
         q: 'Hoe privé is het echt?',
-        a: 'Er gaat niets naar OpenAI of welk publiek cloudmodel dan ook. De modellen draaien binnen uw omgeving, elke prompt en elk antwoord blijft achter uw eigen muren, en het toegangsbeheer en de audit trail tonen precies wie wat wanneer raadpleegde.',
+        a: 'Er gaat niets naar OpenAI of welk publiek cloudmodel dan ook. De modellen draaien binnen uw omgeving, elke prompt en elk antwoord blijft op uw eigen servers, en het toegangsbeheer en de audit trail tonen precies wie wat wanneer raadpleegde.',
       },
       {
         q: 'We gebruiken al ChatGPT. Waarom veranderen?',
@@ -707,15 +707,15 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       },
       {
         q: 'Hebben we onze eigen servers nodig?',
-        a: 'Nee. We kunnen uitrollen op uw bestaande hardware, of op dedicated infrastructuur die wij voor u beheren. Hoe dan ook, wij nemen de technische kant op ons en geven u een systeem dat gewoon werkt.',
+        a: 'Als uw bestaande servers krachtig genoeg zijn om de lokale modellen vlot te draaien, gebruiken we die gewoon. Zijn ze dat niet, dan plaatsen we er aansluitbare hardware bij die uw opstelling versterkt. We kijken samen wat het meeste oplevert en kiezen zo de beste optie voor uw situatie.',
       },
       {
-        q: 'Hoe krachtig zijn zelf-gehoste modellen vergeleken met cloud-AI?',
-        a: 'Sterk genoeg voor serieus zakelijk werk: documentanalyse, teksten opstellen, interne Q&A, classificatie, onderzoek. We stemmen het model af op uw echte taken en hardware, zodat wat u krijgt echt nuttig is.',
+        q: 'Hoe snel worden lokale AI-modellen beter?',
+        a: 'Enorm snel. Open, lokaal draaiende modellen verbeteren op dit moment razendsnel en komen steeds dichter bij de grootste cloudmodellen. De grote techbedrijven praten daar niet graag over, want zij verdienen niets aan AI die u zelf bezit. Voor het echte werk van de meeste bedrijven, documentanalyse, teksten, interne Q&A en classificatie, zijn ze nu al ruim krachtig genoeg, en dat wordt elke maand beter.',
       },
     ],
     finalCta: {
-      title: 'Echte AI, zonder uw data op te geven.',
+      title: 'Impactvolle AI, zonder uw data op te geven.',
       body: 'Als uw bedrijf geen vertrouwelijke informatie naar de cloud kan sturen, hoeft u niet achterop te raken. Laat ons naar uw opstelling kijken en de private AI vinden die past.',
       button: 'Boek een strategiegesprek',
       reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',

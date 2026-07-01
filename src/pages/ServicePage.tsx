@@ -40,10 +40,10 @@ const UI = {
     bookCall: 'Book a strategy call',
     brandObjectTitle: 'Yours to keep. Private to the core.',
     brandObjectBody:
-      'Everything runs inside your own infrastructure: the models, the data, and every answer. Nothing is rented, nothing is sent away, and nothing ever leaves the building.',
+      'Everything runs inside your own infrastructure: the models, the data, and every answer. Nothing is rented, nothing is sent away, and nothing ever leaves your servers.',
     brandObjectAlt: 'A Nivora folder labelled Private, Yours, Secure, Local, held in hand.',
     privacyHeadline:
-      'Everything your team asks. Everything they receive. None of it leaves this building.',
+      'Everything your team asks. Everything they receive. None of it leaves your servers.',
     privacyFacts: [
       {
         label: 'No cloud API',
@@ -118,10 +118,10 @@ const UI = {
     bookCall: 'Boek een strategiegesprek',
     brandObjectTitle: 'Helemaal van u. Privé tot in de kern.',
     brandObjectBody:
-      'Alles draait binnen uw eigen infrastructuur: de modellen, de data, en elk antwoord. Niets wordt gehuurd, niets wordt weggestuurd, en niets verlaat ooit het gebouw.',
+      'Alles draait binnen uw eigen infrastructuur: de modellen, de data, en elk antwoord. Niets wordt gehuurd, niets wordt weggestuurd, en niets verlaat ooit uw servers.',
     brandObjectAlt: 'Een Nivora-map met het label Private, Yours, Secure, Local, in de hand gehouden.',
     privacyHeadline:
-      'Alles wat uw team vraagt. Alles wat ze ontvangen. Niets ervan verlaat dit gebouw.',
+      'Alles wat uw team vraagt. Alles wat ze ontvangen. Niets ervan verlaat uw servers.',
     privacyFacts: [
       {
         label: 'Geen cloud-API',
@@ -398,7 +398,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'local-ai': {
       eyebrow: '',
       title: 'Your data becomes an AI that works for you.',
-      body: 'Everything your company knows is now scattered across folders, documents and inboxes, quiet and hard to find right when you need it. We bring it together into one intelligence you can simply ask. It learns from your own data, grows more useful every day, and never leaves your own walls.',
+      body: 'Everything your company knows is now scattered across folders, documents and inboxes, quiet and hard to find right when you need it. We bring it together into one intelligent system you can simply ask. It learns from your own data, grows more useful every day, and never leaves your own servers.',
     },
     aios: {
       eyebrow: '',
@@ -420,7 +420,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'local-ai': {
       eyebrow: '',
       title: 'Uw data wordt een AI die voor u werkt.',
-      body: 'Alles wat uw bedrijf weet ligt nu verspreid over mappen, documenten en inboxen, stil en moeilijk te vinden net op het moment dat u het nodig hebt. Wij brengen dat samen tot één intelligentie die u gewoon iets kunt vragen. Ze leert van uw eigen data, wordt elke dag bruikbaarder, en verlaat nooit uw eigen muren.',
+      body: 'Alles wat uw bedrijf weet ligt nu verspreid over mappen, documenten en inboxen, stil en moeilijk te vinden net op het moment dat u het nodig hebt. Wij brengen dat samen tot één intelligent systeem dat u gewoon iets kunt vragen. Het leert van uw eigen data, wordt elke dag bruikbaarder, en verlaat nooit uw eigen servers.',
     },
     aios: {
       eyebrow: '',
@@ -1446,19 +1446,19 @@ const LOCAL_COMPARE: Record<
   }
 > = {
   en: {
-    title: 'Why your AI belongs with you',
+    title: 'Why owning your AI pays off',
     subtitle:
       'Most companies send their data to a handful of big tech companies. It works, but you give away more than you think. Here is the difference.',
     sides: [
       {
         kind: 'cloud',
-        label: 'The big models',
+        label: 'The big tech models',
         tag: 'Cloud AI',
         image: '/services/compare-cloud.webp',
         points: [
-          'Your data leaves your building with every question you ask.',
-          'It is sometimes used to train their model further, unless you pay a steep premium.',
-          'You pay again every month, and that bill grows with your team.',
+          'Your data leaves your server with every question you ask.',
+          'It is used to train their model further, unless you pay a steep premium.',
+          'You pay a subscription every month, often for overkill models far heavier and pricier than your tasks actually need.',
           "You depend on someone else's servers, prices and rules.",
         ],
       },
@@ -1468,10 +1468,11 @@ const LOCAL_COMPARE: Record<
         tag: 'Local',
         image: '/services/compare-local.webp',
         points: [
-          'Your data stays in, with every question, without exception.',
+          'Your data stays on your servers, with every question.',
           'It learns only from you, and that knowledge stays yours.',
-          'You mostly pay once, for the hardware, and after that it is yours.',
-          'You depend on no one, it sits inside your own walls.',
+          'You pay for any hardware, and after that it is yours.',
+          'You depend on no one, it sits on your own servers.',
+          'It becomes a valuable asset of your company.',
         ],
       },
     ],
@@ -1479,19 +1480,19 @@ const LOCAL_COMPARE: Record<
       'A local model is not the single most powerful one out there. But for what most companies actually need it is more than good enough, and the big advantage is that it is entirely yours.',
   },
   nl: {
-    title: 'Waarom uw AI bij u hoort te staan',
+    title: 'Waarom eigen AI zoveel voordelen heeft',
     subtitle:
       'De meeste bedrijven sturen hun data naar een handvol grote techbedrijven. Het werkt, maar u geeft er meer voor weg dan u denkt. Zo zit het verschil.',
     sides: [
       {
         kind: 'cloud',
-        label: 'De grote modellen',
+        label: 'De grote tech-modellen',
         tag: 'Cloud-AI',
         image: '/services/compare-cloud.webp',
         points: [
-          'Uw data verlaat uw gebouw bij elke vraag die u stelt.',
-          'Ze wordt soms gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
-          'U betaalt elke maand opnieuw, en die rekening groeit mee met uw team.',
+          'Uw data verlaat uw server bij elke vraag die u stelt.',
+          'Ze wordt gebruikt om hun model verder te trainen, tenzij u flink bijbetaalt.',
+          'U betaalt elke maand een abonnement, vaak voor overkill-modellen die zwaarder en duurder zijn dan uw taken echt nodig hebben.',
           'U bent afhankelijk van de servers, prijzen en regels van iemand anders.',
         ],
       },
@@ -1501,10 +1502,11 @@ const LOCAL_COMPARE: Record<
         tag: 'Lokaal',
         image: '/services/compare-local.webp',
         points: [
-          'Uw data blijft binnen, bij elke vraag, zonder uitzondering.',
+          'Uw data blijft op uw servers, bij elke vraag.',
           'Ze leert alleen van u, en die kennis blijft van u.',
-          'U betaalt vooral een keer, voor de hardware, en daarna is het van u.',
-          'U bent van niemand afhankelijk, het staat binnen uw eigen muren.',
+          'U betaalt voor eventuele hardware, en daarna is het van u.',
+          'U bent van niemand afhankelijk, het staat op uw eigen servers.',
+          'Het wordt een waardevolle asset van uw bedrijf.',
         ],
       },
     ],
@@ -1667,7 +1669,7 @@ const LOCAL_WHO: Record<Lang, { title: string; subtitle: string; lines: { head: 
     lines: [
       { head: 'Your data cannot leave', body: 'Companies working with data that simply cannot go out, because clients, regulation or competition will not allow it.' },
       { head: 'You want no monthly bill', body: 'Companies that want to work with AI every day, without a monthly bill that grows with every new colleague.' },
-      { head: 'You want to own it', body: 'Companies that want to build their own intelligence, something that stays theirs, instead of forever renting it from someone else.' },
+      { head: 'You want to own it', body: 'Companies that want to build their own intelligence, something that stays theirs, instead of staying dependent on big cloud companies.' },
     ],
   },
   nl: {
@@ -1677,7 +1679,7 @@ const LOCAL_WHO: Record<Lang, { title: string; subtitle: string; lines: { head: 
     lines: [
       { head: 'Uw data mag niet naar buiten', body: 'Bedrijven die werken met data die simpelweg niet naar buiten mag, omdat klanten, wetgeving of concurrentie dat niet toelaten.' },
       { head: 'U wilt geen maandkosten', body: 'Bedrijven die elke dag met AI willen werken, zonder een maandelijkse rekening die meegroeit met elke nieuwe collega.' },
-      { head: 'U wilt het zelf bezitten', body: 'Bedrijven die hun eigen intelligentie willen opbouwen, iets dat van hen blijft, in plaats van het te blijven huren bij iemand anders.' },
+      { head: 'U wilt het zelf bezitten', body: 'Bedrijven die hun eigen intelligentie willen opbouwen, iets dat van hen blijft, in plaats van afhankelijk te blijven van grote cloudbedrijven.' },
     ],
   },
 }
@@ -1771,11 +1773,11 @@ function ComparisonBand() {
 const SAFE_APPROACH: Record<Lang, { title: string; body: string }> = {
   en: {
     title: 'More than one path to safe AI',
-    body: 'With local models everything stays on your own server, and your data never leaves. But for very large tasks you can also use the strongest models from the big AI players, like OpenAI, Anthropic or Google. You pay more then, precisely to keep your data with you: it is not stored and not reused. That way you get the greatest power when you need it, with the only downside being the higher cost.',
+    body: 'With local models everything stays on your own server and your data does not go out. For very large tasks you can also bring in the strongest models from the big AI players, like OpenAI, Anthropic or Google. You then pay more to those tech companies in API costs, precisely to keep your data with you: it is not stored, not reused, and not used to train their models. That way you get the greatest power when you genuinely need it, with a higher cost as the downside, especially with a lot of data.',
   },
   nl: {
     title: 'Meerdere benaderingen voor veilige AI',
-    body: 'Met lokale modellen blijft alles op uw eigen server, en gaat uw data nooit naar buiten. Maar voor heel grote taken kunt u ook de sterkste modellen van de grote AI-spelers gebruiken, zoals OpenAI, Anthropic of Google. U betaalt dan meer, precies om uw data bij u te houden: ze wordt niet bewaard en niet hergebruikt. Zo krijgt u de grootste kracht wanneer u die nodig hebt, met als enige nadeel de hogere kost.',
+    body: 'Met lokale modellen blijft alles op uw eigen server en gaat uw data niet naar buiten. Voor heel grote taken kunt u daarnaast de sterkste modellen van de grote AI-spelers inzetten, zoals OpenAI, Anthropic of Google. U betaalt dan wel meer aan die techbedrijven in API-kosten, precies om uw data bij u te houden: ze wordt niet bewaard, niet hergebruikt en niet gebruikt om hun modellen te trainen. Zo krijgt u de grootste kracht wanneer u die echt nodig hebt, met als nadeel een hogere kost, zeker bij veel data.',
   },
 }
 
@@ -1860,32 +1862,32 @@ const SERVER_STEPS: Record<
   en: {
     title: 'From your own server to your own AI',
     subtitle:
-      'We do not just drop in a model. We build a complete intelligence of your own, shaped around how you work and entirely within your own walls.',
+      'We do not just drop in a model. We build a complete AI system of your own, shaped around how you work and entirely on your own servers.',
     items: [
       {
-        title: 'We look at what you need',
-        body: 'Which data matters, which tasks cost the most time today, and how many people will work with it. That decides what kind of system fits you, not the other way around. A small team needs something very different from a large one.',
+        title: 'We look at your data and what you need',
+        body: 'Which data you have, how many people will work with it, and what hardware is already in place and might still be needed. That decides which AI models fit you. A small team needs something very different from a large one.',
         image: '/services/timeline-1.webp',
         clean: '/services/timeline-clean-1.webp',
         icon: '/services/icon-step-1.png',
       },
       {
-        title: 'We put the AI in your place',
-        body: "The intelligence runs on your own server, in your own building. No connection to anyone else's servers, no data going out. We handle the hardware and make sure everything sits exactly as it should.",
+        title: 'We deploy the AI and hardware you need',
+        body: "The AI runs on your own servers, inside your own environment. No connection to anyone else's servers, no data going out. We place and handle the hardware you need and make sure everything sits exactly as it should.",
         image: '/services/timeline-2.webp',
         clean: '/services/timeline-clean-2.webp',
         icon: '/services/icon-step-2.png',
       },
       {
         title: 'We let it get to know your company',
-        body: 'This is where it truly becomes yours. The AI learns from your own documents, your own way of working, your own data. You get no generic AI but one that understands your company, and that knowledge stays in.',
+        body: 'This is where it truly becomes yours. The AI learns from your own documents, your own way of working, your own data. You get no generic AI but one that understands your company. That knowledge stays in and is kept.',
         image: '/services/timeline-3.webp',
         clean: '/services/timeline-clean-3.webp',
         icon: '/services/icon-step-3.png',
       },
       {
-        title: 'We build the apps around it',
-        body: 'An AI on its own does nothing yet. We build the applications your people actually work with. Pulling up documents and emails, asking questions about your own data, work that happens by itself. All through your own AI, nothing through the outside.',
+        title: 'We build the apps you need around it',
+        body: 'An AI on its own does nothing yet. We build the applications your team actually works with: pulling up documents and emails, asking questions about your own data, work that happens by itself. And we can combine this with an AIOS system, so it fits seamlessly into how your whole business runs. All through your own AI, nothing through the outside.',
         image: '/services/timeline-4.webp',
         clean: '/services/timeline-clean-4.webp',
         icon: '/services/icon-step-4.png',
@@ -1895,32 +1897,32 @@ const SERVER_STEPS: Record<
   nl: {
     title: 'Van uw eigen server tot uw eigen AI',
     subtitle:
-      'We zetten niet zomaar een model neer. We bouwen een complete eigen intelligentie, op maat van hoe u werkt en volledig binnen uw eigen muren.',
+      'We zetten niet zomaar een model neer. We bouwen een compleet eigen AI-systeem, op maat van hoe u werkt en volledig op uw eigen servers.',
     items: [
       {
-        title: 'We kijken wat u nodig hebt',
-        body: 'Welke data telt, welke taken kosten nu het meeste tijd, en hoeveel mensen gaan ermee werken. Dat bepaalt wat voor systeem bij u past, niet andersom. Een klein team heeft iets heel anders nodig dan een groot.',
+        title: 'We kijken welke data u heeft en wat nodig is',
+        body: 'We kijken welke data u heeft, hoeveel mensen ermee gaan werken, en welke hardware er al staat en eventueel nog nodig is. Dat bepaalt welke AI-modellen bij u passen. Een klein team heeft iets heel anders nodig dan een groot.',
         image: '/services/timeline-1.webp',
         clean: '/services/timeline-clean-1.webp',
         icon: '/services/icon-step-1.png',
       },
       {
-        title: 'We zetten de AI bij u neer',
-        body: 'De intelligentie komt op uw eigen server, in uw eigen gebouw. Geen verbinding met servers van iemand anders, geen data die naar buiten gaat. Wij regelen de hardware en zorgen dat alles staat zoals het hoort.',
+        title: 'We implementeren de nodige AI en hardware',
+        body: 'De AI komt op uw eigen servers te draaien, binnen uw eigen omgeving. Geen verbinding met servers van iemand anders, geen data die naar buiten gaat. Wij plaatsen en regelen de nodige hardware en zorgen dat alles staat zoals het hoort.',
         image: '/services/timeline-2.webp',
         clean: '/services/timeline-clean-2.webp',
         icon: '/services/icon-step-2.png',
       },
       {
-        title: 'We laten hem uw bedrijf leren kennen',
-        body: 'Dit is waar het echt van u wordt. De AI leert van uw eigen documenten, uw eigen manier van werken, uw eigen data. Zo krijgt u geen algemene AI maar een die uw bedrijf begrijpt, en die kennis blijft binnen.',
+        title: 'We laten het uw bedrijf leren kennen',
+        body: 'Dit is waar het echt van u wordt. De AI leert van uw eigen documenten, uw eigen manier van werken, uw eigen data. Zo krijgt u geen algemene AI maar een die uw bedrijf begrijpt. Die kennis blijft binnen en blijft behouden.',
         image: '/services/timeline-3.webp',
         clean: '/services/timeline-clean-3.webp',
         icon: '/services/icon-step-3.png',
       },
       {
-        title: 'We bouwen de apps eromheen',
-        body: 'Een AI op zich doet nog niks. Wij bouwen de toepassingen waarmee uw mensen er echt mee werken. Documenten en e-mails ophalen, vragen stellen over uw eigen data, werk dat vanzelf gebeurt. Alles via uw eigen AI, niets via buiten.',
+        title: 'We bouwen de nodige apps eromheen',
+        body: 'Een AI op zich doet nog niks. Wij bouwen de toepassingen waarmee uw team er echt mee werkt: documenten en e-mails ophalen, vragen stellen over uw eigen data, werk dat vanzelf gebeurt. En we kunnen dit combineren met een AIOS-systeem, zodat het naadloos in uw hele bedrijfsvoering past. Alles via uw eigen AI, niets via buiten.',
         image: '/services/timeline-4.webp',
         clean: '/services/timeline-clean-4.webp',
         icon: '/services/icon-step-4.png',

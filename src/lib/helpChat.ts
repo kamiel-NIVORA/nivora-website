@@ -292,8 +292,8 @@ function matchLocalReply(text: string, history: ChatMessage[], lang: Lang): stri
 
   if (has('local ai', 'on-prem', 'on prem', 'self-host', 'self host', 'private', 'gdpr', 'data', 'secure', 'security', 'privacy', 'lokale ai', 'privé', 'prive', 'gegevens', 'veilig', 'beveiliging')) {
     return nl
-      ? `Ervoor zorgen dat uw data van u blijft, is een kernonderdeel van hoe we bouwen. Met Local AI draaien we modellen op uw eigen servers, of die van ons, zodat gevoelige informatie nooit uw controle hoeft te verlaten. Vertel me wat meer over uw opzet, dan stel ik voor waar u begint, of lees meer op de Local AI servicepagina.`
-      : `Keeping your data yours is a core part of how we build. With Local AI we run models on your own servers, or ours, so sensitive information never has to leave your control. If you tell me a little about your setup I can suggest where to start, or read more on the Local AI service page.`
+      ? `Uw data van u laten blijven is een kernonderdeel van hoe we bouwen. Met Local AI draaien krachtige, lokale AI-modellen op uw eigen servers: op uw bestaande hardware als die sterk genoeg is, anders vullen we die aan met aansluitbare hardware. Uw gevoelige data blijft binnen en wordt nooit gebruikt om modellen van grote techbedrijven te trainen. Lokale modellen worden bovendien razendsnel beter, en u bezit het systeem volledig. Vertel me wat meer over uw opzet, dan stel ik voor waar u begint, of lees meer op de Local AI servicepagina.`
+      : `Keeping your data yours is a core part of how we build. With Local AI, capable local AI models run on your own servers: on your existing hardware if it is strong enough, otherwise we add attachable hardware. Your sensitive data stays in and is never used to train the big tech companies' models. Local models are also improving remarkably fast, and you own the system outright. If you tell me a little about your setup I can suggest where to start, or read more on the Local AI service page.`
   }
 
   if (has('aios', 'operating system', 'os ', 'besturingssysteem')) {
@@ -316,8 +316,8 @@ function matchLocalReply(text: string, history: ChatMessage[], lang: Lang): stri
 
   if (has('service', 'what do you do', 'what can you', 'offer', 'help with', 'dienst', 'diensten', 'wat doen jullie', 'wat doe je', 'aanbod')) {
     return nl
-      ? `We werken rond vier diensten: App Design (apps op maat), Local AI (veilige AI op uw eigen servers of die van ons), AIOS (een AI-besturingssysteem op maat van uw bedrijf) en AI Consulting (uitzoeken waar AI past en welke strategie wint). Vertel me welke het dichtst bij uw behoefte ligt, dan ga ik dieper.`
-      : `We work across four services: App Design (custom apps), Local AI (secure AI on your servers or ours), AIOS (a custom AI operating system for your company), and AI Consulting (finding where AI fits and which strategy wins). Tell me which one is closest to what you need and I can go deeper.`
+      ? `We werken rond vier diensten: App Design (apps op maat), Local AI (krachtige AI die op uw eigen servers draait, zodat uw data binnen blijft), AIOS (een AI-besturingssysteem op maat van uw bedrijf) en AI Consulting (uitzoeken waar AI past en welke strategie wint). Vertel me welke het dichtst bij uw behoefte ligt, dan ga ik dieper.`
+      : `We work across four services: App Design (custom apps), Local AI (capable AI running on your own servers, so your data stays in), AIOS (a custom AI operating system for your company), and AI Consulting (finding where AI fits and which strategy wins). Tell me which one is closest to what you need and I can go deeper.`
   }
 
   if (has('box', 'voice', 'product', 'download', 'waitlist', 'early access', 'launch', 'beta', 'producten', 'wachtlijst', 'vroege toegang', 'lancering', 'lanceren')) {
