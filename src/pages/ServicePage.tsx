@@ -1828,11 +1828,11 @@ function LocalSafeApproaches() {
         {/* the timeline centre line, continuing down into the top of the card */}
         <div
           aria-hidden
-          className="absolute left-1/2 -top-[300px] hidden h-[308px] w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block"
+          className="absolute left-1/2 -top-[360px] hidden h-[368px] w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block"
         >
           <motion.div
             style={reduced ? { scaleY: 1 } : { scaleY: connectorFill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/45 via-white/65 to-white/85"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/72 via-white/80 to-white/90"
           />
         </div>
 
@@ -2085,12 +2085,12 @@ function ServerTimeline() {
 
       <div
         ref={lineRef}
-        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)]"
+        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_8%,#000_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_8%,#000_100%)]"
       >
         <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
           <motion.div
             style={{ scaleY: fill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/55 to-white/25"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/74 to-white/72"
           />
         </div>
 
