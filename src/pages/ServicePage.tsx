@@ -14,7 +14,7 @@ import { ArrowUpRight, Check, ChevronDown, Minus, Plus } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { LampBeam, RoiCalculator } from '@/components/ui/RoiCalculator'
+import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
@@ -2060,9 +2060,12 @@ function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
    differentiators: free-standing frosted-glass cards over a sharp peak, crisp in
    the gaps and blurred through each card via an aligned blurred copy of the peak,
    with a cursor-driven 3D tilt. The peak is faded into the page so it blends. */
-const WHY_GLOW = '/services/whyus-wave.webp'
-const WHY_GLOW_W = 800
-const WHY_GLOW_H = 448
+type WhyBg = { src: string; w: number; h: number }
+const WHY_BG: Record<string, WhyBg> = {
+  'app-design': { src: '/services/whyus-wave.webp', w: 800, h: 448 },
+  aios: { src: '/services/whyus-aios.webp', w: 1500, h: 841 },
+}
+const whyBg = (slug: string): WhyBg => WHY_BG[slug] ?? WHY_BG['app-design']
 const WHY_POS_X = 0.5
 const WHY_POS_Y = 0.5
 
@@ -2070,10 +2073,12 @@ function AppWhyCard({
   title,
   body,
   bandRef,
+  bg,
 }: {
   title: string
   body: string
   bandRef: RefObject<HTMLDivElement | null>
+  bg: WhyBg
 }) {
   const reduced = usePrefersReducedMotion()
   const cardRef = useRef<HTMLDivElement>(null)
@@ -2096,9 +2101,9 @@ function AppWhyCard({
     const measure = () => {
       const bw = band.offsetWidth
       const bh = band.offsetHeight
-      const scale = Math.max(bw / WHY_GLOW_W, bh / WHY_GLOW_H)
-      const sw = WHY_GLOW_W * scale
-      const sh = WHY_GLOW_H * scale
+      const scale = Math.max(bw / bg.w, bh / bg.h)
+      const sw = bg.w * scale
+      const sh = bg.h * scale
       const bandX = (bw - sw) * WHY_POS_X
       const bandY = (bh - sh) * WHY_POS_Y
       const { x: cardX, y: cardY } = offsetWithin(card, band)
@@ -2108,7 +2113,7 @@ function AppWhyCard({
     const ro = new ResizeObserver(measure)
     ro.observe(band)
     return () => ro.disconnect()
-  }, [bandRef])
+  }, [bandRef, bg])
 
   return (
     <div style={{ perspective: '1000px' }} className="h-full">
@@ -2133,7 +2138,7 @@ function AppWhyCard({
         {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
         {frost && (
           <img
-            src={WHY_GLOW}
+            src={bg.src}
             alt=""
             aria-hidden
             style={{ width: frost.w, height: frost.h, left: frost.left, top: frost.top }}
@@ -2157,6 +2162,7 @@ function AppWhyCard({
 function AppWhyUs({ content }: { content: ServiceContent }) {
   const { lang } = useLang()
   const bandRef = useRef<HTMLDivElement>(null)
+  const bg = whyBg(content.slug)
   const sub =
     content.slug === 'aios'
       ? lang === 'nl'
@@ -2174,7 +2180,7 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
         {/* The sharp peak, faded into the page on every edge so it blends in */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <img
-            src={WHY_GLOW}
+            src={bg.src}
             alt=""
             className="h-full w-full object-cover object-[50%_50%] opacity-[0.72]"
           />
@@ -2199,7 +2205,7 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
             {content.differentiators.items.map((d, i) => (
               <Reveal key={d.title} delay={(i % 4) * 0.08}>
-                <AppWhyCard title={d.title} body={d.body} bandRef={bandRef} />
+                <AppWhyCard title={d.title} body={d.body} bandRef={bandRef} bg={bg} />
               </Reveal>
             ))}
           </div>
@@ -2281,10 +2287,9 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
   if (!config) return null // AI Consulting sells the plan, not hours saved
 
   return (
-    <section className="relative w-full overflow-hidden border-y border-line py-14 sm:py-16 lg:py-20">
-      <LampBeam />
+    <section className="relative w-full overflow-hidden border-y border-line py-16 sm:py-20 lg:py-24">
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6">
-        <div className="mx-auto max-w-2xl pt-8 text-center sm:pt-10">
+        <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
             {config.title}
           </h2>
@@ -2499,7 +2504,13 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
   return (
     <section className="relative grid w-full place-items-center overflow-hidden px-6 py-20 sm:py-24 lg:py-36">
       <ParallaxImage
-        src={meta.slug === 'app-design' ? '/services/cta-appdesign.webp' : meta.photo}
+        src={
+          meta.slug === 'app-design'
+            ? '/services/cta-appdesign.webp'
+            : meta.slug === 'aios'
+              ? '/services/cta-aios.webp'
+              : meta.photo
+        }
         range={['-8%', '8%']}
       />
       <div className="absolute inset-0 bg-black/40" />
