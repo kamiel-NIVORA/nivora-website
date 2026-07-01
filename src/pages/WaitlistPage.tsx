@@ -195,7 +195,11 @@ export function WaitlistPage() {
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
                     <span className="text-[10px] font-medium uppercase tracking-wider text-white/80">{t.pill}</span>
                   </div>
+<<<<<<< Updated upstream
                   <h1 className="mb-4 text-3xl font-semibold leading-tight tracking-tight text-white">{t.leftTitle}</h1>
+=======
+                  <h1 className="mb-4 font-sans text-3xl font-semibold leading-tight tracking-tight text-white">{t.leftTitle}</h1>
+>>>>>>> Stashed changes
                   <p className="max-w-xs text-sm font-light leading-relaxed text-neutral-300">{t.leftDesc}</p>
                 </div>
                 <div className="flex w-full items-center justify-center border-t border-white/10 pt-8 opacity-90">
@@ -229,7 +233,7 @@ export function WaitlistPage() {
                     >
                       <Check size={24} className="text-white" strokeWidth={2.5} />
                     </motion.div>
-                    <h2 className="mb-1.5 text-xl font-semibold text-white">{already ? t.doneAlready : t.doneNew}</h2>
+                    <h2 className="mb-1.5 font-sans text-xl font-semibold text-white">{already ? t.doneAlready : t.doneNew}</h2>
                     <p className="mb-8 max-w-xs text-xs text-neutral-500">
                       {already ? (
                         t.bodyAlready(thing)
@@ -257,7 +261,11 @@ export function WaitlistPage() {
                       <img src="/brand/nivora-logo.png" alt="Nivora" className="h-6 w-auto object-contain opacity-80" />
                     </div>
                     <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500">{t.eyebrow}</p>
+<<<<<<< Updated upstream
                     <h2 className="text-[28px] font-medium leading-tight tracking-tight text-white md:text-3xl">{heading}</h2>
+=======
+                    <h2 className="font-sans text-[28px] font-medium leading-tight tracking-tight text-white md:text-3xl">{heading}</h2>
+>>>>>>> Stashed changes
                   </div>
 
                   {/* Body — only the active step */}
