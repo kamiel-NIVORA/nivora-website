@@ -1652,14 +1652,20 @@ const WORK_ICONS: LucideIcon[][] = [
   [Receipt, Workflow, UserPlus, CalendarDays],
 ]
 
-/** One department row: a glossy icon badge matching the department, then the name and
- *  a short line. Icon badges instead of check marks keep it clean and scannable. */
-function WorkItem({ Icon, label, body }: { Icon: LucideIcon; label: string; body: string }) {
+/** Where the four glossy icon badges sit on the photo, a calm constellation like
+ *  Local AI's provider marks. */
+const WORK_BADGE_POS = [
+  { left: '25%', top: '31%' },
+  { left: '72%', top: '26%' },
+  { left: '30%', top: '71%' },
+  { left: '75%', top: '67%' },
+]
+
+/** One department row: a clean dot, the name and a short line. */
+function WorkItem({ label, body }: { label: string; body: string }) {
   return (
     <li className="flex items-start gap-3.5">
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] border border-white/12 bg-white/[0.07] shadow-[0_8px_24px_rgba(0,0,0,0.4)] backdrop-blur-md">
-        <Icon className="h-[17px] w-[17px] text-ink-soft" strokeWidth={1.7} />
-      </span>
+      <span aria-hidden className="mt-[8px] h-[5px] w-[5px] shrink-0 rounded-full bg-ink/55" />
       <div>
         <p className="text-[15px] font-medium leading-tight text-ink">{label}</p>
         <p className="mt-1 text-[13px] leading-relaxed text-faint">{body}</p>
@@ -1668,8 +1674,9 @@ function WorkItem({ Icon, label, body }: { Icon: LucideIcon; label: string; body
   )
 }
 
-/** One side of the work map as a home-style framed card: a light nature photo panel,
- *  the column heading, then the departments as glossy icon rows. */
+/** One side of the work map as a home-style framed card: a dark nature photo panel
+ *  with the department icons floating on it as glossy badges (like Local AI's marks),
+ *  then the column heading and the departments as clean dotted points. */
 function WorkColumn({
   heading,
   image,
@@ -1686,18 +1693,35 @@ function WorkColumn({
       <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.02] p-4 lg:p-5">
         <div className="relative overflow-hidden rounded-2xl border border-line bg-surface">
           <img src={image} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover" />
+          {/* darken so the glossy badges always read on the photo */}
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(78% 78% at 50% 40%, transparent 46%, rgba(0,0,0,0.30))' }}
+            style={{ background: 'radial-gradient(80% 80% at 50% 44%, rgba(0,0,0,0.22), rgba(0,0,0,0.54))' }}
           />
+          {/* the department icons, floating on the photo as glossy badges */}
+          <div className="pointer-events-none absolute inset-0">
+            {icons.map((Icon, i) => (
+              <div
+                key={i}
+                className="absolute"
+                style={{ left: WORK_BADGE_POS[i].left, top: WORK_BADGE_POS[i].top, marginLeft: -26, marginTop: -26 }}
+              >
+                <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 90}>
+                  <div className="flex h-[52px] w-[52px] items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <Icon className="h-[22px] w-[22px] text-white/90" strokeWidth={1.6} />
+                  </div>
+                </Drift>
+              </div>
+            ))}
+          </div>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
         </div>
 
         <div className="flex flex-1 flex-col px-2 pb-1 pt-6 lg:px-3">
           <h3 className="font-serif text-[24px] leading-tight tracking-[-0.01em] text-ink lg:text-[28px]">{heading}</h3>
           <ul className="mt-6 flex flex-col gap-4">
-            {items.map((it, i) => (
-              <WorkItem key={it.label} Icon={icons[i]} label={it.label} body={it.body} />
+            {items.map((it) => (
+              <WorkItem key={it.label} label={it.label} body={it.body} />
             ))}
           </ul>
         </div>
