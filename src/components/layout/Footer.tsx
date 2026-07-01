@@ -5,6 +5,7 @@ import {
   type NavItem,
 } from '@/lib/navigation'
 import { WAITLIST_URL } from '@/data/contact'
+import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { useLang, type Lang } from '@/i18n'
 
 const toLinks = (items: NavItem[]) => items.map((i) => ({ label: i.title, href: i.href }))
@@ -113,8 +114,11 @@ export function Footer() {
       <div className="relative mx-auto w-full max-w-[1200px] px-6 pt-16">
         {/* Top: brand + columns */}
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
-          {/* Nivora arrow mark */}
-          <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-28 max-w-full shrink-0 opacity-75" />
+          {/* Nivora arrow mark + language toggle */}
+          <div className="flex shrink-0 flex-col items-start gap-6">
+            <img src="/brand/nivora-mark.webp" alt="Nivora" className="w-36 max-w-full opacity-90" />
+            <LanguageSwitch />
+          </div>
 
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 md:w-auto md:flex-1 md:max-w-[900px] md:pl-12">
             {columns.map((col) => (
