@@ -253,7 +253,9 @@ export function ServicePage() {
                 ? '/services/statement-localai.webp'
                 : meta.slug === 'aios'
                   ? '/services/statement-aios.webp'
-                  : meta.photo
+                  : meta.slug === 'ai-consulting'
+                    ? '/services/statement-consulting.webp'
+                    : meta.photo
           }
           copy={content.reveal}
           accent={meta.accent}
