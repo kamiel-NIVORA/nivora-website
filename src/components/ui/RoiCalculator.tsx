@@ -8,13 +8,13 @@ import { useLang } from '@/i18n'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 
 /**
- * ROI calculator — a specific, stepwise "what AIOS hands back" configurator.
+ * ROI calculator — a specific, stepwise "money on the table" configurator.
  *
- * You pick the exact places work piles up (the same departments as the section above),
- * set the hours a week each one eats, then the cost and the share AIOS takes over. A
- * light traces around the card border, starting top-left and closing the loop once
- * done; "Bekijk je getal" then reveals the yearly saving inside the card. Honest model:
- * sum(hours a week per area) x working weeks x hourly cost x automatable share.
+ * You pick the departments where recurring work piles up, then configure each one on
+ * its own (people, hours a week each, cost per hour) before moving to the next. A soft
+ * light traces around the card border, starting top-left and closing the loop as you
+ * go; "Bekijk je getal" reveals the yearly figure. Honest model, no hidden factors:
+ * sum over departments of people x hours a week x working weeks x hourly cost.
  */
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -36,17 +36,14 @@ const AREAS: { key: AreaKey; Icon: LucideIcon; nl: string; en: string }[] = [
 
 const COPY = {
   en: {
-    steps: ['Where it piles up', 'Hours a week', 'The cost'],
-    stepHelp: [
-      'Click the places where recurring work piles up for you.',
-      'Set the hours each place eats every week.',
-      'What that time costs, and how much AIOS realistically takes over.',
-    ],
-    pickHint: 'Pick at least one place to continue.',
-    rate: { label: 'Cost per hour', render: (v: number) => `${eur.format(v)} / h`, help: 'What an hour of that time costs you.' },
-    automatable: { label: 'Share AIOS takes over', render: (v: number) => `${v}%`, help: 'Kept cautious, only what is realistic.' },
-    perWeek: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} h / week`,
-    savesYou: 'saved for you, every year',
+    selectTitle: 'Where it piles up',
+    selectHelp: 'Click the departments where recurring work piles up for you.',
+    pickHint: 'Pick at least one department to continue.',
+    ofN: (i: number, n: number) => `${i} / ${n}`,
+    people: { label: 'People doing this work', render: (v: number) => `${nf().format(v)} ${v === 1 ? 'person' : 'people'}` },
+    hours: { label: 'Hours a week, each of them', render: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} h / week` },
+    rate: { label: 'Cost per hour', render: (v: number) => `${eur.format(v)} / h` },
+    perYear: 'on recurring work, a year',
     stats: { month: 'Per month', hours: 'Hours a year', weeks: 'Full-time weeks' },
     back: 'Back',
     next: 'Next',
@@ -55,17 +52,14 @@ const COPY = {
     cta: "Let's make this happen",
   },
   nl: {
-    steps: ['Waar loopt het vast', 'Uren per week', 'De kost'],
-    stepHelp: [
-      'Klik de plekken aan waar bij u werk blijft liggen.',
-      'Zet per plek de uren die er elke week in kruipen.',
-      'Wat die tijd kost, en hoeveel AIOS er realistisch van overneemt.',
-    ],
-    pickHint: 'Kies minstens één plek om verder te gaan.',
-    rate: { label: 'Kost per uur', render: (v: number) => `${eur.format(v)} / u`, help: 'Wat een uur van die tijd u kost.' },
-    automatable: { label: 'Deel dat AIOS overneemt', render: (v: number) => `${v}%`, help: 'Voorzichtig gehouden, enkel wat realistisch is.' },
-    perWeek: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} u / week`,
-    savesYou: 'bespaart u, elk jaar',
+    selectTitle: 'Waar loopt het vast',
+    selectHelp: 'Klik de afdelingen aan waar bij u werk blijft liggen.',
+    pickHint: 'Kies minstens één afdeling om verder te gaan.',
+    ofN: (i: number, n: number) => `${i} / ${n}`,
+    people: { label: 'Mensen die dit doen', render: (v: number) => `${nf().format(v)} ${v === 1 ? 'persoon' : 'mensen'}` },
+    hours: { label: 'Uren per week, elk van hen', render: (v: number) => `${nf({ maximumFractionDigits: 1 }).format(v)} u / week` },
+    rate: { label: 'Kost per uur', render: (v: number) => `${eur.format(v)} / u` },
+    perYear: 'aan terugkerend werk, per jaar',
     stats: { month: 'Per maand', hours: 'Uren per jaar', weeks: 'Voltijdse weken' },
     back: 'Terug',
     next: 'Volgende',
@@ -75,9 +69,13 @@ const COPY = {
   },
 } as const
 
-const HOURS = { min: 0.5, max: 30, step: 0.5, default: 4 }
-const RATE = { min: 15, max: 150, step: 5, default: 45 }
-const AUTO = { min: 20, max: 90, step: 5, default: 60 }
+type Dept = { people: number; hours: number; rate: number }
+const DEPT_DEFAULT: Dept = { people: 2, hours: 4, rate: 45 }
+const B = {
+  people: { min: 1, max: 30, step: 1 },
+  hours: { min: 0.5, max: 40, step: 0.5 },
+  rate: { min: 15, max: 150, step: 5 },
+}
 
 /** The lamp: a bright line on the section boundary that widens as you scroll in. */
 export function LampBeam() {
@@ -108,7 +106,7 @@ export function LampBeam() {
   )
 }
 
-function Slider({ id, label, value, valueText, min, max, step, help, onChange }: { id: string; label: string; value: number; valueText: string; min: number; max: number; step: number; help?: string; onChange: (n: number) => void }) {
+function Slider({ id, label, value, valueText, min, max, step, onChange }: { id: string; label: string; value: number; valueText: string; min: number; max: number; step: number; onChange: (n: number) => void }) {
   const pct = ((value - min) / (max - min)) * 100
   return (
     <div>
@@ -126,14 +124,13 @@ function Slider({ id, label, value, valueText, min, max, step, help, onChange }:
         onChange={(e) => onChange(Number(e.target.value))}
         aria-label={label}
         className={cn(
-          'mt-4 h-1.5 w-full cursor-pointer touch-pan-y appearance-none rounded-full outline-none',
+          'mt-3.5 h-1.5 w-full cursor-pointer touch-pan-y appearance-none rounded-full outline-none',
           '[&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_1px_6px_rgba(0,0,0,0.6)] [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-black/30 active:[&::-webkit-slider-thumb]:scale-110',
           'pointer-coarse:[&::-webkit-slider-thumb]:h-6 pointer-coarse:[&::-webkit-slider-thumb]:w-6',
           '[&::-moz-range-thumb]:h-[18px] [&::-moz-range-thumb]:w-[18px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white',
         )}
         style={{ background: `linear-gradient(to right, rgba(245,245,245,0.9) ${pct}%, rgba(255,255,255,0.1) ${pct}%)` }}
       />
-      {help && <p className="mt-3 text-[12.5px] leading-relaxed text-dim">{help}</p>}
     </div>
   )
 }
@@ -172,55 +169,68 @@ export function RoiCalculator() {
   const [selected, setSelected] = useState<Record<AreaKey, boolean>>({
     sales: true, marketing: false, support: true, communication: false, finance: true, operations: false, hr: false, planning: false,
   })
-  const [hours, setHours] = useState<Record<AreaKey, number>>(
-    () => Object.fromEntries(AREAS.map((a) => [a.key, HOURS.default])) as Record<AreaKey, number>,
+  const [config, setConfig] = useState<Record<AreaKey, Dept>>(
+    () => Object.fromEntries(AREAS.map((a) => [a.key, { ...DEPT_DEFAULT }])) as Record<AreaKey, Dept>,
   )
-  const [rate, setRate] = useState(RATE.default)
-  const [automatable, setAutomatable] = useState(AUTO.default)
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(0) // 0 = selection; 1..N = chosen[step-1]
   const [done, setDone] = useState(false)
 
   const chosen = AREAS.filter((a) => selected[a.key])
-  const totalHoursWeek = chosen.reduce((sum, a) => sum + hours[a.key], 0)
-  const hoursSaved = totalHoursWeek * WORK_WEEKS * (automatable / 100)
-  const savings = hoursSaved * rate
-  const animated = useCountUp(done ? savings : 0)
+
+  useEffect(() => {
+    if (step > chosen.length) setStep(chosen.length)
+  }, [chosen.length, step])
+
+  const total = chosen.reduce((sum, a) => {
+    const d = config[a.key]
+    return sum + d.people * d.hours * WORK_WEEKS * d.rate
+  }, 0)
+  const hoursTotal = chosen.reduce((sum, a) => sum + config[a.key].people * config[a.key].hours * WORK_WEEKS, 0)
+  const animated = useCountUp(done ? total : 0)
 
   const prog = useSpring(0, { stiffness: 90, damping: 20, mass: 0.5 })
   useEffect(() => {
-    prog.set(done ? 1 : (step + 0.4) / 3)
-  }, [step, done, prog])
+    prog.set(done ? 1 : (step + 0.5) / (chosen.length + 1))
+  }, [step, done, chosen.length, prog])
   const ang = useTransform(prog, (p) => `${p * 360}deg`)
-  const ring = useMotionTemplate`conic-gradient(from 292deg, rgba(245,245,245,0.85) 0deg, rgba(245,245,245,0.85) ${ang}, transparent ${ang})`
+  const ring = useMotionTemplate`conic-gradient(from 292deg, rgba(245,245,245,0.8) 0deg, rgba(245,245,245,0.8) ${ang}, transparent ${ang})`
 
   const stats = [
-    { label: t.stats.month, value: eur.format(Math.round(savings / 12)) },
-    { label: t.stats.hours, value: nf({ maximumFractionDigits: 0 }).format(Math.round(hoursSaved)) },
-    { label: t.stats.weeks, value: nf({ maximumFractionDigits: 1 }).format(hoursSaved / 40) },
+    { label: t.stats.month, value: eur.format(Math.round(total / 12)) },
+    { label: t.stats.hours, value: nf({ maximumFractionDigits: 0 }).format(Math.round(hoursTotal)) },
+    { label: t.stats.weeks, value: nf({ maximumFractionDigits: 1 }).format(hoursTotal / 40) },
   ]
+
+  const dept = step >= 1 ? chosen[step - 1] : undefined
+  const setDept = (patch: Partial<Dept>) => {
+    if (!dept) return
+    setConfig((c) => ({ ...c, [dept.key]: { ...c[dept.key], ...patch } }))
+  }
+  const isLast = step === chosen.length
   const canNext = step !== 0 || chosen.length > 0
 
   return (
     <div className="relative mx-auto mt-10 max-w-[900px]">
-      {/* the light lives BEHIND the card and seeps out from under the edges, like the
-          booking pop-up: a wide soft bloom under the bottom + a faint halo behind */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-8 bottom-[-26px] h-32 rounded-[50%] bg-white/[0.14] blur-[54px]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-[-4px] top-24 bottom-[-14px] rounded-[42px] bg-white/[0.045] blur-[50px]" />
+      {/* the light lives BEHIND the card and seeps out from under the edges */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-8 bottom-[-26px] h-32 rounded-[50%] bg-white/[0.13] blur-[56px]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-[-4px] top-24 bottom-[-14px] rounded-[42px] bg-white/[0.04] blur-[50px]" />
 
       <div className="relative overflow-hidden rounded-[30px] border border-white/[0.09] bg-[#0a0a0c]/95 p-7 shadow-[0_50px_120px_-45px_rgba(0,0,0,0.9)] sm:p-9">
-        {/* border light — a thin line that traces around, starting top-left */}
-        <motion.div aria-hidden className="pointer-events-none absolute inset-0 rounded-[30px]" style={{ background: ring, padding: 1.5, ...BORDER_MASK }} />
+        {/* border light — a soft, vague glow that traces around, starting top-left */}
+        <motion.div aria-hidden className="pointer-events-none absolute inset-0 rounded-[30px]" style={{ background: ring, padding: 3, opacity: 0.6, filter: 'blur(5px)', ...BORDER_MASK }} />
 
         <div className="relative flex min-h-[392px] flex-col">
           <AnimatePresence mode="wait">
             {!done ? (
               <motion.div key="config" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3, ease }} className="flex flex-1 flex-col">
                 <div className="flex items-start justify-between gap-4">
-                  <p className="max-w-[62%] text-[13px] leading-snug text-faint">{t.stepHelp[step]}</p>
-                  <span className="shrink-0 text-[12px] uppercase tracking-[0.18em] text-faint">{t.steps[step]}</span>
+                  <p className="max-w-[62%] text-[13px] leading-snug text-faint">{step === 0 ? t.selectHelp : ''}</p>
+                  <span className="shrink-0 text-[12px] uppercase tracking-[0.18em] text-faint">
+                    {step === 0 ? t.selectTitle : dept ? t.ofN(step, chosen.length) : ''}
+                  </span>
                 </div>
 
-                <div className="mt-6 flex-1">
+                <div className="mt-6 flex flex-1 flex-col justify-center">
                   <AnimatePresence mode="wait">
                     <motion.div key={step} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.28, ease }}>
                       {step === 0 ? (
@@ -248,29 +258,21 @@ export function RoiCalculator() {
                             )
                           })}
                         </div>
-                      ) : step === 1 ? (
-                        <div className="flex max-h-[248px] flex-col gap-5 overflow-y-auto pr-1">
-                          {chosen.length === 0 ? (
-                            <p className="py-10 text-center text-[13.5px] text-dim">{t.pickHint}</p>
-                          ) : (
-                            chosen.map((a) => (
-                              <div key={a.key} className="flex items-center gap-4">
-                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-line bg-white/[0.04]">
-                                  <a.Icon className="h-[17px] w-[17px] text-ink-soft" strokeWidth={1.7} />
-                                </span>
-                                <div className="min-w-0 flex-1">
-                                  <Slider id={`roi-${a.key}`} label={a[lang]} value={hours[a.key]} valueText={t.perWeek(hours[a.key])} min={HOURS.min} max={HOURS.max} step={HOURS.step} onChange={(n) => setHours((h) => ({ ...h, [a.key]: n }))} />
-                                </div>
-                              </div>
-                            ))
-                          )}
+                      ) : dept ? (
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-[12px] border border-white/20 bg-white/[0.08]">
+                              <dept.Icon className="h-5 w-5 text-ink" strokeWidth={1.7} />
+                            </span>
+                            <h3 className="font-serif text-[22px] leading-none tracking-[-0.01em] text-ink">{dept[lang]}</h3>
+                          </div>
+                          <div className="mt-7 flex flex-col gap-6">
+                            <Slider id={`roi-${dept.key}-people`} label={t.people.label} value={config[dept.key].people} valueText={t.people.render(config[dept.key].people)} min={B.people.min} max={B.people.max} step={B.people.step} onChange={(n) => setDept({ people: n })} />
+                            <Slider id={`roi-${dept.key}-hours`} label={t.hours.label} value={config[dept.key].hours} valueText={t.hours.render(config[dept.key].hours)} min={B.hours.min} max={B.hours.max} step={B.hours.step} onChange={(n) => setDept({ hours: n })} />
+                            <Slider id={`roi-${dept.key}-rate`} label={t.rate.label} value={config[dept.key].rate} valueText={t.rate.render(config[dept.key].rate)} min={B.rate.min} max={B.rate.max} step={B.rate.step} onChange={(n) => setDept({ rate: n })} />
+                          </div>
                         </div>
-                      ) : (
-                        <div className="flex flex-col gap-8">
-                          <Slider id="roi-rate" label={t.rate.label} value={rate} valueText={t.rate.render(rate)} min={RATE.min} max={RATE.max} step={RATE.step} help={t.rate.help} onChange={setRate} />
-                          <Slider id="roi-auto" label={t.automatable.label} value={automatable} valueText={t.automatable.render(automatable)} min={AUTO.min} max={AUTO.max} step={AUTO.step} help={t.automatable.help} onChange={setAutomatable} />
-                        </div>
-                      )}
+                      ) : null}
                     </motion.div>
                   </AnimatePresence>
                 </div>
@@ -279,8 +281,8 @@ export function RoiCalculator() {
                   <PillButton onClick={() => setStep((s) => Math.max(0, s - 1))} className={step === 0 ? 'pointer-events-none opacity-0' : ''}>
                     {t.back}
                   </PillButton>
-                  {step < 2 ? (
-                    <PillButton primary disabled={!canNext} onClick={() => setStep((s) => Math.min(2, s + 1))}>
+                  {!isLast ? (
+                    <PillButton primary disabled={!canNext} onClick={() => setStep((s) => Math.min(chosen.length, s + 1))}>
                       {t.next}
                     </PillButton>
                   ) : (
@@ -292,21 +294,21 @@ export function RoiCalculator() {
               </motion.div>
             ) : (
               <motion.div key="result" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }} className="flex flex-1 flex-col justify-center text-center">
-                <div className="font-serif leading-[0.95] tracking-[-0.02em] text-ink tabular-nums" style={{ fontSize: 'clamp(2.75rem, 8vw, 5.25rem)' }}>
+                <div className="font-serif leading-[0.95] tracking-[-0.02em] text-ink tabular-nums" style={{ fontSize: 'clamp(2.85rem, 8vw, 5.5rem)' }}>
                   {eur.format(Math.round(animated))}
                 </div>
-                <div className="label-mono mt-3 text-muted">{t.savesYou}</div>
+                <div className="label-mono mt-4 text-muted">{t.perYear}</div>
 
-                <div className="mx-auto mt-9 grid max-w-[520px] grid-cols-3 gap-4 border-t border-line pt-8">
+                <div className="mx-auto mt-10 flex w-full max-w-[440px] items-center justify-between gap-4">
                   {stats.map((s) => (
-                    <div key={s.label}>
-                      <div className="font-mono text-[20px] tabular-nums text-ink sm:text-[22px]">{s.value}</div>
+                    <div key={s.label} className="flex-1">
+                      <div className="font-mono text-[19px] tabular-nums text-ink-soft sm:text-[21px]">{s.value}</div>
                       <div className="mt-1.5 text-[10.5px] uppercase tracking-[0.1em] text-dim">{s.label}</div>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-10 flex justify-center">
+                <div className="mt-11 flex justify-center">
                   <BookCallButton className="h-11 px-7 text-[14px]">{t.cta}</BookCallButton>
                 </div>
                 <button type="button" onClick={() => setDone(false)} className="mx-auto mt-6 text-[12.5px] text-dim underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink">
