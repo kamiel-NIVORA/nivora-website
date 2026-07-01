@@ -123,12 +123,6 @@ const COPY = {
     wordBody:
       'No feed, no camera, no problem. Send your link in a message, drop it in a group chat, mention it to a business that needs it. One honest recommendation beats any ad.',
     wordChips: ['A message', 'A group chat', 'A quick word'],
-    eyebrowExtra: 'A little extra',
-    giftHeading: 'Your people get a gift too',
-    giftBody:
-      'It is not only about your commission. Everyone who joins through your link gets early access to Box and Voice before the public. So sharing feels like giving them a head start, not a sales pitch.',
-    giftRibbonAlt: 'An endless ribbon, passed from one hand to the next',
-    giftChip: 'Early access for everyone you invite. A gift worth sharing.',
     appsHeading: 'Two apps people will actually want',
     appsBody:
       'Box and Voice are launching soon. As an affiliate you will be among the first to put them in front of the people who need them.',
@@ -199,12 +193,6 @@ const COPY = {
     wordBody:
       'Geen feed, geen camera, geen probleem. Stuur uw link in een bericht, zet hem in een groepschat, vermeld hem bij een bedrijf dat het nodig heeft. Eén eerlijke aanbeveling wint van elke advertentie.',
     wordChips: ['Een bericht', 'Een groepschat', 'Een kort woord'],
-    eyebrowExtra: 'Een beetje extra',
-    giftHeading: 'Uw mensen krijgen ook een cadeau',
-    giftBody:
-      'Het gaat niet alleen om uw commissie. Iedereen die zich via uw link aansluit, krijgt vroege toegang tot Box en Voice, nog voor het grote publiek. Zo voelt delen als hen een voorsprong geven, niet als een verkooppraatje.',
-    giftRibbonAlt: 'Een eindeloos lint, doorgegeven van de ene hand naar de andere',
-    giftChip: 'Vroege toegang voor iedereen die u uitnodigt. Een cadeau dat het delen waard is.',
     appsHeading: 'Twee apps die mensen echt zullen willen',
     appsBody:
       'Box en Voice lanceren binnenkort. Als affiliate bent u een van de eersten om ze onder de aandacht te brengen van de mensen die ze nodig hebben.',
