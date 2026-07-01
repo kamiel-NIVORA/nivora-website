@@ -39,6 +39,9 @@ export async function subscribe(input: {
   /** Optional phone number, captured on the waitlist so we can reach people who
    *  prefer a text over an email. Sent to the backend alongside the email. */
   phone?: string
+  /** Affiliate signups only: why this person wants to become an affiliate of
+   *  Box and Voice. Stored in the Nivora system next to the subscriber. */
+  vision?: string
   product?: string
   /** Overrides the derived source, e.g. 'newsletter:home' so the AIOS can see
    *  where a lead came in from. Falls back to the product / generic website tag. */
@@ -56,6 +59,7 @@ export async function subscribe(input: {
         email: input.email.trim(),
         name: input.name?.trim() || undefined,
         phone: input.phone?.trim() || undefined,
+        vision: input.vision?.trim() || undefined,
         product: input.product || undefined,
         source: input.source || (input.product ? `website:${input.product}` : 'website'),
       }),

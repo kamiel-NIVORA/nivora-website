@@ -13,15 +13,25 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const COPY = {
   en: {
     thingGeneric: 'Box and Voice',
+    thingAffiliate: 'the affiliate program',
     titleGeneric: 'Be first with Box and Voice.',
+    titleAffiliate: 'Be first for the affiliate deals.',
     titleProduct: (p: string) => `Be first with ${p}.`,
     subtitle: "Leave your details and we'll reach out the moment they go live. Nothing else.",
+    subtitleAffiliate:
+      'Leave your details and tell us briefly why you want to become an affiliate of Box and Voice. We reach out the moment the program opens.',
     namePh: 'First + last name',
     nameHint: "We'll only reach out when they go live.",
+    nameHintAffiliate: "We'll only reach out when the program opens.",
     emailPh: 'you@company.com',
     emailHint: 'One message at launch. No newsletters.',
+    emailHintAffiliate: 'One message when the program opens. No newsletters.',
+    visionPh: 'Why do you want to become an affiliate of Box and Voice?',
+    visionHint: 'A few sentences is enough. It helps us tailor the program to you.',
+    visionSubmit: 'Sign up as affiliate',
     errName: 'Please enter your full name.',
     errEmail: 'Please enter a valid email address.',
+    errVision: 'Please tell us briefly why you want to become an affiliate.',
     errGeneric: 'Something went wrong. Please try again.',
     doneNew: "You're on the list",
     doneAlready: "You're already on the list",
@@ -33,15 +43,25 @@ const COPY = {
   },
   nl: {
     thingGeneric: 'Box en Voice',
+    thingAffiliate: 'het affiliate programma',
     titleGeneric: 'Wees de eerste met Box en Voice.',
+    titleAffiliate: 'Wees de eerste voor de affiliate deals.',
     titleProduct: (p: string) => `Wees de eerste met ${p}.`,
     subtitle: 'Laat uw gegevens achter en we laten van ons horen zodra ze live gaan. Niets anders.',
+    subtitleAffiliate:
+      'Laat uw gegevens achter en vertel kort waarom u affiliate wilt worden van Box en Voice. We nemen contact op zodra het programma opent.',
     namePh: 'Voornaam + achternaam',
     nameHint: 'We laten van ons horen zodra ze live gaan.',
+    nameHintAffiliate: 'We laten van ons horen zodra het programma opent.',
     emailPh: 'naam@bedrijf.be',
     emailHint: 'Eén bericht bij de lancering. Geen nieuwsbrieven.',
+    emailHintAffiliate: 'Eén bericht zodra het programma opent. Geen nieuwsbrieven.',
+    visionPh: 'Waarom wilt u affiliate worden van Box en Voice?',
+    visionHint: 'Een paar zinnen is genoeg. Zo kunnen we het programma op u afstemmen.',
+    visionSubmit: 'Meld u aan als affiliate',
     errName: 'Vul alsjeblieft uw volledige naam in.',
     errEmail: 'Vul alsjeblieft een geldig e-mailadres in.',
+    errVision: 'Vertel kort waarom u affiliate wilt worden.',
     errGeneric: 'Er ging iets mis. Probeer het opnieuw.',
     doneNew: 'U staat op de lijst',
     doneAlready: 'U staat al op de lijst',
@@ -59,8 +79,13 @@ export function WaitlistPage() {
   const [params] = useSearchParams()
   const productSlug = (params.get('product') ?? '').toLowerCase()
   const product = PRODUCT_LABELS[productSlug]
-  const thing = product ?? t.thingGeneric
-  const heading = product ? t.titleProduct(product) : t.titleGeneric
+  // Affiliate flow: same card, one extra step. The signup asks WHY you want to
+  // become an affiliate (the vision) and is stored as an affiliate signup in
+  // the Nivora system, separate from the app (user) waitlist.
+  const isAffiliate = productSlug === 'affiliate'
+  const thing = isAffiliate ? t.thingAffiliate : (product ?? t.thingGeneric)
+  const heading = isAffiliate ? t.titleAffiliate : product ? t.titleProduct(product) : t.titleGeneric
+  const subtitle = isAffiliate ? t.subtitleAffiliate : t.subtitle
   // Top icon: the product's own app tile on a product page, else the Nivora mark.
   const brandIcon =
     productSlug === 'box'
@@ -69,39 +94,61 @@ export function WaitlistPage() {
         ? '/products/voice-logo.webp'
         : '/brand/nivora-mark.webp'
 
-  const [step, setStep] = useState<'name' | 'email'>('name')
+  const [step, setStep] = useState<'name' | 'email' | 'vision'>('name')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [vision, setVision] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [already, setAlready] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const visionRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     inputRef.current?.focus()
+    visionRef.current?.focus()
   }, [step])
 
   useEffect(() => {
     const prev = document.title
-    document.title = lang === 'nl' ? 'Wachtlijst · Nivora' : 'Waitlist · Nivora'
+    document.title = isAffiliate
+      ? lang === 'nl'
+        ? 'Affiliate wachtlijst · Nivora'
+        : 'Affiliate waitlist · Nivora'
+      : lang === 'nl'
+        ? 'Wachtlijst · Nivora'
+        : 'Waitlist · Nivora'
     return () => {
       document.title = prev
     }
-  }, [lang])
+  }, [lang, isAffiliate])
 
   // Progress for the border-glow animation (0 → 1), like the booking card.
-  const progress = done ? 1.05 : step === 'name' ? 1 / 3 : 2 / 3
+  // The affiliate flow has one step more, so it fills in quarters.
+  const progress = done
+    ? 1.05
+    : isAffiliate
+      ? step === 'name'
+        ? 0.25
+        : step === 'email'
+          ? 0.5
+          : 0.75
+      : step === 'name'
+        ? 1 / 3
+        : 2 / 3
 
-  async function submitEmail(value: string) {
+  async function submitAll() {
     setLoading(true)
     setError('')
     const res = await subscribe({
-      email: value.trim(),
+      email: email.trim(),
       name: name.trim(),
+      vision: isAffiliate ? vision.trim() : undefined,
       product: productSlug || undefined,
       source: productSlug ? `waitlist:${productSlug}` : 'waitlist',
+      lang,
     })
     setLoading(false)
     if (!res.ok) {
@@ -121,7 +168,17 @@ export function WaitlistPage() {
   function emailNext() {
     if (loading) return
     if (!EMAIL_RE.test(email.trim())) return setError(t.errEmail)
-    void submitEmail(email.trim())
+    setError('')
+    if (isAffiliate) {
+      setStep('vision')
+      return
+    }
+    void submitAll()
+  }
+  function visionNext() {
+    if (loading) return
+    if (vision.trim().length < 10) return setError(t.errVision)
+    void submitAll()
   }
   const keyGo = (fn: () => void) => (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -205,7 +262,7 @@ export function WaitlistPage() {
                     className={product ? 'mb-8 h-20 w-20 object-contain md:h-24 md:w-24' : 'mb-8 h-9 w-auto object-contain opacity-90'}
                   />
                   <h2 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h2>
-                  <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{t.subtitle}</p>
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{subtitle}</p>
 
                   <div className="mt-8 w-full max-w-md">
                     <AnimatePresence mode="wait">
@@ -216,52 +273,95 @@ export function WaitlistPage() {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <div className="relative">
-                          {step === 'name' ? (
-                            <input
-                              ref={inputRef}
+                        {step === 'vision' ? (
+                          /* Affiliate only: the vision. A real textarea with its
+                             own submit button, so people can take a few lines. */
+                          <div>
+                            <textarea
+                              ref={visionRef}
                               autoFocus
-                              type="text"
-                              value={name}
+                              value={vision}
+                              rows={4}
                               onChange={(e) => {
-                                setName(e.target.value)
+                                setVision(e.target.value)
                                 if (error) setError('')
                               }}
-                              onKeyDown={keyGo(nameNext)}
-                              placeholder={t.namePh}
-                              autoComplete="name"
-                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
-                            />
-                          ) : (
-                            <input
-                              ref={inputRef}
-                              autoFocus
-                              type="email"
-                              value={email}
-                              onChange={(e) => {
-                                setEmail(e.target.value)
-                                if (error) setError('')
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                  e.preventDefault()
+                                  visionNext()
+                                }
                               }}
-                              onKeyDown={keyGo(emailNext)}
-                              placeholder={t.emailPh}
-                              autoComplete="email"
-                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              placeholder={t.visionPh}
+                              className="w-full resize-none rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-left text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
                             />
-                          )}
-                          <button
-                            type="button"
-                            onClick={step === 'name' ? nameNext : emailNext}
-                            disabled={loading}
-                            aria-label={step === 'name' ? t.namePh : t.emailPh}
-                            className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg bg-white/10 text-white transition-all hover:bg-white/20"
-                          >
-                            {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
-                          </button>
-                        </div>
+                            <button
+                              type="button"
+                              onClick={visionNext}
+                              disabled={loading}
+                              className="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-[15px] font-medium text-black transition-all hover:bg-neutral-200 disabled:opacity-60"
+                            >
+                              {loading ? <Loader2 size={16} className="animate-spin" /> : t.visionSubmit}
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            {step === 'name' ? (
+                              <input
+                                ref={inputRef}
+                                autoFocus
+                                type="text"
+                                value={name}
+                                onChange={(e) => {
+                                  setName(e.target.value)
+                                  if (error) setError('')
+                                }}
+                                onKeyDown={keyGo(nameNext)}
+                                placeholder={t.namePh}
+                                autoComplete="name"
+                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              />
+                            ) : (
+                              <input
+                                ref={inputRef}
+                                autoFocus
+                                type="email"
+                                value={email}
+                                onChange={(e) => {
+                                  setEmail(e.target.value)
+                                  if (error) setError('')
+                                }}
+                                onKeyDown={keyGo(emailNext)}
+                                placeholder={t.emailPh}
+                                autoComplete="email"
+                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              />
+                            )}
+                            <button
+                              type="button"
+                              onClick={step === 'name' ? nameNext : emailNext}
+                              disabled={loading}
+                              aria-label={step === 'name' ? t.namePh : t.emailPh}
+                              className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg bg-white/10 text-white transition-all hover:bg-white/20"
+                            >
+                              {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                            </button>
+                          </div>
+                        )}
                         {error ? (
                           <p className="mt-3 text-xs text-red-400">{error}</p>
                         ) : (
-                          <p className="mt-3 text-[12px] text-neutral-500">{step === 'name' ? t.nameHint : t.emailHint}</p>
+                          <p className="mt-3 text-[12px] text-neutral-500">
+                            {step === 'name'
+                              ? isAffiliate
+                                ? t.nameHintAffiliate
+                                : t.nameHint
+                              : step === 'email'
+                                ? isAffiliate
+                                  ? t.emailHintAffiliate
+                                  : t.emailHint
+                                : t.visionHint}
+                          </p>
                         )}
                       </motion.div>
                     </AnimatePresence>

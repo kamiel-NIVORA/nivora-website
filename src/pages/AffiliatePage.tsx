@@ -107,7 +107,7 @@ const COPY = {
     heroLine2: 'Earn 20%.',
     heroSub:
       'Post about it, or simply tell the right people. You keep 20% of every customer you bring in, every month they stay.',
-    beFirst: 'Be the first to know',
+    beFirst: 'Be first for the affiliate deals',
     eyebrowHow: 'How it works',
     howHeading: 'From your link to your first payout',
     howSub: 'Four steps, and only the first one asks anything of you. The rest keeps running on its own.',
@@ -124,8 +124,8 @@ const COPY = {
     wordChips: ['A message', 'A group chat', 'A quick word'],
     appsHeading: 'Two apps people will actually want',
     appsBody:
-      'Box and Voice are launching soon. As an affiliate you will be among the first to put them in front of the people who need them.',
-    joinWaitlist: 'Join the waiting list',
+      'Box and Voice are launching soon. As an affiliate you will be among the first to put them in front of the people who need them. Want to use the apps yourself? Join the waiting list below.',
+    joinWaitlist: (app: string) => `Sign up to use ${app}`,
     finalHeading: 'The program opens soon',
     finalBody:
       'We are putting the final pieces in place. Leave your details and we will reach out the moment you can join as an affiliate, with your link ready to share.',
@@ -177,7 +177,7 @@ const COPY = {
     heroLine2: 'Verdien 20%.',
     heroSub:
       'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 20% van elke klant die u aanbrengt, elke maand opnieuw.',
-    beFirst: 'Wees als eerste op de hoogte',
+    beFirst: 'Wees de eerste voor de affiliate deals',
     eyebrowHow: 'Hoe het werkt',
     howHeading: 'Van uw link tot uw eerste uitbetaling',
     howSub: 'Vier stappen, en alleen de eerste vraagt iets van u. De rest loopt vanzelf verder.',
@@ -194,8 +194,8 @@ const COPY = {
     wordChips: ['Een bericht', 'Een groepschat', 'Een kort woord'],
     appsHeading: 'Twee apps die mensen echt zullen willen',
     appsBody:
-      'Box en Voice lanceren binnenkort. Als affiliate bent u een van de eersten om ze onder de aandacht te brengen van de mensen die ze nodig hebben.',
-    joinWaitlist: 'Schrijf u in op de wachtlijst',
+      'Box en Voice lanceren binnenkort. Als affiliate bent u een van de eersten om ze onder de aandacht te brengen van de mensen die ze nodig hebben. Wilt u de apps zelf gebruiken? Schrijf u dan hieronder in op de wachtlijst.',
+    joinWaitlist: (app: string) => `Schrijf u in om ${app} te gebruiken`,
     finalHeading: 'Het programma opent binnenkort',
     finalBody:
       'We leggen de laatste stukken op hun plaats. Laat uw gegevens achter en we nemen contact op zodra u zich als affiliate kunt aansluiten, met uw link klaar om te delen.',
@@ -317,7 +317,7 @@ function Hero() {
 
         <motion.div variants={heroFade} className="mt-10 w-full sm:w-auto">
           <RippleButton
-            href={waitlistHref()}
+            href={waitlistHref('affiliate')}
             target="_blank"
             rel="noopener noreferrer"
             className="h-12 w-full px-7 text-[15px] sm:w-auto"
@@ -688,7 +688,7 @@ function Apps() {
                   variant="solid"
                   className="h-11 px-6 text-[14px]"
                 >
-                  {t.joinWaitlist}
+                  {t.joinWaitlist(a.name)}
                 </RippleButton>
               </div>
             </div>
@@ -734,7 +734,7 @@ function FinalCta() {
               touch, where there is no hover). */}
           <div className="mt-9 flex flex-col items-center">
             <RippleButton
-              href={waitlistHref()}
+              href={waitlistHref('affiliate')}
               target="_blank"
               rel="noopener noreferrer"
               className="peer h-12 w-full px-7 text-[15px] sm:w-auto"
