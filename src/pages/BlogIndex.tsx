@@ -5,16 +5,28 @@ import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { usePosts } from '@/lib/blog'
 import { useLang } from '@/i18n'
 import { cn } from '@/lib/utils'
+import { useSeo } from '@/lib/seo'
 
 const COPY = {
-  en: { heading: 'Blog & News', viewAll: 'View All' },
-  nl: { heading: 'Blog & nieuws', viewAll: 'Alles' },
+  en: {
+    heading: 'Blog & News',
+    viewAll: 'View All',
+    metaDescription:
+      'Notes from Nivora: how we build our apps Box and Voice, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
+  },
+  nl: {
+    heading: 'Blog & nieuws',
+    viewAll: 'Alles',
+    metaDescription:
+      'Notities vanuit Nivora: hoe we onze apps Box en Voice bouwen, waar AI echt rendeert en wat we leren terwijl we intelligente systemen voor bedrijven maken.',
+  },
 } as const
 
 export function BlogIndex() {
   const { posts: allPosts } = usePosts()
   const { lang } = useLang()
   const t = COPY[lang]
+  useSeo({ title: 'Blog · Nivora', description: t.metaDescription, path: '/blog' })
   // null = "view all"; storing the category (not the localized label) keeps the
   // active filter valid across a language switch.
   const [active, setActive] = useState<string | null>(null)

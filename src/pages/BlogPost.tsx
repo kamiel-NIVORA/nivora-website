@@ -1,4 +1,4 @@
-import { useEffect, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import type { BlockFont } from '@/data/posts'
@@ -10,6 +10,7 @@ import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
 import { usePost } from '@/lib/blog'
 import { useLang } from '@/i18n'
+import { useSeo, SITE_URL, DEFAULT_TITLE } from '@/lib/seo'
 
 const COPY = {
   en: {
@@ -52,21 +53,33 @@ export function BlogPost() {
   const { lang } = useLang()
   const t = COPY[lang]
 
-  // Per-post SEO: set the tab title and meta description, then restore on leave.
-  useEffect(() => {
-    if (!post) return
-    const prevTitle = document.title
-    document.title = `${post.title} · Nivora`
-
-    const meta = document.querySelector('meta[name="description"]')
-    const prevDesc = meta?.getAttribute('content') ?? null
-    meta?.setAttribute('content', post.excerpt)
-
-    return () => {
-      document.title = prevTitle
-      if (meta && prevDesc !== null) meta.setAttribute('content', prevDesc)
-    }
-  }, [post])
+  // Per-post SEO: title, description, canonical and BlogPosting structured data.
+  const postDate = post ? new Date(post.date) : null
+  useSeo({
+    title: post ? `${post.title} · Nivora` : DEFAULT_TITLE,
+    description: post?.excerpt,
+    path: post ? `/blog/${post.slug}` : undefined,
+    jsonLd: post
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.excerpt,
+          image: `${SITE_URL}${post.image}`,
+          url: `${SITE_URL}/blog/${post.slug}`,
+          ...(postDate && !isNaN(postDate.getTime())
+            ? { datePublished: postDate.toISOString().slice(0, 10) }
+            : {}),
+          author: { '@type': 'Person', name: post.author },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Nivora',
+            url: SITE_URL,
+            logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/nivora-logo.png` },
+          },
+        }
+      : undefined,
+  })
 
   if (!post) {
     // Still loading the live posts (direct link to a DB-only post): hold the

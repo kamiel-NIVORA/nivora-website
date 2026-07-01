@@ -7,6 +7,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { CONTACT, waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
 const ACCENT = '#f5f5f5'
@@ -169,16 +170,7 @@ export function About() {
   const { lang } = useLang()
   const t = COPY[lang]
 
-  useEffect(() => {
-    document.title = t.docTitle
-    const meta = document.querySelector('meta[name="description"]')
-    const prev = meta?.getAttribute('content') ?? null
-    meta?.setAttribute('content', t.metaDescription)
-    return () => {
-      document.title = 'Nivora'
-      if (meta && prev !== null) meta.setAttribute('content', prev)
-    }
-  }, [t.docTitle, t.metaDescription])
+  useSeo({ title: t.docTitle, description: t.metaDescription, path: '/about' })
 
   return (
     <main

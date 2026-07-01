@@ -19,6 +19,7 @@ import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
+import { useSeo } from '@/lib/seo'
 import { getServiceContent } from '@/data/services'
 import { getServiceRoi } from '@/data/serviceRoi'
 import { useLang, type Lang } from '@/i18n'
@@ -206,22 +207,11 @@ export function ServicePage() {
   const content = isValid ? dict[slug as ServiceSlug] : null
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
 
-  useEffect(() => {
-    if (!content) return
-    document.title = `${content.name} · Nivora`
-    let meta = document.querySelector('meta[name="description"]')
-    if (!meta) {
-      meta = document.createElement('meta')
-      meta.setAttribute('name', 'description')
-      document.head.appendChild(meta)
-    }
-    const prev = meta.getAttribute('content')
-    meta.setAttribute('content', content.hero.subhead)
-    return () => {
-      document.title = 'Nivora'
-      if (prev != null) meta!.setAttribute('content', prev)
-    }
-  }, [content])
+  useSeo({
+    title: content ? `${content.name} · Nivora` : 'Nivora',
+    description: content ? `${content.hero.subhead} ${content.intro.statement}` : undefined,
+    path: content ? `/services/${content.slug}` : undefined,
+  })
 
   if (!content || !meta) return <Navigate to="/" replace />
 

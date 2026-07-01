@@ -3,6 +3,7 @@ import { Check, Copy, Download, ImageDown, ArrowRight, ArrowDown } from 'lucide-
 import { Reveal } from '@/components/animations/Reveal'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
+import { useSeo } from '@/lib/seo'
 import {
   copyText,
   copyImage,
@@ -276,6 +277,14 @@ const NAV_IDS = ['logo', 'colour', 'type', 'photography', 'voice', 'guidelines']
 export function MediaKit() {
   const { lang } = useLang()
   const t = COPY[lang]
+  useSeo({
+    title: 'Media kit · Nivora',
+    description:
+      lang === 'nl'
+        ? 'De officiële Nivora media kit: logo, kleuren, typografie, fotografie en merkstem, klaar om te downloaden voor pers en partners.'
+        : 'The official Nivora media kit: logo, colours, typography, photography and brand voice, ready to download for press and partners.',
+    path: '/media',
+  })
   const colorGroups = getColorGroups(lang)
   const fonts = getFonts(lang)
   const logos = getLogos(lang)

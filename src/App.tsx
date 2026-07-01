@@ -4,6 +4,7 @@ import { Routes, Route, useParams, useLocation, Navigate } from 'react-router-do
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollManager } from '@/components/ScrollManager'
+import { CookieConsent } from '@/components/CookieConsent'
 import { Home } from '@/pages/Home'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
 
@@ -22,6 +23,7 @@ const ContactPage = lazy(() => import('@/pages/ContactPage').then((m) => ({ defa
 const LegalPage = lazy(() => import('@/pages/LegalPage').then((m) => ({ default: m.LegalPage })))
 const NewsletterConfirmed = lazy(() => import('@/pages/NewsletterConfirmed').then((m) => ({ default: m.NewsletterConfirmed })))
 const Unsubscribed = lazy(() => import('@/pages/Unsubscribed').then((m) => ({ default: m.Unsubscribed })))
+const NotFound = lazy(() => import('@/pages/NotFound').then((m) => ({ default: m.NotFound })))
 
 /* Force a fresh ServicePage mount per slug so the intro animation replays on every service. */
 function ServiceRoute() {
@@ -66,10 +68,12 @@ export default function App() {
               <Route path="/unsubscribed" element={<Unsubscribed />} />
               <Route path="/terms" element={<LegalPage slug="terms" />} />
               <Route path="/privacy" element={<LegalPage slug="privacy" />} />
-              <Route path="*" element={<Home />} />
+              {/* Real 404 (noindex) so unknown URLs never duplicate the homepage. */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
           {!bare && <Footer />}
+          <CookieConsent />
         </div>
       </ContactModalProvider>
     </ReactLenis>

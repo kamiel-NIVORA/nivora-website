@@ -1,6 +1,7 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { getLegalDoc } from '@/data/legal'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 const COPY = {
   en: { label: 'Legal', lastUpdated: 'Last updated' },
@@ -11,6 +12,7 @@ export function LegalPage({ slug }: { slug: 'terms' | 'privacy' }) {
   const { lang } = useLang()
   const t = COPY[lang]
   const doc = getLegalDoc(lang, slug)
+  useSeo({ title: `${doc.title} · Nivora`, description: doc.intro, path: `/${slug}` })
   return (
     <main>
       <article className="relative mx-auto w-full max-w-[760px] px-6 pb-28 pt-36 lg:pb-32 lg:pt-44">

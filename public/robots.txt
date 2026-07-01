@@ -1,0 +1,7 @@
+# Nivora Works - crawl policy
+# All engines and AI crawlers welcome; utility pages are excluded via noindex.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://nivoraworks.com/sitemap.xml

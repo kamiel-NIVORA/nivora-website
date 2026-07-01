@@ -5,6 +5,7 @@ import { ArrowRight, Check, Loader2 } from 'lucide-react'
 import { subscribe } from '@/lib/newsletter'
 import { SOCIAL_LINKS } from '@/data/contact'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 /** Map the ?product= query to a friendly label. */
 const PRODUCT_LABELS: Record<string, string> = { box: 'Box', voice: 'Voice' }
@@ -111,19 +112,23 @@ export function WaitlistPage() {
     visionRef.current?.focus()
   }, [step])
 
-  useEffect(() => {
-    const prev = document.title
-    document.title = isAffiliate
+  useSeo({
+    title: isAffiliate
       ? lang === 'nl'
         ? 'Affiliate wachtlijst · Nivora'
         : 'Affiliate waitlist · Nivora'
       : lang === 'nl'
         ? 'Wachtlijst · Nivora'
-        : 'Waitlist · Nivora'
-    return () => {
-      document.title = prev
-    }
-  }, [lang, isAffiliate])
+        : 'Waitlist · Nivora',
+    description: isAffiliate
+      ? lang === 'nl'
+        ? 'Schrijf u in voor het Nivora affiliate programma en wees er als eerste bij wanneer de deals live gaan.'
+        : 'Sign up for the Nivora affiliate program and be first in line when the deals go live.'
+      : lang === 'nl'
+        ? 'Zet uzelf op de wachtlijst voor Box en Voice, de Nivora-apps, en hoor het meteen wanneer ze live gaan.'
+        : 'Join the waitlist for Box and Voice, the Nivora apps, and hear the moment they go live.',
+    path: '/waitlist',
+  })
 
   // Progress for the border-glow animation (0 → 1), like the booking card.
   // The affiliate flow has one step more, so it fills in quarters.

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -6,6 +6,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -209,12 +210,14 @@ const COPY = {
 export function AffiliatePage() {
   const { lang } = useLang()
   const t = COPY[lang]
-  useEffect(() => {
-    document.title = t.docTitle
-    return () => {
-      document.title = 'Nivora'
-    }
-  }, [t.docTitle])
+  useSeo({
+    title: t.docTitle,
+    description:
+      lang === 'nl'
+        ? 'Word Nivora-affiliate: deel de apps Box en Voice met uw netwerk en verdien mee per nieuwe gebruiker. Schrijf u in en wees er als eerste bij.'
+        : 'Become a Nivora affiliate: share the Box and Voice apps with your network and earn for every new user. Sign up and be first in line.',
+    path: '/affiliate',
+  })
 
   return (
     <main className="relative w-full overflow-hidden bg-bg">

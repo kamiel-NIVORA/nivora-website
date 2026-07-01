@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { LocationMap } from '@/components/ui/LocationMap'
 import { CONTACT, ADDRESS, SOCIAL_LINKS } from '@/data/contact'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS.mapQuery)}`
 /** The studio, geocoded once so the map centres exactly on it (no runtime lookup). */
@@ -89,13 +89,7 @@ export function ContactPage() {
   const { lang } = useLang()
   const t = COPY[lang]
 
-  useEffect(() => {
-    const prev = document.title
-    document.title = t.docTitle
-    return () => {
-      document.title = prev
-    }
-  }, [t.docTitle])
+  useSeo({ title: t.docTitle, description: t.sub, path: '/contact' })
 
   return (
     <main className="bg-bg">

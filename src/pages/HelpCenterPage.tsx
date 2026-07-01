@@ -15,6 +15,7 @@ import {
 import { ChatBackdrop } from '@/components/help/ChatBackdrop'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { cn } from '@/lib/utils'
+import { useSeo } from '@/lib/seo'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { useHelpChat } from '@/lib/useHelpChat'
 import { splitCta, type ChatMessage, type CtaToken } from '@/lib/helpChat'
@@ -106,12 +107,14 @@ export function HelpCenterPage() {
   const empty = messages.length === 0
   const prevLenRef = useRef(0)
 
-  useEffect(() => {
-    document.title = COPY[lang].docTitle
-    return () => {
-      document.title = 'Nivora'
-    }
-  }, [lang])
+  useSeo({
+    title: COPY[lang].docTitle,
+    description:
+      lang === 'nl'
+        ? 'Het Nivora helpcentrum: stel elke vraag over onze apps, AI-systemen en diensten aan de Nivora-assistent, of neem rechtstreeks contact op met het team.'
+        : 'The Nivora Help Center: ask the Nivora assistant anything about our apps, AI systems and services, or talk directly to the team.',
+    path: '/help',
+  })
 
   // Follow the newest turn as it streams in. The conversation flows in the page
   // (so page scrolling stays smooth), and the end sentinel carries a scroll

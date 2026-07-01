@@ -2,6 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { Check, X, ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { useLang } from '@/i18n'
+import { useSeo } from '@/lib/seo'
 
 const COPY = {
   en: {
@@ -28,6 +29,7 @@ export function NewsletterConfirmed() {
   const ok = (params.get('status') ?? 'ok') !== 'invalid'
   const { lang } = useLang()
   const t = COPY[lang]
+  useSeo({ title: `${t.titleOk} · Nivora`, noindex: true })
 
   return (
     <main>
