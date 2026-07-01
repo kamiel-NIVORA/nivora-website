@@ -1,6 +1,5 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -28,12 +27,20 @@ const SERVICE_ICON: Record<string, string> = {
   'ai-consulting': '/services/icon-consulting.png',
 }
 
+/** Glossy glass-slat tile per service, same treatment as the Voice/Box frames above. */
+const SERVICE_TILE_IMG: Record<string, string> = {
+  'app-design': '/about/service-appdesign-glossy.webp',
+  'local-ai': '/about/service-localai-glossy.webp',
+  aios: '/about/service-aios-glossy.webp',
+  'ai-consulting': '/about/service-consulting-glossy.webp',
+}
+
 /** Kamiel's personal LinkedIn, shown on the founder plate. */
 const LINKEDIN_URL = 'https://www.linkedin.com/in/kamiel-niville-067ba2366/'
 const LINKEDIN_PATH =
   'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'
 
-type Svc = { slug: string; name: string; desc: string }
+type Svc = { slug: string; name: string }
 
 const COPY = {
   en: {
@@ -41,25 +48,24 @@ const COPY = {
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
     heroHeadline: 'Nivora',
-    heroSub: 'Software and AI that simply works.',
+    heroSub: 'Intelligent systems.',
     voiceStory:
       'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around. You speak, and Voice picks up not just what you say, but the shape it should take. List a few things, and they become clean bullet points. Say “write an email”, and out comes an email, opening and sign-off included. Send a message, and it reads short and direct, the way you would actually type it yourself. No more dictaphone dumping everything out flat. Ready to send, not to rewrite.',
     boxStory:
       'Your attention lives across ten apps. A mail here, a chat there, a DM you only spot at night. Box pulls it all into one calm inbox, so nothing slips past you anymore, and communication becomes just one app to check. Read, sort, reply, all in one quiet place.',
     joinWaitlist: 'Join the waiting list',
-    servicesHeading: 'Software and AI, born from our own system.',
+    servicesEyebrow: 'What grew from that',
     servicesIntro:
-      'When we went looking for the right tools ourselves, we ran into the same problem most companies have: plenty of tools, but nothing really built for how we work. So we built our own system, one we keep designing, optimising and extending ourselves. That is what lets a very lean team scale like a much bigger company. These services are what grew out of that: the same system, and the AI knowledge we keep maintaining, now for your business too.',
+      'Four services, grown straight out of that same experience. The same approach, the same AI, and the knowledge we keep building and maintaining every single day, now offered as consulting for your business too. Not knowledge from a book, but knowledge we have already tested and proven on ourselves.',
     morePre: 'And this is only the beginning. We want to build so much more, and we share every step on the ',
     moreLink: 'blog',
     morePost: '.',
     services: [
-      { slug: 'app-design', name: 'App Design', desc: 'Custom apps built around your idea.' },
-      { slug: 'local-ai', name: 'Local AI', desc: 'Secure AI on your own servers or ours.' },
-      { slug: 'aios', name: 'AIOS', desc: 'A custom AI operating system for your company.' },
-      { slug: 'ai-consulting', name: 'AI Consulting', desc: 'Find where AI fits and which strategy wins.' },
+      { slug: 'app-design', name: 'App Design' },
+      { slug: 'local-ai', name: 'Local AI' },
+      { slug: 'aios', name: 'AIOS' },
+      { slug: 'ai-consulting', name: 'AI Consulting' },
     ] as Svc[],
-    learnMore: 'Learn more',
     founderAlt: 'Kamiel Niville, founder of Nivora',
     founderName: 'Kamiel Niville',
     founderRole: 'Founder of Nivora',
@@ -86,25 +92,24 @@ const COPY = {
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
     heroHeadline: 'Nivora',
-    heroSub: 'Software en AI die gewoon werkt.',
+    heroSub: 'Intelligente systemen.',
     voiceStory:
       'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en Voice hoort niet alleen wát u zegt, maar ook welke vorm het moet krijgen. Somt u iets op, dan worden het nette bullet points. Zegt u “schrijf een e-mail”, dan komt er een e-mail uit, met aanhef en afsluiting. Stuurt u een bericht, dan klinkt het kort en direct, zoals u het zelf zou typen. Geen dicteerapparaat meer dat alles plat achter elkaar plakt. Klaar om te versturen, niet om over te doen.',
     boxStory:
       'Uw aandacht ligt verspreid over tien apps. Een mail hier, een chat daar, een DM die u pas ’s avonds opmerkt. Box brengt het allemaal samen in één rustige inbox, zodat u niets meer over het hoofd ziet en u nog maar één app hoeft te checken voor al uw communicatie. Lezen, sorteren, antwoorden, op één rustige plek.',
     joinWaitlist: 'Schrijf u in op de wachtlijst',
-    servicesHeading: 'Software en AI, ontstaan uit ons eigen systeem.',
+    servicesEyebrow: 'Wat daaruit is gegroeid',
     servicesIntro:
-      'Toen we zelf op zoek gingen naar de juiste tools, botsten we op hetzelfde probleem als de meeste bedrijven: genoeg aanbod, maar niets echt op maat. Dus bouwden we ons eigen systeem, dat we zelf blijven ontwerpen, optimaliseren en uitbreiden. Daardoor kan een heel lean team schalen als een veel groter bedrijf. Deze diensten zijn wat daaruit is gegroeid: hetzelfde systeem, en de kennis rond AI die we blijven bijhouden, nu ook voor uw bedrijf.',
+      'Vier diensten, rechtstreeks uit diezelfde ervaring gegroeid. Dezelfde aanpak, dezelfde AI, en de kennis die we dag na dag opbouwen en bijhouden, bieden we nu ook aan als consultancy voor uw bedrijf. Geen kennis uit een boek, maar kennis die we zelf al hebben getest en bewezen.',
     morePre: 'En dit is nog maar het begin. We willen nog veel meer bouwen, en we delen elke stap op de ',
     moreLink: 'blog',
     morePost: '.',
     services: [
-      { slug: 'app-design', name: 'App Design', desc: 'Apps op maat, gebouwd rond uw idee.' },
-      { slug: 'local-ai', name: 'Local AI', desc: 'AI die uw data veilig houdt.' },
-      { slug: 'aios', name: 'AIOS', desc: 'Een AI-operating systeem afgestemd op uw bedrijf.' },
-      { slug: 'ai-consulting', name: 'AI Consulting', desc: 'Ontdek waar AI past en welke strategie wint.' },
+      { slug: 'app-design', name: 'App Design' },
+      { slug: 'local-ai', name: 'Local AI' },
+      { slug: 'aios', name: 'AIOS' },
+      { slug: 'ai-consulting', name: 'AI Consulting' },
     ] as Svc[],
-    learnMore: 'Lees meer',
     founderAlt: 'Kamiel Niville, oprichter van Nivora',
     founderName: 'Kamiel Niville',
     founderRole: 'Oprichter van Nivora',
@@ -198,7 +203,6 @@ export function About() {
         cta={t.joinWaitlist}
         ctaHref={waitlistHref('box')}
       />
-      <Services />
       <Founder />
       <FinalCta />
     </main>
@@ -326,66 +330,10 @@ function ProductStory({
   )
 }
 
-/* Services · what we build for companies ─────────────────────────────────────── */
-
-function Services() {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  return (
-    <section className="relative w-full border-t border-line px-6 py-20 lg:py-28">
-      <div className="relative mx-auto w-full max-w-[1100px]">
-        <div className="max-w-2xl">
-          <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px] lg:text-[44px]">
-              {t.servicesHeading}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-faint lg:text-base">{t.servicesIntro}</p>
-          </Reveal>
-        </div>
-
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:gap-6">
-          {t.services.map((s, i) => (
-            <Reveal key={s.slug} delay={(i % 2) * 0.08}>
-              <a
-                href={`/services/${s.slug}`}
-                className="group relative flex h-full items-start gap-5 overflow-hidden rounded-[22px] border border-line bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-white/[0.035] hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.8)] lg:p-7"
-              >
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-line bg-white/[0.03]">
-                  <img src={SERVICE_ICON[s.slug]} alt="" className="h-8 w-8 object-contain" loading="lazy" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em] text-ink lg:text-[22px]">{s.name}</h3>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-dim transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink" strokeWidth={1.7} />
-                  </div>
-                  <p className="mt-2 text-[14px] leading-relaxed text-faint">{s.desc}</p>
-                </div>
-              </a>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.1}>
-          <p className="mt-10 max-w-xl text-[15px] leading-relaxed text-faint lg:text-base">
-            {t.morePre}
-            <a
-              href="/blog"
-              className="text-ink underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-ink"
-            >
-              {t.moreLink}
-            </a>
-            {t.morePost}
-          </p>
-        </Reveal>
-      </div>
-    </section>
-  )
-}
-
-/* Founder · editorial, with a portrait that drifts on scroll ─────────────────── */
+/* Founder · editorial portrait that drifts on scroll, plus the four services that
+   grew out of the same story — one collage of photos (big founder portrait, four
+   smaller glossy service tiles) beside one flowing text column. Not two sections
+   stacked, one whole. ─────────────────────────────────────────────────────────── */
 
 function Founder() {
   const { lang } = useLang()
@@ -397,21 +345,21 @@ function Founder() {
 
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
-      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-        {/* Portrait */}
+      <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
+        {/* Photo collage: the founder portrait, big, with the four services that
+            grew out of his story as smaller glossy tiles beside it. */}
         <Reveal>
-          <div ref={ref} className="relative mx-auto w-full max-w-[420px]">
+          <div className="flex flex-col gap-3 lg:grid lg:h-[520px] lg:grid-cols-4 lg:grid-rows-2 lg:gap-4">
+            {/* Portrait */}
             <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-6 -z-10 blur-[70px]"
-              style={{ background: 'radial-gradient(50% 45% at 50% 45%, rgba(245,245,245,0.06), transparent 72%)' }}
-            />
-            <div className="relative overflow-hidden rounded-[28px] border border-line">
+              ref={ref}
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-line lg:aspect-auto lg:col-span-2 lg:row-span-2 lg:h-full"
+            >
               <motion.img
                 src="/about/founder-kamiel.webp"
                 alt={t.founderAlt}
                 style={reduced ? undefined : { y }}
-                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_20%] will-change-transform [filter:brightness(1.12)_saturate(1.06)_sepia(0.05)]"
+                className="absolute inset-0 h-[112%] w-full scale-[1.06] object-cover object-[center_20%] will-change-transform [filter:brightness(1.12)_saturate(1.06)_sepia(0.05)]"
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -434,10 +382,19 @@ function Founder() {
                 </a>
               </div>
             </div>
+
+            {/* Four service tiles — a plain grid on mobile, `contents` at lg so
+                they drop straight into the collage grid as four cells beside
+                the portrait instead of nesting a grid inside a grid cell. */}
+            <div className="grid grid-cols-2 gap-3 lg:contents">
+              {t.services.map((s) => (
+                <ServiceTile key={s.slug} service={s} />
+              ))}
+            </div>
           </div>
         </Reveal>
 
-        {/* The note */}
+        {/* One flowing text column: the personal story, then what grew from it. */}
         <div>
           <Reveal>
             <h2 className="font-serif text-[28px] leading-[1.18] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
@@ -446,29 +403,76 @@ function Founder() {
           </Reveal>
 
           <div className="mt-6 flex flex-col gap-4 text-[15.5px] leading-relaxed text-muted lg:text-base">
-            <Reveal delay={0.12}>
+            <Reveal delay={0.1}>
               <p>{t.founderP1}</p>
             </Reveal>
-            <Reveal delay={0.18}>
+            <Reveal delay={0.14}>
               <p>{t.founderP2}</p>
             </Reveal>
-            <Reveal delay={0.24}>
+            <Reveal delay={0.18}>
               <p>{t.founderP3}</p>
             </Reveal>
-            <Reveal delay={0.3}>
+            <Reveal delay={0.22}>
               <p>{t.founderP4}</p>
             </Reveal>
           </div>
 
-          <Reveal delay={0.36}>
+          <Reveal delay={0.26}>
             <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="font-serif text-[24px] italic leading-none text-ink/90">{t.founderName}</span>
               <span className="text-[13.5px] text-faint">{t.founderSign}</span>
             </div>
           </Reveal>
+
+          <Reveal delay={0.3}>
+            <div className="mt-10 border-t border-line/60 pt-8">
+              <p className="text-[12px] font-medium uppercase tracking-[0.14em] text-dim">{t.servicesEyebrow}</p>
+              <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-faint lg:text-base">{t.servicesIntro}</p>
+              <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-faint lg:text-base">
+                {t.morePre}
+                <a
+                  href="/blog"
+                  className="text-ink underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-ink"
+                >
+                  {t.moreLink}
+                </a>
+                {t.morePost}
+              </p>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
+  )
+}
+
+/** One glossy service tile in the founder collage: a blurred scenic photo (same
+ *  glass-slat treatment as the Voice/Box frames) with the service's icon set on
+ *  it, like a small companion to those bigger frames. Links to its service page. */
+function ServiceTile({ service }: { service: Svc }) {
+  return (
+    <a
+      href={`/services/${service.slug}`}
+      className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-line transition-colors duration-300 hover:border-line-strong lg:aspect-auto lg:h-full"
+    >
+      <img
+        src={SERVICE_TILE_IMG[service.slug]}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div aria-hidden className="absolute h-16 w-16 rounded-full bg-black/40 blur-xl" />
+        <span className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-[#0c0c0e]/80 shadow-[0_8px_20px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+          <img src={SERVICE_ICON[service.slug]} alt="" className="h-[22px] w-[22px] object-contain" loading="lazy" />
+        </span>
+      </div>
+      <span className="absolute inset-x-3 bottom-3 font-serif text-[13px] leading-tight text-ink">
+        {service.name}
+      </span>
+    </a>
   )
 }
 
