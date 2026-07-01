@@ -121,17 +121,31 @@ export function Footer() {
               <div key={col.title} className={col.title === t.contact ? 'col-span-2 sm:col-span-1' : undefined}>
                 <p className="text-sm text-faint">{col.title}</p>
                 <ul className="mt-4 flex flex-col gap-3">
-                  {col.links.map((l) => (
-                    <li key={l.label}>
-                      <a
-                        href={l.href}
-                        {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                        className="inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors [overflow-wrap:anywhere] hover:text-ink"
-                      >
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
+                  {col.links.map((l) => {
+                    // The e-mail is one long token; let it break ONLY after the "@"
+                    // (via <wbr>), never mid-domain, so it always reads whole.
+                    const atIndex = l.href.startsWith('mailto:') ? l.label.indexOf('@') : -1
+                    const wrapClass = atIndex >= 0 ? '[overflow-wrap:normal] [word-break:normal]' : '[overflow-wrap:anywhere]'
+                    return (
+                      <li key={l.label}>
+                        <a
+                          href={l.href}
+                          {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          className={`inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors hover:text-ink ${wrapClass}`}
+                        >
+                          {atIndex >= 0 ? (
+                            <>
+                              {l.label.slice(0, atIndex + 1)}
+                              <wbr />
+                              {l.label.slice(atIndex + 1)}
+                            </>
+                          ) : (
+                            l.label
+                          )}
+                        </a>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             ))}
