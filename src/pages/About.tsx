@@ -43,13 +43,13 @@ const COPY = {
     heroHeadline: 'Nivora',
     heroSub: 'Software and AI that simply works.',
     voiceStory:
-      'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around: you speak, and out comes text that reads like you actually write. Ready to send, not to rewrite.',
+      'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around. You speak, and Voice picks up not just what you say, but the shape it should take. List a few things, and they become clean bullet points. Say “write an email”, and out comes an email, opening and sign-off included. Send a message, and it reads short and direct, the way you would actually type it yourself. No more dictaphone dumping everything out flat. Ready to send, not to rewrite.',
     boxStory:
-      'Your attention lives across ten apps. A mail here, a chat there, a DM you only spot at night. Box pulls it all into one calm inbox, so nothing slips through the cracks again, and so you stop hunting for where things are. Read, sort, reply, all in one quiet place.',
+      'Your attention lives across ten apps. A mail here, a chat there, a DM you only spot at night. Box pulls it all into one calm inbox, so nothing slips past you anymore, and communication becomes just one app to check. Read, sort, reply, all in one quiet place.',
     joinWaitlist: 'Join the waiting list',
-    servicesHeading: 'Custom software and AI, built around your business.',
+    servicesHeading: 'Software and AI, born from our own system.',
     servicesIntro:
-      'For teams that want to get everything out of AI and stay ahead, not just dabble with it. We design, build and install exactly what fits the way you already work.',
+      'When we went looking for the right tools ourselves, we ran into the same problem most companies have: plenty of tools, but nothing really built for how we work. So we built our own system, one we keep designing, optimising and extending ourselves. That is what lets a very lean team scale like a much bigger company. These services are what grew out of that: the same system, and the AI knowledge we keep maintaining, now for your business too.',
     morePre: 'And this is only the beginning. We want to build so much more, and we share every step on the ',
     moreLink: 'blog',
     morePost: '.',
@@ -71,6 +71,8 @@ const COPY = {
     founderP2:
       "So we do it the other way round. Work first, technology second. Not AI because it is AI, but because it takes something off your plate that you feel every single day. And always on something that is yours, not rented, not sitting in a cloud you cannot see into.",
     founderP3:
+      "We ran into that exact same problem ourselves. AI tools everywhere, but nothing really built for Nivora. So we built our own system, one we design, optimise and keep extending ourselves. That is exactly what lets a very lean team run and scale like a much bigger company. That system, and everything we keep learning about AI along the way, is where our services come from. We offer what we already proved on ourselves first.",
+    founderP4:
       "Sometimes we sharpen what you already have, sometimes we build from scratch. Honestly, that part does not matter much. What matters is that the thing just works, quietly, so you can get on with your day instead of fighting your tools. That is the whole point.",
     founderSign: 'Founder, based in Brugge, Belgium',
     ctaHeading: "Let's build the right thing",
@@ -86,13 +88,13 @@ const COPY = {
     heroHeadline: 'Nivora',
     heroSub: 'Software en AI die gewoon werkt.',
     voiceStory:
-      'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en er komt tekst uit die klinkt zoals u écht schrijft. Klaar om te versturen, niet om over te doen.',
+      'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en Voice hoort niet alleen wát u zegt, maar ook welke vorm het moet krijgen. Somt u iets op, dan worden het nette bullet points. Zegt u “schrijf een e-mail”, dan komt er een e-mail uit, met aanhef en afsluiting. Stuurt u een bericht, dan klinkt het kort en direct, zoals u het zelf zou typen. Geen dicteerapparaat meer dat alles plat achter elkaar plakt. Klaar om te versturen, niet om over te doen.',
     boxStory:
-      'Uw aandacht ligt verspreid over tien apps. Een mail hier, een chat daar, een DM die u pas ’s avonds opmerkt. Box brengt het allemaal samen in één rustige inbox, zodat niets nog tussen de mazen glipt en u niet meer moet zoeken waar iets staat. Lezen, sorteren, antwoorden, op één rustige plek.',
+      'Uw aandacht ligt verspreid over tien apps. Een mail hier, een chat daar, een DM die u pas ’s avonds opmerkt. Box brengt het allemaal samen in één rustige inbox, zodat u niets meer over het hoofd ziet en u nog maar één app hoeft te checken voor al uw communicatie. Lezen, sorteren, antwoorden, op één rustige plek.',
     joinWaitlist: 'Schrijf u in op de wachtlijst',
-    servicesHeading: 'Software en AI op maat, gebouwd rond uw bedrijf.',
+    servicesHeading: 'Software en AI, ontstaan uit ons eigen systeem.',
     servicesIntro:
-      'Voor teams die er echt alles uit willen halen en vooropwillen lopen, niet er wat mee prutsen. We ontwerpen, bouwen en installeren precies wat past bij hoe u al werkt.',
+      'Toen we zelf op zoek gingen naar de juiste tools, botsten we op hetzelfde probleem als de meeste bedrijven: genoeg aanbod, maar niets echt op maat. Dus bouwden we ons eigen systeem, dat we zelf blijven ontwerpen, optimaliseren en uitbreiden. Daardoor kan een heel lean team schalen als een veel groter bedrijf. Deze diensten zijn wat daaruit is gegroeid: hetzelfde systeem, en de kennis rond AI die we blijven bijhouden, nu ook voor uw bedrijf.',
     morePre: 'En dit is nog maar het begin. We willen nog veel meer bouwen, en we delen elke stap op de ',
     moreLink: 'blog',
     morePost: '.',
@@ -114,6 +116,8 @@ const COPY = {
     founderP2:
       'Dus doen wij het andersom. Eerst het werk, dan pas de technologie. Geen AI omdat het AI is, maar omdat het iets van uw bord haalt dat u elke dag voelt. En altijd op iets dat van u is, niet gehuurd, niet ergens in een cloud waar u geen zicht op hebt.',
     founderP3:
+      'We botsten zelf op precies hetzelfde probleem. Overal AI-tools, maar niets dat echt voor Nivora was gemaakt. Dus bouwden we ons eigen systeem, dat we zelf ontwerpen, optimaliseren en steeds verder uitbouwen. Dat is precies wat een heel lean team laat draaien en schalen zoals een veel groter bedrijf. En dat systeem, met alles wat we blijven bijleren over AI, is waar onze diensten vandaan komen. Wij bieden aan wat we eerst op onszelf hebben bewezen.',
+    founderP4:
       'Soms scherpen we bij wat u al hebt, soms bouwen we van nul. Eerlijk, dat deel maakt niet zoveel uit. Wat telt, is dat het gewoon werkt, in stilte, zodat u met uw dag bezig kunt zijn in plaats van met uw tools. Daar draait het om.',
     founderSign: 'Oprichter, gevestigd in Brugge, België',
     ctaHeading: 'Laat ons het juiste bouwen',
@@ -238,7 +242,7 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <h1 className="font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
+        <h1 className="font-serif text-[64px] leading-[1.02] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[92px] lg:text-[132px] lg:leading-[0.98]">
           {t.heroHeadline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
@@ -248,7 +252,7 @@ function Hero() {
 
         <motion.p
           variants={heroFade}
-          className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-ink-soft/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)] lg:text-[17px]"
+          className="mt-8 max-w-2xl text-[19px] leading-relaxed text-ink-soft/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)] lg:text-[24px]"
         >
           {t.heroSub}
         </motion.p>
@@ -451,9 +455,12 @@ function Founder() {
             <Reveal delay={0.24}>
               <p>{t.founderP3}</p>
             </Reveal>
+            <Reveal delay={0.3}>
+              <p>{t.founderP4}</p>
+            </Reveal>
           </div>
 
-          <Reveal delay={0.3}>
+          <Reveal delay={0.36}>
             <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="font-serif text-[24px] italic leading-none text-ink/90">{t.founderName}</span>
               <span className="text-[13.5px] text-faint">{t.founderSign}</span>
