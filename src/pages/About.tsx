@@ -1,17 +1,24 @@
-import { useEffect, type CSSProperties } from 'react'
-import { motion, type Variants } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { ProcessTimeline, type ProcessStep } from '@/components/ui/ProcessTimeline'
+import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { useContactModal } from '@/components/contact/ContactModal'
+import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { cn } from '@/lib/utils'
 import { CONTACT } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
 const ACCENT = '#f5f5f5'
 const ease = [0.16, 1, 0.3, 1] as const
+
+/** Scenic photos, on the same quiet-morning palette as the service pages. */
+const HERO_IMG = '/about/hero.jpg'
+const MISSION_IMG = '/backgrounds/bg-peak-mono.webp'
+const CTA_IMG = '/home/cta-landscape.webp'
 
 /** Company LinkedIn (kept in sync with the footer/contact data). */
 const LINKEDIN_URL = 'https://www.linkedin.com/company/116050071'
@@ -24,16 +31,18 @@ const COPY = {
   en: {
     docTitle: 'About · Nivora',
     metaDescription:
-      'Nivora is a software and AI studio. We build custom software and AI around how your business actually works, and we make our own products, Box and Voice.',
+      'Nivora is a software and AI studio in Brugge. We build custom software and AI around how your business actually works, and we make our own products, Box and Voice.',
+    heroEyebrow: 'A software & AI studio',
     heroHeadline: 'Software and AI, shaped around how you really work.',
     heroSub:
-      "We're Nivora, a small studio in Brugge. We design and build custom software and AI that fits the way your team already works, instead of fighting it. And we make our own products too. Box and Voice are on the way.",
+      "We're Nivora, a small studio in Brugge. We design and build custom software and AI that fits the way your team already works, and we make our own products too. Box and Voice are on the way.",
     bookCall: 'Book a call',
     getInTouch: 'Get in touch',
-    missionHeading:
+    missionStatement:
       'Most companies get sold AI. Hardly anyone gets shown what it should actually do for them.',
-    missionBody:
-      "That gap is exactly why we started Nivora. We do not lead with a tool, we lead with a conversation: how does your business really run, and where does it hurt? Then we build the software and AI that fits, whether that means sharpening what you already have or starting fresh. The only test that matters to us is a simple one. Does it make the day genuinely easier?",
+    promisesEyebrow: 'Why we exist',
+    promisesLead:
+      "That gap is exactly why we started Nivora. We don't lead with a tool, we lead with a conversation: how does your business really run, and where does it hurt? Then we build the software and AI that fits. The only test that matters to us is simple. Does it make the day genuinely easier?",
     promises: [
       {
         title: 'We build around you',
@@ -71,9 +80,10 @@ const COPY = {
     founderName: 'Kamiel Niville',
     founderRole: 'Founder of Nivora',
     founderLinkedinAria: 'Kamiel on LinkedIn',
+    founderEyebrow: 'The person behind it',
     founderHeading: 'The story behind Nivora',
     founderP1:
-      "Hi, I'm Kamiel. I started Nivora after watching the same thing happen over and over: companies getting sold AI, but almost no one building it around what those companies actually do all day.",
+      "Hi, I'm Kamiel. I started Nivora after seeing the same thing happen again and again: companies being sold AI, but almost no one building it around what those companies actually do all day.",
     founderP2:
       'So we do the opposite. We start with the work, shape the software and AI around it, and give people tools they genuinely reach for, all on systems they own and control.',
     founderP3:
@@ -87,16 +97,18 @@ const COPY = {
   nl: {
     docTitle: 'Over ons · Nivora',
     metaDescription:
-      'Nivora is een software- en AI-studio. We bouwen software en AI op maat, rond de manier waarop uw bedrijf echt werkt, en we maken onze eigen producten, Box en Voice.',
+      'Nivora is een software- en AI-studio in Brugge. We bouwen software en AI op maat, rond de manier waarop uw bedrijf echt werkt, en we maken onze eigen producten, Box en Voice.',
+    heroEyebrow: 'Een software- & AI-studio',
     heroHeadline: 'Software en AI, gevormd rond hoe u echt werkt.',
     heroSub:
-      'Wij zijn Nivora, een kleine studio in Brugge. We ontwerpen en bouwen software en AI op maat die past bij hoe uw team al werkt, in plaats van ertegenin. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
+      'Wij zijn Nivora, een kleine studio in Brugge. We ontwerpen en bouwen software en AI op maat die past bij hoe uw team al werkt, en we maken ook onze eigen producten. Box en Voice zijn onderweg.',
     bookCall: 'Boek een gesprek',
     getInTouch: 'Neem contact op',
-    missionHeading:
+    missionStatement:
       'De meeste bedrijven krijgen AI verkocht. Bijna niemand krijgt te zien wat het echt voor hen zou moeten doen.',
-    missionBody:
-      'Net dat gat is waarom we Nivora startten. We beginnen niet met een tool, maar met een gesprek: hoe draait uw bedrijf echt, en waar doet het pijn? Daarna bouwen we de software en AI die past, of dat nu betekent aanscherpen wat u al hebt of opnieuw beginnen. De enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
+    promisesEyebrow: 'Waarom we bestaan',
+    promisesLead:
+      'Net dat gat is waarom we Nivora startten. We beginnen niet met een tool, maar met een gesprek: hoe draait uw bedrijf echt, en waar doet het pijn? Daarna bouwen we de software en AI die past. De enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
     promises: [
       {
         title: 'We bouwen rond u',
@@ -134,6 +146,7 @@ const COPY = {
     founderName: 'Kamiel Niville',
     founderRole: 'Oprichter van Nivora',
     founderLinkedinAria: 'Kamiel op LinkedIn',
+    founderEyebrow: 'De persoon erachter',
     founderHeading: 'Het verhaal achter Nivora',
     founderP1:
       'Hallo, ik ben Kamiel. Ik startte Nivora nadat ik telkens hetzelfde zag gebeuren: bedrijven kregen AI verkocht, maar bijna niemand bouwde het rond wat die bedrijven de hele dag echt doen.',
@@ -148,6 +161,52 @@ const COPY = {
     ctaFootPre: 'Gevestigd in Brugge, we werken met bedrijven waar ze ook zijn. Of mail gewoon ',
   },
 } as const
+
+/* Shared bits ─────────────────────────────────────────────────────────────── */
+
+/** A scenic photo that drifts gently against the scroll. Always covers its box. */
+function ParallaxImage({
+  src,
+  range = ['-6%', '6%'],
+  className,
+}: {
+  src: string
+  range?: [string, string]
+  className?: string
+}) {
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], range)
+  return (
+    <div ref={ref} className={cn('absolute inset-0 overflow-hidden', className)}>
+      <motion.img
+        src={src}
+        alt=""
+        aria-hidden
+        style={reduced ? { top: '-13%' } : { y, top: '-13%' }}
+        className="absolute left-0 h-[126%] w-full object-cover"
+      />
+    </div>
+  )
+}
+
+/** Frosted glass card, echoing the service pages: a soft top-left highlight, a top
+ *  hairline and a gentle hover lift. No brand colour, no glow. */
+function GlassCard({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      className={cn(
+        'group relative h-full overflow-hidden rounded-[22px] border border-line bg-white/[0.02] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-white/[0.035] hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.8)] lg:p-8',
+        className,
+      )}
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_85%_at_18%_-12%,rgba(255,255,255,0.06),transparent_56%)]" />
+      <div className="relative">{children}</div>
+    </div>
+  )
+}
 
 /* ──────────────────────────────────────────────────────────────────────────
    Page
@@ -173,7 +232,8 @@ export function About() {
       style={{ ['--accent' as string]: ACCENT } as CSSProperties}
     >
       <Hero />
-      <Mission />
+      <ScrollStatement image={MISSION_IMG} copy={t.missionStatement} accent={ACCENT} />
+      <Promises />
       <HowWeWork />
       <Founder />
       <FinalCta />
@@ -181,11 +241,11 @@ export function About() {
   )
 }
 
-/* Hero ─────────────────────────────────────────────────────────────────────── */
+/* Hero · scenic, drifting on scroll ─────────────────────────────────────────── */
 
 const heroContainer: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.12 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.14 } },
 }
 const heroWord: Variants = {
   hidden: { opacity: 0, y: 16, filter: 'blur(12px)' },
@@ -200,22 +260,31 @@ function Hero() {
   const { open } = useContactModal()
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduced = usePrefersReducedMotion()
   return (
-    <section className="relative flex min-h-[88svh] w-full flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-32">
-      {/* Hero photo, darkened so the white headline stays legible. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-        <img src="/about/hero.jpg" alt="" className="h-full w-full object-cover object-center" />
-        <div className="absolute inset-0 bg-bg/50" />
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-bg/70 to-transparent" />
-      </div>
+    <section className="relative grid min-h-[92svh] w-full place-items-center overflow-hidden px-6 pb-24 pt-32">
+      {/* Scenic backdrop, drifting on scroll like the service heroes */}
+      <ParallaxImage src={HERO_IMG} range={['-5%', '5%']} />
+      <div className="absolute inset-0 bg-black/45" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(78% 60% at 50% 46%, rgba(0,0,0,0.5), rgba(0,0,0,0.18) 58%, transparent 80%)' }}
+      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42vh] bg-gradient-to-t from-bg via-bg/70 to-transparent" />
+
       <motion.div
         variants={heroContainer}
-        initial="hidden"
+        initial={reduced ? false : 'hidden'}
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
-        <h1 className="font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
+        <motion.p variants={heroFade} className="mb-6 text-[12px] uppercase tracking-[0.2em] text-ink-soft/70">
+          {t.heroEyebrow}
+        </motion.p>
+
+        <h1 className="font-serif text-[38px] leading-[1.08] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[52px] lg:text-[64px] lg:leading-[1.04]">
           {t.heroHeadline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
               {w}
@@ -225,7 +294,7 @@ function Hero() {
 
         <motion.p
           variants={heroFade}
-          className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-muted lg:text-[17px]"
+          className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-ink-soft/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)] lg:text-[17px]"
         >
           {t.heroSub}
         </motion.p>
@@ -245,57 +314,34 @@ function Hero() {
           </RippleButton>
         </motion.div>
       </motion.div>
-
-      {/* Subtle scroll cue */}
-      <motion.div
-        variants={heroFade}
-        initial="hidden"
-        animate="show"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 7, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="text-dim"
-        >
-          <ChevronDown className="h-5 w-5" />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }
 
-/* Mission — why we exist + the three promises ─────────────────────────────────── */
+/* Promises · why we exist + three frosted glass cards ────────────────────────── */
 
-function Mission() {
+function Promises() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
     <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 lg:py-28">
-      <div className="max-w-3xl">
+      <div className="max-w-2xl">
         <Reveal>
-          <h2 className="font-serif text-[28px] leading-[1.32] tracking-[-0.01em] text-ink-soft sm:text-[34px] lg:text-[40px] lg:leading-[1.3]">
-            {t.missionHeading}
-          </h2>
+          <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.promisesEyebrow}</p>
         </Reveal>
         <Reveal delay={0.08}>
-          <p className="mt-7 max-w-2xl text-[15.5px] leading-relaxed text-muted lg:text-base">
-            {t.missionBody}
-          </p>
+          <p className="mt-6 text-[16px] leading-relaxed text-muted lg:text-[17px]">{t.promisesLead}</p>
         </Reveal>
       </div>
 
-      {/* Three promises, a calm hairline-divided row instead of another card grid. */}
-      <div className="mt-16 grid gap-px overflow-hidden rounded-[24px] border border-line bg-line sm:grid-cols-3">
+      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         {t.promises.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.08}>
-            <div className="h-full bg-bg p-7 lg:p-8">
-              <span className="font-mono text-[12px] tracking-[0.14em] text-faint">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-tight text-ink">{p.title}</h3>
-              <p className="mt-2.5 text-[14.5px] leading-relaxed text-faint">{p.body}</p>
-            </div>
+          <Reveal key={p.title} delay={(i % 3) * 0.08}>
+            <GlassCard>
+              <span className="font-serif text-[30px] leading-none text-ink/20">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-4 font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink lg:text-[20px]">{p.title}</h3>
+              <p className="mt-3 text-[14px] leading-relaxed text-faint">{p.body}</p>
+            </GlassCard>
           </Reveal>
         ))}
       </div>
@@ -318,9 +364,7 @@ function HowWeWork() {
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">
-              {t.howSub}
-            </p>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{t.howSub}</p>
           </Reveal>
         </div>
         <div className="mt-14">
@@ -331,24 +375,34 @@ function HowWeWork() {
   )
 }
 
-/* Founder — the story behind Nivora ──────────────────────────────────────────── */
+/* Founder · editorial, with a portrait that drifts on scroll ─────────────────── */
 
 function Founder() {
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['4%', '-4%'])
+
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
         {/* Portrait */}
         <Reveal>
-          <div className="relative mx-auto w-full max-w-[420px]">
+          <div ref={ref} className="relative mx-auto w-full max-w-[420px]">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-6 -z-10 blur-[70px]"
+              style={{ background: 'radial-gradient(50% 45% at 50% 45%, rgba(245,245,245,0.06), transparent 72%)' }}
+            />
             <div className="relative overflow-hidden rounded-[28px] border border-line">
-              <img
+              <motion.img
                 src="/about/founder-kamiel.webp"
                 alt={t.founderAlt}
-                className="aspect-[4/5] w-full object-cover object-[center_22%]"
+                style={reduced ? undefined : { y }}
+                className="aspect-[4/5] w-full scale-[1.06] object-cover object-[center_20%] will-change-transform"
               />
-              {/* Top hairline + bottom legibility gradient for the name plate */}
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
@@ -376,24 +430,27 @@ function Founder() {
         {/* The note */}
         <div>
           <Reveal>
-            <h2 className="font-serif text-[28px] leading-[1.18] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
+            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.founderEyebrow}</p>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-4 font-serif text-[28px] leading-[1.18] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
               {t.founderHeading}
             </h2>
           </Reveal>
 
           <div className="mt-6 flex flex-col gap-4 text-[15.5px] leading-relaxed text-muted lg:text-base">
-            <Reveal delay={0.08}>
+            <Reveal delay={0.12}>
               <p>{t.founderP1}</p>
             </Reveal>
-            <Reveal delay={0.14}>
+            <Reveal delay={0.18}>
               <p>{t.founderP2}</p>
             </Reveal>
-            <Reveal delay={0.2}>
+            <Reveal delay={0.24}>
               <p>{t.founderP3}</p>
             </Reveal>
           </div>
 
-          <Reveal delay={0.26}>
+          <Reveal delay={0.3}>
             <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="font-serif text-[24px] italic leading-none text-ink/90">{t.founderName}</span>
               <span className="text-[13.5px] text-faint">{t.founderSign}</span>
@@ -405,24 +462,34 @@ function Founder() {
   )
 }
 
-/* Final CTA ─────────────────────────────────────────────────────────────────── */
+/* Final CTA · scenic close ───────────────────────────────────────────────────── */
 
 function FinalCta() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section id="contact" className="relative w-full border-t border-line px-6 py-24 lg:py-32">
+    <section id="contact" className="relative w-full overflow-hidden px-6 py-28 sm:py-32 lg:py-40">
+      <ParallaxImage src={CTA_IMG} range={['-5%', '5%']} />
+      <div className="absolute inset-0 bg-black/55" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(72% 60% at 50% 48%, rgba(6,6,6,0.6), transparent 78%)' }}
+      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg via-bg/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg via-bg/70 to-transparent" />
+
       <Reveal>
         <div className="relative mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-[32px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[50px]">
+          <h2 className="font-serif text-[32px] leading-[1.12] tracking-[-0.01em] text-ink [text-shadow:0_2px_26px_rgba(0,0,0,0.5)] sm:text-[42px] lg:text-[50px]">
             {t.ctaHeading}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-muted lg:text-base">
+          <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-ink-soft/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)] lg:text-base">
             {t.ctaBody}
           </p>
-          <div className="group mt-9 flex flex-col items-center">
-            <BookCallButton className="h-12 px-7 text-[15px]">{t.bookCall}</BookCallButton>
-            <p className="mt-6 text-center text-[13px] text-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div className="mt-9 flex flex-col items-center">
+            <BookCallButton className="peer h-12 px-7 text-[15px]">{t.bookCall}</BookCallButton>
+            <p className="mt-6 text-center text-[13px] text-ink-soft/60 opacity-0 transition-opacity duration-300 peer-hover:opacity-100 [@media(hover:none)]:opacity-100">
               {t.ctaFootPre}
               <a href={`mailto:${CONTACT.email}`} className="text-faint underline-offset-4 hover:text-ink hover:underline">
                 {CONTACT.email}
