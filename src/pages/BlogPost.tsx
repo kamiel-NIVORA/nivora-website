@@ -38,7 +38,12 @@ function blockFontClass(font?: BlockFont, fallback = ''): string {
  *  No/invalid size returns undefined, so the block keeps its default CSS size. */
 function blockSizeStyle(size?: number): CSSProperties | undefined {
   if (typeof size !== 'number' || !Number.isFinite(size)) return undefined
-  return { fontSize: `${Math.min(72, Math.max(12, size))}px` }
+  const px = Math.min(72, Math.max(12, size))
+  // The authored size is the desktop maximum; large sizes scale down on narrow
+  // screens so a big heading/quote can never force horizontal overflow on a
+  // phone. Small sizes (<=32px) keep their value exactly (lower bound == max).
+  const lo = Math.min(px, 32)
+  return { fontSize: `clamp(${lo}px, ${(px / 4.3).toFixed(2)}vw, ${px}px)` }
 }
 
 export function BlogPost() {

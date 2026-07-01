@@ -205,7 +205,7 @@ function ContactModal({ open, onClose }: { open: boolean; onClose: () => void })
               type="button"
               onClick={onClose}
               aria-label={t.close}
-              className="absolute right-4 top-4 z-[2] flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white/[0.03] text-faint transition-colors hover:bg-white/[0.08] hover:text-ink"
+              className="absolute right-4 top-4 z-[2] flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white/[0.03] text-faint transition-colors hover:bg-white/[0.08] hover:text-ink sm:h-10 sm:w-10"
             >
               <X className="h-4 w-4" />
             </button>

@@ -150,7 +150,7 @@ function PillButton({ children, onClick, primary = false, glow = false, disabled
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'rounded-full px-6 py-2.5 text-[13.5px] font-medium transition-all disabled:pointer-events-none disabled:opacity-40',
+        'inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-[13.5px] font-medium transition-all disabled:pointer-events-none disabled:opacity-40 sm:min-h-0',
         primary
           ? 'border border-line-strong bg-white/[0.08] text-ink hover:border-white/40 hover:bg-white/[0.14]'
           : 'border border-line bg-white/[0.02] text-faint hover:border-line-strong hover:text-ink',

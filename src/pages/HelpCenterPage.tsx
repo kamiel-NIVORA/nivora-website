@@ -511,14 +511,14 @@ function Message({
             <button
               type="button"
               onClick={onRetry}
-              className="inline-flex items-center gap-1.5 text-ink underline underline-offset-2 transition-colors hover:text-ink-soft"
+              className="inline-flex items-center gap-1.5 py-2 -my-2 text-ink underline underline-offset-2 transition-colors hover:text-ink-soft"
             >
               <RotateCw className="h-3.5 w-3.5" strokeWidth={1.8} />
               {t.tryAgain}
             </button>
             <Link
               to="/contact"
-              className="text-faint underline underline-offset-2 transition-colors hover:text-ink"
+              className="inline-flex items-center py-2 -my-2 text-faint underline underline-offset-2 transition-colors hover:text-ink"
             >
               {t.talkToTeam}
             </Link>

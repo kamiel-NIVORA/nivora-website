@@ -560,8 +560,8 @@ export function MediaKit() {
                         className="h-full min-h-44 w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3.5">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3 sm:p-3.5">
                         <span className="text-[12px] text-ink-soft/90">{shot.caption}</span>
                         <button
                           type="button"

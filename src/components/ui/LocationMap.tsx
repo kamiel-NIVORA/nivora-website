@@ -61,6 +61,14 @@ export function LocationMap({
     })
     L.marker([coords.lat, coords.lng], { icon, keyboard: false }).addTo(map)
 
+    // On touch devices one-finger dragging would trap the page scroll (a swipe
+    // that lands on the map pans it instead of scrolling past). Disable drag
+    // there so the page always scrolls; the map stays a calm still image and the
+    // chip still opens Google Maps for directions. Pinch-zoom keeps working.
+    if (typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches) {
+      map.dragging.disable()
+    }
+
     return () => {
       map.remove()
     }

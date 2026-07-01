@@ -230,7 +230,7 @@ export function WaitlistPage() {
                               onKeyDown={keyGo(nameNext)}
                               placeholder={t.namePh}
                               autoComplete="name"
-                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
                             />
                           ) : (
                             <input
@@ -245,7 +245,7 @@ export function WaitlistPage() {
                               onKeyDown={keyGo(emailNext)}
                               placeholder={t.emailPh}
                               autoComplete="email"
-                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-base text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
                             />
                           )}
                           <button
@@ -253,7 +253,7 @@ export function WaitlistPage() {
                             onClick={step === 'name' ? nameNext : emailNext}
                             disabled={loading}
                             aria-label={step === 'name' ? t.namePh : t.emailPh}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20"
+                            className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg bg-white/10 text-white transition-all hover:bg-white/20"
                           >
                             {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
                           </button>
@@ -261,7 +261,7 @@ export function WaitlistPage() {
                         {error ? (
                           <p className="mt-3 text-xs text-red-400">{error}</p>
                         ) : (
-                          <p className="mt-3 text-[11px] text-neutral-600">{step === 'name' ? t.nameHint : t.emailHint}</p>
+                          <p className="mt-3 text-[12px] text-neutral-500">{step === 'name' ? t.nameHint : t.emailHint}</p>
                         )}
                       </motion.div>
                     </AnimatePresence>
@@ -277,7 +277,7 @@ export function WaitlistPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.label}
-                      className="text-white/40 transition-colors hover:text-white/80"
+                      className="-m-2.5 grid h-11 w-11 place-items-center text-white/40 transition-colors hover:text-white/80"
                     >
                       <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="currentColor">
                         <path d={s.path} />

@@ -2692,7 +2692,7 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
         </motion.p>
         <motion.div variants={heroFade} className="group mt-9 flex flex-col items-center">
           <BookCallButton className="h-12 px-7 text-[15px]">{content.finalCta.button}</BookCallButton>
-          <p className="pointer-events-none mt-5 max-w-xl text-center text-[13px] text-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <p className="pointer-events-none mt-5 max-w-xl text-center text-[13px] text-dim opacity-100 transition-opacity duration-300 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
             {content.finalCta.reassurance}
           </p>
         </motion.div>
