@@ -324,7 +324,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Why a builder, not a vendor',
+      title: 'Why work with us',
       items: [
         { title: 'Built around you, not a template', body: 'Off-the-shelf ERPs make you change how you work to fit the software. We do the opposite, so the system fits from day one.' },
         { title: 'You own it', body: "Your system, your data, your platform. No lock-in to a tool you can't change, no per-seat tax on growing your team." },
@@ -777,7 +777,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     differentiators: {
-      title: 'Waarom een bouwer, geen leverancier',
+      title: 'Waarom werken met ons',
       items: [
         { title: 'Gebouwd rond u, geen template', body: 'Kant-en-klare ERP-systemen laten u veranderen hoe u werkt om in de software te passen. Wij doen het omgekeerde, zodat het systeem vanaf dag één past.' },
         { title: 'U bezit het', body: 'Uw systeem, uw data, uw platform. Geen lock-in aan een tool die u niet kunt veranderen, geen taks per gebruiker als uw team groeit.' },

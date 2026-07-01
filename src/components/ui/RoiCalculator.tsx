@@ -47,6 +47,8 @@ const COPY = {
     stats: { month: 'Per month', hours: 'Hours a year', weeks: 'Full-time weeks' },
     back: 'Back',
     next: 'Next',
+    selectAll: 'Select all',
+    clearAll: 'Clear all',
     reveal: 'See your number',
     redo: 'Reconfigure',
     cta: "Let's make this happen",
@@ -63,6 +65,8 @@ const COPY = {
     stats: { month: 'Per maand', hours: 'Uren per jaar', weeks: 'Voltijdse weken' },
     back: 'Terug',
     next: 'Volgende',
+    selectAll: 'Alles selecteren',
+    clearAll: 'Alles wissen',
     reveal: 'Bekijk je getal',
     redo: 'Opnieuw',
     cta: 'Laten we dit uitvoeren',
@@ -160,7 +164,7 @@ export function RoiCalculator() {
   const t = COPY[lang]
 
   const [selected, setSelected] = useState<Record<AreaKey, boolean>>({
-    sales: true, marketing: false, support: true, communication: false, finance: true, operations: false, hr: false, planning: false,
+    sales: false, marketing: false, support: false, communication: false, finance: false, operations: false, hr: false, planning: false,
   })
   const [config, setConfig] = useState<Record<AreaKey, Dept>>(
     () => Object.fromEntries(AREAS.map((a) => [a.key, { ...DEPT_DEFAULT }])) as Record<AreaKey, Dept>,
@@ -201,6 +205,11 @@ export function RoiCalculator() {
   }
   const isLast = step === chosen.length
   const canNext = step !== 0 || chosen.length > 0
+  const allSelected = AREAS.every((a) => selected[a.key])
+  const toggleAll = () => {
+    const v = !allSelected
+    setSelected(Object.fromEntries(AREAS.map((a) => [a.key, v])) as Record<AreaKey, boolean>)
+  }
 
   return (
     <div className="relative mx-auto mt-10 max-w-[900px]">
@@ -271,9 +280,11 @@ export function RoiCalculator() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between">
-                  <PillButton onClick={() => setStep((s) => Math.max(0, s - 1))} className={step === 0 ? 'pointer-events-none opacity-0' : ''}>
-                    {t.back}
-                  </PillButton>
+                  {step === 0 ? (
+                    <PillButton onClick={toggleAll}>{allSelected ? t.clearAll : t.selectAll}</PillButton>
+                  ) : (
+                    <PillButton onClick={() => setStep((s) => Math.max(0, s - 1))}>{t.back}</PillButton>
+                  )}
                   {!isLast ? (
                     <PillButton primary disabled={!canNext} onClick={() => setStep((s) => Math.min(chosen.length, s + 1))}>
                       {t.next}

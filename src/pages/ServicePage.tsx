@@ -2130,9 +2130,13 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
   const { lang } = useLang()
   const bandRef = useRef<HTMLDivElement>(null)
   const sub =
-    lang === 'nl'
-      ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
-      : 'No agency passing you around. The people who shape your app are the same people who build it.'
+    content.slug === 'aios'
+      ? lang === 'nl'
+        ? 'Geen kant-en-klaar systeem dat u naar zich toe buigt. Wij bouwen het rond hoe u werkt, en het blijft helemaal van u.'
+        : 'No off-the-shelf system you have to bend to. We build it around how you work, and it stays entirely yours.'
+      : lang === 'nl'
+        ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
+        : 'No agency passing you around. The people who shape your app are the same people who build it.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
       {/* bandRef wraps the backdrop AND the cards, so the peak reads across the whole
@@ -2180,7 +2184,7 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  if (meta.slug === 'app-design') return <AppWhyUs content={content} />
+  if (meta.slug === 'app-design' || meta.slug === 'aios') return <AppWhyUs content={content} />
 
   return (
     <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-28">
