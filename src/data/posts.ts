@@ -111,6 +111,7 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         { h2: 'What is next' },
         'The near-term goal has not changed. We want a system that one person can fully understand and rely on, that runs close to your business, and that gets sharper every month without you lifting a finger. We are closer to that than we have ever been, and the pace is picking up rather than slowing down.',
         'We will keep sharing these updates as they happen, the real ones rather than the tidy ones. If you want them first, the waiting list is the best seat in the house.',
+        { cta: { label: 'Get notified at launch', href: '/waitlist' } },
       ],
     },
     {
@@ -193,6 +194,7 @@ const POSTS_BY_LANG: Localized<Post[]> = {
         { h2: 'Wat nu volgt' },
         'Het doel op korte termijn is niet veranderd. We willen een systeem dat één persoon volledig kan begrijpen en waarop die kan rekenen, dat dicht bij uw business draait, en dat elke maand scherper wordt zonder dat u een vinger uitsteekt. We zijn daar dichter bij dan ooit, en het tempo gaat eerder omhoog dan omlaag.',
         'We blijven deze updates delen wanneer ze gebeuren, de echte in plaats van de opgepoetste. Wilt u ze als eerste, dan is de wachtlijst de beste plek in de zaal.',
+        { cta: { label: 'Word op de hoogte gebracht bij de lancering', href: '/waitlist' } },
       ],
     },
     {
