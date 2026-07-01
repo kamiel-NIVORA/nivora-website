@@ -29,8 +29,17 @@ const SERVICE_TILE: Record<string, string> = {
   'ai-consulting': '/services/service-consulting.webp',
 }
 
-/** Each service's hero backdrop, given the glossy glass-slat blur treatment (same as
- *  the Voice/Box frames), used as the timeline frame so About ties back to the pages. */
+/** Each service's sharp hero backdrop (the scenic used at the top of its page). Shown
+ *  first; the glossy blur then fades in over it on scroll, like the service timelines. */
+const SERVICE_HERO: Record<string, string> = {
+  'app-design': '/services/hero-appdesign.jpg',
+  'local-ai': '/IMG_0885.jpg',
+  aios: '/services/hero-aios.jpg',
+  'ai-consulting': '/IMG_0887.jpg',
+}
+
+/** The same hero, given the glossy glass-slat blur treatment (same as the Voice/Box
+ *  frames). Fades in over the sharp hero as the row scrolls into view. */
 const SERVICE_GLOSSY: Record<string, string> = {
   'app-design': '/about/tl-appdesign.webp',
   'local-ai': '/about/tl-localai.webp',
@@ -51,7 +60,7 @@ const COPY = {
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
     heroHeadline: 'Nivora',
-    heroSub: 'Intelligent systems.',
+    heroSub: 'Intelligent systems',
     voiceStory:
       'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around. You speak, and Voice picks up not just what you say, but the shape it should take. List a few things, and they become clean bullet points. Say “write an email”, and out comes an email, opening and sign-off included. Send a message, and it reads short and direct, the way you would actually type it yourself. No more dictaphone dumping everything out flat. Ready to send, not to rewrite.',
     boxStory:
@@ -60,7 +69,7 @@ const COPY = {
     learnMore: 'Learn more',
     servicesHeading: 'Software and AI, born from our own system.',
     servicesIntro:
-      'We could not find tools built for how we work, so we built our own system. The same system, and the AI knowledge behind it, is now yours to use too.',
+      'We could not find tools that truly fit how we work, so we built our own system, and we keep improving it every day. That is how a small team runs and scales like a much bigger one. That same system, and the AI knowledge behind it, is now yours to use too, across four services.',
     services: [
       { slug: 'app-design', name: 'App Design' },
       { slug: 'local-ai', name: 'Local AI' },
@@ -74,9 +83,9 @@ const COPY = {
     founderEyebrow: 'The person behind it',
     founderHeading: 'The story behind Nivora',
     founderP1:
-      "I'm Kamiel. I started Nivora because AI kept getting sold like a miracle, while almost no one looked at what a company actually does all day. So we do it the other way round: work first, technology second, and always on something that is yours, not rented.",
+      "I'm Kamiel, founder of Nivora. What bothered me about AI was how it gets sold as a show: expensive tools that dazzle in a demo but leave the real work of a business untouched. I wanted the opposite. Not a shiny toy, but something that quietly runs alongside you and hands back time, every single day.",
     founderP2:
-      "We ran into that exact problem ourselves, found nothing built for us, and built our own system. That system, and everything we keep learning about AI, is where these services come from. We simply offer what we proved on ourselves first.",
+      "So I started with us. We could not find a system that fit how we work, so we built our own, and we sharpen it every day. That is how a small team does the work of a much bigger one. Everything we offer you, from custom apps to AI running on your own servers, we use and prove on ourselves first. We do not sell promises, only what already works for us.",
     founderSign: 'Founder, based in Brugge, Belgium',
     ctaHeading: "Let's build the right thing",
     ctaBody:
@@ -89,7 +98,7 @@ const COPY = {
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
     heroHeadline: 'Nivora',
-    heroSub: 'Intelligente systemen.',
+    heroSub: 'Intelligente systemen',
     voiceStory:
       'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en Voice hoort niet alleen wát u zegt, maar ook welke vorm het moet krijgen. Somt u iets op, dan worden het nette bullet points. Zegt u “schrijf een e-mail”, dan komt er een e-mail uit, met aanhef en afsluiting. Stuurt u een bericht, dan klinkt het kort en direct, zoals u het zelf zou typen. Geen dicteerapparaat meer dat alles plat achter elkaar plakt. Klaar om te versturen, niet om over te doen.',
     boxStory:
@@ -98,7 +107,7 @@ const COPY = {
     learnMore: 'Lees meer',
     servicesHeading: 'Software en AI, ontstaan uit ons eigen systeem.',
     servicesIntro:
-      'We vonden geen tools die pasten bij hoe wij werken, dus bouwden we ons eigen systeem. Datzelfde systeem, en de AI-kennis erachter, is nu ook van u om te gebruiken.',
+      'We vonden geen tools die echt pasten bij hoe wij werken, dus bouwden we ons eigen systeem, en we blijven het elke dag verbeteren. Daardoor kan een klein team draaien en schalen als een veel groter bedrijf. Datzelfde systeem, en de AI-kennis die we erachter opbouwen, bieden we nu ook aan u aan, in vier diensten.',
     services: [
       { slug: 'app-design', name: 'App Design' },
       { slug: 'local-ai', name: 'Local AI' },
@@ -112,9 +121,9 @@ const COPY = {
     founderEyebrow: 'De persoon erachter',
     founderHeading: 'Het verhaal achter Nivora',
     founderP1:
-      'Ik ben Kamiel. Ik begon Nivora omdat AI telkens als wondermiddel werd verkocht, terwijl bijna niemand keek naar wat een bedrijf de hele dag écht doet. Dus doen wij het andersom: eerst het werk, dan pas de technologie, en altijd op iets dat van u is, niet gehuurd.',
+      'Ik ben Kamiel, oprichter van Nivora. Wat me stoorde aan AI, is hoe het als een show wordt verkocht: dure tools die schitteren in een demo, maar het echte werk van een bedrijf onaangeroerd laten. Ik wilde net het omgekeerde. Geen glimmend speeltje, maar iets dat stil meedraait en u elke dag tijd teruggeeft.',
     founderP2:
-      'We botsten zelf op datzelfde probleem, vonden niets dat voor ons gemaakt was, en bouwden ons eigen systeem. Dat systeem, en alles wat we blijven bijleren over AI, is waar deze diensten vandaan komen. Wij bieden gewoon aan wat we eerst op onszelf bewezen.',
+      'Dus begon ik bij onszelf. We vonden geen systeem dat paste bij hoe wij werken, dus bouwden we het zelf, en we scherpen het nog elke dag bij. Daardoor doet ons kleine team het werk van een veel groter bedrijf. Alles wat we u aanbieden, van apps op maat tot AI op uw eigen servers, gebruiken en bewijzen we eerst op onszelf. Wij verkopen geen beloftes, alleen wat bij ons al werkt.',
     founderSign: 'Oprichter, gevestigd in Brugge, België',
     ctaHeading: 'Laat ons het juiste bouwen',
     ctaBody:
@@ -238,6 +247,14 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
+        <motion.img
+          variants={heroFade}
+          src="/brand/nivora-mark.webp"
+          alt=""
+          aria-hidden
+          className="mb-6 h-12 w-auto object-contain opacity-95 drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)] sm:mb-8 sm:h-14 lg:mb-10 lg:h-[68px]"
+        />
+
         <h1 className="font-serif text-[64px] leading-[1.02] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[92px] lg:text-[132px] lg:leading-[0.98]">
           {t.heroHeadline.split(' ').map((w, i) => (
             <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
@@ -383,6 +400,10 @@ function ServiceStep({ service, reverse }: { service: Svc; reverse: boolean }) {
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
+  // Once the frame has wiped in, a quick scroll fades the glossy blur over the sharp
+  // hero, then the app tile — same little reveal the service-page timelines use.
+  const blurReveal = useTransform(scrollYProgress, [0.24, 0.36], [0, 1])
+  const iconReveal = useTransform(scrollYProgress, [0.31, 0.43], [0, 1])
 
   return (
     <div ref={ref} className="relative py-12 sm:py-16 lg:py-24">
@@ -410,7 +431,7 @@ function ServiceStep({ service, reverse }: { service: Svc; reverse: boolean }) {
           </RippleButton>
         </motion.div>
 
-        {/* Glossy-blurred hero frame with the app tile mark on it */}
+        {/* Sharp hero wipes in, then the glossy blur fades over it, then the app tile */}
         <motion.a
           href={`/services/${service.slug}`}
           style={reduced ? undefined : { clipPath: clip, opacity }}
@@ -419,21 +440,35 @@ function ServiceStep({ service, reverse }: { service: Svc; reverse: boolean }) {
             reverse ? 'lg:order-1' : 'lg:order-2',
           )}
         >
+          {/* sharp hero — the clean base */}
           <img
+            src={SERVICE_HERO[service.slug]}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            className="block aspect-[4/3] w-full object-cover"
+          />
+          {/* glossy glass-slat blur — fades in over the sharp hero on scroll */}
+          <motion.img
             src={SERVICE_GLOSSY[service.slug]}
             alt=""
             aria-hidden
             loading="lazy"
-            className="block aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            style={reduced ? { opacity: 1 } : { opacity: blurReveal }}
+            className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          {/* app tile mark — fades in a beat after the blur */}
+          <motion.div
+            style={reduced ? { opacity: 1 } : { opacity: iconReveal }}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
             <div aria-hidden className="absolute h-28 w-28 rounded-full bg-black/30 blur-2xl sm:h-36 sm:w-36" />
             <img
               src={SERVICE_TILE[service.slug]}
               alt={service.name}
               className="relative h-[78px] w-[78px] rounded-[20px] border border-white/10 object-cover shadow-[0_14px_36px_rgba(0,0,0,0.6)] sm:h-[94px] sm:w-[94px]"
             />
-          </div>
+          </motion.div>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
         </motion.a>
       </div>
