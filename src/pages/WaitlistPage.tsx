@@ -154,8 +154,8 @@ export function WaitlistPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(2,2,2,0.72)_100%)]" />
       </div>
 
-      <main className="relative z-10 w-full max-w-5xl">
-        <div className="relative min-h-[600px] w-full md:h-[700px]">
+      <main className="relative z-10 w-full max-w-4xl">
+        <div className="relative min-h-[540px] w-full md:h-[600px]">
           {/* Progress glow border */}
           <div aria-hidden className="absolute -inset-[2px] z-0 rounded-[26px]">
             <svg className="h-full w-full overflow-visible">
@@ -188,20 +188,6 @@ export function WaitlistPage() {
               <div aria-hidden className="absolute inset-0" style={{ background: ARC_MAIN, filter: 'blur(7px)' }} />
               <div aria-hidden className="absolute inset-0" style={{ background: ARC_FILL, filter: 'blur(10px)' }} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/45 to-transparent" />
-
-              <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col justify-end p-12">
-                <div className="mb-8 flex flex-col items-start text-left">
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 backdrop-blur-md">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-white/80">{t.pill}</span>
-                  </div>
-                  <h1 className="mb-4 font-sans text-3xl font-semibold leading-tight tracking-tight text-white">{t.leftTitle}</h1>
-                  <p className="max-w-xs text-sm font-light leading-relaxed text-neutral-300">{t.leftDesc}</p>
-                </div>
-                <div className="flex w-full items-center justify-center border-t border-white/10 pt-8 opacity-90">
-                  <img src="/brand/nivora-logo.png" alt="Nivora" className="h-8 w-auto object-contain" />
-                </div>
-              </div>
             </motion.div>
 
             {/* RIGHT PANEL */}
