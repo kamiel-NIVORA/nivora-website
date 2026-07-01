@@ -261,8 +261,8 @@ export function ServicePage() {
           accent={meta.accent}
         />
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
-        {meta.slug === 'aios' && <AiosTimeline />}
         {meta.slug === 'aios' && <AiosWorkGrid />}
+        {meta.slug === 'aios' && <AiosTimeline />}
         {meta.slug === 'aios' && <RoiBand meta={meta} />}
         {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <LocalWhoFor />}
