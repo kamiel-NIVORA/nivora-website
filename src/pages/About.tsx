@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
