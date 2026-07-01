@@ -2222,8 +2222,8 @@ function ServerStepRow({
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
   // Once the frame has settled, a quick scroll fades the glossy blur in, then the icon.
-  const blurReveal = useTransform(scrollYProgress, [0.44, 0.54], [0, 1])
-  const iconReveal = useTransform(scrollYProgress, [0.52, 0.62], [0, 1])
+  const blurReveal = useTransform(scrollYProgress, [0.24, 0.36], [0, 1])
+  const iconReveal = useTransform(scrollYProgress, [0.31, 0.43], [0, 1])
 
   return (
     <div ref={ref} className="relative py-16 lg:py-40">
@@ -2270,11 +2270,11 @@ function ServerStepRow({
               style={reduced ? { opacity: 1 } : { opacity: iconReveal }}
               className="pointer-events-none absolute inset-0 flex items-center justify-center"
             >
-              <div aria-hidden className="absolute h-24 w-24 rounded-full bg-black/25 blur-xl sm:h-28 sm:w-28" />
+              <div aria-hidden className="absolute h-40 w-40 rounded-full bg-black/35 blur-2xl sm:h-48 sm:w-48" />
               <img
                 src={icon}
                 alt=""
-                className="relative h-14 w-14 drop-shadow-[0_6px_18px_rgba(0,0,0,0.55)] sm:h-[68px] sm:w-[68px]"
+                className="relative h-24 w-24 drop-shadow-[0_8px_22px_rgba(0,0,0,0.6)] sm:h-32 sm:w-32"
               />
             </motion.div>
           )}
