@@ -20,6 +20,9 @@ export const DEFAULT_TITLE = 'Nivora Works - Intelligent systems for ambitious c
 export const DEFAULT_DESCRIPTION =
   'Nivora designs AI systems and software built specifically for how you operate. Intelligent tools that make your business work better, faster, smarter.'
 
+/* Default share card, mirrored from index.html so cleanup can restore it. */
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/brand/og-card.png`
+
 type SeoInput = {
   /** Tab + search-result title. Keep ~50-60 chars and include the brand. */
   title: string
@@ -29,8 +32,12 @@ type SeoInput = {
   path?: string
   /** Keep utility pages (confirmations, 404) out of Google's index. */
   noindex?: boolean
-  /** Page-specific structured data, rendered as JSON-LD while mounted. */
-  jsonLd?: Record<string, unknown>
+  /** Share image for this page (site-relative like '/blog/cover.webp' or absolute). */
+  ogImage?: string
+  /** Open Graph type; blog posts use 'article'. */
+  ogType?: 'website' | 'article'
+  /** Page-specific structured data (one object or several), rendered as JSON-LD while mounted. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
@@ -43,12 +50,13 @@ function setMeta(attr: 'name' | 'property', key: string, content: string) {
   el.setAttribute('content', content)
 }
 
-export function useSeo({ title, description, path, noindex, jsonLd }: SeoInput) {
+export function useSeo({ title, description, path, noindex, ogImage, ogType, jsonLd }: SeoInput) {
   const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : undefined
 
   useEffect(() => {
     const desc = description ?? DEFAULT_DESCRIPTION
     const url = `${SITE_URL}${path ?? window.location.pathname}`
+    const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`) : DEFAULT_OG_IMAGE
 
     document.title = title
     setMeta('name', 'description', desc)
@@ -56,6 +64,10 @@ export function useSeo({ title, description, path, noindex, jsonLd }: SeoInput) 
     setMeta('property', 'og:title', title)
     setMeta('property', 'og:description', desc)
     setMeta('property', 'og:url', url)
+    setMeta('property', 'og:image', image)
+    setMeta('property', 'og:type', ogType ?? 'website')
+    setMeta('name', 'twitter:title', title)
+    setMeta('name', 'twitter:image', image)
 
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
     if (!canonical) {
@@ -79,7 +91,11 @@ export function useSeo({ title, description, path, noindex, jsonLd }: SeoInput) 
       setMeta('name', 'robots', 'index, follow')
       setMeta('property', 'og:title', DEFAULT_TITLE)
       setMeta('property', 'og:description', DEFAULT_DESCRIPTION)
+      setMeta('property', 'og:image', DEFAULT_OG_IMAGE)
+      setMeta('property', 'og:type', 'website')
+      setMeta('name', 'twitter:title', DEFAULT_TITLE)
+      setMeta('name', 'twitter:image', DEFAULT_OG_IMAGE)
       script?.remove()
     }
-  }, [title, description, path, noindex, jsonLdText])
+  }, [title, description, path, noindex, ogImage, ogType, jsonLdText])
 }

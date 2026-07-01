@@ -27,20 +27,20 @@ export function getCookieConsent(): CookieChoice | null {
 
 const COPY = {
   en: {
-    title: 'Cookies, the short version',
-    body: 'We use a few small cookies to make the site work properly and, only with your OK, to see anonymously which pages help people most. The details live in our ',
+    title: 'We use cookies',
+    body: 'We use cookies to make this website work properly, remember your preferences and, only with your consent, analyse how the site is used. Read more in our ',
     privacy: 'privacy policy',
     bodyEnd: '.',
-    accept: 'Sounds good',
-    decline: 'Only the essentials',
+    accept: 'Accept',
+    decline: 'Decline',
   },
   nl: {
-    title: 'Cookies, de korte versie',
-    body: 'We gebruiken enkele kleine cookies om de site goed te laten werken en, alleen met uw akkoord, om anoniem te zien welke pagina’s mensen het meest helpen. De details staan in ons ',
+    title: 'Wij gebruiken cookies',
+    body: 'Wij gebruiken cookies om de website goed te laten werken, uw voorkeuren te onthouden en, alleen met uw toestemming, het gebruik van de site te analyseren. Lees meer in ons ',
     privacy: 'privacybeleid',
     bodyEnd: '.',
-    accept: 'Prima zo',
-    decline: 'Enkel het nodige',
+    accept: 'Accepteren',
+    decline: 'Weigeren',
   },
 } as const
 

@@ -19,7 +19,7 @@ import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
-import { useSeo } from '@/lib/seo'
+import { useSeo, SITE_URL } from '@/lib/seo'
 import { getServiceContent } from '@/data/services'
 import { getServiceRoi } from '@/data/serviceRoi'
 import { useLang, type Lang } from '@/i18n'
@@ -208,9 +208,35 @@ export function ServicePage() {
   const meta = isValid ? SERVICE_META[slug as ServiceSlug] : null
 
   useSeo({
-    title: content ? `${content.name} · Nivora` : 'Nivora',
+    title: content ? `${content.hero.eyebrow} · Nivora` : 'Nivora',
     description: content ? `${content.hero.subhead} ${content.intro.statement}` : undefined,
     path: content ? `/services/${content.slug}` : undefined,
+    jsonLd: content
+      ? [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: content.name,
+            description: `${content.hero.subhead} ${content.intro.statement}`,
+            url: `${SITE_URL}/services/${content.slug}`,
+            areaServed: { '@type': 'Country', name: 'Belgium' },
+            provider: {
+              '@type': 'Organization',
+              name: 'Nivora',
+              url: SITE_URL,
+              logo: `${SITE_URL}/brand/nivora-logo.png`,
+            },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: content.name, item: `${SITE_URL}/services/${content.slug}` },
+            ],
+          },
+        ]
+      : undefined,
   })
 
   if (!content || !meta) return <Navigate to="/" replace />

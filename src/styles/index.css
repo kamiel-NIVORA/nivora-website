@@ -52,6 +52,15 @@
     text-size-adjust: 100%;
   }
 
+  /* Photos and renders are part of the design: no native drag-ghosting when a
+     visitor clicks and pulls an image (a dragstart listener in main.tsx covers
+     the browsers that ignore this property). Text stays selectable as normal. */
+  img,
+  video {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+
   /* Lenis drives smooth scrolling site-wide; only fall back to native smooth
      scroll when Lenis is absent (it adds a `.lenis` class to <html>). Running
      both at once makes anchor/hash jumps double-ease and jank on phones. */

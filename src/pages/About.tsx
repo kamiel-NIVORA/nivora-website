@@ -7,7 +7,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { CONTACT, waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
-import { useSeo } from '@/lib/seo'
+import { useSeo, SITE_URL } from '@/lib/seo'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
 const ACCENT = '#f5f5f5'
@@ -170,7 +170,28 @@ export function About() {
   const { lang } = useLang()
   const t = COPY[lang]
 
-  useSeo({ title: t.docTitle, description: t.metaDescription, path: '/about' })
+  useSeo({
+    title: t.docTitle,
+    description: t.metaDescription,
+    path: '/about',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        name: t.docTitle,
+        url: `${SITE_URL}/about`,
+        about: { '@type': 'Organization', name: 'Nivora', url: SITE_URL },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Kamiel Niville',
+        jobTitle: 'Founder',
+        worksFor: { '@type': 'Organization', name: 'Nivora', url: SITE_URL },
+        sameAs: LINKEDIN_URL,
+      },
+    ],
+  })
 
   return (
     <main

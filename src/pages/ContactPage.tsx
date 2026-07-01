@@ -4,7 +4,7 @@ import { BookCallButton } from '@/components/ui/BookCallButton'
 import { LocationMap } from '@/components/ui/LocationMap'
 import { CONTACT, ADDRESS, SOCIAL_LINKS } from '@/data/contact'
 import { useLang } from '@/i18n'
-import { useSeo } from '@/lib/seo'
+import { useSeo, SITE_URL } from '@/lib/seo'
 
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS.mapQuery)}`
 /** The studio, geocoded once so the map centres exactly on it (no runtime lookup). */
@@ -89,7 +89,29 @@ export function ContactPage() {
   const { lang } = useLang()
   const t = COPY[lang]
 
-  useSeo({ title: t.docTitle, description: t.sub, path: '/contact' })
+  useSeo({
+    title: t.docTitle,
+    description: t.sub,
+    path: '/contact',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: 'Nivora',
+      url: `${SITE_URL}/contact`,
+      image: `${SITE_URL}/brand/og-card.png`,
+      email: CONTACT.email,
+      telephone: CONTACT.phoneDisplay,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: ADDRESS.line1,
+        postalCode: '8000',
+        addressLocality: 'Brugge',
+        addressCountry: 'BE',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: STUDIO.lat, longitude: STUDIO.lng },
+      areaServed: { '@type': 'AdministrativeArea', name: 'West-Vlaanderen' },
+    },
+  })
 
   return (
     <main className="bg-bg">

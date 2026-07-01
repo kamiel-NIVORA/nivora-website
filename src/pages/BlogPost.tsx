@@ -59,25 +59,38 @@ export function BlogPost() {
     title: post ? `${post.title} · Nivora` : DEFAULT_TITLE,
     description: post?.excerpt,
     path: post ? `/blog/${post.slug}` : undefined,
+    ogImage: post?.image,
+    ogType: post ? 'article' : undefined,
     jsonLd: post
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: post.title,
-          description: post.excerpt,
-          image: `${SITE_URL}${post.image}`,
-          url: `${SITE_URL}/blog/${post.slug}`,
-          ...(postDate && !isNaN(postDate.getTime())
-            ? { datePublished: postDate.toISOString().slice(0, 10) }
-            : {}),
-          author: { '@type': 'Person', name: post.author },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Nivora',
-            url: SITE_URL,
-            logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/nivora-logo.png` },
+      ? [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.excerpt,
+            image: `${SITE_URL}${post.image}`,
+            url: `${SITE_URL}/blog/${post.slug}`,
+            ...(postDate && !isNaN(postDate.getTime())
+              ? { datePublished: postDate.toISOString().slice(0, 10) }
+              : {}),
+            author: { '@type': 'Person', name: post.author },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Nivora',
+              url: SITE_URL,
+              logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/nivora-logo.png` },
+            },
           },
-        }
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+              { '@type': 'ListItem', position: 3, name: post.title, item: `${SITE_URL}/blog/${post.slug}` },
+            ],
+          },
+        ]
       : undefined,
   })
 

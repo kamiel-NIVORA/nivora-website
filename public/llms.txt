@@ -1,0 +1,23 @@
+# Nivora Works
+
+> Nivora is a software and AI studio in Brugge, Belgium. It builds its own consumer apps, Box and Voice, and designs custom software and AI systems for companies: bespoke apps, local (on-premise) AI installations, AI operating systems and AI consulting.
+
+Nivora (also written as Nivora Works or NivoraWorks) works with companies that want intelligent systems built around how they actually operate, with a strong focus on data privacy: its Local AI service runs powerful AI models on the customer's own servers so data never leaves the building.
+
+## Products
+
+- [Box](https://nivoraworks.com/waitlist?product=box): all your communication (email, chat, DMs) in one calm inbox. In development, waitlist open.
+- [Voice](https://nivoraworks.com/waitlist?product=voice): turns the way you talk into finished, well-formatted text in your own style. In development, waitlist open.
+
+## Services
+
+- [App Design & Development](https://nivoraworks.com/services/app-design): consumer apps, business tools and complex builds, designed from the ground up.
+- [Local AI](https://nivoraworks.com/services/local-ai): full AI capability on your own servers; data stays in-house, no subscriptions.
+- [AIOS](https://nivoraworks.com/services/aios): an AI operating system tuned to your company that takes on admin, marketing, finance and support work.
+- [AI Consulting](https://nivoraworks.com/services/ai-consulting): mapping where AI genuinely pays off and implementing it with your team.
+
+## Pages
+
+- [About](https://nivoraworks.com/about): the studio and founder Kamiel Niville.
+- [Blog](https://nivoraworks.com/blog): notes on building Box and Voice and where AI creates real value.
+- [Contact](https://nivoraworks.com/contact): Julius en Maurits Sabbestraat 15, 8000 Brugge, Belgium. kamiel@nivoraworks.com, +32 489 00 77 37.
