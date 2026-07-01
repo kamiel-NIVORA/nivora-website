@@ -1820,7 +1820,7 @@ function LocalSafeApproaches() {
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 30, mass: 0.45 })
   const connectorFill = useTransform(p, [0, 0.5], [0, 1])
   const sweepDeg = useTransform(p, [0.42, 1], [0, 360])
-  const ring = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(245,245,245,0.85) 0deg, rgba(245,245,245,0.85) ${sweepDeg}deg, transparent ${sweepDeg}deg)`
+  const ring = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(245,245,245,0.58) 0deg, rgba(245,245,245,0.58) ${sweepDeg}deg, transparent ${sweepDeg}deg)`
 
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-8 sm:pb-20 lg:pb-28 lg:pt-24">
@@ -1828,11 +1828,11 @@ function LocalSafeApproaches() {
         {/* the timeline centre line, continuing down into the top of the card */}
         <div
           aria-hidden
-          className="absolute left-1/2 -top-[196px] z-20 hidden h-[202px] w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent,#000_22%)]"
+          className="absolute left-1/2 -top-[300px] hidden h-[308px] w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block"
         >
           <motion.div
             style={reduced ? { scaleY: 1 } : { scaleY: connectorFill }}
-            className="absolute inset-0 origin-top bg-gradient-to-b from-white/12 via-white/55 to-white/90"
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/45 via-white/65 to-white/85"
           />
         </div>
 
@@ -1841,14 +1841,14 @@ function LocalSafeApproaches() {
           <motion.div
             aria-hidden
             className="pointer-events-none absolute -inset-[9px] rounded-[36px] blur-[22px]"
-            style={{ background: ring, opacity: 0.55 }}
+            style={{ background: ring, opacity: 0.36 }}
           />
         )}
         {/* ambient backlight seeping out from under the card */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-12 bottom-[-26px] h-28 rounded-[50%] bg-white/[0.09] blur-[56px]" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-12 bottom-[-26px] h-28 rounded-[50%] bg-white/[0.055] blur-[56px]" />
 
         <Reveal y={16}>
-          <div className="relative overflow-hidden rounded-[28px] border border-line-strong bg-[#0a0a0c] p-8 shadow-[0_45px_110px_-50px_rgba(0,0,0,0.9)] sm:p-10 lg:p-12">
+          <div className="relative z-10 overflow-hidden rounded-[28px] border border-line-strong bg-[#0a0a0c] p-8 shadow-[0_45px_110px_-50px_rgba(0,0,0,0.9)] sm:p-10 lg:p-12">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
               {/* left: the grass, settled into the card rather than pasted on top */}
