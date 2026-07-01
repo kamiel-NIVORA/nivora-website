@@ -2,7 +2,6 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { waitlistHref } from '@/data/contact'
@@ -260,7 +259,6 @@ function HeroWords({ text }: { text: string }) {
 }
 
 function Hero() {
-  const { open } = useContactModal()
   const { lang } = useLang()
   const t = COPY[lang]
   return (
@@ -319,12 +317,10 @@ function Hero() {
 
         <motion.div variants={heroFade} className="mt-10 w-full sm:w-auto">
           <RippleButton
-            href="#contact"
+            href={waitlistHref()}
+            target="_blank"
+            rel="noopener noreferrer"
             className="h-12 w-full px-7 text-[15px] sm:w-auto"
-            onClick={(e) => {
-              e.preventDefault()
-              open()
-            }}
           >
             {t.beFirst}
           </RippleButton>
@@ -706,7 +702,6 @@ function Apps() {
 /* ── Final CTA · scenic close ─────────────────────────────────────────────── */
 
 function FinalCta() {
-  const { open } = useContactModal()
   const { lang } = useLang()
   const t = COPY[lang]
   return (
@@ -735,19 +730,21 @@ function FinalCta() {
           <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-ink-soft/85 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)] lg:text-base">
             {t.finalBody}
           </p>
-          <div className="mt-9 flex justify-center">
+          {/* The button reveals its reassurance line only on hover (always shown on
+              touch, where there is no hover). */}
+          <div className="mt-9 flex flex-col items-center">
             <RippleButton
-              href="#contact"
-              className="h-12 w-full px-7 text-[15px] sm:w-auto"
-              onClick={(e) => {
-                e.preventDefault()
-                open()
-              }}
+              href={waitlistHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="peer h-12 w-full px-7 text-[15px] sm:w-auto"
             >
               {t.beFirst}
             </RippleButton>
+            <p className="mt-5 text-[13px] text-ink-soft/60 opacity-0 transition-opacity duration-300 peer-hover:opacity-100 [@media(hover:none)]:opacity-100">
+              {t.finalFoot}
+            </p>
           </div>
-          <p className="mt-5 text-[13px] text-ink-soft/60">{t.finalFoot}</p>
         </div>
       </Reveal>
     </section>
