@@ -68,7 +68,7 @@ const COPY = {
   en: {
     docTitle: 'Affiliate · Nivora',
     facts: [
-      { big: '10%', label: 'of every payment from the customers you refer' },
+      { big: '20%', label: 'of every payment from the customers you refer' },
       { big: 'Every month', label: 'you keep earning for as long as they stay' },
       { big: 'Your link', label: 'a personal link that tracks everyone you send' },
     ] as Fact[],
@@ -89,9 +89,9 @@ const COPY = {
         keyword: 'Clients',
       },
       {
-        title: 'You earn 10%',
-        body: 'You keep 10% of what they pay, every month they stay a customer. No cap, no expiry. It keeps coming in as long as they do.',
-        keyword: '10%',
+        title: 'You earn 20%',
+        body: 'You keep 20% of what they pay, every month they stay a customer. No cap, no expiry. It keeps coming in as long as they do.',
+        keyword: '20%',
       },
     ] as Step[],
     apps: [
@@ -108,9 +108,9 @@ const COPY = {
     ] as App[],
     badgeSoon: 'Coming soon',
     heroLine1: 'Share Box and Voice.',
-    heroLine2: 'Earn 10%.',
+    heroLine2: 'Earn 20%.',
     heroSub:
-      'Post about it, or simply tell the right people. You keep 10% of every customer you bring in, every month they stay.',
+      'Post about it, or simply tell the right people. You keep 20% of every customer you bring in, every month they stay.',
     beFirst: 'Be the first to know',
     eyebrowHow: 'How it works',
     howHeading: 'From your link to your first payout',
@@ -144,7 +144,7 @@ const COPY = {
   nl: {
     docTitle: 'Affiliate · Nivora',
     facts: [
-      { big: '10%', label: 'van elke betaling van de klanten die u aanbrengt' },
+      { big: '20%', label: 'van elke betaling van de klanten die u aanbrengt' },
       { big: 'Elke maand', label: 'u blijft verdienen zolang ze klant blijven' },
       { big: 'Uw link', label: 'een persoonlijke link die iedereen volgt die u doorstuurt' },
     ] as Fact[],
@@ -165,9 +165,9 @@ const COPY = {
         keyword: 'Klanten',
       },
       {
-        title: 'U verdient 10%',
-        body: 'U houdt 10% van wat ze betalen, elke maand dat ze klant blijven. Zonder limiet, zonder einddatum. Het blijft binnenkomen zolang zij dat doen.',
-        keyword: '10%',
+        title: 'U verdient 20%',
+        body: 'U houdt 20% van wat ze betalen, elke maand dat ze klant blijven. Zonder limiet, zonder einddatum. Het blijft binnenkomen zolang zij dat doen.',
+        keyword: '20%',
       },
     ] as Step[],
     apps: [
@@ -184,9 +184,9 @@ const COPY = {
     ] as App[],
     badgeSoon: 'Binnenkort',
     heroLine1: 'Deel Box en Voice.',
-    heroLine2: 'Verdien 10%.',
+    heroLine2: 'Verdien 20%.',
     heroSub:
-      'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 10% van elke klant die u aanbrengt, elke maand opnieuw.',
+      'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 20% van elke klant die u aanbrengt, elke maand opnieuw.',
     beFirst: 'Wees als eerste op de hoogte',
     eyebrowHow: 'Hoe het werkt',
     howHeading: 'Van uw link tot uw eerste uitbetaling',
