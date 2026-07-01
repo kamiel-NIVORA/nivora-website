@@ -15,7 +15,6 @@ import {
   CalendarDays,
   Check,
   ChevronDown,
-  CloudOff,
   Handshake,
   Headset,
   Mail,
@@ -23,8 +22,6 @@ import {
   Minus,
   Plus,
   Receipt,
-  Scale,
-  ShieldCheck,
   UserPlus,
   Workflow,
   type LucideIcon,
@@ -35,7 +32,6 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
-import { JourneyTimeline } from '@/components/ui/JourneyTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -282,22 +278,16 @@ export function ServicePage() {
         {meta.slug === 'aios' && <AiosWorkGrid />}
         {meta.slug === 'aios' && <RoiBand meta={meta} />}
         {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
-        {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
-        {meta.slug === 'local-ai'
-          ? <LocalAiTension content={content} />
-          : meta.slug !== 'app-design' && meta.slug !== 'aios' && <Problem content={content} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Solution content={content} meta={meta} />}
-        {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
-        {meta.objectImage && <BrandObject meta={meta} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Capabilities content={content} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Problem content={content} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Solution content={content} meta={meta} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
         {meta.slug !== 'aios' && <WhyUs content={content} meta={meta} />}
-        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Process content={content} meta={meta} />}
-        {meta.slug === 'local-ai' && <JourneyTimeline />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Process content={content} meta={meta} />}
         {meta.slug !== 'aios' && <RoiBand meta={meta} />}
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
@@ -414,54 +404,6 @@ function AnimFrame({ src, className }: { src: string; className?: string }) {
    into the page (no visible frame), with a soft bloom behind and a gentle
    scroll-drift. Used where a service has a hero brand asset, e.g. Local AI's
    "Private / Yours / Secure / Local" folder. */
-function BrandObject({ meta }: { meta: ServiceMeta }) {
-  const { lang } = useLang()
-  const t = UI[lang]
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['5%', '-5%'])
-
-  if (!meta.objectImage) return null
-
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-16 sm:py-20 lg:py-28">
-      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Copy — complements the words baked into the object */}
-        <div className="order-2 lg:order-1">
-          <Reveal>
-            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              {t.brandObjectTitle}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-faint lg:text-base">
-              {t.brandObjectBody}
-            </p>
-          </Reveal>
-        </div>
-
-        {/* The floating object */}
-        <div ref={ref} className="relative order-1 lg:order-2">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 blur-[80px]"
-            style={{ background: `radial-gradient(50% 45% at 50% 42%, ${meta.accent}1f, transparent 72%)` }}
-          />
-          <Reveal y={32}>
-            <motion.img
-              src={meta.objectImage}
-              alt={t.brandObjectAlt}
-              loading="lazy"
-              style={{ y }}
-              className="relative mx-auto block w-full max-w-[440px] will-change-transform [mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)] [-webkit-mask-image:radial-gradient(80%_80%_at_50%_50%,#000_72%,transparent_100%)]"
-            />
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* Product showcase · the real product floating on the page's own black. Generalises
    the BrandObject pattern to any service with a product shot (e.g. AIOS on an iPad):
    a headline, one line, and the top outcomes as proof. Self-gates per slug. */
@@ -713,47 +655,6 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
 /* Privacy band · four architecture facts, Local AI only ─────────────────────── */
 
 /** Four architecture-level privacy facts. Only shown for Local AI. */
-function PrivacyBand({ meta }: { meta: ServiceMeta }) {
-  const { lang } = useLang()
-  const t = UI[lang]
-  const facts = t.privacyFacts
-
-  return (
-    <section className="relative w-full overflow-hidden border-y border-line py-16 sm:py-20 lg:py-28">
-      <ParallaxImage src="/backgrounds/bg-peak-mono.webp" range={['-6%', '6%']} />
-      <div className="absolute inset-0 bg-bg/88" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-bg to-transparent" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(60% 60% at 50% 40%, ${meta.accent}0f, transparent 70%)` }}
-      />
-
-      <div className="relative mx-auto w-full max-w-[1100px] px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <p className="mt-5 font-serif text-[26px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px] lg:leading-[1.24]">
-              {t.privacyHeadline}
-            </p>
-          </Reveal>
-        </div>
-
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {facts.map((f, i) => (
-            <Reveal key={f.label} delay={i * 0.06}>
-              <GlassCard className="h-full">
-                <h3 className="font-serif text-[19px] leading-snug tracking-[-0.01em] text-ink">{f.label}</h3>
-                <p className="mt-3 text-[13.5px] leading-relaxed text-faint">{f.body}</p>
-              </GlassCard>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* Hero · scenic landscape, like the home page ───────────────────────────────── */
 
 const heroContainer: Variants = {
@@ -872,108 +773,6 @@ function Problem({ content }: { content: ServiceContent }) {
 /** Two elegant frames (one tension, one promise) plus a confident accent bar.
  *  Replaces the generic two-negative Problem on the Local AI page. Self-contained
  *  bilingual copy; the heading/intro still come from the service data. */
-const TENSION: Record<
-  Lang,
-  { tension: { title: string; body: string }; promise: { title: string; body: string }; bar: string }
-> = {
-  en: {
-    tension: {
-      title: 'Cloud AI lets your data leave the building',
-      body: 'Every prompt your team sends to a cloud model leaves your perimeter. And afterwards you cannot prove where that data went, who saw it, or what happened to it. For anyone handling confidential work, that is a risk you do not see until it goes wrong.',
-    },
-    promise: {
-      title: 'The same power, but inside your walls',
-      body: 'You get real AI power on your own hardware, not a watered-down version. Your data stays in, every answer is computed behind your own walls, and you own the whole system. No cloud in the chain, no per-seat meter, nothing you have to take on a promise.',
-    },
-    bar: 'Not every model has to be the biggest. We pick the AI that fits what you need: powerful enough for the work, never heavier than it has to be.',
-  },
-  nl: {
-    tension: {
-      title: 'Cloud-AI laat je data je gebouw uit',
-      body: 'Elke prompt die je team naar een cloudmodel stuurt, verlaat je perimeter. En achteraf kun je niet hard maken waar die data heen ging, wie ze zag of wat ermee gebeurde. Voor wie met vertrouwelijk werk bezig is, is dat een risico dat je niet ziet tot het misgaat.',
-    },
-    promise: {
-      title: 'Dezelfde kracht, maar binnen je muren',
-      body: 'Je krijgt echte AI-kracht op je eigen hardware, niet een afgezwakte versie. Je data blijft binnen, elk antwoord wordt achter je eigen muren berekend, en je bezit het volledige systeem. Geen cloud in de keten, geen teller per gebruiker, niets dat je op een belofte moet vertrouwen.',
-    },
-    bar: 'Niet elk model hoeft het grootste te zijn. We kiezen de AI die past bij wat je nodig hebt: krachtig genoeg voor het werk, niet zwaarder dan nodig.',
-  },
-}
-
-function LocalAiTension({ content }: { content: ServiceContent }) {
-  const { lang } = useLang()
-  const t = TENSION[lang]
-  return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-14 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Reveal>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-            {content.problem.title}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{content.problem.intro}</p>
-        </Reveal>
-      </div>
-
-      {/* Two frames: one tension, one promise. Narrower + taller than a standard grid. */}
-      <div className="mx-auto mt-12 grid max-w-[940px] gap-5 md:grid-cols-2 lg:mt-16 lg:gap-6">
-        {/* Tension */}
-        <Reveal>
-          <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.015] p-7 transition-colors duration-300 hover:border-line-strong lg:p-10">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white/[0.03] text-faint">
-              <CloudOff className="h-[22px] w-[22px]" strokeWidth={1.6} />
-            </span>
-            <h3 className="mt-7 font-serif text-[23px] leading-[1.18] tracking-[-0.01em] text-ink lg:text-[26px]">
-              {t.tension.title}
-            </h3>
-            <p className="mt-4 text-[15px] leading-relaxed text-faint">{t.tension.body}</p>
-          </div>
-        </Reveal>
-
-        {/* Promise — elevated */}
-        <Reveal delay={0.1}>
-          <div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-7 transition-colors duration-300 hover:border-white/20 lg:p-10">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{ background: 'radial-gradient(60% 50% at 50% 0%, rgba(245,245,245,0.06), transparent 70%)' }}
-            />
-            <span className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-line-strong bg-white/[0.07] text-ink">
-              <ShieldCheck className="h-[22px] w-[22px]" strokeWidth={1.6} />
-            </span>
-            <h3 className="relative mt-7 font-serif text-[23px] leading-[1.18] tracking-[-0.01em] text-ink lg:text-[26px]">
-              {t.promise.title}
-            </h3>
-            <p className="relative mt-4 text-[15px] leading-relaxed text-ink-soft/80">{t.promise.body}</p>
-          </div>
-        </Reveal>
-      </div>
-
-      {/* Confident accent bar, brought out front and centre */}
-      <div className="mx-auto mt-5 max-w-[940px] lg:mt-6">
-        <Reveal delay={0.16}>
-          <div className="relative overflow-hidden rounded-2xl border border-line-strong bg-white/[0.025] px-6 py-5 sm:px-8 sm:py-6">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{ background: 'radial-gradient(70% 130% at 0% 50%, rgba(245,245,245,0.05), transparent 60%)' }}
-            />
-            <div className="relative flex items-center gap-4 sm:gap-5">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line-strong bg-white/[0.05] text-ink">
-                <Scale className="h-[19px] w-[19px]" strokeWidth={1.6} />
-              </span>
-              <p className="text-[15px] leading-relaxed text-ink-soft sm:text-[16px] lg:text-[17px]">{t.bar}</p>
-            </div>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  )
-}
-
 /* Solution · sticky media + outcomes checklist (the "sold" moment) ──────────── */
 
 function Solution({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
@@ -1772,89 +1571,6 @@ function AiosWorkGrid() {
 
 /* Who this is for · particle terrain gif + checklist, only for local-ai ─────── */
 
-const LOCAL_WHO: Record<Lang, { title: string; subtitle: string; lines: string[] }> = {
-  en: {
-    title: 'Who this is built for',
-    subtitle:
-      'The more sensitive your data, the more this is for you. Not everyone needs their own AI, but for some companies it is the only approach that holds up.',
-    lines: [
-      'Companies working with data that simply cannot leave the building, because clients, regulation or competition will not allow it.',
-      'Teams that want to work with AI every day, without a monthly bill that grows with every new colleague.',
-      'Companies that want to build their own intelligence, something that stays theirs, instead of forever renting it from someone else.',
-    ],
-  },
-  nl: {
-    title: 'Voor wie dit gemaakt is',
-    subtitle:
-      'Hoe gevoeliger uw data, hoe meer dit voor u is. Niet iedereen heeft een eigen AI nodig, maar voor sommige bedrijven is het de enige manier die klopt.',
-    lines: [
-      'Bedrijven die werken met data die simpelweg niet naar buiten mag, omdat klanten, wetgeving of concurrentie dat niet toelaten.',
-      'Teams die elke dag met AI willen werken, zonder een maandelijkse rekening die meegroeit met elke nieuwe collega.',
-      'Bedrijven die hun eigen intelligentie willen opbouwen, iets dat van hen blijft, in plaats van het te blijven huren bij iemand anders.',
-    ],
-  },
-}
-
-const LOCAL_WHO_GIF = '/services/who-localai.gif'
-
-function LocalWhoFor() {
-  const { lang } = useLang()
-  const data = LOCAL_WHO[lang]
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
-
-  return (
-    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
-      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Particle-terrain gif — left on desktop */}
-        <div ref={ref} className="relative order-1">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 blur-[90px]"
-            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
-          />
-          <Reveal y={24}>
-            <motion.div
-              style={{ y }}
-              className="relative mx-auto aspect-square w-full max-w-[440px] overflow-hidden will-change-transform"
-            >
-              <img
-                src={LOCAL_WHO_GIF}
-                alt=""
-                aria-hidden
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover [mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)] [-webkit-mask-image:radial-gradient(78%_78%_at_50%_50%,#000_54%,transparent_94%)]"
-                style={{ mixBlendMode: 'screen' }}
-              />
-            </motion.div>
-          </Reveal>
-        </div>
-
-        {/* Copy — right on desktop */}
-        <div className="order-2">
-          <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
-              {data.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
-          </Reveal>
-          <ul className="mt-8 flex flex-col gap-4">
-            {data.lines.map((line, i) => (
-              <Reveal as="li" key={line} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
-                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
-                <span className="text-[15.5px] leading-relaxed text-ink-soft">{line}</span>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* Cloud vs Local comparison · only for local-ai ─────────────────────────────── */
 
 const LOCAL_COMPARE: Record<
@@ -2595,15 +2311,19 @@ function FitFaq({ content }: { content: ServiceContent }) {
 
   // App Design: stripped to just the FAQ, centred, with a warm-red (terracotta)
   // heading like the homepage. No "is this the right fit" comparison block.
-  if (content.slug === 'app-design' || content.slug === 'aios') {
+  if (content.slug === 'app-design' || content.slug === 'aios' || content.slug === 'local-ai') {
     const faqSub =
       content.slug === 'aios'
         ? lang === 'nl'
           ? 'De dingen die u waarschijnlijk wilt weten voordat we uw AIOS bouwen.'
           : 'The things you probably want to know before we build your AIOS.'
-        : lang === 'nl'
-          ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
-          : 'The things you probably want to know before we start on your app.'
+        : content.slug === 'local-ai'
+          ? lang === 'nl'
+            ? 'De dingen die u waarschijnlijk wilt weten voordat we uw private AI installeren.'
+            : 'The things you probably want to know before we install your private AI.'
+          : lang === 'nl'
+            ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
+            : 'The things you probably want to know before we start on your app.'
     return (
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
