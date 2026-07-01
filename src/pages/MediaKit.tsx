@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { Check, Copy, Download, ImageDown, ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
+import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import {
@@ -23,37 +24,49 @@ import {
   ALL_ASSETS,
 } from '@/data/brand'
 
-/* ── Section frame: mono eyebrow + serif title, anchored for the TOC ── */
+/* ── A frosted "kader", same feel as the home/service cards: a hairline
+   border, near-black surface and a soft light line along the top edge. ── */
+function Kader({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-[22px] border border-line bg-white/[0.02]',
+        className,
+      )}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+      />
+      {children}
+    </div>
+  )
+}
+
+/* ── Section frame: a calm centered serif heading (no mono eyebrow, no
+   numbers), anchored so the table of contents can jump to it. ── */
 function Section({
   id,
-  index,
-  eyebrow,
   title,
   intro,
   children,
 }: {
   id: string
-  index: string
-  eyebrow: string
   title: string
   intro?: string
   children: ReactNode
 }) {
   return (
-    <section id={id} className="scroll-mt-28 border-t border-line py-14 sm:py-20 lg:py-28">
-      <Reveal>
-        <div className="flex items-baseline gap-3">
-          <span className="label-mono text-dim">{index}</span>
-          <span className="label-mono">{eyebrow}</span>
-        </div>
-        <h2 className="mt-5 max-w-2xl font-serif text-[32px] leading-[1.12] tracking-[-0.02em] text-ink sm:text-[40px]">
-          {title}
-        </h2>
-        {intro && <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{intro}</p>}
-      </Reveal>
-      <div className="mt-12">{children}</div>
+    <section id={id} className="scroll-mt-28 py-14 sm:py-20 lg:py-24">
+      <SectionHeading title={title} subtitle={intro} />
+      <div className="mt-12 lg:mt-16">{children}</div>
     </section>
   )
+}
+
+/* ── A small label above a block of content: quiet, readable, sentence case. ── */
+function MiniLabel({ children, className }: { children: ReactNode; className?: string }) {
+  return <p className={cn('mb-4 text-[14px] font-medium text-ink', className)}>{children}</p>
 }
 
 /* ── A small button that flips to a check when its action fires ── */
@@ -87,10 +100,9 @@ function ActionButton({
 
 const COPY = {
   en: {
-    headerEyebrow: 'Brand & Media Kit',
     headerTitle: 'The Nivora brand kit',
     headerIntro:
-      'Everything you need to represent Nivora correctly: logos, colours, type, photography and the prompts behind our images. Built for partners, affiliates and the press. Copy or download anything with one click.',
+      'Everything you need to represent Nivora correctly: logos, colours, type, photography and the prompts behind our images. Copy or download anything with one click.',
     downloadAll: 'Download all assets',
     preparing: 'Preparing…',
     questions: 'Questions? Get in touch',
@@ -104,10 +116,9 @@ const COPY = {
       voice: 'Voice',
     },
     guidelines: {
-      eyebrow: 'For affiliates & partners',
       title: 'What to post, and how.',
       intro:
-        'Sharing Nivora through the affiliate program? Here is what makes a good post, where to share it, and the assets to build from. Stay close to these and everything you make feels on-brand.',
+        'Sharing Nivora through the affiliate program? Here is what makes a good post, where to share it, and the assets to build from.',
       postLabel: 'What to post',
       posts: [
         'Show a real problem, then Box or Voice quietly solving it. A genuine moment beats any feature list.',
@@ -122,13 +133,13 @@ const COPY = {
       affiliateCta: 'Back to the affiliate program',
     },
     logo: {
-      eyebrow: 'Logo & mark',
       title: 'The mark, and how to use it.',
       intro:
         'The arrow rising through the wordmark is our symbol of growth. Give it room, keep it monochrome, and never redraw it.',
       copyImage: 'Copy image',
       copied: 'Copied',
       downloadPng: 'Download PNG',
+      rulesLabel: 'A few things to avoid',
       rules: [
         'Keep clear space around the mark equal to the height of the arrow.',
         'Use white on dark, black on light. Nothing in between.',
@@ -137,23 +148,20 @@ const COPY = {
       ],
     },
     colour: {
-      eyebrow: 'Colour',
       title: 'Near-black, with earth from the landscape.',
       intro:
-        'The interface is built from layered near-blacks and a grayscale text ladder. Colour appears only in small earthy accents, pulled straight from our photography. Click any swatch to copy its value.',
+        'Layered near-blacks and a grayscale text ladder. Colour appears only in small earthy accents, pulled straight from our photography. Click any swatch to copy its value.',
       copy: 'Copy',
       copied: 'Copied',
     },
     type: {
-      eyebrow: 'Typography',
       title: 'A serif that speaks, a sans that works.',
       intro:
-        'Hedvig Letters Serif carries every headline; Inter handles the reading and the interface; Geist Mono labels things. That is the whole system.',
+        'Hedvig Letters Serif carries every headline; Inter handles the reading and the interface; Geist Mono labels the technical bits. That is the whole system.',
       copyName: 'Copy name',
       copied: 'Copied',
     },
     layout: {
-      eyebrow: 'Layout & components',
       title: 'Soft corners, hairline borders, calm motion.',
       intro:
         'Surfaces are framed with white hairline borders at low opacity and rounded consistently. Buttons are full pills; cards round generously.',
@@ -163,15 +171,15 @@ const COPY = {
       secondary: 'Secondary',
       ghost: 'Ghost',
       buttonNote:
-        'Primary is the white pill that fills black from the cursor. Secondary is a hairline dark pill. Both are fully rounded with a 200 ms ease. Keep one primary action per view.',
+        'Primary is the white pill that fills black from the cursor. Secondary is a hairline dark pill. Keep one primary action per view.',
       pillTag: 'Pill · rounded-full',
       cardTag: 'Card · rounded-2xl',
     },
     photography: {
-      eyebrow: 'Photography & image prompts',
       title: 'One landscape, shot many ways.',
       intro:
-        'Every Nivora image looks like it came from the same quiet morning. Follow the principles below, and use the prompts to generate new on-brand photos for blogs and ads, text included.',
+        'Every Nivora image looks like it came from the same quiet morning. Follow the principles below, and use the prompts to generate new on-brand photos.',
+      principlesLabel: 'The principles',
       promptsTitle: 'Image prompts',
       promptsIntro:
         'Paste these into an image model (we use Nano Banana Pro) and swap the capitalised placeholders. They keep every new image on-brand.',
@@ -180,7 +188,6 @@ const COPY = {
       downloadPhoto: 'Download photo',
     },
     voice: {
-      eyebrow: 'Voice & tone',
       do: 'Do',
       dont: 'Don’t',
     },
@@ -192,10 +199,9 @@ const COPY = {
     },
   },
   nl: {
-    headerEyebrow: 'Brand & Media Kit',
     headerTitle: 'De Nivora brand kit',
     headerIntro:
-      'Alles wat u nodig hebt om Nivora correct weer te geven: logo’s, kleuren, typografie, fotografie en de prompts achter onze beelden. Gemaakt voor partners, affiliates en de pers. Kopieer of download alles met één klik.',
+      'Alles wat u nodig hebt om Nivora correct weer te geven: logo’s, kleuren, typografie, fotografie en de prompts achter onze beelden. Kopieer of download alles met één klik.',
     downloadAll: 'Download alle assets',
     preparing: 'Bezig…',
     questions: 'Vragen? Neem contact op',
@@ -209,10 +215,9 @@ const COPY = {
       voice: 'Stem',
     },
     guidelines: {
-      eyebrow: 'Voor affiliates & partners',
       title: 'Wat u post, en hoe.',
       intro:
-        'Deelt u Nivora via het affiliateprogramma? Hier leest u wat een goede post maakt, waar u het deelt, en met welke assets u bouwt. Blijf hier dicht bij en alles wat u maakt voelt on-brand.',
+        'Deelt u Nivora via het affiliateprogramma? Hier leest u wat een goede post maakt, waar u het deelt, en met welke assets u bouwt.',
       postLabel: 'Wat u post',
       posts: [
         'Toon een echt probleem, en dan Box of Voice die het rustig oplost. Een oprecht moment wint van elke opsomming.',
@@ -227,13 +232,13 @@ const COPY = {
       affiliateCta: 'Terug naar het affiliateprogramma',
     },
     logo: {
-      eyebrow: 'Logo & teken',
       title: 'Het teken, en hoe u het gebruikt.',
       intro:
         'De pijl die door het woordmerk omhoogkomt is ons symbool van groei. Geef het ruimte, houd het monochroom, en teken het nooit opnieuw.',
       copyImage: 'Kopieer afbeelding',
       copied: 'Gekopieerd',
       downloadPng: 'Download PNG',
+      rulesLabel: 'Een paar dingen om te vermijden',
       rules: [
         'Houd rondom het teken vrije ruimte gelijk aan de hoogte van de pijl.',
         'Gebruik wit op donker, zwart op licht. Niets daartussen.',
@@ -242,23 +247,20 @@ const COPY = {
       ],
     },
     colour: {
-      eyebrow: 'Kleur',
       title: 'Bijna-zwart, met aarde uit het landschap.',
       intro:
-        'De interface is opgebouwd uit gelaagde bijna-zwarten en een grijswaardenladder voor tekst. Kleur verschijnt alleen in kleine aardse accenten, rechtstreeks uit onze fotografie. Klik op een staal om de waarde te kopiëren.',
+        'Gelaagde bijna-zwarten en een grijswaardenladder voor tekst. Kleur verschijnt alleen in kleine aardse accenten, rechtstreeks uit onze fotografie. Klik op een staal om de waarde te kopiëren.',
       copy: 'Kopieer',
       copied: 'Gekopieerd',
     },
     type: {
-      eyebrow: 'Typografie',
       title: 'Een serif die spreekt, een sans die werkt.',
       intro:
-        'Hedvig Letters Serif draagt elke kop; Inter verzorgt het lezen en de interface; Geist Mono labelt de dingen. Dat is het hele systeem.',
+        'Hedvig Letters Serif draagt elke kop; Inter verzorgt het lezen en de interface; Geist Mono labelt de technische details. Dat is het hele systeem.',
       copyName: 'Kopieer naam',
       copied: 'Gekopieerd',
     },
     layout: {
-      eyebrow: 'Layout & componenten',
       title: 'Zachte hoeken, haarlijnranden, kalme beweging.',
       intro:
         'Oppervlakken zijn omkaderd met witte haarlijnranden met lage opaciteit en consistent afgerond. Knoppen zijn volledige pills; cards ronden royaal af.',
@@ -268,15 +270,15 @@ const COPY = {
       secondary: 'Secundair',
       ghost: 'Ghost',
       buttonNote:
-        'Primair is de witte pill die vanaf de cursor zwart vult. Secundair is een donkere haarlijn-pill. Beide zijn volledig afgerond met een ease van 200 ms. Houd één primaire actie per scherm.',
+        'Primair is de witte pill die vanaf de cursor zwart vult. Secundair is een donkere haarlijn-pill. Houd één primaire actie per scherm.',
       pillTag: 'Pill · rounded-full',
       cardTag: 'Card · rounded-2xl',
     },
     photography: {
-      eyebrow: 'Fotografie & beeldprompts',
       title: 'Eén landschap, op vele manieren geschoten.',
       intro:
-        'Elk Nivora-beeld lijkt van dezelfde stille ochtend te komen. Volg de principes hieronder, en gebruik de prompts om nieuwe on-brand foto’s te genereren voor blogs en advertenties, tekst inbegrepen.',
+        'Elk Nivora-beeld lijkt van dezelfde stille ochtend te komen. Volg de principes hieronder, en gebruik de prompts om nieuwe on-brand foto’s te genereren.',
+      principlesLabel: 'De principes',
       promptsTitle: 'Beeldprompts',
       promptsIntro:
         'Plak deze in een beeldmodel (wij gebruiken Nano Banana Pro) en vervang de placeholders in hoofdletters. Ze houden elk nieuw beeld on-brand.',
@@ -285,7 +287,6 @@ const COPY = {
       downloadPhoto: 'Download foto',
     },
     voice: {
-      eyebrow: 'Stem & toon',
       do: 'Wel',
       dont: 'Niet',
     },
@@ -342,49 +343,44 @@ export function MediaKit() {
       <header className="relative overflow-hidden">
         {/* Soft on-brand landscape, faded into the dark */}
         <div className="pointer-events-none absolute inset-0">
-          <img
-            src="/home/hero-nivora.webp"
-            alt=""
-            className="h-full w-full object-cover opacity-30"
-          />
+          <img src="/home/hero-nivora.webp" alt="" className="h-full w-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-bg/70 via-bg/85 to-bg" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-36 lg:pb-20 lg:pt-44">
+        <div className="relative mx-auto w-full max-w-[1100px] px-6 pb-16 pt-36 text-center lg:pb-20 lg:pt-44">
           <Reveal mode="mount">
-            <span className="label-mono">{t.headerEyebrow}</span>
-            <h1 className="mt-5 max-w-3xl font-serif text-[44px] leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl lg:text-[72px] lg:leading-[1.02]">
+            <h1 className="mx-auto max-w-3xl font-serif text-[44px] leading-[1.04] tracking-[-0.02em] text-ink sm:text-6xl lg:text-[72px] lg:leading-[1.02]">
               {t.headerTitle}
             </h1>
-            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-ink-soft/80">
+            <p className="mx-auto mt-6 max-w-xl text-[16px] leading-relaxed text-ink-soft/80">
               {t.headerIntro}
             </p>
           </Reveal>
 
           <Reveal mode="mount" delay={0.1}>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button size="lg" onClick={onDownloadAll} disabled={downloading}>
                 <Download className="h-4 w-4" />
                 {downloading ? t.preparing : t.downloadAll}
               </Button>
               <Button variant="dark" size="lg" asChild>
-                <a href="#contact">
+                <a href="/#contact">
                   {t.questions} <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
             </div>
           </Reveal>
 
-          {/* Table of contents */}
+          {/* Table of contents — quiet jump links */}
           <Reveal mode="mount" delay={0.18}>
-            <nav className="mt-12 flex flex-wrap gap-2.5 lg:gap-2">
-              {TOC.map((t) => (
+            <nav className="mt-12 flex flex-wrap justify-center gap-2.5 lg:gap-2">
+              {TOC.map((item) => (
                 <a
-                  key={t.id}
-                  href={`#${t.id}`}
+                  key={item.id}
+                  href={`#${item.id}`}
                   className="inline-flex min-h-[44px] items-center rounded-full border border-line bg-white/[0.03] px-4 py-2.5 text-[13px] text-muted transition-colors hover:bg-white/[0.07] hover:text-ink lg:min-h-0 lg:py-2"
                 >
-                  {t.label}
+                  {item.label}
                 </a>
               ))}
             </nav>
@@ -394,20 +390,12 @@ export function MediaKit() {
 
       <div className="mx-auto w-full max-w-[1200px] px-6">
         {/* ── Posting guidelines · for affiliates & partners ── */}
-        <section id="guidelines" className="scroll-mt-28 py-14 sm:py-20 lg:py-24">
-          <Reveal>
-            <span className="label-mono text-olive">{t.guidelines.eyebrow}</span>
-            <h2 className="mt-5 max-w-2xl font-serif text-[32px] leading-[1.12] tracking-[-0.02em] text-ink sm:text-[40px]">
-              {t.guidelines.title}
-            </h2>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{t.guidelines.intro}</p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <Section id="guidelines" title={t.guidelines.title} intro={t.guidelines.intro}>
+          <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
             {/* What to post */}
             <Reveal>
-              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6 lg:p-8">
-                <p className="label-mono mb-5 text-olive">{t.guidelines.postLabel}</p>
+              <Kader className="h-full p-6 lg:p-8">
+                <MiniLabel>{t.guidelines.postLabel}</MiniLabel>
                 <ul className="flex flex-col gap-3.5">
                   {t.guidelines.posts.map((p) => (
                     <li key={p} className="flex gap-3 text-[14.5px] leading-relaxed text-ink-soft/85">
@@ -416,13 +404,13 @@ export function MediaKit() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Kader>
             </Reveal>
 
             {/* Where to post + the assets */}
             <Reveal delay={0.06}>
-              <div className="flex h-full flex-col rounded-2xl border border-line bg-white/[0.02] p-6 lg:p-8">
-                <p className="label-mono mb-3">{t.guidelines.whereLabel}</p>
+              <Kader className="flex h-full flex-col p-6 lg:p-8">
+                <MiniLabel>{t.guidelines.whereLabel}</MiniLabel>
                 <p className="text-[14px] leading-relaxed text-faint">{t.guidelines.whereIntro}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {t.guidelines.platforms.map((p) => (
@@ -445,25 +433,19 @@ export function MediaKit() {
                     </a>
                   </Button>
                 </div>
-              </div>
+              </Kader>
             </Reveal>
           </div>
-        </section>
+        </Section>
 
-        {/* ── 1 · Logo ── */}
-        <Section
-          id="logo"
-          index="01"
-          eyebrow={t.logo.eyebrow}
-          title={t.logo.title}
-          intro={t.logo.intro}
-        >
+        {/* ── Logo ── */}
+        <Section id="logo" title={t.logo.title} intro={t.logo.intro}>
           <div className="grid gap-6 sm:grid-cols-2">
             {logos.map((logo) => {
               const copyKey = `logo-copy-${logo.filename}`
               return (
                 <Reveal key={logo.filename}>
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/[0.02]">
+                  <Kader className="flex h-full flex-col">
                     <div
                       className={cn(
                         'flex h-44 items-center justify-center px-8',
@@ -494,7 +476,7 @@ export function MediaKit() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </Kader>
                 </Reveal>
               )
             })}
@@ -502,25 +484,22 @@ export function MediaKit() {
 
           {/* Misuse rules */}
           <Reveal>
-            <div className="mt-6 grid gap-3 rounded-2xl border border-line bg-white/[0.02] p-6 sm:grid-cols-2">
-              {t.logo.rules.map((rule) => (
-                <p key={rule} className="flex gap-2.5 text-[13px] leading-snug text-muted">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-terracotta" />
-                  {rule}
-                </p>
-              ))}
-            </div>
+            <Kader className="mt-6 p-6 lg:p-8">
+              <MiniLabel>{t.logo.rulesLabel}</MiniLabel>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {t.logo.rules.map((rule) => (
+                  <p key={rule} className="flex gap-2.5 text-[13px] leading-snug text-muted">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-terracotta" />
+                    {rule}
+                  </p>
+                ))}
+              </div>
+            </Kader>
           </Reveal>
         </Section>
 
-        {/* ── 2 · Colour ── */}
-        <Section
-          id="colour"
-          index="02"
-          eyebrow={t.colour.eyebrow}
-          title={t.colour.title}
-          intro={t.colour.intro}
-        >
+        {/* ── Colour ── */}
+        <Section id="colour" title={t.colour.title} intro={t.colour.intro}>
           <div className="flex flex-col gap-10">
             {colorGroups.map((group) => (
               <Reveal key={group.label}>
@@ -579,20 +558,14 @@ export function MediaKit() {
           </div>
         </Section>
 
-        {/* ── 3 · Typography ── */}
-        <Section
-          id="type"
-          index="03"
-          eyebrow={t.type.eyebrow}
-          title={t.type.title}
-          intro={t.type.intro}
-        >
+        {/* ── Typography ── */}
+        <Section id="type" title={t.type.title} intro={t.type.intro}>
           <div className="flex flex-col gap-4">
             {fonts.map((font) => {
               const key = `font-${font.name}`
               return (
                 <Reveal key={font.name}>
-                  <div className="rounded-2xl border border-line bg-white/[0.02] p-6 lg:p-8">
+                  <Kader className="p-6 lg:p-8">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
                         <p className="font-serif text-[22px] text-ink">{font.name}</p>
@@ -615,26 +588,20 @@ export function MediaKit() {
                       {font.specimen}
                     </p>
                     <p className="mt-5 max-w-2xl text-[13px] leading-relaxed text-muted">{font.usage}</p>
-                  </div>
+                  </Kader>
                 </Reveal>
               )
             })}
           </div>
         </Section>
 
-        {/* ── 4 · Layout & components ── */}
-        <Section
-          id="layout"
-          index="04"
-          eyebrow={t.layout.eyebrow}
-          title={t.layout.title}
-          intro={t.layout.intro}
-        >
+        {/* ── Layout & components ── */}
+        <Section id="layout" title={t.layout.title} intro={t.layout.intro}>
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Radius scale */}
             <Reveal>
-              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5">{t.layout.cornerRadius}</p>
+              <Kader className="h-full p-6 lg:p-8">
+                <MiniLabel>{t.layout.cornerRadius}</MiniLabel>
                 <div className="flex flex-wrap items-end gap-4">
                   {radii.map((r) => (
                     <div key={r.name} className="flex flex-col items-center gap-2">
@@ -647,22 +614,20 @@ export function MediaKit() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </Kader>
             </Reveal>
 
             {/* Buttons */}
             <Reveal delay={0.05}>
-              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5">{t.layout.buttons}</p>
+              <Kader className="h-full p-6 lg:p-8">
+                <MiniLabel>{t.layout.buttons}</MiniLabel>
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap items-center gap-3">
                     <Button>{t.layout.primary}</Button>
                     <Button variant="dark">{t.layout.secondary}</Button>
                     <Button variant="ghost">{t.layout.ghost}</Button>
                   </div>
-                  <p className="text-[13px] leading-relaxed text-muted">
-                    {t.layout.buttonNote}
-                  </p>
+                  <p className="text-[13px] leading-relaxed text-muted">{t.layout.buttonNote}</p>
                   <div className="flex flex-wrap gap-3 pt-1">
                     <span className="rounded-full border border-line bg-white/[0.04] px-3 py-1 text-[12px] text-muted">
                       {t.layout.pillTag}
@@ -672,29 +637,26 @@ export function MediaKit() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Kader>
             </Reveal>
           </div>
         </Section>
 
-        {/* ── 5 · Photography ── */}
-        <Section
-          id="photography"
-          index="05"
-          eyebrow={t.photography.eyebrow}
-          title={t.photography.title}
-          intro={t.photography.intro}
-        >
+        {/* ── Photography ── */}
+        <Section id="photography" title={t.photography.title} intro={t.photography.intro}>
           {/* Principles */}
           <Reveal>
-            <div className="grid gap-3 rounded-2xl border border-line bg-white/[0.02] p-6 sm:grid-cols-2">
-              {photoPrinciples.map((p) => (
-                <p key={p} className="flex gap-2.5 text-[13px] leading-snug text-muted">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                  {p}
-                </p>
-              ))}
-            </div>
+            <Kader className="p-6 lg:p-8">
+              <MiniLabel>{t.photography.principlesLabel}</MiniLabel>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {photoPrinciples.map((p) => (
+                  <p key={p} className="flex gap-2.5 text-[13px] leading-snug text-muted">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </Kader>
           </Reveal>
 
           {/* Gallery */}
@@ -736,17 +698,19 @@ export function MediaKit() {
 
           {/* Prompt formulas */}
           <Reveal>
-            <h3 className="mt-14 font-serif text-[22px] text-ink">{t.photography.promptsTitle}</h3>
-            <p className="mt-2 max-w-xl text-[14px] leading-relaxed text-faint">
+            <h3 className="mt-14 text-center font-serif text-[26px] text-ink sm:text-[30px]">
+              {t.photography.promptsTitle}
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-center text-[14px] leading-relaxed text-faint">
               {t.photography.promptsIntro}
             </p>
           </Reveal>
-          <div className="mt-6 flex flex-col gap-4">
+          <div className="mt-8 flex flex-col gap-4">
             {photoPrompts.map((p) => {
               const key = `prompt-${p.label}`
               return (
                 <Reveal key={p.label}>
-                  <div className="rounded-2xl border border-line bg-white/[0.02] p-6">
+                  <Kader className="p-6 lg:p-8">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <p className="text-[15px] font-semibold text-ink">{p.label}</p>
@@ -763,24 +727,22 @@ export function MediaKit() {
                     <p className="mt-4 rounded-xl border border-line bg-black/40 p-4 font-mono text-[12.5px] leading-relaxed text-muted">
                       {p.prompt}
                     </p>
-                  </div>
+                  </Kader>
                 </Reveal>
               )
             })}
           </div>
         </Section>
 
-        {/* ── 6 · Voice ── */}
-        <Section
-          id="voice"
-          index="06"
-          eyebrow={t.voice.eyebrow}
-          title={voice.essence}
-        >
+        {/* ── Voice ── */}
+        <Section id="voice" title={voice.essence}>
           <div className="grid gap-6 md:grid-cols-2">
             <Reveal>
-              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5 text-olive">{t.voice.do}</p>
+              <Kader className="h-full p-6 lg:p-8">
+                <div className="mb-5 flex items-center gap-2 text-[15px] font-medium text-olive">
+                  <span className="h-1.5 w-1.5 rounded-full bg-olive" />
+                  {t.voice.do}
+                </div>
                 <ul className="flex flex-col gap-3">
                   {voice.dos.map((d) => (
                     <li key={d} className="flex gap-2.5 text-[14px] leading-snug text-ink-soft/85">
@@ -789,11 +751,14 @@ export function MediaKit() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Kader>
             </Reveal>
             <Reveal delay={0.05}>
-              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6">
-                <p className="label-mono mb-5 text-terracotta">{t.voice.dont}</p>
+              <Kader className="h-full p-6 lg:p-8">
+                <div className="mb-5 flex items-center gap-2 text-[15px] font-medium text-terracotta">
+                  <span className="h-1.5 w-1.5 rounded-full bg-terracotta" />
+                  {t.voice.dont}
+                </div>
                 <ul className="flex flex-col gap-3">
                   {voice.donts.map((d) => (
                     <li key={d} className="flex gap-2.5 text-[14px] leading-snug text-muted">
@@ -802,20 +767,15 @@ export function MediaKit() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Kader>
             </Reveal>
           </div>
         </Section>
 
         {/* ── Closing CTA ── */}
-        <section className="border-t border-line py-14 text-center sm:py-20 lg:py-28">
-          <Reveal>
-            <h2 className="mx-auto max-w-xl font-serif text-[30px] leading-[1.15] tracking-[-0.02em] text-ink sm:text-[40px]">
-              {t.closing.title}
-            </h2>
-            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-faint">
-              {t.closing.intro}
-            </p>
+        <section className="py-14 text-center sm:py-20 lg:py-28">
+          <SectionHeading title={t.closing.title} subtitle={t.closing.intro} />
+          <Reveal delay={0.08}>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button size="lg" onClick={onDownloadAll} disabled={downloading}>
                 <Download className="h-4 w-4" />
