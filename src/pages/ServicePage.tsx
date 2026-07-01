@@ -1408,19 +1408,27 @@ const AIOS_WORK: Record<
   },
 }
 
-const WORK_PHOTOS = ['/services/work-klantgericht.webp', '/services/work-intern.webp']
+const WORK_PHOTOS = ['/services/work-klantgericht.gif', '/services/work-intern.gif']
 const WORK_ICONS: string[][] = [
   ['/services/aios-icons/sales.png', '/services/aios-icons/marketing.png', '/services/aios-icons/support.png', '/services/aios-icons/communication.png'],
   ['/services/aios-icons/finance.png', '/services/aios-icons/operations.png', '/services/aios-icons/hr.png', '/services/aios-icons/planning.png'],
 ]
 
-/** Where the four glossy icon badges float on the photo — varied sizes, more spread
- *  out, so they really float like a calm constellation. */
-const WORK_BADGES = [
-  { left: '18%', top: '23%', size: 74 },
-  { left: '74%', top: '18%', size: 56 },
-  { left: '30%', top: '74%', size: 62 },
-  { left: '80%', top: '64%', size: 84 },
+/** Where the four glossy icon badges float on each gif — a different, varied spread
+ *  per column so the two cards never look the same. */
+const WORK_BADGES: { left: string; top: string; size: number }[][] = [
+  [
+    { left: '17%', top: '22%', size: 74 },
+    { left: '73%', top: '17%', size: 56 },
+    { left: '31%', top: '75%', size: 62 },
+    { left: '81%', top: '65%', size: 84 },
+  ],
+  [
+    { left: '28%', top: '18%', size: 60 },
+    { left: '78%', top: '32%', size: 82 },
+    { left: '18%', top: '63%', size: 80 },
+    { left: '68%', top: '74%', size: 54 },
+  ],
 ]
 
 /** One department row: a clean dot, the name and a short line. */
@@ -1444,11 +1452,13 @@ function WorkColumn({
   image,
   items,
   icons,
+  badges,
 }: {
   heading: string
   image: string
   items: { label: string; body: string }[]
   icons: string[]
+  badges: { left: string; top: string; size: number }[]
 }) {
   return (
     <Reveal>
@@ -1463,14 +1473,14 @@ function WorkColumn({
           {/* the department icons, floating on the photo as glossy badges */}
           <div className="pointer-events-none absolute inset-0">
             {icons.map((icon, i) => {
-              const b = WORK_BADGES[i]
+              const b = badges[i]
               return (
                 <div
                   key={i}
                   className="absolute"
                   style={{ left: b.left, top: b.top, marginLeft: -b.size / 2, marginTop: -b.size / 2 }}
                 >
-                  <Drift radius={8} duration={24 + (i % 4) * 5} phase={i * 90}>
+                  <Drift radius={13} duration={20 + (i % 4) * 4} phase={i * 90}>
                     <div
                       className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
                       style={{ width: b.size, height: b.size }}
@@ -1516,7 +1526,7 @@ function AiosWorkGrid() {
 
       <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
         {data.columns.map((col, ci) => (
-          <WorkColumn key={col.heading} heading={col.heading} image={WORK_PHOTOS[ci]} items={col.items} icons={WORK_ICONS[ci]} />
+          <WorkColumn key={col.heading} heading={col.heading} image={WORK_PHOTOS[ci]} items={col.items} icons={WORK_ICONS[ci]} badges={WORK_BADGES[ci]} />
         ))}
       </div>
 
