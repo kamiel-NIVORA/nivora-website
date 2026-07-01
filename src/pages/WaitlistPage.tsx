@@ -1,40 +1,23 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, Mail, ArrowRight, Check, Loader2, Linkedin, Instagram, Facebook, Globe } from 'lucide-react'
+import { ArrowRight, Check, Loader2 } from 'lucide-react'
 import { subscribe } from '@/lib/newsletter'
+import { SOCIAL_LINKS } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 /** Map the ?product= query to a friendly label. */
 const PRODUCT_LABELS: Record<string, string> = { box: 'Box', voice: 'Voice' }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-/* Nivora's real socials — same set + order as the booking page footer. */
-const SOCIALS = [
-  { href: 'https://www.linkedin.com/company/116050071', Icon: Linkedin, label: 'LinkedIn' },
-  { href: 'https://www.instagram.com/nivoraworks/', Icon: Instagram, label: 'Instagram' },
-  { href: 'https://www.facebook.com/profile.php?id=61588828395357', Icon: Facebook, label: 'Facebook' },
-  { href: 'https://nivoraworks.com', Icon: Globe, label: 'Website' },
-]
-
-/* The left panel's soft white crescent — the booking page builds it from a
-   luminosity-blended image; here it is recreated with two radial glows. */
-const ARC_MAIN = 'radial-gradient(circle at 55% 41%, transparent 48%, rgba(255,255,255,0.22) 57%, rgba(255,255,255,0.04) 64%, transparent 72%)'
-const ARC_FILL = 'radial-gradient(circle at 66% 52%, rgba(255,255,255,0.10), transparent 42%)'
-
 const COPY = {
   en: {
-    pill: 'Coming soon',
-    leftTitle: 'Two apps, one calm place.',
-    leftDesc: "Sign up and we'll reach out the moment Box and Voice go live. Nothing else.",
-    eyebrow: 'Nivora / Waitlist',
     thingGeneric: 'Box and Voice',
-    titleGeneric: 'Be first to use Box or Voice',
-    titleProduct: (p: string) => `Be first to use ${p}`,
-    nameLabel: 'Your name',
+    titleGeneric: 'Be first with Box and Voice.',
+    titleProduct: (p: string) => `Be first with ${p}.`,
+    subtitle: "Leave your details and we'll reach out the moment they go live. Nothing else.",
     namePh: 'First + last name',
     nameHint: "We'll only reach out when they go live.",
-    emailLabel: 'What is your email?',
     emailPh: 'you@company.com',
     emailHint: 'One message at launch. No newsletters.',
     errName: 'Please enter your full name.',
@@ -49,17 +32,12 @@ const COPY = {
     caption: 'Nivora.Waitlist',
   },
   nl: {
-    pill: 'Binnenkort beschikbaar',
-    leftTitle: 'Twee apps, één rustige plek.',
-    leftDesc: 'Schrijf u in en we laten van ons horen zodra Box en Voice live gaan. Niets anders.',
-    eyebrow: 'Nivora / Wachtlijst',
     thingGeneric: 'Box en Voice',
-    titleGeneric: 'Wees de eerste die Box of Voice gebruikt',
-    titleProduct: (p: string) => `Wees de eerste die ${p} gebruikt`,
-    nameLabel: 'Jouw naam',
+    titleGeneric: 'Wees de eerste met Box en Voice.',
+    titleProduct: (p: string) => `Wees de eerste met ${p}.`,
+    subtitle: 'Laat uw gegevens achter en we laten van ons horen zodra ze live gaan. Niets anders.',
     namePh: 'Voornaam + achternaam',
     nameHint: 'We laten van ons horen zodra ze live gaan.',
-    emailLabel: 'Wat is uw e-mailadres?',
     emailPh: 'naam@bedrijf.be',
     emailHint: 'Eén bericht bij de lancering. Geen nieuwsbrieven.',
     errName: 'Vul alsjeblieft uw volledige naam in.',
@@ -154,8 +132,8 @@ export function WaitlistPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(2,2,2,0.72)_100%)]" />
       </div>
 
-      <main className="relative z-10 w-full max-w-4xl">
-        <div className="relative min-h-[540px] w-full md:h-[600px]">
+      <main className="relative z-10 w-full max-w-2xl">
+        <div className="relative min-h-[520px] w-full md:h-[560px]">
           {/* Progress glow border */}
           <div aria-hidden className="absolute -inset-[2px] z-0 rounded-[26px]">
             <svg className="h-full w-full overflow-visible">
@@ -177,77 +155,48 @@ export function WaitlistPage() {
             </svg>
           </div>
 
-          {/* MAIN CARD */}
-          <div className="relative z-10 flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/5 bg-[#0a0a0a] shadow-2xl md:flex-row">
-            {/* LEFT PANEL — visual + trust (hidden on success, like booking) */}
-            <motion.div
-              className="relative hidden h-[300px] overflow-hidden bg-[#0c0c0d] md:block md:h-full md:w-5/12"
-              animate={done ? { width: 0, opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
-            >
-              <div aria-hidden className="absolute inset-0" style={{ background: ARC_MAIN, filter: 'blur(7px)' }} />
-              <div aria-hidden className="absolute inset-0" style={{ background: ARC_FILL, filter: 'blur(10px)' }} />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/45 to-transparent" />
-            </motion.div>
-
-            {/* RIGHT PANEL */}
-            <div className="relative flex h-full flex-1 flex-col rounded-r-3xl border-l border-white/5 bg-[#0a0a0a]">
-              {!done && (
-                <div className="absolute right-5 top-5 z-20 md:right-6 md:top-6">
-                  <img src="/brand/nivora-mark.webp" alt="" className="h-8 w-8 object-contain md:h-9 md:w-9" />
-                </div>
-              )}
-
-              {done ? (
-                /* SUCCESS — replaces the right panel */
+          {/* MAIN CARD — single centered column */}
+          <div className="relative z-10 flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/5 bg-[#0a0a0a] shadow-2xl">
+            {done ? (
+              /* SUCCESS */
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex flex-1 flex-col items-center justify-center px-8 py-14 text-center md:px-14"
+              >
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="flex flex-1 flex-col"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                  className="mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5"
                 >
-                  <div className="flex flex-1 flex-col items-center justify-center px-8 pb-8 text-center md:px-14">
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
-                      className="mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5"
-                    >
-                      <Check size={24} className="text-white" strokeWidth={2.5} />
-                    </motion.div>
-                    <h2 className="mb-1.5 font-sans text-xl font-semibold text-white">{already ? t.doneAlready : t.doneNew}</h2>
-                    <p className="mb-8 max-w-xs text-xs text-neutral-500">
-                      {already ? (
-                        t.bodyAlready(thing)
-                      ) : emailSent ? (
-                        <>
-                          {t.bodyEmailPre}
-                          <span className="text-neutral-300">{email.trim()}</span>
-                          {t.bodyEmailPost}
-                        </>
-                      ) : (
-                        t.bodyThanks(name.trim().split(' ')[0], thing)
-                      )}
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-center border-t border-white/5 px-8 pb-6 pt-4 md:px-14">
-                    <img src="/brand/nivora-logo.png" alt="Nivora" className="h-6 opacity-30" />
-                  </div>
+                  <Check size={24} className="text-white" strokeWidth={2.5} />
                 </motion.div>
-              ) : (
-                /* WAITLIST FORM — one step per screen */
-                <div className="flex min-h-0 flex-1 flex-col">
-                  {/* Header */}
-                  <div className="shrink-0 px-8 pb-6 pt-8 md:px-14 md:pt-14">
-                    <div className="mb-8 flex justify-center md:hidden">
-                      <img src="/brand/nivora-logo.png" alt="Nivora" className="h-6 w-auto object-contain opacity-80" />
-                    </div>
-                    <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500">{t.eyebrow}</p>
-                    <h2 className="font-sans text-[28px] font-medium leading-tight tracking-tight text-white md:text-3xl">{heading}</h2>
-                  </div>
+                <h2 className="mb-2 font-serif text-2xl text-white md:text-[28px]">{already ? t.doneAlready : t.doneNew}</h2>
+                <p className="max-w-sm text-sm text-neutral-400">
+                  {already ? (
+                    t.bodyAlready(thing)
+                  ) : emailSent ? (
+                    <>
+                      {t.bodyEmailPre}
+                      <span className="text-neutral-200">{email.trim()}</span>
+                      {t.bodyEmailPost}
+                    </>
+                  ) : (
+                    t.bodyThanks(name.trim().split(' ')[0], thing)
+                  )}
+                </p>
+              </motion.div>
+            ) : (
+              /* WAITLIST FORM — centered single column */
+              <>
+                <div className="flex flex-1 flex-col items-center justify-center px-8 py-12 text-center md:px-14">
+                  <img src="/brand/nivora-mark.webp" alt="Nivora" className="mb-8 h-9 w-auto object-contain opacity-90" />
+                  <h2 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h2>
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{t.subtitle}</p>
 
-                  {/* Body — only the active step */}
-                  <div className="min-h-0 flex-1 overflow-y-auto px-8 [scrollbar-width:none] md:px-14 [&::-webkit-scrollbar]:hidden">
+                  <div className="mt-8 w-full max-w-md">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={step}
@@ -255,100 +204,78 @@ export function WaitlistPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                        className="pb-10 pt-1"
                       >
-                        {step === 'name' ? (
-                          <div className="flex flex-col gap-3">
-                            <label className="flex items-center gap-2 text-sm font-medium text-neutral-300">
-                              <User size={14} className="text-neutral-500" />
-                              {t.nameLabel}
-                            </label>
-                            <div className="relative">
-                              <input
-                                ref={inputRef}
-                                autoFocus
-                                type="text"
-                                value={name}
-                                onChange={(e) => {
-                                  setName(e.target.value)
-                                  if (error) setError('')
-                                }}
-                                onKeyDown={keyGo(nameNext)}
-                                placeholder={t.namePh}
-                                autoComplete="name"
-                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
-                              />
-                              <button
-                                type="button"
-                                onClick={nameNext}
-                                aria-label={t.nameLabel}
-                                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20 ${name.trim().length > 1 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-                              >
-                                <ArrowRight size={16} />
-                              </button>
-                            </div>
-                            {error && <p className="pl-1 text-xs text-red-400">{error}</p>}
-                            <p className="pl-1 text-[10px] text-neutral-600">{t.nameHint}</p>
-                          </div>
+                        <div className="relative">
+                          {step === 'name' ? (
+                            <input
+                              ref={inputRef}
+                              autoFocus
+                              type="text"
+                              value={name}
+                              onChange={(e) => {
+                                setName(e.target.value)
+                                if (error) setError('')
+                              }}
+                              onKeyDown={keyGo(nameNext)}
+                              placeholder={t.namePh}
+                              autoComplete="name"
+                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                            />
+                          ) : (
+                            <input
+                              ref={inputRef}
+                              autoFocus
+                              type="email"
+                              value={email}
+                              onChange={(e) => {
+                                setEmail(e.target.value)
+                                if (error) setError('')
+                              }}
+                              onKeyDown={keyGo(emailNext)}
+                              placeholder={t.emailPh}
+                              autoComplete="email"
+                              className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-center text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                            />
+                          )}
+                          <button
+                            type="button"
+                            onClick={step === 'name' ? nameNext : emailNext}
+                            disabled={loading}
+                            aria-label={step === 'name' ? t.namePh : t.emailPh}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20"
+                          >
+                            {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                          </button>
+                        </div>
+                        {error ? (
+                          <p className="mt-3 text-xs text-red-400">{error}</p>
                         ) : (
-                          <div className="flex flex-col gap-3">
-                            <label className="flex items-center gap-2 text-sm font-medium text-neutral-300">
-                              <Mail size={14} className="text-neutral-500" />
-                              {t.emailLabel}
-                            </label>
-                            <div className="relative">
-                              <input
-                                ref={inputRef}
-                                autoFocus
-                                type="email"
-                                value={email}
-                                onChange={(e) => {
-                                  setEmail(e.target.value)
-                                  if (error) setError('')
-                                }}
-                                onKeyDown={keyGo(emailNext)}
-                                placeholder={t.emailPh}
-                                autoComplete="email"
-                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
-                              />
-                              <button
-                                type="button"
-                                onClick={emailNext}
-                                disabled={loading}
-                                aria-label={t.emailLabel}
-                                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20 ${email.trim().length > 5 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-                              >
-                                {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
-                              </button>
-                            </div>
-                            {error && <p className="pl-1 text-xs text-red-400">{error}</p>}
-                            <p className="pl-1 text-[10px] text-neutral-600">{t.emailHint}</p>
-                          </div>
+                          <p className="mt-3 text-[11px] text-neutral-600">{step === 'name' ? t.nameHint : t.emailHint}</p>
                         )}
                       </motion.div>
                     </AnimatePresence>
                   </div>
-
-                  {/* Footer — social icons, like the booking page */}
-                  <div className="flex shrink-0 items-center justify-center border-t border-white/5 px-8 py-4 md:justify-end md:px-14">
-                    <div className="flex items-center gap-4">
-                      {SOCIALS.map(({ href, Icon, label }) => (
-                        <a
-                          key={label}
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={label}
-                          className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-neutral-800 text-neutral-300 shadow-lg transition-all duration-300 hover:bg-white hover:text-black"
-                        >
-                          <Icon size={22} strokeWidth={1.6} />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
                 </div>
-              )}
-            </div>
+
+                {/* Footer — plain social icons, centered, like the site footer */}
+                <div className="flex shrink-0 items-center justify-center gap-5 border-t border-white/5 py-5">
+                  {SOCIAL_LINKS.map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="text-white/40 transition-colors hover:text-white/80"
+                    >
+                      <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="currentColor">
+                        <path d={s.path} />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
