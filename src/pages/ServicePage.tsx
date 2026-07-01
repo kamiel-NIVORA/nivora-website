@@ -29,7 +29,7 @@ import {
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
-import { RoiCalculator } from '@/components/ui/RoiCalculator'
+import { LampBeam, RoiCalculator } from '@/components/ui/RoiCalculator'
 import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { ProcessTimeline } from '@/components/ui/ProcessTimeline'
 import { useContactModal } from '@/components/contact/ContactModal'
@@ -2249,14 +2249,16 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
   if (!config) return null // AI Consulting sells the plan, not hours saved
 
   return (
-    <section className="relative w-full border-y border-line py-16 sm:py-20 lg:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: `radial-gradient(70% 60% at 50% 0%, ${meta.accent}0d, transparent 70%)` }}
-      />
-      <div className="relative mx-auto w-full max-w-[1200px] px-6">
-        <RoiCalculator title={config.title} subtitle={config.subtitle} />
+    <section className="relative w-full overflow-hidden border-y border-line py-14 sm:py-16 lg:py-20">
+      <LampBeam />
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6">
+        <div className="mx-auto max-w-2xl pt-8 text-center sm:pt-10">
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {config.title}
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{config.subtitle}</p>
+        </div>
+        <RoiCalculator />
       </div>
     </section>
   )
