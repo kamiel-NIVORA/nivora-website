@@ -4,7 +4,6 @@ import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { ProcessTimeline, type ProcessStep } from '@/components/ui/ProcessTimeline'
-import { ScrollStatement } from '@/components/ui/ScrollStatement'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
@@ -17,7 +16,6 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 /** Scenic photos, on the same quiet-morning palette as the service pages. */
 const HERO_IMG = '/about/hero.jpg'
-const MISSION_IMG = '/backgrounds/bg-peak-mono.webp'
 const CTA_IMG = '/home/cta-landscape.webp'
 
 /** Company LinkedIn (kept in sync with the footer/contact data). */
@@ -37,11 +35,9 @@ const COPY = {
       "We're Nivora, a small studio in Brugge. We care about technology that feels like it was always meant to be there, quiet, useful, and truly yours. And we make our own products too. Box and Voice are on the way.",
     bookCall: 'Book a call',
     getInTouch: 'Get in touch',
-    missionStatement:
-      'Most companies get sold AI. Hardly anyone gets shown what it should actually do for them.',
     promisesEyebrow: 'Why we exist',
     promisesLead:
-      "That gap is exactly why we started Nivora. We don't lead with a tool, we lead with a conversation: how does your business really run, and where does it hurt? Then we build the software and AI that fits. The only test that matters to us is simple. Does it make the day genuinely easier?",
+      "We didn't start Nivora to sell AI. We started it to build the software and AI that actually fits a business, around the way it already runs, and where it hurts. We don't lead with a tool, we lead with a conversation. And the only test that matters to us is a simple one. Does it make the day genuinely easier?",
     promises: [
       {
         title: 'We build around you',
@@ -102,11 +98,9 @@ const COPY = {
       'Wij zijn Nivora, een kleine studio in Brugge. We geven om technologie die aanvoelt alsof ze er altijd al thuishoorde, stil, bruikbaar en echt van u. En we maken ook onze eigen producten. Box en Voice zijn onderweg.',
     bookCall: 'Boek een gesprek',
     getInTouch: 'Neem contact op',
-    missionStatement:
-      'De meeste bedrijven krijgen AI verkocht. Bijna niemand krijgt te zien wat het echt voor hen zou moeten doen.',
     promisesEyebrow: 'Waarom we bestaan',
     promisesLead:
-      'Net dat gat is waarom we Nivora startten. We beginnen niet met een tool, maar met een gesprek: hoe draait uw bedrijf echt, en waar doet het pijn? Daarna bouwen we de software en AI die past. De enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
+      'We zijn Nivora niet begonnen om AI te verkopen. We begonnen het om de software en AI te bouwen die echt bij een bedrijf past, rond hoe het al draait en waar het pijn doet. We beginnen niet met een tool, maar met een gesprek. En de enige test die voor ons telt is eenvoudig. Maakt het de dag echt makkelijker?',
     promises: [
       {
         title: 'We bouwen rond u',
@@ -230,7 +224,6 @@ export function About() {
       style={{ ['--accent' as string]: ACCENT } as CSSProperties}
     >
       <Hero />
-      <ScrollStatement image={MISSION_IMG} copy={t.missionStatement} accent={ACCENT} />
       <Promises />
       <HowWeWork />
       <Founder />
