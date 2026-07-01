@@ -1235,7 +1235,7 @@ const AIOS_WORK: Record<
   }
 > = {
   en: {
-    title: 'The work you never see, now simply gets done',
+    title: "The work you'd rather avoid, now simply gets done",
     subtitle:
       'The recurring work that eats time every day, customer-facing and internal. The system reviews it or has already done it, you only sign off.',
     columns: [
@@ -1264,7 +1264,7 @@ const AIOS_WORK: Record<
     },
   },
   nl: {
-    title: 'Het werk dat u nooit ziet, wordt voortaan gewoon gedaan',
+    title: 'Het werk dat u ontziet, wordt voortaan gewoon gedaan',
     subtitle:
       'Het terugkerende werk dat elke dag tijd kost, klantgericht en intern. Het systeem kijkt het na of heeft het al gedaan, u kijkt het enkel nog na.',
     columns: [
