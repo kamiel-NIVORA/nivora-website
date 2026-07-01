@@ -10,9 +10,9 @@
  * The Supabase anon key is public by design; row-level security limits anon
  * reads to published posts only.
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getPosts, type Post, type PostBlock } from '@/data/posts'
-import { useLang } from '@/i18n'
+import { useLang, type Lang } from '@/i18n'
 
 const SUPABASE_URL =
   (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? 'https://agpjxjujzjzasgizpphz.supabase.co'
@@ -29,6 +29,13 @@ type Row = {
   image: string | null
   excerpt: string | null
   body: unknown
+  /** Dutch variants, authored alongside the base (English) fields in the AIOS.
+   *  When the site language is NL these win; missing ones fall back to English,
+   *  so a half-translated post still renders. */
+  title_nl: string | null
+  excerpt_nl: string | null
+  body_nl: unknown
+  category_nl: string | null
   image_position: string | null
   cover_label: string | null
   cover_occlude: boolean | null
@@ -66,17 +73,19 @@ function fixBlock(block: PostBlock): PostBlock {
     : block
 }
 
-function mapRow(r: Row): Post {
+function mapRow(r: Row, lang: Lang): Post {
   const coverIcons = (r.cover_icons as Post['coverIcons']) ?? undefined
+  const nl = lang === 'nl'
+  const body = nl && Array.isArray(r.body_nl) && r.body_nl.length ? r.body_nl : r.body
   return {
     slug: r.slug,
-    title: r.title,
-    category: r.category,
+    title: (nl && r.title_nl) || r.title,
+    category: (nl && r.category_nl) || r.category,
     author: r.author,
     date: r.date ?? '',
     image: fixAssetPath(r.image ?? ''),
-    excerpt: r.excerpt ?? '',
-    body: Array.isArray(r.body) ? (r.body as Post['body']).map(fixBlock) : [],
+    excerpt: (nl && r.excerpt_nl) || r.excerpt || '',
+    body: Array.isArray(body) ? (body as Post['body']).map(fixBlock) : [],
     imagePosition: r.image_position ?? undefined,
     coverLabel: r.cover_label ?? undefined,
     coverOcclude: r.cover_occlude ?? undefined,
@@ -87,37 +96,39 @@ function mapRow(r: Row): Post {
   }
 }
 
-export async function fetchPublishedPosts(): Promise<Post[]> {
+async function fetchPublishedRows(): Promise<Row[]> {
   const url = `${SUPABASE_URL}/rest/v1/blog_posts?status=eq.published&select=*&order=published_at.desc.nullslast`
   const res = await fetch(url, {
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
   })
   if (!res.ok) throw new Error(`blog fetch failed: ${res.status}`)
   const rows = (await res.json()) as Row[]
-  return rows.filter((r) => r.slug && r.title).map(mapRow)
+  return rows.filter((r) => r.slug && r.title)
+}
+
+export async function fetchPublishedPosts(lang: Lang = 'en'): Promise<Post[]> {
+  return (await fetchPublishedRows()).map((r) => mapRow(r, lang))
 }
 
 /** Posts for the blog. Starts with the bundled set for an instant render, then
  *  swaps in the live published posts from Supabase. `loaded` is true once the
  *  network call has settled (so a single-post page knows when to show 404).
- *  A module cache keeps navigation flicker-free. */
-let cache: Post[] | null = null
+ *  A module cache keeps navigation flicker-free. The raw rows are cached and
+ *  mapped per language, so switching NL/EN re-renders the live posts too. */
+let cache: Row[] | null = null
 
 export function usePosts(): { posts: Post[]; loaded: boolean } {
   const { lang } = useLang()
-  // Live posts from Supabase (language-neutral DB content). Until they settle we
-  // render the bundled set in the active language, so a language switch is
-  // reflected instantly on the seeded posts.
-  const [live, setLive] = useState<Post[] | null>(cache)
+  const [rows, setRows] = useState<Row[] | null>(cache)
   const [loaded, setLoaded] = useState(cache !== null)
   useEffect(() => {
     if (cache !== null) return
     let alive = true
-    fetchPublishedPosts()
-      .then((p) => {
-        if (alive && p.length) {
-          cache = p
-          setLive(p)
+    fetchPublishedRows()
+      .then((r) => {
+        if (alive && r.length) {
+          cache = r
+          setRows(r)
         }
       })
       .catch(() => {})
@@ -128,7 +139,11 @@ export function usePosts(): { posts: Post[]; loaded: boolean } {
       alive = false
     }
   }, [])
-  return { posts: live ?? getPosts(lang), loaded }
+  const posts = useMemo(
+    () => (rows ? rows.map((r) => mapRow(r, lang)) : getPosts(lang)),
+    [rows, lang],
+  )
+  return { posts, loaded }
 }
 
 /** A single post by slug, plus whether the live list has settled. */
