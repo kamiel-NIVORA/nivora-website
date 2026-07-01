@@ -1,106 +1,79 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, ArrowLeft, Check, Loader2 } from 'lucide-react'
+import { User, Mail, ArrowRight, Check, Loader2, Linkedin, Instagram, Facebook, Globe } from 'lucide-react'
 import { subscribe } from '@/lib/newsletter'
 import { useLang } from '@/i18n'
 
 /** Map the ?product= query to a friendly label. */
-const PRODUCT_LABELS: Record<string, string> = {
-  box: 'Box',
-  voice: 'Voice',
-}
-
+const PRODUCT_LABELS: Record<string, string> = { box: 'Box', voice: 'Voice' }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const STEPS = ['name', 'email'] as const
-type Step = (typeof STEPS)[number]
+/* Nivora's real socials — same set + order as the booking page footer. */
+const SOCIALS = [
+  { href: 'https://www.linkedin.com/company/116050071', Icon: Linkedin, label: 'LinkedIn' },
+  { href: 'https://www.instagram.com/nivoraworks/', Icon: Instagram, label: 'Instagram' },
+  { href: 'https://www.facebook.com/profile.php?id=61588828395357', Icon: Facebook, label: 'Facebook' },
+  { href: 'https://nivoraworks.com', Icon: Globe, label: 'Website' },
+]
 
-const ease = [0.22, 1, 0.36, 1] as const
-
-/* Slide variants for the active field. `custom` is the direction (+1 forward,
-   -1 back); AnimatePresence resolves the exiting field against the current
-   direction, so a "Back" step exits to the right, a "Continue" to the left. */
-const stepVariants = {
-  enter: (d: number) => ({ opacity: 0, x: d * 30 }),
-  center: { opacity: 1, x: 0 },
-  exit: (d: number) => ({ opacity: 0, x: d * -30 }),
-}
+/* The left panel's soft white crescent — the booking page builds it from a
+   luminosity-blended image; here it is recreated with two radial glows. */
+const ARC_MAIN = 'radial-gradient(circle at 55% 41%, transparent 48%, rgba(255,255,255,0.22) 57%, rgba(255,255,255,0.04) 64%, transparent 72%)'
+const ARC_FILL = 'radial-gradient(circle at 66% 52%, rgba(255,255,255,0.10), transparent 42%)'
 
 const COPY = {
   en: {
+    pill: 'Coming soon',
+    leftTitle: 'Two apps, one calm place.',
+    leftDesc: "Sign up and we'll reach out the moment Box and Voice go live. Nothing else.",
     eyebrow: 'Nivora / Waitlist',
-    leftCaption: 'Two apps, one calm place to be the first to step in.',
     thingGeneric: 'Box and Voice',
-    titleProduct: (p: string) => `Be first to use ${p}`,
     titleGeneric: 'Be first to use Box or Voice',
-    subProduct: (p: string) => `Leave your name and email. We'll reach out the moment ${p} goes live.`,
-    subGeneric: "Leave your name and email. We'll reach out the moment they go live.",
-    stepLabel: (n: number, total: number) => `Step ${n} / ${total}`,
-    fields: {
-      name: { label: "What's your name?", ph: 'Your name' },
-      email: { label: 'Your business email', ph: 'you@company.com' },
-    } as Record<Step, { label: string; ph: string }>,
-    hintContinue: 'Press Enter to continue',
-    hintFinish: 'Press Enter to finish',
-    back: 'Back',
-    cont: 'Continue',
-    submit: 'Get notified',
-    submitting: 'One sec',
-    errName: 'Please add your name.',
+    titleProduct: (p: string) => `Be first to use ${p}`,
+    nameLabel: 'Your name',
+    namePh: 'First + last name',
+    nameHint: "We'll only reach out when they go live.",
+    emailLabel: 'What is your email?',
+    emailPh: 'you@company.com',
+    emailHint: 'One message at launch. No newsletters.',
+    errName: 'Please enter your full name.',
     errEmail: 'Please enter a valid email address.',
     errGeneric: 'Something went wrong. Please try again.',
-    doneAlready: "You're already on the list",
     doneNew: "You're on the list",
+    doneAlready: "You're already on the list",
+    bodyThanks: (fn: string, thing: string) => `Thanks${fn ? `, ${fn}` : ''}. We'll reach out the second ${thing} goes live.`,
     bodyAlready: (thing: string) => `We already have you down. We'll let you know the moment ${thing} drops.`,
     bodyEmailPre: 'Check ',
     bodyEmailPost: ' for a confirmation link, click it once and you are set.',
-    bodyThanks: (firstName: string, thing: string) =>
-      `Thanks${firstName ? `, ${firstName}` : ''}. We'll reach out the second ${thing} goes live.`,
+    caption: 'Nivora.Waitlist',
   },
   nl: {
+    pill: 'Binnenkort beschikbaar',
+    leftTitle: 'Twee apps, één rustige plek.',
+    leftDesc: 'Schrijf u in en we laten van ons horen zodra Box en Voice live gaan. Niets anders.',
     eyebrow: 'Nivora / Wachtlijst',
-    leftCaption: 'Twee apps, één rustige plek om als eerste binnen te stappen.',
     thingGeneric: 'Box en Voice',
-    titleProduct: (p: string) => `Wees de eerste die ${p} gebruikt`,
     titleGeneric: 'Wees de eerste die Box of Voice gebruikt',
-    subProduct: (p: string) => `Laat uw naam en e-mail achter. We laten van ons horen zodra ${p} live gaat.`,
-    subGeneric: 'Laat uw naam en e-mail achter. We laten van ons horen zodra ze live gaan.',
-    stepLabel: (n: number, total: number) => `Stap ${n} / ${total}`,
-    fields: {
-      name: { label: 'Wat is uw naam?', ph: 'Uw naam' },
-      email: { label: 'Uw bedrijfse-mail', ph: 'u@bedrijf.com' },
-    } as Record<Step, { label: string; ph: string }>,
-    hintContinue: 'Druk op Enter om verder te gaan',
-    hintFinish: 'Druk op Enter om af te ronden',
-    back: 'Terug',
-    cont: 'Verder',
-    submit: 'Houd me op de hoogte',
-    submitting: 'Momentje',
-    errName: 'Vul uw naam in.',
-    errEmail: 'Vul een geldig e-mailadres in.',
+    titleProduct: (p: string) => `Wees de eerste die ${p} gebruikt`,
+    nameLabel: 'Jouw naam',
+    namePh: 'Voornaam + achternaam',
+    nameHint: 'We laten van ons horen zodra ze live gaan.',
+    emailLabel: 'Wat is uw e-mailadres?',
+    emailPh: 'naam@bedrijf.be',
+    emailHint: 'Eén bericht bij de lancering. Geen nieuwsbrieven.',
+    errName: 'Vul alsjeblieft uw volledige naam in.',
+    errEmail: 'Vul alsjeblieft een geldig e-mailadres in.',
     errGeneric: 'Er ging iets mis. Probeer het opnieuw.',
-    doneAlready: 'U staat al op de lijst',
     doneNew: 'U staat op de lijst',
+    doneAlready: 'U staat al op de lijst',
+    bodyThanks: (fn: string, thing: string) => `Bedankt${fn ? `, ${fn}` : ''}. We nemen contact op zodra ${thing} live gaat.`,
     bodyAlready: (thing: string) => `We hebben u al genoteerd. We laten van ons horen zodra ${thing} er is.`,
     bodyEmailPre: 'Controleer ',
     bodyEmailPost: ' voor een bevestigingslink, klik er één keer op en u bent klaar.',
-    bodyThanks: (firstName: string, thing: string) =>
-      `Bedankt${firstName ? `, ${firstName}` : ''}. We nemen contact op zodra ${thing} live gaat.`,
+    caption: 'Nivora.Wachtlijst',
   },
 } as const
-
-/** A Box / Voice app-icon tile, on a subtle rim so the black icon reads on the dark card. */
-function ProductIcon({ src, alt, size = 42 }: { src: string; alt: string; size?: number }) {
-  return (
-    <span
-      className="relative block overflow-hidden rounded-[12px] shadow-[0_6px_16px_rgba(0,0,0,0.5)] ring-1 ring-inset ring-white/[0.12]"
-      style={{ width: size, height: size }}
-    >
-      <img src={src} alt={alt} className="h-full w-full object-cover" />
-    </span>
-  )
-}
 
 export function WaitlistPage() {
   const { lang } = useLang()
@@ -109,28 +82,18 @@ export function WaitlistPage() {
   const productSlug = (params.get('product') ?? '').toLowerCase()
   const product = PRODUCT_LABELS[productSlug]
   const thing = product ?? t.thingGeneric
+  const heading = product ? t.titleProduct(product) : t.titleGeneric
 
-  const [step, setStep] = useState(0)
-  const [dir, setDir] = useState(1)
+  const [step, setStep] = useState<'name' | 'email'>('name')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [already, setAlready] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const title = product ? t.titleProduct(product) : t.titleGeneric
-  const subtitle = product ? t.subProduct(product) : t.subGeneric
-  const stepKey = STEPS[step]
-  const field = t.fields[stepKey]
-  const isLast = step === STEPS.length - 1
-  const values: Record<Step, string> = { name, email }
-  const setters: Record<Step, (v: string) => void> = { name: setName, email: setEmail }
-
-  // Focus the field whenever the step changes, so the visitor just types.
   useEffect(() => {
     inputRef.current?.focus()
   }, [step])
@@ -143,16 +106,19 @@ export function WaitlistPage() {
     }
   }, [lang])
 
-  async function submit() {
-    setError(null)
-    setSubmitting(true)
+  // Progress for the border-glow animation (0 → 1), like the booking card.
+  const progress = done ? 1.05 : step === 'name' ? 1 / 3 : 2 / 3
+
+  async function submitEmail(value: string) {
+    setLoading(true)
+    setError('')
     const res = await subscribe({
-      email: email.trim(),
+      email: value.trim(),
       name: name.trim(),
       product: productSlug || undefined,
       source: productSlug ? `waitlist:${productSlug}` : 'waitlist',
     })
-    setSubmitting(false)
+    setLoading(false)
     if (!res.ok) {
       setError(res.error ?? t.errGeneric)
       return
@@ -162,246 +128,248 @@ export function WaitlistPage() {
     setDone(true)
   }
 
-  function goNext() {
-    if (submitting) return
-    if (stepKey === 'name' && !name.trim()) return setError(t.errName)
-    if (stepKey === 'email') {
-      const e = email.trim()
-      if (!e || !EMAIL_RE.test(e)) return setError(t.errEmail)
-    }
-    setError(null)
-    if (isLast) return void submit()
-    setDir(1)
-    setStep((s) => s + 1)
+  function nameNext() {
+    if (name.trim().length < 2) return setError(t.errName)
+    setError('')
+    setStep('email')
   }
-
-  function goBack() {
-    if (step === 0) return
-    setError(null)
-    setDir(-1)
-    setStep((s) => s - 1)
+  function emailNext() {
+    if (loading) return
+    if (!EMAIL_RE.test(email.trim())) return setError(t.errEmail)
+    void submitEmail(email.trim())
   }
-
-  function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+  const keyGo = (fn: () => void) => (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      goNext()
+      fn()
     }
   }
 
   return (
-    <main className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden px-4 py-10">
-      {/* ── Background: the same misty hills as the booking page, kept visible ── */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <img
-          src="/backgrounds/bg-hills.webp"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[50%_46%]"
-        />
-        <div className="absolute inset-0 bg-bg/[0.44]" />
-        <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_42%,transparent_42%,rgba(6,6,6,0.55))]" />
-        <div className="absolute inset-x-0 bottom-0 h-[26%] bg-gradient-to-t from-bg/85 to-transparent" />
+    <div className="relative flex min-h-screen w-full items-center justify-center bg-[#020202] p-4 text-white selection:bg-white/20 selection:text-white">
+      {/* Background — same Nivora landscape as the booking page, a touch darker */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 [transform:translateZ(0)]">
+        <img src="/backgrounds/bg-hills.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(2,2,2,0.72)_100%)]" />
       </div>
 
-      <div className="relative w-full max-w-[860px]">
-        {/* a soft light spilling over the top edge, like the booking frame */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[-3px] z-20 h-[90px] w-[38%] -translate-x-1/2 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(255,255,255,0.42),rgba(255,255,255,0.06)_55%,transparent_72%)] blur-[13px]"
-        />
-
-        {/* ── The card: one light line all around, near-black, two columns ── */}
-        <div className="relative grid overflow-hidden rounded-[24px] border border-white/[0.12] bg-[#0b0b0d]/90 shadow-[0_40px_110px_-40px_rgba(0,0,0,0.85)] lg:grid-cols-[44%_56%]">
-          <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-          {/* ── LEFT: two photos + copy + logo (desktop only) ── */}
-          <div className="relative hidden flex-col border-r border-white/[0.06] p-6 lg:flex">
-            <div className="flex items-center gap-2.5">
-              <ProductIcon src="/products/box-logo.webp" alt="Nivora Box" />
-              <ProductIcon src="/products/voice-logo.webp" alt="Nivora Voice" />
-            </div>
-
-            <div className="relative mx-1 mt-6">
-              <div className="relative aspect-[5/4] overflow-hidden rounded-[15px] shadow-[0_22px_44px_-20px_rgba(0,0,0,0.8)] outline outline-1 outline-white/[0.08]">
-                <img
-                  src="/brand/landscape-ridges.webp"
-                  alt=""
-                  className="h-full w-full object-cover [filter:saturate(0.96)_brightness(0.92)]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-bg/10 to-bg/55" />
-              </div>
-              <div className="absolute -bottom-3 -right-2.5 aspect-[3/4] w-[46%] overflow-hidden rounded-[12px] border-[3px] border-[#0b0b0d] shadow-[0_16px_32px_-12px_rgba(0,0,0,0.85)] outline outline-1 outline-white/10">
-                <img
-                  src="/products/products-bg-moss.webp"
-                  alt=""
-                  className="h-full w-full object-cover object-[50%_60%] [filter:brightness(0.8)_contrast(1.03)]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-bg/60 via-bg/10 to-bg/45" />
-              </div>
-            </div>
-
-            <p className="mt-7 max-w-[17rem] text-[12.5px] leading-relaxed text-faint">{t.leftCaption}</p>
-
-            <div className="mt-auto flex items-center gap-2 pt-6">
-              <img src="/brand/nivora-mark.webp" alt="" className="h-4 w-auto" />
-              <span className="text-[13px] font-medium tracking-[0.26em] text-ink-soft">NIVORA</span>
-            </div>
+      <main className="relative z-10 w-full max-w-5xl">
+        <div className="relative min-h-[600px] w-full md:h-[700px]">
+          {/* Progress glow border */}
+          <div aria-hidden className="absolute -inset-[2px] z-0 rounded-[26px]">
+            <svg className="h-full w-full overflow-visible">
+              <motion.rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                rx="24"
+                fill="none"
+                stroke="white"
+                strokeWidth="6"
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0, pathOffset: -0.05 }}
+                animate={{ pathLength: progress, opacity: 0.6, pathOffset: -0.05 }}
+                transition={{ duration: 1.2, ease: 'easeInOut' }}
+                style={{ filter: 'blur(8px)' }}
+              />
+            </svg>
           </div>
 
-          {/* ── RIGHT: the sign-up ── */}
-          <div className="relative flex flex-col p-7">
-            <img src="/brand/nivora-mark.webp" alt="" className="absolute right-6 top-6 h-[22px] w-auto opacity-80" />
+          {/* MAIN CARD */}
+          <div className="relative z-10 flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/5 bg-[#0a0a0a] shadow-2xl md:flex-row">
+            {/* LEFT PANEL — visual + trust (hidden on success, like booking) */}
+            <motion.div
+              className="relative hidden h-[300px] overflow-hidden bg-[#0c0c0d] md:block md:h-full md:w-5/12"
+              animate={done ? { width: 0, opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+            >
+              <div aria-hidden className="absolute inset-0" style={{ background: ARC_MAIN, filter: 'blur(7px)' }} />
+              <div aria-hidden className="absolute inset-0" style={{ background: ARC_FILL, filter: 'blur(10px)' }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/45 to-transparent" />
 
-            <div className="mb-5 flex items-center gap-2.5 lg:hidden">
-              <ProductIcon src="/products/box-logo.webp" alt="Nivora Box" size={40} />
-              <ProductIcon src="/products/voice-logo.webp" alt="Nivora Voice" size={40} />
-            </div>
+              <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col justify-end p-12">
+                <div className="mb-8 flex flex-col items-start text-left">
+                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 backdrop-blur-md">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
+                    <span className="text-[10px] font-medium uppercase tracking-wider text-white/80">{t.pill}</span>
+                  </div>
+                  <h1 className="mb-4 text-3xl font-semibold leading-tight tracking-tight text-white">{t.leftTitle}</h1>
+                  <p className="max-w-xs text-sm font-light leading-relaxed text-neutral-300">{t.leftDesc}</p>
+                </div>
+                <div className="flex w-full items-center justify-center border-t border-white/10 pt-8 opacity-90">
+                  <img src="/brand/nivora-logo.png" alt="Nivora" className="h-8 w-auto object-contain" />
+                </div>
+              </div>
+            </motion.div>
 
-            <AnimatePresence mode="wait">
+            {/* RIGHT PANEL */}
+            <div className="relative flex h-full flex-1 flex-col rounded-r-3xl border-l border-white/5 bg-[#0a0a0a]">
+              {!done && (
+                <div className="absolute right-5 top-5 z-20 md:right-6 md:top-6">
+                  <img src="/brand/nivora-mark.webp" alt="" className="h-8 w-8 object-contain md:h-9 md:w-9" />
+                </div>
+              )}
+
               {done ? (
+                /* SUCCESS — replaces the right panel */
                 <motion.div
-                  key="done"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease }}
-                  className="flex flex-1 flex-col justify-center py-3"
-                >
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.05 }}
-                    className="grid h-12 w-12 place-items-center rounded-full bg-white text-[#0a0a0a] shadow-[0_12px_34px_rgba(255,255,255,0.2)]"
-                  >
-                    <Check className="h-[22px] w-[22px]" strokeWidth={2.4} />
-                  </motion.span>
-                  <h2 className="mt-5 text-[22px] font-semibold tracking-[-0.01em] text-ink">
-                    {already ? t.doneAlready : t.doneNew}
-                  </h2>
-                  <p className="mt-2.5 max-w-xs text-[13.5px] leading-relaxed text-faint">
-                    {already ? (
-                      <>{t.bodyAlready(thing)}</>
-                    ) : emailSent ? (
-                      <>
-                        {t.bodyEmailPre}
-                        <span className="text-ink-soft">{email.trim()}</span>
-                        {t.bodyEmailPost}
-                      </>
-                    ) : (
-                      <>{t.bodyThanks(name.trim() ? name.trim().split(' ')[0] : '', thing)}</>
-                    )}
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="form"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-1 flex-col"
                 >
-                  <div className="text-[10.5px] uppercase tracking-[0.26em] text-faint">{t.eyebrow}</div>
-                  <h1 className="mt-3 max-w-[16rem] text-[25px] font-semibold leading-[1.12] tracking-[-0.02em] text-ink">
-                    {title}
-                  </h1>
-                  <p className="mt-3 max-w-xs text-[13.5px] leading-relaxed text-muted">{subtitle}</p>
-
-                  {/* progress: a single clean white bar + step label */}
-                  <div className="mt-6 flex items-center gap-2.5">
-                    <span className="h-[2px] flex-1 overflow-hidden rounded-full bg-white/[0.12]">
-                      <motion.span
-                        className="block h-full rounded-full bg-white/85"
-                        initial={false}
-                        animate={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
-                        transition={{ duration: 0.45, ease }}
-                      />
-                    </span>
-                    <span className="whitespace-nowrap text-[11px] tracking-[0.1em] text-faint">
-                      {t.stepLabel(step + 1, STEPS.length)}
-                    </span>
+                  <div className="flex flex-1 flex-col items-center justify-center px-8 pb-8 text-center md:px-14">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
+                      className="mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5"
+                    >
+                      <Check size={24} className="text-white" strokeWidth={2.5} />
+                    </motion.div>
+                    <h2 className="mb-1.5 text-xl font-semibold text-white">{already ? t.doneAlready : t.doneNew}</h2>
+                    <p className="mb-8 max-w-xs text-xs text-neutral-500">
+                      {already ? (
+                        t.bodyAlready(thing)
+                      ) : emailSent ? (
+                        <>
+                          {t.bodyEmailPre}
+                          <span className="text-neutral-300">{email.trim()}</span>
+                          {t.bodyEmailPost}
+                        </>
+                      ) : (
+                        t.bodyThanks(name.trim().split(' ')[0], thing)
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center border-t border-white/5 px-8 pb-6 pt-4 md:px-14">
+                    <img src="/brand/nivora-logo.png" alt="Nivora" className="h-6 opacity-30" />
+                  </div>
+                </motion.div>
+              ) : (
+                /* WAITLIST FORM — one step per screen */
+                <div className="flex min-h-0 flex-1 flex-col">
+                  {/* Header */}
+                  <div className="shrink-0 px-8 pb-6 pt-8 md:px-14 md:pt-14">
+                    <div className="mb-8 flex justify-center md:hidden">
+                      <img src="/brand/nivora-logo.png" alt="Nivora" className="h-6 w-auto object-contain opacity-80" />
+                    </div>
+                    <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500">{t.eyebrow}</p>
+                    <h2 className="text-[28px] font-medium leading-tight tracking-tight text-white md:text-3xl">{heading}</h2>
                   </div>
 
-                  {/* the single active field */}
-                  <div className="relative mt-5 min-h-[86px]">
-                    <AnimatePresence mode="popLayout" custom={dir} initial={false}>
+                  {/* Body — only the active step */}
+                  <div className="min-h-0 flex-1 overflow-y-auto px-8 [scrollbar-width:none] md:px-14 [&::-webkit-scrollbar]:hidden">
+                    <AnimatePresence mode="wait">
                       <motion.div
-                        key={stepKey}
-                        custom={dir}
-                        variants={stepVariants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{ duration: 0.3, ease }}
+                        key={step}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                        className="pb-10 pt-1"
                       >
-                        <label className="text-[12.5px] font-medium text-ink-soft">{field.label}</label>
-                        <input
-                          ref={inputRef}
-                          type={stepKey === 'email' ? 'email' : 'text'}
-                          value={values[stepKey]}
-                          onChange={(e) => {
-                            setters[stepKey](e.target.value)
-                            if (error) setError(null)
-                          }}
-                          onKeyDown={onKeyDown}
-                          placeholder={field.ph}
-                          autoComplete={stepKey === 'email' ? 'email' : 'name'}
-                          aria-invalid={!!error}
-                          className="mt-2.5 h-12 w-full rounded-[12px] border border-white/[0.12] bg-black/30 px-3.5 text-[15px] text-ink outline-none transition-colors placeholder:text-dim focus:border-white/40"
-                        />
-                        <div className="mt-2 h-4 text-[12px]">
-                          {error ? (
-                            <span className="text-terracotta">{error}</span>
-                          ) : (
-                            <span className="text-dim">{isLast ? t.hintFinish : t.hintContinue}</span>
-                          )}
-                        </div>
+                        {step === 'name' ? (
+                          <div className="flex flex-col gap-3">
+                            <label className="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                              <User size={14} className="text-neutral-500" />
+                              {t.nameLabel}
+                            </label>
+                            <div className="relative">
+                              <input
+                                ref={inputRef}
+                                autoFocus
+                                type="text"
+                                value={name}
+                                onChange={(e) => {
+                                  setName(e.target.value)
+                                  if (error) setError('')
+                                }}
+                                onKeyDown={keyGo(nameNext)}
+                                placeholder={t.namePh}
+                                autoComplete="name"
+                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              />
+                              <button
+                                type="button"
+                                onClick={nameNext}
+                                aria-label={t.nameLabel}
+                                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20 ${name.trim().length > 1 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                              >
+                                <ArrowRight size={16} />
+                              </button>
+                            </div>
+                            {error && <p className="pl-1 text-xs text-red-400">{error}</p>}
+                            <p className="pl-1 text-[10px] text-neutral-600">{t.nameHint}</p>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-3">
+                            <label className="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                              <Mail size={14} className="text-neutral-500" />
+                              {t.emailLabel}
+                            </label>
+                            <div className="relative">
+                              <input
+                                ref={inputRef}
+                                autoFocus
+                                type="email"
+                                value={email}
+                                onChange={(e) => {
+                                  setEmail(e.target.value)
+                                  if (error) setError('')
+                                }}
+                                onKeyDown={keyGo(emailNext)}
+                                placeholder={t.emailPh}
+                                autoComplete="email"
+                                className="w-full rounded-xl border border-white/10 bg-neutral-900/50 px-4 py-3.5 text-[15px] text-white placeholder-neutral-600 transition-all focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20"
+                              />
+                              <button
+                                type="button"
+                                onClick={emailNext}
+                                disabled={loading}
+                                aria-label={t.emailLabel}
+                                className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20 ${email.trim().length > 5 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                              >
+                                {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                              </button>
+                            </div>
+                            {error && <p className="pl-1 text-xs text-red-400">{error}</p>}
+                            <p className="pl-1 text-[10px] text-neutral-600">{t.emailHint}</p>
+                          </div>
+                        )}
                       </motion.div>
                     </AnimatePresence>
                   </div>
 
-                  {/* nav row */}
-                  <div className="mt-3 flex items-center gap-2.5">
-                    <AnimatePresence initial={false}>
-                      {step > 0 && (
-                        <motion.button
-                          type="button"
-                          onClick={goBack}
-                          initial={{ opacity: 0, width: 0 }}
-                          animate={{ opacity: 1, width: 48 }}
-                          exit={{ opacity: 0, width: 0 }}
-                          transition={{ duration: 0.25, ease }}
-                          aria-label={t.back}
-                          className="grid h-12 w-12 shrink-0 place-items-center rounded-[12px] border border-white/[0.12] bg-white/[0.03] text-muted transition-colors hover:border-white/25 hover:text-ink"
+                  {/* Footer — social icons, like the booking page */}
+                  <div className="flex shrink-0 items-center justify-center border-t border-white/5 px-8 py-4 md:justify-end md:px-14">
+                    <div className="flex items-center gap-4">
+                      {SOCIALS.map(({ href, Icon, label }) => (
+                        <a
+                          key={label}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={label}
+                          className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-neutral-800 text-neutral-300 shadow-lg transition-all duration-300 hover:bg-white hover:text-black"
                         >
-                          <ArrowLeft className="h-4 w-4" strokeWidth={1.8} />
-                        </motion.button>
-                      )}
-                    </AnimatePresence>
-                    <button
-                      type="button"
-                      onClick={goNext}
-                      disabled={submitting}
-                      className="group inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-[12px] bg-white px-5 text-[14px] font-semibold text-[#0a0a0a] transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70"
-                    >
-                      {submitting ? (
-                        <>
-                          {t.submitting}
-                          <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.8} />
-                        </>
-                      ) : (
-                        <>
-                          {isLast ? t.submit : t.cont}
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
-                        </>
-                      )}
-                    </button>
+                          <Icon size={22} strokeWidth={1.6} />
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+
+        <div className="mt-8 text-center text-[10px] font-light uppercase tracking-[0.2em] opacity-20">
+          <p>{t.caption}</p>
+        </div>
+      </main>
+    </div>
   )
 }
