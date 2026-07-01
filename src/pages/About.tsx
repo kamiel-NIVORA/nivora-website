@@ -40,8 +40,8 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
-    heroHeadline: 'We build technology that works.',
-    heroSub: "We're Nivora. We design and build software and AI that simply do their job.",
+    heroHeadline: 'Nivora',
+    heroSub: 'Software and AI that simply works.',
     voiceStory:
       'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around: you speak, and out comes text that reads like you actually write. Ready to send, not to rewrite.',
     boxStory:
@@ -83,8 +83,8 @@ const COPY = {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
-    heroHeadline: 'Wij bouwen technologie die werkt.',
-    heroSub: 'Wij zijn Nivora. We ontwerpen en bouwen software en AI die gewoon doen wat ze moeten.',
+    heroHeadline: 'Nivora',
+    heroSub: 'Software en AI die gewoon werkt.',
     voiceStory:
       'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en er komt tekst uit die klinkt zoals u écht schrijft. Klaar om te versturen, niet om over te doen.',
     boxStory:
