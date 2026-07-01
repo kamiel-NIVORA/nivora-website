@@ -23,12 +23,22 @@ type Variant = 'solid' | 'ghost'
  *   and because the element's own background is already black, the corners
  *   stay black no matter what sits behind the button — no white/light rim.
  *
+ *   That still leaves ONE white source while hovered: the layer's own
+ *   anti-aliased curve. Its edge pixels blend white into the pill's rounded
+ *   ends underneath the ripple, which reads as a thin white line at the left
+ *   and right of the filled (black) button. So while hovered, the layer itself
+ *   fades to the fill colour too — DELAYED so the ripple leads and no grey rim
+ *   trails the circle — and snaps back quickly on leave, under the shrinking
+ *   ripple. The steady hover state contains zero white pixels.
+ *
  *  - `solid` — white pill that fills BLACK from the cursor (primary CTA).
  *  - `ghost` — transparent, hairline-bordered pill that fills a soft light
  *    from the cursor (secondary CTA, e.g. "Contact Us").
  */
 /* Hover colour shifts are gated to real hover devices: on touch a :hover can
    stick after a tap and would leave the solid pill's label white-on-white. */
+const CAN_HOVER = typeof window !== 'undefined' && window.matchMedia?.('(hover: hover)').matches
+
 const VARIANTS: Record<Variant, { surface: string; text: string; layer?: string; fill: string }> = {
   solid: { surface: 'bg-[#0a0a0a]', text: 'text-[#0a0a0a] [@media(hover:hover)]:hover:text-white', layer: 'bg-ink', fill: '#0a0a0a' },
   ghost: { surface: 'bg-transparent', text: 'border border-line text-muted [@media(hover:hover)]:hover:text-ink', fill: 'rgba(255,255,255,0.09)' },
@@ -86,7 +96,7 @@ export function RippleButton({
 
   const hover = {
     onMouseEnter: (e: React.MouseEvent) => {
-      if (hovered || !ref.current) return
+      if (!CAN_HOVER || hovered || !ref.current) return
       setHovered(true)
       setRipple({ ...at(e), key: Date.now() })
     },
@@ -103,7 +113,15 @@ export function RippleButton({
 
   const inner = (
     <>
-      {layer && <span className={cn('pointer-events-none absolute inset-0 z-0 rounded-full', layer)} />}
+      {layer && (
+        <span
+          className={cn(
+            'pointer-events-none absolute inset-0 z-0 rounded-full transition-[background-color]',
+            layer,
+            hovered ? 'bg-[#0a0a0a] delay-200 duration-300' : 'delay-0 duration-150',
+          )}
+        />
+      )}
       <span className="relative z-[2]">{children}</span>
       <AnimatePresence>
         {ripple && (
