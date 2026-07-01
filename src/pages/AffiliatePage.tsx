@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
+import { motion, useMotionTemplate, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Gift } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -31,15 +31,16 @@ const SOCIAL_BG = '/affiliate/social-bg.webp'
 const WOM_BG = '/affiliate/wom-bg.webp'
 const WOM_ICON = '/affiliate/icons/word-of-mouth.png'
 
-/** Social platforms you can post on — the real brand icons, in full colour. */
-const SOCIALS: { name: string; src: string }[] = [
-  { name: 'Instagram', src: '/affiliate/icons/instagram.svg' },
-  { name: 'TikTok', src: '/affiliate/icons/tiktok.svg' },
-  { name: 'YouTube', src: '/affiliate/icons/youtube.svg' },
-  { name: 'LinkedIn', src: '/affiliate/icons/linkedin.svg' },
-  { name: 'X', src: '/affiliate/icons/x.svg' },
-  { name: 'Facebook', src: '/affiliate/icons/facebook.svg' },
-  { name: 'Pinterest', src: '/affiliate/icons/pinterest.svg' },
+/** Social platforms you can post on — real brand icons, scattered across the frame
+ *  at varied sizes like the Local AI constellation (one bigger, some smaller). */
+const SOCIALS: { name: string; src: string; left: string; top: string; size: number }[] = [
+  { name: 'Instagram', src: '/affiliate/icons/instagram.svg', left: '50%', top: '49%', size: 76 },
+  { name: 'TikTok', src: '/affiliate/icons/tiktok.svg', left: '22%', top: '26%', size: 54 },
+  { name: 'YouTube', src: '/affiliate/icons/youtube.svg', left: '79%', top: '24%', size: 58 },
+  { name: 'LinkedIn', src: '/affiliate/icons/linkedin.svg', left: '13%', top: '63%', size: 46 },
+  { name: 'X', src: '/affiliate/icons/x.svg', left: '33%', top: '79%', size: 52 },
+  { name: 'Facebook', src: '/affiliate/icons/facebook.svg', left: '87%', top: '64%', size: 50 },
+  { name: 'Pinterest', src: '/affiliate/icons/pinterest.svg', left: '67%', top: '80%', size: 48 },
 ]
 
 type Fact = { big: string; label: string }
@@ -88,6 +89,7 @@ const COPY = {
         line: 'Speech to text, tuned to your voice and your writing.',
       },
     ] as App[],
+    badgeSoon: 'Coming soon',
     heroLine1: 'Share Box and Voice.',
     heroLine2: 'Earn 20%.',
     heroSub:
@@ -163,6 +165,7 @@ const COPY = {
         line: 'Spraak naar tekst, afgestemd op uw stem en uw schrijfstijl.',
       },
     ] as App[],
+    badgeSoon: 'Binnenkort',
     heroLine1: 'Deel Box en Voice.',
     heroLine2: 'Verdien 20%.',
     heroSub:
@@ -291,6 +294,16 @@ function Hero() {
         animate="show"
         className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center"
       >
+        <motion.div variants={heroFade} className="mb-6">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 py-1.5 text-[12.5px] tracking-wide text-ink/90 backdrop-blur-md">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/50" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+            </span>
+            {t.badgeSoon}
+          </span>
+        </motion.div>
+
         <h1 className="font-serif text-[42px] leading-[1.04] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.45)] sm:text-[60px] lg:text-[76px] lg:leading-[1.01]">
           <span className="block">
             <HeroWords text={t.heroLine1} />
@@ -366,6 +379,9 @@ function HowRow({ index, title, body, image, keyword }: { index: number; title: 
   const ty = useTransform(scrollYProgress, [0, 1], [36, -36])
   const beadOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
   const beadScale = useTransform(scrollYProgress, [0.4, 0.5, 0.58], [0.3, 1.18, 1])
+  // Local-AI timeline feel: the photo sharpens out of a soft blur as the frame settles.
+  const blurAmt = useTransform(scrollYProgress, [0.06, 0.46], [14, 0])
+  const imgFilter = useMotionTemplate`blur(${blurAmt}px)`
 
   return (
     <div ref={ref} className="relative py-14 sm:py-20 lg:py-36">
@@ -400,21 +416,22 @@ function HowRow({ index, title, body, image, keyword }: { index: number; title: 
             reverse ? 'lg:order-1' : 'lg:order-2',
           )}
         >
-          <img
+          <motion.img
             src={image}
             alt=""
             aria-hidden
             loading="lazy"
-            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-70 blur-[6px]"
+            style={reduced ? undefined : { filter: imgFilter }}
+            className="absolute inset-0 h-full w-full scale-[1.06] object-cover"
           />
-          <div className="pointer-events-none absolute inset-0 bg-black/45" />
+          <div className="pointer-events-none absolute inset-0 bg-black/30" />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(60% 60% at 50% 50%, rgba(0,0,0,0.35), transparent 75%)' }}
+            style={{ background: 'radial-gradient(58% 58% at 50% 50%, rgba(0,0,0,0.4), transparent 78%)' }}
           />
           <div className="absolute inset-0 flex items-center justify-center px-6">
-            <span className="font-serif text-[52px] leading-none tracking-[-0.02em] text-ink [text-shadow:0_4px_30px_rgba(0,0,0,0.6)] sm:text-[64px] lg:text-[76px]">
+            <span className="font-serif text-[52px] leading-none tracking-[-0.02em] text-ink [text-shadow:0_4px_30px_rgba(0,0,0,0.7)] sm:text-[64px] lg:text-[76px]">
               {keyword}
             </span>
           </div>
@@ -437,15 +454,9 @@ function HowItWorks() {
       <div className="relative mx-auto w-full max-w-[1200px]">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal y={16}>
-            <Eyebrow>{t.eyebrowHow}</Eyebrow>
-          </Reveal>
-          <Reveal delay={0.06} y={16}>
-            <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
               {t.howHeading}
             </h2>
-          </Reveal>
-          <Reveal delay={0.12} y={16}>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{t.howSub}</p>
           </Reveal>
         </div>
 
@@ -472,6 +483,37 @@ function HowItWorks() {
 
 /* ── How you share · post content or word of mouth ───────────────────────── */
 
+/** A perfectly smooth circular drift (same as the Local AI marks): a pivot rotates
+ *  linearly, the child is offset by `radius` and counter-rotates to stay upright. */
+function Drift({ radius, duration, phase, children }: { radius: number; duration: number; phase: number; children: ReactNode }) {
+  const reduced = usePrefersReducedMotion()
+  if (reduced) return <span className="inline-flex">{children}</span>
+  return (
+    <motion.div className="inline-flex" animate={{ rotate: [phase, phase + 360] }} transition={{ duration, repeat: Infinity, ease: 'linear' }}>
+      <motion.div className="will-change-transform" style={{ x: radius }} animate={{ rotate: [-phase, -phase - 360] }} transition={{ duration, repeat: Infinity, ease: 'linear' }}>
+        {children}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+/** One social logo in a glassy floating badge, drifting on its own phase. */
+function SocialBadge({ src, name, left, top, size, i }: { src: string; name: string; left: string; top: string; size: number; i: number }) {
+  const pad = Math.round(size * 0.24)
+  return (
+    <div className="absolute" style={{ left, top, marginLeft: -size / 2, marginTop: -size / 2 }}>
+      <Drift radius={7} duration={24 + (i % 3) * 5} phase={i * 51}>
+        <div
+          className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/[0.12] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          style={{ width: size, height: size, padding: pad }}
+        >
+          <img src={src} alt={name} loading="lazy" className="h-full w-full object-contain" />
+        </div>
+      </Drift>
+    </div>
+  )
+}
+
 /** Frosted glass shell, the same feel as the home "Our Services" cards: a real
  *  backdrop blur, a diagonal sheen, a soft top-left highlight and a top hairline. */
 function GlassShell({ children, className }: { children: ReactNode; className?: string }) {
@@ -493,19 +535,14 @@ function GlassShell({ children, className }: { children: ReactNode; className?: 
 function Ways() {
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduced = usePrefersReducedMotion()
   return (
     <section className="relative mx-auto w-full max-w-[1200px] px-6 py-12 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal y={16}>
-          <Eyebrow>{t.waysEyebrow}</Eyebrow>
-        </Reveal>
-        <Reveal delay={0.06} y={16}>
-          <h2 className="mt-5 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[46px]">
             {t.waysHeading}
           </h2>
-        </Reveal>
-        <Reveal delay={0.12} y={16}>
-          <p className="mx-auto mt-5 max-w-lg text-[15.5px] leading-relaxed text-muted">{t.waysSub}</p>
         </Reveal>
       </div>
 
@@ -515,19 +552,16 @@ function Ways() {
           <GlassShell>
             <div className="relative aspect-[16/10] overflow-hidden rounded-[18px] border border-white/[0.08]">
               <img src={SOCIAL_BG} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_45%]" />
-              <div className="absolute inset-0 bg-black/50" />
-              <div className="absolute inset-0 flex items-center justify-center p-5">
-                <div className="flex max-w-[272px] flex-wrap items-center justify-center gap-3">
-                  {SOCIALS.map((s) => (
-                    <span
-                      key={s.name}
-                      title={s.name}
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.12] shadow-[0_10px_28px_rgba(0,0,0,0.5)] backdrop-blur-md"
-                    >
-                      <img src={s.src} alt={s.name} loading="lazy" className="h-6 w-6 object-contain" />
-                    </span>
-                  ))}
-                </div>
+              <div className="absolute inset-0 bg-black/45" />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{ background: 'radial-gradient(64% 64% at 50% 50%, rgba(0,0,0,0.3), transparent 76%)' }}
+              />
+              <div className="pointer-events-none absolute inset-0">
+                {SOCIALS.map((s, i) => (
+                  <SocialBadge key={s.name} src={s.src} name={s.name} left={s.left} top={s.top} size={s.size} i={i} />
+                ))}
               </div>
             </div>
 
@@ -556,9 +590,15 @@ function Ways() {
                 className="pointer-events-none absolute inset-0"
                 style={{ background: 'radial-gradient(52% 60% at 50% 46%, rgba(0,0,0,0.4), transparent 72%)' }}
               />
-              <span className="relative flex h-24 w-24 items-center justify-center rounded-[26px] border border-white/20 bg-white/[0.12] shadow-[0_16px_40px_rgba(0,0,0,0.55)] backdrop-blur-md">
-                <img src={WOM_ICON} alt="Word of mouth" className="h-12 w-12 object-contain" />
-              </span>
+              <Drift radius={9} duration={28} phase={0}>
+                <motion.span
+                  animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
+                  transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                  className="relative flex h-24 w-24 items-center justify-center rounded-[26px] border border-white/20 bg-white/[0.12] shadow-[0_16px_40px_rgba(0,0,0,0.55)] backdrop-blur-md"
+                >
+                  <img src={WOM_ICON} alt="Word of mouth" className="h-12 w-12 object-contain" />
+                </motion.span>
+              </Drift>
             </div>
 
             <div className="flex flex-1 flex-col px-3 pb-2 pt-6">
