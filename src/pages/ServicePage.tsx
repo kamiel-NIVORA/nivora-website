@@ -260,6 +260,7 @@ export function ServicePage() {
           accent={meta.accent}
         />
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
+        {meta.slug === 'aios' && <AiosTimeline />}
         {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
@@ -1440,6 +1441,109 @@ function AiosWhoFor({ meta }: { meta: ServiceMeta }) {
             ))}
           </ul>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* AIOS · build timeline (from an ordinary company to one that runs on AI). Same
+   alternating photo/text lane shape as Local AI's ServerTimeline, reusing its row.
+   Photos get the glossy glass-slat treatment (scripts/glossy.py). AIOS only. ────── */
+
+const AIOS_STEPS: Record<
+  Lang,
+  { title: string; subtitle: string; items: { title: string; body: string; image: string }[] }
+> = {
+  en: {
+    title: 'From an ordinary company to one that runs on AI',
+    subtitle:
+      'We do not just drop AI in somewhere. We look at how you work first, and build your whole system around that.',
+    items: [
+      {
+        title: 'We look at how your business really works',
+        body: "Before we build anything, we map what happens every day. Which tasks keep coming back, where time slips away, which steps get in each other's way. We talk to the people who do the work, not only to those above them. The better we understand why something exists, the better we know what we may take over.",
+        image: '/services/timeline-aios-1.webp',
+      },
+      {
+        title: 'We build the brain of your company',
+        body: "We bring all of your company's knowledge into one place. Your way of working, your brand, your tone, the things that now live only in your people's heads. From that moment everything works from the same memory, and what comes out matches who you are.",
+        image: '/services/timeline-aios-2.webp',
+      },
+      {
+        title: 'We take over the recurring work, department by department',
+        body: 'Now the real work begins. Department by department, we take on what keeps coming back. In marketing, support, finance, operations. The system takes over the slow, repeated work, so your people keep time for what does need their attention.',
+        image: '/services/timeline-aios-3.webp',
+      },
+      {
+        title: 'We make everything work together as one',
+        body: 'Finally we connect it all, with a layer above that steers the whole. No more loose pieces you tie together yourself, but one company that runs as a single system, with you at the wheel.',
+        image: '/services/timeline-aios-4.webp',
+      },
+    ],
+  },
+  nl: {
+    title: 'Van een gewoon bedrijf naar een bedrijf dat op AI draait',
+    subtitle:
+      'We zetten niet zomaar ergens AI neer. We kijken eerst hoe u werkt, en bouwen daar uw hele systeem omheen.',
+    items: [
+      {
+        title: 'We kijken hoe uw bedrijf echt werkt',
+        body: 'Voor we iets bouwen, brengen we in kaart wat er elke dag gebeurt. Welke taken keren steeds terug, waar gaat tijd verloren, welke stappen zitten elkaar in de weg. We praten met de mensen die het werk doen, niet alleen met wie erboven zit. Hoe beter we begrijpen waarom iets bestaat, hoe beter we weten wat we mogen overnemen.',
+        image: '/services/timeline-aios-1.webp',
+      },
+      {
+        title: 'We bouwen het brein van uw bedrijf',
+        body: 'We zetten alle kennis van uw bedrijf op één plek. Uw manier van werken, uw merk, uw toon, de dingen die nu alleen in de hoofden van uw mensen zitten. Vanaf dat moment werkt alles vanuit hetzelfde geheugen, en klopt wat eruit komt met wie u bent.',
+        image: '/services/timeline-aios-2.webp',
+      },
+      {
+        title: 'We nemen het terugkerende werk over, afdeling per afdeling',
+        body: 'Nu begint het echte werk. Per afdeling pakken we aan wat steeds terugkomt. In marketing, support, finance, operations. Het systeem neemt het trage, herhaalde werk over, zodat uw mensen tijd houden voor wat wél hun aandacht vraagt.',
+        image: '/services/timeline-aios-3.webp',
+      },
+      {
+        title: 'We laten alles samenwerken als één geheel',
+        body: 'Tot slot verbinden we alles, met daarboven een laag die het geheel aanstuurt. Geen losse stukken meer die u zelf aan elkaar knoopt, maar één bedrijf dat als één systeem draait, met u aan het stuur.',
+        image: '/services/timeline-aios-4.webp',
+      },
+    ],
+  },
+}
+
+function AiosTimeline() {
+  const { lang } = useLang()
+  const data = AIOS_STEPS[lang]
+  const lineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 55%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
+        </Reveal>
+      </div>
+
+      <div
+        ref={lineRef}
+        className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_11%,#000_89%,transparent_100%)]"
+      >
+        <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block">
+          <motion.div
+            style={{ scaleY: fill }}
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/55 to-white/25"
+          />
+        </div>
+
+        {data.items.map((it, i) => (
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} reverse={i % 2 === 0} />
+        ))}
       </div>
     </section>
   )
