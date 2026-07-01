@@ -1,6 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
-import { Gift } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { useContactModal } from '@/components/contact/ContactModal'
@@ -14,8 +13,6 @@ const ease = [0.16, 1, 0.3, 1] as const
 /* Scenic, photographic world, in line with the home and service pages. */
 const HERO_IMG = '/affiliate/hero-hills.webp' // green hills, the hero
 const CTA_IMG = '/affiliate/cta-spiral.webp' // the closing call to action
-const LOOP_GIF = '/affiliate/loop.gif' // the gift ribbon
-
 /** One quiet, monochrome image per step of the timeline, alternating left and
  *  right. Kept grayscale on purpose: the green scenics are the hero and the close,
  *  the middle of the page stays calm and clean. */
@@ -238,7 +235,6 @@ export function AffiliatePage() {
       <Facts />
       <HowItWorks />
       <Ways />
-      <GiftBlock />
       <Apps />
       <FinalCta />
     </main>
@@ -248,10 +244,6 @@ export function AffiliatePage() {
 /* ── Shared ──────────────────────────────────────────────────────────────── */
 
 /** A calm, plain section eyebrow. No dots, no rules, just a quiet label. */
-function Eyebrow({ children }: { children: ReactNode }) {
-  return <span className="text-[12px] font-medium uppercase tracking-[0.2em] text-faint">{children}</span>
-}
-
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 
 const heroContainer: Variants = {
@@ -665,65 +657,6 @@ function Ways() {
             </div>
           </GlassShell>
         </Reveal>
-      </div>
-    </section>
-  )
-}
-
-/* ── Gift ────────────────────────────────────────────────────────────────── */
-
-function GiftBlock() {
-  const { lang } = useLang()
-  const t = COPY[lang]
-  return (
-    <section className="relative w-full px-6 pb-8 lg:pb-12">
-      <div className="relative mx-auto w-full max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-[32px] border border-line bg-black">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-
-          <div className="relative grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_1fr] lg:gap-16 lg:p-16">
-            {/* Copy */}
-            <div className="order-2 lg:order-1">
-              <Reveal y={16}>
-                <Eyebrow>{t.eyebrowExtra}</Eyebrow>
-              </Reveal>
-              <Reveal delay={0.06} y={16}>
-                <h2 className="mt-5 font-serif text-[28px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[36px] lg:text-[44px]">
-                  {t.giftHeading}
-                </h2>
-              </Reveal>
-              <Reveal delay={0.12} y={16}>
-                <p className="mt-5 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">
-                  {t.giftBody}
-                </p>
-              </Reveal>
-              <Reveal delay={0.18} y={16}>
-                <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-line bg-white/[0.03] px-4 py-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-white/[0.04] text-ink-soft">
-                    <Gift className="h-[18px] w-[18px]" strokeWidth={1.6} />
-                  </span>
-                  <span className="text-[14px] text-ink-soft">{t.giftChip}</span>
-                </div>
-              </Reveal>
-            </div>
-
-            {/* Animated ribbon, sitting in its own pool of light */}
-            <Reveal delay={0.1} y={16} className="order-1 lg:order-2">
-              <div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{ background: 'radial-gradient(50% 50% at 50% 50%, rgba(255,255,255,0.08), transparent 70%)' }}
-                />
-                <img
-                  src={LOOP_GIF}
-                  alt={t.giftRibbonAlt}
-                  className="relative h-full w-full object-contain mix-blend-screen"
-                />
-              </div>
-            </Reveal>
-          </div>
-        </div>
       </div>
     </section>
   )
