@@ -735,7 +735,7 @@ export function MediaKit() {
                 {downloading ? t.preparing : t.downloadAll}
               </Button>
               <Button variant="dark" size="lg" asChild>
-                <a href="/#contact">{t.closing.contact}</a>
+                <a href="/contact">{t.closing.contact}</a>
               </Button>
             </div>
           </Reveal>
