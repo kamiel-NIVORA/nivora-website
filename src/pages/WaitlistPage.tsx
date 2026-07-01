@@ -29,7 +29,7 @@ const COPY = {
     bodyAlready: (thing: string) => `We already have you down. We'll let you know the moment ${thing} drops.`,
     bodyEmailPre: 'Check ',
     bodyEmailPost: ' for a confirmation link, click it once and you are set.',
-    caption: 'Nivora.Waitlist',
+    caption: 'Nivora',
   },
   nl: {
     thingGeneric: 'Box en Voice',
@@ -49,7 +49,7 @@ const COPY = {
     bodyAlready: (thing: string) => `We hebben u al genoteerd. We laten van ons horen zodra ${thing} er is.`,
     bodyEmailPre: 'Controleer ',
     bodyEmailPost: ' voor een bevestigingslink, klik er één keer op en u bent klaar.',
-    caption: 'Nivora.Wachtlijst',
+    caption: 'Nivora',
   },
 } as const
 
@@ -61,6 +61,13 @@ export function WaitlistPage() {
   const product = PRODUCT_LABELS[productSlug]
   const thing = product ?? t.thingGeneric
   const heading = product ? t.titleProduct(product) : t.titleGeneric
+  // Top icon: the product's own app tile on a product page, else the Nivora mark.
+  const brandIcon =
+    productSlug === 'box'
+      ? '/products/box-logo.webp'
+      : productSlug === 'voice'
+        ? '/products/voice-logo.webp'
+        : '/brand/nivora-mark.webp'
 
   const [step, setStep] = useState<'name' | 'email'>('name')
   const [name, setName] = useState('')
@@ -192,7 +199,11 @@ export function WaitlistPage() {
               /* WAITLIST FORM — centered single column */
               <>
                 <div className="flex flex-1 flex-col items-center justify-center px-8 py-12 text-center md:px-14">
-                  <img src="/brand/nivora-mark.webp" alt="Nivora" className="mb-8 h-9 w-auto object-contain opacity-90" />
+                  <img
+                    src={brandIcon}
+                    alt={product ?? 'Nivora'}
+                    className={product ? 'mb-8 h-12 w-12 object-contain' : 'mb-8 h-9 w-auto object-contain opacity-90'}
+                  />
                   <h2 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h2>
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{t.subtitle}</p>
 
@@ -258,7 +269,7 @@ export function WaitlistPage() {
                 </div>
 
                 {/* Footer — plain social icons, centered, like the site footer */}
-                <div className="flex shrink-0 items-center justify-center gap-5 border-t border-white/5 py-5">
+                <div className="flex shrink-0 items-center justify-center gap-5 py-5">
                   {SOCIAL_LINKS.map((s) => (
                     <a
                       key={s.label}
