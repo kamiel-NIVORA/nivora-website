@@ -187,7 +187,7 @@ const UI = {
     goodToKnow: 'Goed om te weten',
     stillQuestion: 'Hebt u nog vragen?',
     reachPerson: 'neem gerust contact op',
-    orVisit: 'of geef uw idee meer context via het',
+    orVisit: 'of bezoek het',
     helpCenter: 'Helpcentrum',
     exploreOther: 'Ontdek andere diensten',
   },
@@ -1110,34 +1110,34 @@ const AIOS_STEPS: Record<
   { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
-    title: 'From an ordinary company to one that runs on AI',
+    title: 'From an ordinary company to one that goes AI-first',
     subtitle:
       'We do not just drop AI in somewhere. We look at how you work first, and build your whole system around that.',
     items: [
       {
         title: 'We look at how your business really works',
-        body: "Before we build anything, we map what happens every day. Which tasks keep coming back, where time slips away, which steps get in each other's way. We talk to the people who do the work, not only to those above them. The better we understand why something exists, the better we know what we may take over.",
+        body: "Before we build anything, we map what happens every day. Which tasks keep coming back, where time slips away, which steps get in each other's way. To do that, we talk to the people who do the work themselves, not only to management.",
         image: '/services/timeline-aios-1.webp',
         clean: '/services/timeline-aios-clean-1.webp',
         icon: '/services/icon-aios-1.png',
       },
       {
         title: 'We build the brain of your company',
-        body: "We bring all of your company's knowledge into one place. Your way of working, your brand, your tone, the things that now live only in your people's heads. From that moment everything works from the same memory, and what comes out matches who you are.",
+        body: "We bring all of your company's knowledge into one place. Your way of working, your brand, your tone, the knowledge that right now only lives with your people. From that moment everything works from the same memory, and your system's output holds up.",
         image: '/services/timeline-aios-2.webp',
         clean: '/services/timeline-aios-clean-2.webp',
         icon: '/services/icon-aios-2.png',
       },
       {
         title: 'We take over the recurring work, department by department',
-        body: 'Now the real work begins. Department by department, we take on what keeps coming back. In marketing, support, finance, operations. The system takes over the slow, repeated work, so your people keep time for what does need their attention.',
+        body: 'This is where we start building. Department by department, we tackle it step by step within your business process. The system takes over not just the slow, repeated work, but bigger parts of the process itself, so your people keep time for what does need their attention.',
         image: '/services/timeline-aios-3.webp',
         clean: '/services/timeline-aios-clean-3.webp',
         icon: '/services/icon-aios-3.png',
       },
       {
         title: 'We make everything work together as one',
-        body: 'Finally we connect it all, with a layer above that steers the whole. No more loose pieces you tie together yourself, but one company that runs as a single system, with you at the wheel.',
+        body: 'Finally we connect it all, with a layer above that steers the whole. No more loose pieces you tie together yourself, but a company that runs as a system, with a chat that oversees it all and you steering the business.',
         image: '/services/timeline-aios-4.webp',
         clean: '/services/timeline-aios-clean-4.webp',
         icon: '/services/icon-aios-4.png',
@@ -1145,34 +1145,34 @@ const AIOS_STEPS: Record<
     ],
   },
   nl: {
-    title: 'Van een gewoon bedrijf naar een bedrijf dat op AI draait',
+    title: 'Van een gewoon bedrijf naar een bedrijf dat AI-first wordt',
     subtitle:
       'We zetten niet zomaar ergens AI neer. We kijken eerst hoe u werkt, en bouwen daar uw hele systeem omheen.',
     items: [
       {
         title: 'We kijken hoe uw bedrijf echt werkt',
-        body: 'Voor we iets bouwen, brengen we in kaart wat er elke dag gebeurt. Welke taken keren steeds terug, waar gaat tijd verloren, welke stappen zitten elkaar in de weg. We praten met de mensen die het werk doen, niet alleen met wie erboven zit. Hoe beter we begrijpen waarom iets bestaat, hoe beter we weten wat we mogen overnemen.',
+        body: 'Voor we iets bouwen, brengen we in kaart wat er elke dag gebeurt. Welke taken keren steeds terug, waar gaat tijd verloren, welke stappen zitten elkaar in de weg. We praten daarvoor met de mensen die het werk zelf doen, niet enkel met het management.',
         image: '/services/timeline-aios-1.webp',
         clean: '/services/timeline-aios-clean-1.webp',
         icon: '/services/icon-aios-1.png',
       },
       {
         title: 'We bouwen het brein van uw bedrijf',
-        body: 'We zetten alle kennis van uw bedrijf op één plek. Uw manier van werken, uw merk, uw toon, de dingen die nu alleen in de hoofden van uw mensen zitten. Vanaf dat moment werkt alles vanuit hetzelfde geheugen, en klopt wat eruit komt met wie u bent.',
+        body: 'We zetten alle kennis van uw bedrijf op één plek. Uw manier van werken, uw merk, uw toon, de kennis die nu alleen bij uw mensen zit. Vanaf dat moment werkt alles vanuit hetzelfde geheugen, en klopt de output van uw systeem.',
         image: '/services/timeline-aios-2.webp',
         clean: '/services/timeline-aios-clean-2.webp',
         icon: '/services/icon-aios-2.png',
       },
       {
         title: 'We nemen het terugkerende werk over, afdeling per afdeling',
-        body: 'Nu begint het echte werk. Per afdeling pakken we aan wat steeds terugkomt. In marketing, support, finance, operations. Het systeem neemt het trage, herhaalde werk over, zodat uw mensen tijd houden voor wat wél hun aandacht vraagt.',
+        body: 'Hier starten we met bouwen. Per afdeling binnen uw bedrijfsproces pakken we het stapsgewijs aan. Het systeem neemt niet enkel het trage, herhaalde werk over, maar ook grotere stukken van het proces zelf, zodat uw mensen tijd houden voor wat wél hun aandacht vraagt.',
         image: '/services/timeline-aios-3.webp',
         clean: '/services/timeline-aios-clean-3.webp',
         icon: '/services/icon-aios-3.png',
       },
       {
         title: 'We laten alles samenwerken als één geheel',
-        body: 'Tot slot verbinden we alles, met daarboven een laag die het geheel aanstuurt. Geen losse stukken meer die u zelf aan elkaar knoopt, maar één bedrijf dat als één systeem draait, met u aan het stuur.',
+        body: 'Tot slot verbinden we alles, met daarboven een laag die het geheel aanstuurt. Geen losse stukken meer die u zelf aan elkaar knoopt, maar een bedrijf dat als een systeem draait, met een chat die alles controleert en waar u het bedrijf stuurt.',
         image: '/services/timeline-aios-4.webp',
         clean: '/services/timeline-aios-clean-4.webp',
         icon: '/services/icon-aios-4.png',
@@ -1235,15 +1235,15 @@ const AIOS_WORK: Record<
   }
 > = {
   en: {
-    title: 'The work that piles up, already done',
+    title: 'The work you never see, now simply gets done',
     subtitle:
-      'The recurring work that eats time every day, customer-facing and internal. The system sets it up, you only review it.',
+      'The recurring work that eats time every day, customer-facing and internal. The system reviews it or has already done it, you only sign off.',
     columns: [
       {
         heading: 'Customer-facing',
         items: [
           { label: 'Sales', body: 'Quotes and proposals ready to send, leads followed up so none slip through.' },
-          { label: 'Marketing', body: 'Copy, posts and scheduling, all in your own tone.' },
+          { label: 'Marketing', body: 'Content creation and content planning, all in your own trained tone.' },
           { label: 'Support', body: 'Customer questions answered at once, only the hard ones reach a person.' },
           { label: 'Communication', body: 'Every message in one place, replies prepared and on point.' },
         ],
@@ -1251,9 +1251,9 @@ const AIOS_WORK: Record<
       {
         heading: 'Internal',
         items: [
-          { label: 'Finance', body: 'Most bookkeeping kept up, your accountant only checks it.' },
+          { label: 'Finance', body: 'Most bookkeeping kept up, your accountant only checks it, cutting your accounting costs.' },
           { label: 'Operations', body: 'Onboarding, projects and KPIs running smoothly, always an overview.' },
-          { label: 'HR', body: 'Hiring, first screening and follow-up.' },
+          { label: 'HR', body: 'Hiring, first screening, follow-up and payroll.' },
           { label: 'Planning', body: 'Rosters, planning and reporting kept in sync.' },
         ],
       },
@@ -1264,15 +1264,15 @@ const AIOS_WORK: Record<
     },
   },
   nl: {
-    title: 'Het werk dat blijft liggen, voortaan al gedaan',
+    title: 'Het werk dat u nooit ziet, wordt voortaan gewoon gedaan',
     subtitle:
-      'Het terugkerende werk dat elke dag tijd kost, klantgericht en intern. Het systeem zet het klaar, u kijkt het enkel nog na.',
+      'Het terugkerende werk dat elke dag tijd kost, klantgericht en intern. Het systeem kijkt het na of heeft het al gedaan, u kijkt het enkel nog na.',
     columns: [
       {
         heading: 'Klantgericht',
         items: [
           { label: 'Sales', body: 'Offertes en voorstellen klaar om te versturen, leads opgevolgd zonder er een te vergeten.' },
-          { label: 'Marketing', body: 'Teksten, posts en planning, alles in uw eigen toon.' },
+          { label: 'Marketing', body: 'Content creatie en contentplanning, alles in uw eigen getrainde toon.' },
           { label: 'Support', body: 'Klantvragen meteen beantwoord, alleen de moeilijke naar een mens.' },
           { label: 'Communicatie', body: 'Alle berichten op één plek, antwoorden staan klaar en kloppen.' },
         ],
@@ -1280,9 +1280,9 @@ const AIOS_WORK: Record<
       {
         heading: 'Intern',
         items: [
-          { label: 'Finance', body: 'Het meeste boekhoudwerk bijgehouden, uw boekhouder controleert enkel nog.' },
+          { label: 'Finance', body: 'Het meeste boekhoudwerk bijgehouden, uw boekhouder controleert enkel nog, wat u minder boekhoudkosten scheelt.' },
           { label: 'Operations', body: "Onboarding, projecten en KPI's lopen soepel, altijd overzicht." },
-          { label: 'HR', body: 'Aanwerving, eerste screening en opvolging.' },
+          { label: 'HR', body: 'Aanwerving, eerste screening, opvolging en loonadministratie.' },
           { label: 'Planning', body: 'Roosters, planning en rapportage op elkaar afgestemd.' },
         ],
       },
@@ -2306,8 +2306,8 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
   const sub =
     content.slug === 'aios'
       ? lang === 'nl'
-        ? 'Geen kant-en-klaar systeem dat u naar zich toe buigt. Wij bouwen het rond hoe u werkt, en het blijft helemaal van u.'
-        : 'No off-the-shelf system you have to bend to. We build it around how you work, and it stays entirely yours.'
+        ? 'Geen kant-en-klaar systeem dat u naar zich toe buigt. Wij bouwen het rond hoe u werkt.'
+        : 'No off-the-shelf system you have to bend to. We build it around how you work.'
       : content.slug === 'local-ai'
         ? lang === 'nl'
           ? 'Geen leverancier die u een systeem verhuurt. Wij bouwen uw eigen AI, en die blijft volledig van u, op uw eigen server.'
@@ -2458,6 +2458,12 @@ function FitFaq({ content }: { content: ServiceContent }) {
             : lang === 'nl'
               ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
               : 'The things you probably want to know before we start on your app.'
+    const orVisitText =
+      content.slug === 'app-design'
+        ? lang === 'nl'
+          ? 'of geef uw idee meer context via het'
+          : 'or give your idea more context via the'
+        : t.orVisit
     return (
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">
@@ -2516,7 +2522,7 @@ function FitFaq({ content }: { content: ServiceContent }) {
             >
               {t.reachPerson}
             </button>{' '}
-            {t.orVisit}{' '}
+            {orVisitText}{' '}
             <Link
               to="/help"
               className="inline-block py-1 -my-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink-soft"

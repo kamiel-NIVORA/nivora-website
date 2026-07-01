@@ -273,7 +273,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     name: 'AIOS',
     hero: {
       eyebrow: 'AIOS, Your AI Operating System',
-      headline: 'One system to run your whole company, with AI doing the work inside it.',
+      headline: 'One system that holds it all, the AI manager your company needs.',
       subhead: 'One custom system built around how you operate. CRM, projects, operations, and knowledge connected, with AI doing the work across all of it.',
       primaryCta: 'Book a strategy call',
       secondaryCta: 'Contact us',
@@ -326,8 +326,8 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     differentiators: {
       title: 'Why work with us',
       items: [
-        { title: 'Built around you, not a template', body: 'Off-the-shelf ERPs make you change how you work to fit the software. We do the opposite, so the system fits from day one.' },
-        { title: 'You own it', body: "Your system, your data, your platform. No lock-in to a tool you can't change, no per-seat tax on growing your team." },
+        { title: 'Built around you, not a template', body: 'Off-the-shelf ERPs make you change how you work to fit the software. We do the opposite.' },
+        { title: 'Grows with you, no queue', body: "As your business grows, the system grows with it. Need something extra? We just build it in, instead of you filing a feature request with a vendor and hoping it ever ships." },
         { title: 'Private by design', body: "Your knowledge and operations stay yours. We build with privacy and control from the start, so your data isn't quietly feeding someone else's product." },
         { title: 'AI that does the work', body: 'We do not add AI for the sake of it. Agents go where they remove real effort: the re-entry, the chasing, the switching between tools.' },
       ],
@@ -348,16 +348,16 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     faq: [
-      { q: 'How long does it take to build?', a: 'It depends on how much we are replacing and how complex your operations are. We do not build it all at once: we start with the part that hurts most, get it live, and expand from there, so you see value early. You get a real timeline after the strategy call and operations mapping.' },
-      { q: 'Do we own the system, or are we locked into you?', a: 'You own it: the system, your data, and the platform it runs on. No per-seat lock-in, no vendor you cannot leave. We stay involved because clients want us to, not because you are trapped.' },
-      { q: 'Is our data secure and private?', a: "Yes. We build with privacy and control in mind, your knowledge and operations stay yours, and your data is not used to train or feed anyone else's product. Before we build, we walk you through exactly where your data lives and who can access it." },
-      { q: 'We already have a CRM and tools we like. Do we throw them out?', a: 'Not blindly. In the mapping phase we decide together what AIOS replaces and what is worth keeping and connecting. If a tool genuinely serves you, we connect to it instead of rebuilding it.' },
+      { q: 'How long does it take to build?', a: 'It depends on how much we are automating and how complex your operations are. We do not build it all at once: we start with the part that hurts most, get it live, and expand from there, so you see value early. You get a real timeline after the strategy call and operations mapping.' },
+      { q: 'Is the system really ours?', a: 'You own it: the system, your data, and the platform it runs on. We stay involved after launch because clients find that valuable, not because you have to.' },
+      { q: 'Is our data secure and private?', a: "Yes. We build with privacy and control in mind, your knowledge and operations stay yours, and your data is not used to train or feed anyone else's product. Before we build, we walk you through exactly where your data lives and who can access it. Need everything to run fully in-house? We can combine this with our Local AI service, so even the models themselves never leave your servers." },
+      { q: 'We already have a CRM or ERP system, why switch?', a: 'With off-the-shelf tools like Monday or ClickUp, you file a feature request and hope it ever gets picked up. With us it works differently: what you actually need, we just build and run inside the system. In the mapping phase we decide together what we take over and what is worth keeping and connecting; a tool that genuinely serves you, we connect to rather than rebuild.' },
       { q: 'What if our team resists a new system?', a: 'That is exactly why rollout and training are part of the build, not an afterthought. We start with the workflow that removes the most daily pain, so people feel the benefit fast, and we stay with you through adoption. A system nobody uses is not worth building.' },
       { q: 'How do we get started?', a: 'Book a strategy call. We talk through how your business runs today and whether AIOS is the right fit, before any commitment. If it is not right for you yet, we will tell you straight.' },
     ],
     finalCta: {
       title: "Stop running your company on tools that don't talk to each other.",
-      body: 'If your business has outgrown the patchwork, AIOS gives it one system to run on, built around how you work and owned by you. Let us map what it would replace.',
+      body: "Still running your business on a tangle of loose tools that don't line up? AIOS gives it one system to run on, built around how you work and owned by you. Let us map what it would replace.",
       button: 'Book a strategy call',
       reassurance: 'A 30-minute call. No pitch, no obligation, just a straight answer on whether this is the right fit. We usually reply within a day.',
     },
@@ -726,7 +726,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     name: 'AIOS',
     hero: {
       eyebrow: 'AIOS, uw AI-besturingssysteem',
-      headline: 'Eén systeem om uw hele bedrijf op te draaien, met AI die het werk erin doet.',
+      headline: 'Eén systeem waar alles in zit, de AI-manager die uw bedrijf nodig heeft.',
       subhead: 'Eén systeem op maat, gebouwd rond hoe u werkt. CRM, projecten, operations en kennis verbonden, met AI die er het werk in doet.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
@@ -779,8 +779,8 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     differentiators: {
       title: 'Waarom werken met ons',
       items: [
-        { title: 'Gebouwd rond u, geen template', body: 'Kant-en-klare ERP-systemen laten u veranderen hoe u werkt om in de software te passen. Wij doen het omgekeerde, zodat het systeem vanaf dag één past.' },
-        { title: 'U bezit het', body: 'Uw systeem, uw data, uw platform. Geen lock-in aan een tool die u niet kunt veranderen, geen taks per gebruiker als uw team groeit.' },
+        { title: 'Gebouwd rond u, geen template', body: 'Kant-en-klare ERP-systemen laten u veranderen hoe u werkt om in de software te passen. Wij doen het omgekeerde.' },
+        { title: 'Groeit mee, zonder wachtrij', body: 'Groeit uw bedrijf, dan groeit het systeem mee. Hebt u iets extra nodig, dan bouwen wij dat gewoon bij, in plaats van dat u een feature-aanvraag indient bij een leverancier en hoopt dat die er ooit komt.' },
         { title: 'Privé vanaf het ontwerp', body: 'Uw kennis en operations blijven van u. We bouwen met privacy en controle vanaf de start, zodat uw data niet stilletjes het product van iemand anders voedt.' },
         { title: 'AI die het werk doet', body: 'We voegen geen AI toe omwille van zichzelf. Agents gaan waar ze echte moeite wegnemen: het opnieuw invoeren, het achternazitten, het schakelen tussen tools.' },
       ],
@@ -801,16 +801,16 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       ],
     },
     faq: [
-      { q: 'Hoe lang duurt het om te bouwen?', a: 'Dat hangt af van hoeveel we vervangen en hoe complex uw operations zijn. We bouwen het niet in één keer: we beginnen met het deel dat het meest pijn doet, krijgen het live, en breiden van daaruit uit, zodat u vroeg waarde ziet. U krijgt een echte timing na het strategiegesprek en het in kaart brengen van uw operations.' },
-      { q: 'Bezitten we het systeem, of zitten we aan jullie vast?', a: 'U bezit het: het systeem, uw data, en het platform waarop het draait. Geen lock-in per gebruiker, geen leverancier waar u niet weg kunt. We blijven betrokken omdat klanten dat willen, niet omdat u vastzit.' },
-      { q: 'Is onze data veilig en privé?', a: 'Ja. We bouwen met privacy en controle in gedachten, uw kennis en operations blijven van u, en uw data wordt niet gebruikt om het product van iemand anders te trainen of te voeden. Voordat we bouwen, overlopen we precies waar uw data leeft en wie er toegang toe heeft.' },
-      { q: 'We hebben al een CRM en tools die we graag gebruiken. Gooien we die weg?', a: 'Niet blindelings. In de fase van in kaart brengen beslissen we samen wat AIOS vervangt en wat de moeite waard is om te houden en te koppelen. Als een tool u echt van dienst is, koppelen we eraan in plaats van hem te herbouwen.' },
+      { q: 'Hoe lang duurt het om te bouwen?', a: 'Dat hangt af van hoeveel we automatiseren en hoe complex uw operations zijn. We bouwen het niet in één keer: we beginnen met het deel dat het meest pijn doet, krijgen het live, en breiden van daaruit uit, zodat u vroeg waarde ziet. U krijgt een echte timing na het strategiegesprek en het in kaart brengen van uw operations.' },
+      { q: 'Is het systeem echt van ons?', a: 'U bezit het: het systeem, uw data, en het platform waarop het draait. We blijven na de lancering betrokken omdat klanten daar waarde in zien, niet omdat het moet.' },
+      { q: 'Is onze data veilig en privé?', a: 'Ja. We bouwen met privacy en controle in gedachten, uw kennis en operations blijven van u, en uw data wordt niet gebruikt om het product van iemand anders te trainen of te voeden. Voordat we bouwen, overlopen we precies waar uw data leeft en wie er toegang toe heeft. Moet alles zelfs volledig in eigen huis blijven draaien? Dan combineren we dit met onze Local AI dienst, zodat ook de modellen zelf nooit uw servers verlaten.' },
+      { q: 'Ik heb al een CRM- of ERP-systeem, waarom overschakelen?', a: 'Bij kant-en-klare tools zoals Monday of ClickUp dient u een feature-aanvraag in en hoopt u dat die ooit opgepakt wordt. Bij ons werkt dat anders: wat u echt nodig hebt, bouwen en voeren we gewoon uit in het systeem. In de fase van in kaart brengen bekijken we samen wat we overnemen en wat de moeite waard is om te koppelen; een tool die u écht goed dient, koppelen we liever aan dan dat we hem herbouwen.' },
       { q: 'Wat als ons team weerstand biedt tegen een nieuw systeem?', a: 'Net daarom maken uitrol en training deel uit van de build, geen bijzaak achteraf. We beginnen met de workflow die de meeste dagelijkse pijn wegneemt, zodat mensen het voordeel snel voelen, en we blijven aan uw zijde tijdens de adoptie. Een systeem dat niemand gebruikt is het bouwen niet waard.' },
       { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen hoe uw bedrijf vandaag draait en of AIOS de juiste match is, voordat u zich vastlegt. Als het nog niet juist is voor u, zeggen we het rechtuit.' },
     ],
     finalCta: {
       title: 'Stop met uw bedrijf draaien op tools die niet met elkaar praten.',
-      body: 'Als uw bedrijf het lappendeken ontgroeid is, geeft AIOS het één systeem om op te draaien, gebouwd rond hoe u werkt en in uw bezit. Laten we in kaart brengen wat het zou vervangen.',
+      body: 'Draait uw bedrijf nog op een kluwen van losse tools die niet op elkaar afgestemd zijn? AIOS geeft er één systeem voor terug, gebouwd rond hoe u werkt en in uw bezit. Laten we in kaart brengen wat het zou vervangen.',
       button: 'Boek een strategiegesprek',
       reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over of dit de juiste match is. We reageren meestal binnen een dag.',
     },

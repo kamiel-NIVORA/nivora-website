@@ -36,9 +36,9 @@ const AREAS: { key: AreaKey; icon: string; nl: string; en: string }[] = [
 
 const COPY = {
   en: {
-    selectQuestion: 'Where does work pile up for you?',
+    selectQuestion: 'Where would you say it runs least smoothly?',
     selectHelp: 'Pick the departments that apply to you.',
-    deptQuestion: (name: string) => `How much time goes into ${name}?`,
+    deptQuestion: (name: string) => `How much time goes into repetitive, manual ${name} work?`,
     deptHelp: 'The people doing it, the hours a week, and the cost per hour.',
     pickHint: 'Pick at least one department to continue.',
     ofN: (i: number, n: number) => `${i} / ${n}`,
@@ -56,9 +56,9 @@ const COPY = {
     cta: "Let's make this happen",
   },
   nl: {
-    selectQuestion: 'Waar blijft er bij u werk liggen?',
+    selectQuestion: 'Waar loopt het bij u het meest stroef, denkt u?',
     selectHelp: 'Klik de afdelingen aan die op u van toepassing zijn.',
-    deptQuestion: (name: string) => `Hoeveel tijd kruipt er in ${name}?`,
+    deptQuestion: (name: string) => `Hoeveel tijd kruipt er in herhaaldelijke, handmatige ${name}-processen?`,
     deptHelp: 'De mensen die het doen, de uren per week en de kost per uur.',
     pickHint: 'Kies minstens één afdeling om verder te gaan.',
     ofN: (i: number, n: number) => `${i} / ${n}`,
