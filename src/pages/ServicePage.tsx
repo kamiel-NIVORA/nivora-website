@@ -2248,6 +2248,8 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
             className="h-full w-full object-cover"
             style={{ objectPosition: `50% ${bg.posY * 100}%`, opacity: bg.opacity }}
           />
+          {/* gentle dark filter so the background reads softer behind the cards */}
+          <div aria-hidden className="absolute inset-0 bg-bg/35" />
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg via-bg/65 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg via-bg/65 to-transparent" />
           <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-bg to-transparent" />
