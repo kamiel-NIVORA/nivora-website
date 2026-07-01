@@ -242,7 +242,7 @@ export function VoiceSlingers() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -8 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="whitespace-nowrap text-[22px] font-medium text-white/65 [text-shadow:0_2px_14px_rgba(0,0,0,0.92)]"
+              className="whitespace-nowrap text-[18px] font-medium text-white/65 [text-shadow:0_2px_14px_rgba(0,0,0,0.92)] sm:text-[22px]"
             >
               {c.pre}
               {c.strike ? (
@@ -279,7 +279,7 @@ export function VoiceSlingers() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduced ? undefined : { opacity: 0, y: -8, scale: 0.92 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/20 bg-[#171717]/95 py-2.5 pl-2.5 pr-5 text-[15px] font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/20 bg-[#171717]/95 py-2 pl-2 pr-4 text-[13px] font-semibold text-white shadow-[0_18px_40px_-12px_rgba(0,0,0,0.92)] backdrop-blur-md sm:py-2.5 sm:pl-2.5 sm:pr-5 sm:text-[15px]"
             >
               <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-white/15">
                 <Check className="h-4 w-4 text-white" strokeWidth={2.8} />

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import {
@@ -2281,21 +2282,7 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
         style={{ background: `radial-gradient(70% 60% at 50% 0%, ${meta.accent}0d, transparent 70%)` }}
       />
       <div className="relative mx-auto w-full max-w-[1200px] px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <Reveal>
-            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
-              {config.title}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{config.subtitle}</p>
-          </Reveal>
-        </div>
-        <Reveal delay={0.1}>
-          <div className="mt-12">
-            <RoiCalculator />
-          </div>
-        </Reveal>
+        <RoiCalculator title={config.title} subtitle={config.subtitle} />
       </div>
     </section>
   )
@@ -2581,3 +2568,5 @@ function OtherServices({ current }: { current: ServiceSlug }) {
     </section>
   )
 }
+=======
+>>>>>>> Stashed changes

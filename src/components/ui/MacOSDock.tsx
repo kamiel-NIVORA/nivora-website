@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 
 // Types for the component
 export interface DockApp {
@@ -21,14 +21,17 @@ interface MacOSDockProps {
  */
 const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], className = '' }) => {
   const [mouseX, setMouseX] = useState<number | null>(null)
-  const [currentScales, setCurrentScales] = useState<number[]>(apps.map(() => 1))
-  const [currentPositions, setCurrentPositions] = useState<number[]>([])
   const dockRef = useRef<HTMLDivElement>(null)
   const iconRefs = useRef<(HTMLDivElement | null)[]>([])
   const animationFrameRef = useRef<number | undefined>(undefined)
   const lastMouseMoveTime = useRef<number>(0)
 
-  // Responsive size calculations based on viewport
+  // The real width the dock has to fit in (its card column), measured — never the
+  // viewport. This is what keeps the dock from spilling out of its card on phones
+  // and iPad landscape. Starts unconstrained until the first measurement lands.
+  const [containerWidth, setContainerWidth] = useState<number>(Number.POSITIVE_INFINITY)
+
+  // Resting icon size + magnify feel, keyed off the viewport.
   const getResponsiveConfig = useCallback(() => {
     if (typeof window === 'undefined') {
       return { baseIconSize: 56, maxScale: 1.6, effectWidth: 240 }
@@ -46,9 +49,45 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
   }, [])
 
   const [config, setConfig] = useState(getResponsiveConfig)
-  const { baseIconSize, maxScale, effectWidth } = config
+  const { maxScale, effectWidth } = config
+  const vpBaseIconSize = config.baseIconSize
   const minScale = 1.0
+
+  // Fit the dock to its container: shrink the resting icon size until the whole
+  // row fits the measured card width, and only when icons would get uncomfortably
+  // small do we drop the outermost apps (Box and Voice sit in the middle, so they
+  // always survive). On a roomy desktop the loop returns the viewport size, so the
+  // dock stays exactly as designed; on a narrow card it can never exceed the width.
+  const { visibleApps, baseIconSize } = useMemo(() => {
+    const ABS_MIN = 30
+    const COMFORT_MIN = 40
+    const MIN_APPS = 5
+    const fitIconSize = (avail: number, count: number, maxS: number) => {
+      for (let s = Math.round(maxS); s >= ABS_MIN; s--) {
+        const spacing = Math.max(4, s * 0.08)
+        const pad = Math.max(8, s * 0.12)
+        if (count * s + (count - 1) * spacing + 2 * pad <= avail) return s
+      }
+      return ABS_MIN
+    }
+    if (!Number.isFinite(containerWidth)) {
+      return { visibleApps: apps, baseIconSize: vpBaseIconSize }
+    }
+    let count = apps.length
+    let size = fitIconSize(containerWidth, count, vpBaseIconSize)
+    while (count > MIN_APPS && size < COMFORT_MIN) {
+      count -= 1
+      size = fitIconSize(containerWidth, count, vpBaseIconSize)
+    }
+    if (count >= apps.length) return { visibleApps: apps, baseIconSize: size }
+    const start = Math.max(0, Math.floor((apps.length - count) / 2))
+    return { visibleApps: apps.slice(start, start + count), baseIconSize: size }
+  }, [apps, containerWidth, vpBaseIconSize])
+
   const baseSpacing = Math.max(4, baseIconSize * 0.08)
+
+  const [currentScales, setCurrentScales] = useState<number[]>(() => apps.map(() => 1))
+  const [currentPositions, setCurrentPositions] = useState<number[]>([])
 
   useEffect(() => {
     const handleResize = () => setConfig(getResponsiveConfig())
@@ -56,11 +95,28 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
     return () => window.removeEventListener('resize', handleResize)
   }, [getResponsiveConfig])
 
+  // Measure the card column the dock lives in (not the viewport) and re-fit on resize.
+  useEffect(() => {
+    const el = dockRef.current?.parentElement
+    if (!el) return
+    if (typeof ResizeObserver === 'undefined') {
+      setContainerWidth(el.clientWidth || el.getBoundingClientRect().width)
+      return
+    }
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width
+      if (w) setContainerWidth(w)
+    })
+    ro.observe(el)
+    setContainerWidth(el.clientWidth || el.getBoundingClientRect().width)
+    return () => ro.disconnect()
+  }, [])
+
   // Authentic macOS cosine-based magnification algorithm
   const calculateTargetMagnification = useCallback(
     (mousePosition: number | null) => {
-      if (mousePosition === null) return apps.map(() => minScale)
-      return apps.map((_, index) => {
+      if (mousePosition === null) return visibleApps.map(() => minScale)
+      return visibleApps.map((_, index) => {
         const normalIconCenter = index * (baseIconSize + baseSpacing) + baseIconSize / 2
         const minX = mousePosition - effectWidth / 2
         const maxX = mousePosition + effectWidth / 2
@@ -71,7 +127,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
         return minScale + scaleFactor * (maxScale - minScale)
       })
     },
-    [apps, baseIconSize, baseSpacing, effectWidth, maxScale, minScale],
+    [visibleApps, baseIconSize, baseSpacing, effectWidth, maxScale, minScale],
   )
 
   const calculatePositions = useCallback(
@@ -88,10 +144,10 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
   )
 
   useEffect(() => {
-    const initialScales = apps.map(() => minScale)
+    const initialScales = visibleApps.map(() => minScale)
     setCurrentScales(initialScales)
     setCurrentPositions(calculatePositions(initialScales))
-  }, [apps, calculatePositions, minScale, config])
+  }, [visibleApps, calculatePositions, minScale])
 
   const animateToTarget = useCallback(() => {
     const targetScales = calculateTargetMagnification(mouseX)
@@ -154,7 +210,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
   const contentWidth =
     currentPositions.length > 0
       ? Math.max(...currentPositions.map((pos, index) => pos + (baseIconSize * currentScales[index]) / 2))
-      : apps.length * (baseIconSize + baseSpacing) - baseSpacing
+      : visibleApps.length * (baseIconSize + baseSpacing) - baseSpacing
 
   const padding = Math.max(8, baseIconSize * 0.12)
 
@@ -174,7 +230,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
       onMouseLeave={handleMouseLeave}
     >
       <div className="relative" style={{ height: `${baseIconSize}px`, width: '100%' }}>
-        {apps.map((app, index) => {
+        {visibleApps.map((app, index) => {
           const scale = currentScales[index] ?? 1
           const position = currentPositions[index] || 0
           const scaledSize = baseIconSize * scale
@@ -201,7 +257,7 @@ const MacOSDock: React.FC<MacOSDockProps> = ({ apps, onAppClick, openApps = [], 
                 alt={app.name}
                 width={scaledSize}
                 height={scaledSize}
-                className="object-contain"
+                className="object-contain transition-transform duration-150 active:scale-90"
                 style={{
                   filter: `drop-shadow(0 ${scale > 1.2 ? Math.max(2, baseIconSize * 0.05) : Math.max(1, baseIconSize * 0.03)}px ${scale > 1.2 ? Math.max(4, baseIconSize * 0.1) : Math.max(2, baseIconSize * 0.06)}px rgba(0,0,0,${0.2 + (scale - 1) * 0.15}))`,
                 }}

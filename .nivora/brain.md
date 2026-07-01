@@ -1,8 +1,8 @@
-# 🧠 Werkruimte-brein — Nivora website
+# 🧠 Werkruimte-brein — Website
 
 ## 🎯 Visie
 
-ik wil hier de wbesite verder af maken van nivora en na elke update wil ik dat de agent het door pushed naar github en vercel
+_Nog geen visie vastgelegd._
 
 ## 📋 Open taken
 
@@ -14,28 +14,28 @@ _Nog niets afgerond._
 
 ## 🗒️ Logboek
 
-- 📌 24 jun, 17:11 · **Uitkomst** — Cooked for 10m 9s _(AIOS service)_
-- 📌 24 jun, 17:10 · **Uitkomst** — ⎿ Tip: Use git worktrees to run multiple Claude sessions in parallel. _(AIOS service)_
-- 📌 24 jun, 17:05 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
-- 📝 24 jun, 17:03 · **Notitie** — Taak naar AIOS service
-- 📌 24 jun, 17:03 · **Uitkomst** — Cogitated for 6m 2s _(Home pagian)_
-- 📌 24 jun, 17:02 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
-- 📌 24 jun, 17:02 · **Uitkomst** — Cooked for 7m 9s _(App desgin serice)_
-- 📌 24 jun, 17:02 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
-- 📌 24 jun, 17:01 · **Uitkomst** — ⎿ Tip: Use git worktrees to run multiple Claude sessions in parallel. _(AIOS service)_
-- 📌 24 jun, 17:01 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
-- ✅ 24 jun, 17:00 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- ✅ 24 jun, 16:59 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- 📝 24 jun, 16:59 · **Notitie** — Taak naar App desgin serice
-- ✅ 24 jun, 16:58 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- 📌 24 jun, 16:55 · **Uitkomst** — Cooked for 14m 45s _(LOCAL Ai service)_
-- 📌 24 jun, 16:54 · **Uitkomst** — Brewed for 24m 37s _(Agent 3)_
-- 📌 24 jun, 16:52 · **Uitkomst** — ⎿ Tip: Use /memory to view and manage Claude memory _(LOCAL Ai service)_
-- ✅ 24 jun, 16:50 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- ✅ 24 jun, 16:49 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- ✅ 24 jun, 16:48 · **Taak klaar** — rondde een taak af _(AIOS service)_
-- 📌 24 jun, 16:47 · **Uitkomst** — Sautéed for 3m 24s _(AIOS service)_
-- 📌 24 jun, 16:45 · **Uitkomst** — Crunched for 2m 23s 3 shells still running _(Agent 1)_
-- 📌 24 jun, 16:45 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
-- 📌 24 jun, 16:44 · **Uitkomst** — Sautéed for 3m 24s _(AIOS service)_
-- 📌 24 jun, 16:43 · **Uitkomst** — Brewed for 2m 38s _(Ai C. service)_
+- 📌 1 jul, 10:27 · **Uitkomst** — ook hebben dat jij, als je kijkt in de affiliate icons folder, die precies deze naam heeft _(Affiliate)_
+- 📌 1 jul, 10:27 · **Uitkomst** — ook hebben dat jij, als je kijkt in de affiliate icons folder, die precies deze naam heeft _(Affiliate)_
+- 📌 1 jul, 10:26 · **Uitkomst** — De achtergrond van de postcontent moet deze zijn : /Users/kamielniville/Documents/Icon's _(Affiliate)_
+- 📌 1 jul, 10:25 · **Uitkomst** — De achtergrond van de postcontent moet deze zijn : /Users/kamielniville/Documents/Icon's _(Affiliate)_
+- ✅ 1 jul, 10:25 · **Taak klaar** — rondde een taak af _(Affiliate)_
+- ✅ 1 jul, 10:22 · **Taak klaar** — rondde een taak af _(Wait pagina !!)_
+- ✅ 1 jul, 10:20 · **Taak klaar** — rondde een taak af _(Affiliate)_
+- ✅ 1 jul, 10:19 · **Taak klaar** — rondde een taak af _(Service pagain's)_
+- ✅ 1 jul, 10:19 · **Taak klaar** — rondde een taak af _(Wait pagina !!)_
+- ✅ 1 jul, 10:18 · **Taak klaar** — rondde een taak af _(Service pagain's)_
+- ✅ 1 jul, 10:17 · **Taak klaar** — rondde een taak af _(Service pagain's)_
+- 📌 1 jul, 10:17 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- 📌 1 jul, 10:17 · **Uitkomst** — Crunched for 21m 2s _(Affiliate)_
+- 📌 1 jul, 10:16 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- 📌 1 jul, 10:16 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- 📌 1 jul, 10:14 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- 📌 1 jul, 10:10 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- ✅ 1 jul, 10:06 · **Taak klaar** — rondde een taak af _(Wait pagina !!)_
+- ✅ 1 jul, 10:06 · **Taak klaar** — rondde een taak af _(Wait pagina !!)_
+- 📌 1 jul, 10:05 · **Uitkomst** — https://booking.nivoraworks.com _(Wait pagina !!)_
+- 📌 1 jul, 10:04 · **Uitkomst** — API error Retrying in 0s attempt 1/10 _(Serice - local ai)_
+- 📌 1 jul, 10:01 · **Uitkomst** — Churned for 12m 5s _(Serice - local ai)_
+- 📌 1 jul, 09:59 · **Uitkomst** — Churned for 12m 5s _(Serice - local ai)_
+- 📌 1 jul, 09:57 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_
+- 📌 1 jul, 09:56 · **Uitkomst** — 1: Bad 2: Fine 3: Good 0: Dismiss _(Service pagain's)_

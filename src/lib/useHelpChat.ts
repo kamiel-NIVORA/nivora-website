@@ -55,28 +55,66 @@ export function useHelpChat({ initial = [] }: Options = {}) {
     const assistantId = newId('a')
     setStatus('thinking')
 
+    // Claude-style smooth reveal: the network fills `received` (which arrives in
+    // uneven bursts), while a steady rAF loop reveals it a few characters per
+    // frame so the answer flows in evenly instead of lurching per network chunk.
+    // The loop catches up when a big chunk lands, so it never falls behind.
+    let received = ''
+    let shown = 0
     let created = false
+    let networkDone = false
+    let rafId: number | null = null
+    let resolveReveal: () => void = () => {}
+    const revealDone = new Promise<void>((r) => { resolveReveal = r })
+
+    const paint = (content: string) => {
+      if (!created) {
+        created = true
+        setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content }])
+      } else {
+        setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, content } : m)))
+      }
+    }
+
+    const tick = () => {
+      rafId = null
+      if (!mountedRef.current || controller.signal.aborted) { resolveReveal(); return }
+      const remaining = received.length - shown
+      if (remaining > 0) {
+        // Reveal a little, or more when a backlog is waiting, so the flow stays
+        // smooth yet keeps pace with a fast model.
+        const step = Math.min(remaining, Math.max(3, Math.min(14, Math.ceil(remaining / 6))))
+        shown += step
+        if (!created) setStatus('streaming')
+        paint(received.slice(0, shown))
+      }
+      if (shown < received.length || !networkDone) {
+        rafId = requestAnimationFrame(tick)
+      } else {
+        resolveReveal()
+      }
+    }
+    const pump = () => { if (rafId == null && mountedRef.current) rafId = requestAnimationFrame(tick) }
+
     const onToken = (chunk: string) => {
       if (!mountedRef.current || !chunk) return
-      setStatus('streaming')
-      setMessages((prev) => {
-        if (!created) {
-          created = true
-          return [...prev, { id: assistantId, role: 'assistant', content: chunk }]
-        }
-        return prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + chunk } : m))
-      })
+      received += chunk
+      pump()
     }
 
     try {
       const full = await sendHelpMessage(history, { signal: controller.signal, onToken, lang: langRef.current })
       if (!mountedRef.current) return
-      if (!created && full) {
-        setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content: full }])
-      }
+      if (full && full.length > received.length) received = full
+      networkDone = true
+      pump()
+      await revealDone
+      if (!mountedRef.current || controller.signal.aborted) return
+      if (rafId != null) { cancelAnimationFrame(rafId); rafId = null }
       setStatus('idle')
-    } catch (err) {
+    } catch {
       if (controller.signal.aborted || !mountedRef.current) return
+      if (rafId != null) cancelAnimationFrame(rafId)
       setMessages((prev) => [...prev, { id: newId('a'), role: 'assistant', content: ERROR_REPLY[langRef.current] }])
       setStatus('error')
     } finally {

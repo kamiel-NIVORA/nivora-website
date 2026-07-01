@@ -9,8 +9,6 @@ import {
   Copy,
   Paperclip,
   RotateCw,
-  ThumbsDown,
-  ThumbsUp,
   X,
   type LucideIcon,
 } from 'lucide-react'
@@ -27,10 +25,10 @@ import { useLang, pick, type Localized } from '@/i18n'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-/* Calm status words while the assistant is composing (Nivora voice, not playful). */
-const THINKING_WORDS: Localized<string[]> = {
-  en: ['Thinking', 'Reading', 'Putting it together'],
-  nl: ['Aan het denken', 'Aan het lezen', 'Aan het samenstellen'],
+/* One calm status word while the assistant gathers its answer (Nivora voice). */
+const THINKING_LABEL: Localized<string> = {
+  en: 'Thinking',
+  nl: 'Aan het denken',
 }
 
 /* All user-facing copy on the Help Center page. The page mirrors the Nivora
@@ -56,8 +54,6 @@ const COPY = {
     regenerate: 'Regenerate',
     copyLabel: 'Copy',
     copied: 'Copied',
-    helpful: 'Good answer',
-    notHelpful: 'Could be better',
     talkToTeam: 'Talk to the team',
     cta: {
       book_call: 'Book a call',
@@ -84,8 +80,6 @@ const COPY = {
     regenerate: 'Opnieuw genereren',
     copyLabel: 'Kopiëren',
     copied: 'Gekopieerd',
-    helpful: 'Goed antwoord',
-    notHelpful: 'Kan beter',
     talkToTeam: 'Praat met het team',
     cta: {
       book_call: 'Boek een gesprek',
@@ -440,6 +434,18 @@ function Composer({
   )
 }
 
+/* The Nivora / AIOS mark, used as the assistant avatar and in the action row.
+   The icon is a self-contained rounded-square app icon, so it is shown directly. */
+function AssistantAvatar({ className }: { className?: string }) {
+  return (
+    <img
+      src="/brand/aios-icon.png"
+      alt=""
+      className={cn('shrink-0 rounded-[8px] object-cover', className)}
+    />
+  )
+}
+
 /* Messages ───────────────────────────────────────────────────────────────────*/
 
 function Message({
@@ -483,9 +489,7 @@ function Message({
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="flex gap-3"
     >
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-white/[0.04]">
-        <img src="/brand/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
-      </span>
+      <AssistantAvatar className="mt-0.5 h-7 w-7" />
       <div className="min-w-0 flex-1 pt-0.5">
         {/* Open, frameless answer, like the AIOS chat: no bubble, more room. */}
         <div
@@ -525,8 +529,8 @@ function Message({
   )
 }
 
-/* Per-message action footer, echoing the AIOS chat: regenerate (last turn),
-   copy, and a thumbs up/down. Divider above, subtle until hovered. ─────────────*/
+/* Per-message action footer, echoing the AIOS chat: the Nivora mark, then
+   regenerate (last turn) and copy. Divider above, subtle until hovered. ─────────*/
 function MessageActions({
   text,
   isLast,
@@ -539,7 +543,6 @@ function MessageActions({
   const { lang } = useLang()
   const t = COPY[lang]
   const [copied, setCopied] = useState(false)
-  const [vote, setVote] = useState<'up' | 'down' | null>(null)
 
   const onCopy = async () => {
     try {
@@ -556,6 +559,7 @@ function MessageActions({
 
   return (
     <div className="mt-3 flex items-center gap-1 border-t border-white/[0.06] pt-2.5 sm:gap-0.5">
+      <AssistantAvatar className="mr-1 h-5 w-5 opacity-90" />
       {isLast && (
         <button type="button" onClick={onRetry} className={btn} title={t.regenerate} aria-label={t.regenerate}>
           <RotateCw className="h-[15px] w-[15px]" strokeWidth={1.7} />
@@ -569,26 +573,6 @@ function MessageActions({
         aria-label={copied ? t.copied : t.copyLabel}
       >
         {copied ? <Check className="h-[15px] w-[15px]" strokeWidth={2} /> : <Copy className="h-[15px] w-[15px]" strokeWidth={1.7} />}
-      </button>
-      <button
-        type="button"
-        onClick={() => setVote((v) => (v === 'up' ? null : 'up'))}
-        className={cn(btn, vote === 'up' && 'text-ink')}
-        title={t.helpful}
-        aria-label={t.helpful}
-        aria-pressed={vote === 'up'}
-      >
-        <ThumbsUp className="h-[15px] w-[15px]" strokeWidth={1.7} />
-      </button>
-      <button
-        type="button"
-        onClick={() => setVote((v) => (v === 'down' ? null : 'down'))}
-        className={cn(btn, vote === 'down' && 'text-ink')}
-        title={t.notHelpful}
-        aria-label={t.notHelpful}
-        aria-pressed={vote === 'down'}
-      >
-        <ThumbsDown className="h-[15px] w-[15px]" strokeWidth={1.7} />
       </button>
     </div>
   )
@@ -689,19 +673,11 @@ function CtaButton({ spec }: { spec: CtaSpec }) {
 
 function ThinkingIndicator({ reduced }: { reduced: boolean }) {
   const { lang } = useLang()
-  const words = pick(THINKING_WORDS, lang)
-  const [idx, setIdx] = useState(0)
-  useEffect(() => {
-    if (reduced) return
-    const id = setInterval(() => setIdx((i) => (i + 1) % words.length), 2000)
-    return () => clearInterval(id)
-  }, [reduced, words.length])
+  const label = pick(THINKING_LABEL, lang)
 
   return (
     <div className="flex gap-3">
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px] border border-white/[0.08] bg-white/[0.04]">
-        <img src="/brand/nivora-mark.webp" alt="" className="h-3.5 w-3.5 object-contain opacity-90" />
-      </span>
+      <AssistantAvatar className="mt-0.5 h-7 w-7" />
       <div className="flex items-center gap-2 pt-1.5">
         <motion.span
           className="h-2 w-2 rounded-[2px] bg-white/80"
@@ -709,21 +685,14 @@ function ThinkingIndicator({ reduced }: { reduced: boolean }) {
           transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
         />
         {reduced ? (
-          <span className="text-[13.5px] text-faint">{words[0]}</span>
+          <span className="text-[13.5px] text-faint">{label}</span>
         ) : (
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={idx}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.3 }}
-              className="bg-[linear-gradient(90deg,rgba(245,245,245,0.35)_0%,rgba(245,245,245,0.95)_50%,rgba(245,245,245,0.35)_100%)] bg-[length:200%_100%] bg-clip-text text-[13.5px] text-transparent"
-              style={{ animation: 'helpShimmer 2.4s linear infinite' }}
-            >
-              {words[idx]}
-            </motion.span>
-          </AnimatePresence>
+          <span
+            className="bg-[linear-gradient(90deg,rgba(245,245,245,0.35)_0%,rgba(245,245,245,0.95)_50%,rgba(245,245,245,0.35)_100%)] bg-[length:200%_100%] bg-clip-text text-[13.5px] text-transparent"
+            style={{ animation: 'helpShimmer 2.4s linear infinite' }}
+          >
+            {label}
+          </span>
         )}
       </div>
     </div>
