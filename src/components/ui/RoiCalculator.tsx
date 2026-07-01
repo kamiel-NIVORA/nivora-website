@@ -304,7 +304,7 @@ export function RoiCalculator() {
                 <div className="mt-11 flex justify-center">
                   <BookCallButton className="h-11 px-7 text-[14px]">{t.cta}</BookCallButton>
                 </div>
-                <button type="button" onClick={() => setDone(false)} className="mx-auto mt-6 text-[12.5px] text-dim underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink">
+                <button type="button" onClick={() => { setDone(false); setStep(0) }} className="mx-auto mt-6 text-[12.5px] text-dim underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink">
                   {t.redo}
                 </button>
               </motion.div>

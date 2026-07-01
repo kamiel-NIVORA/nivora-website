@@ -26,17 +26,17 @@ export const SERVICE_ROI_EN: Partial<Record<ServiceSlug, RoiFraming>> = {
   // Only AIOS shows the calculator (Kamiel, 2026-06-23). App Design and Local AI
   // no longer show it; AI Consulting never did.
   aios: {
-    title: 'Put a number on it',
+    title: 'Discover the profit you leave on the table',
     subtitle:
-      'Add up what tool-switching and double entry cost your team over a year. The number tends to surprise people.',
+      'Add up what recurring work costs your company every year. What you leave behind tends to surprise people.',
   },
 }
 
 export const SERVICE_ROI_NL: Partial<Record<ServiceSlug, RoiFraming>> = {
   aios: {
-    title: 'Zet er een getal op',
+    title: 'Ontdek de winst die u laat liggen',
     subtitle:
-      'Tel op wat schakelen tussen tools en dubbele invoer uw team over een jaar kosten. Het getal verrast de meeste mensen.',
+      'Reken uit wat het terugkerende werk uw bedrijf elk jaar kost. Wat u laat liggen, verrast de meeste mensen.',
   },
 }
 
