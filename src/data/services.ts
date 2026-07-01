@@ -377,7 +377,7 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
       chips: ['Plan first', 'Honest ROI', 'You own it'],
     },
     reveal:
-      'AI advice is easy to give, and usually worthless. Anyone can tell you to do something with AI. What is hard is knowing what actually pays off for your business, and you only know that once you have seen up close how it works. So that is where we start. Not a list of trends, but a direction that fits how you really operate.',
+      'AI advice is easy to give, and usually worthless. What matters is knowing what actually pays off for your business, and you only see that up close. So that is where we start. Not a list of trends, but a direction that fits how you really operate.',
     problem: {
       title: "You feel the pressure to do something with AI. You just don't know where to start.",
       intro: 'Most founders we talk to are in the same spot: the expectation is loud, the path is silent.',
@@ -830,7 +830,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['Eerst een plan', 'Eerlijke ROI', 'U bezit het'],
     },
     reveal:
-      'Advies over AI is makkelijk te geven en meestal waardeloos. Iedereen kan zeggen dat je iets met AI moet doen. Wat moeilijk is, is weten wat voor jouw bedrijf echt loont, en dat weet je pas als je van dichtbij hebt gezien hoe het werkt. Daarom beginnen wij daar. Geen lijstje met trends, maar een richting die klopt met jouw praktijk.',
+      'Advies over AI is makkelijk te geven en meestal waardeloos. Wat echt telt is weten wat voor jouw bedrijf loont, en dat zie je pas van dichtbij. Daarom beginnen wij daar. Geen lijstje met trends, maar een richting die klopt met jouw praktijk.',
     problem: {
       title: 'U voelt de druk om iets met AI te doen. U weet alleen niet waar te beginnen.',
       intro: 'De meeste oprichters met wie we praten zitten in dezelfde situatie: de verwachting is luid, het pad is stil.',
