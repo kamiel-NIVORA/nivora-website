@@ -62,13 +62,10 @@ const UI = {
         body: 'The system, the models, the configuration. Yours to keep, move, or hand to another team.',
       },
     ],
-    showcaseHeadline: 'Every screen with intention. Down to the last icon.',
+    showcaseHeadline: 'Every screen with intention.',
     showcaseSub:
       'Not a single screen that just turned out that way. Everything is there for a reason, and you feel it with every tap.',
     showcaseBoardLabel: 'Style Board',
-    showcaseCardTitle: 'Crafted, not assembled.',
-    showcaseCardBody:
-      'From the icon to the last interaction, we design the whole thing. The apps people open every day have a visual language no template ever gave them.',
     comparisonHeadline:
       'The difference is not just where the data goes. It is who controls every part of the chain.',
     cloudTitle: 'Cloud AI',
@@ -143,13 +140,10 @@ const UI = {
         body: 'Het systeem, de modellen, de configuratie. Helemaal van u: om te houden, te verhuizen, of door te geven aan een ander team.',
       },
     ],
-    showcaseHeadline: 'Elk scherm met intentie. Tot het laatste icoon.',
+    showcaseHeadline: 'Elk scherm met intentie.',
     showcaseSub:
       'Geen scherm dat toevallig zo geworden is. Alles staat er met een reden, en dat voelt u bij elke tik.',
     showcaseBoardLabel: 'Style Board',
-    showcaseCardTitle: 'Vakwerk, geen montage.',
-    showcaseCardBody:
-      'Van het icoon tot de laatste interactie, we ontwerpen het geheel. De apps die mensen elke dag openen hebben een visuele taal die geen enkele template ze ooit gaf.',
     comparisonHeadline:
       'Het verschil is niet alleen waar de data heen gaat. Het is wie elk deel van de keten beheert.',
     cloudTitle: 'Cloud-AI',
@@ -191,9 +185,9 @@ const UI = {
     strongFit: 'Een sterke match als',
     probablyNot: 'Waarschijnlijk niet als',
     goodToKnow: 'Goed om te weten',
-    stillQuestion: 'Nog een vraag?',
+    stillQuestion: 'Hebt u nog vragen?',
     reachPerson: 'neem gerust contact op',
-    orVisit: 'of bezoek het',
+    orVisit: 'of geef uw idee meer context via het',
     helpCenter: 'Helpcentrum',
     exploreOther: 'Ontdek andere diensten',
   },
@@ -399,7 +393,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'app-design': {
       eyebrow: '',
       title: 'Your idea, sharpened into an app that lives.',
-      body: 'Bring us your idea, even the boldest one. We sharpen it together and take it from concept to a living, working app: business-grade, ready to ship as an internal B2B tool or a B2C product for your customers.',
+      body: 'Bring us your idea, even the boldest one. We sharpen it together and take it from concept to a living, working app: business-grade, sharp and solid, ready to ship as an internal B2B tool, a B2C product for your customers, or an app for a wider audience.',
     },
     'local-ai': {
       eyebrow: '',
@@ -421,7 +415,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'app-design': {
       eyebrow: '',
       title: 'Uw idee, aangescherpt tot een app die leeft.',
-      body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk solide, klaar om in te zetten als interne B2B-tool of als B2C-product voor uw klanten.',
+      body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk, fris en solide, klaar om in te zetten als interne B2B-tool, als B2C-product voor uw klanten, of als app voor een breed publiek.',
     },
     'local-ai': {
       eyebrow: '',
@@ -771,10 +765,10 @@ function AppShowcase() {
           </div>
         </Reveal>
 
-        {/* Right column: the two cards stick under the header and travel down with
+        {/* Right column: the card sticks under the header and travels down with
             you as the tall style board scrolls past, releasing at its bottom */}
         <div className="relative">
-          <div className="flex flex-col gap-4 lg:sticky lg:top-28">
+          <div className="lg:sticky lg:top-28">
             <Reveal delay={0.1}>
               <div className="relative overflow-hidden rounded-[20px] border border-line bg-[#070709] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                 <img
@@ -784,16 +778,6 @@ function AppShowcase() {
                   className="block w-full"
                 />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-              </div>
-            </Reveal>
-            <Reveal delay={0.14}>
-              <div className="rounded-[20px] border border-line bg-surface p-6">
-                <p className="font-serif text-[20px] leading-snug tracking-[-0.01em] text-ink">
-                  {t.showcaseCardTitle}
-                </p>
-                <p className="mt-3 text-[13.5px] leading-relaxed text-faint">
-                  {t.showcaseCardBody}
-                </p>
               </div>
             </Reveal>
           </div>
@@ -816,23 +800,23 @@ const APP_SHAPES: Record<
   { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
 > = {
   en: {
-    title: 'From idea to something that keeps working',
+    title: 'From idea to something that gets used',
     subtitle:
-      'We never build off a template. We look at what you need first, then make the right thing for it. Here is what that involves.',
+      'We put your idea on the table, or really, we spread it out, whether it is already a fully worked out plan or still just a first thought. We look in detail at what it needs, get to work, and keep following up afterwards.',
     items: [
       {
         title: 'We untangle your idea',
         image: '/services/timeline-app-1.webp',
         clean: '/services/timeline-app-clean-1.webp',
         icon: '/services/icon-app-1.png',
-        body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order. The more complex it starts, the more this part matters.',
+        body: 'You come to us with something that is already big and tangled in your head. We pick it apart with you until it is clear: what it really has to do, for whom, and in what order.',
       },
       {
         title: 'We design how it feels',
         image: '/services/timeline-app-2.webp',
         clean: '/services/timeline-app-clean-2.webp',
         icon: '/services/icon-app-2.png',
-        body: 'We draw every screen ourselves, never an off-the-shelf design you see everywhere. How someone moves through your app, where everything sits, what happens at each step. This decides whether people enjoy using it or click away after a week.',
+        body: 'We design every screen ourselves, never an off-the-shelf design you see everywhere. We think carefully upfront about how people will actually use your app, so every step feels obvious: how someone moves through it, where everything sits, what happens at each step.',
       },
       {
         title: 'We build what it actually has to do',
@@ -842,46 +826,46 @@ const APP_SHAPES: Record<
         body: 'This is about what it actually does. Not a pretty screen that does nothing, but an app that genuinely gets the work done. Built on a foundation that holds up as more people come on and as you add to it later. This is the difference from quickly clicked-together apps that break the moment they are used for real.',
       },
       {
-        title: 'We let the work run itself',
+        title: 'We keep it up to date and secure',
         image: '/services/timeline-app-4.webp',
         clean: '/services/timeline-app-clean-4.webp',
         icon: '/services/icon-app-4.png',
-        body: 'Where it saves time, we let the app think along instead of leaving the work to you. Tasks that handle themselves, things that fill in automatically, work that keeps running in the background while you do something else. Not so we can say there is AI in it, but because it wins you hours every day.',
+        body: 'We do not let go after launch. Necessary updates get made as soon as they are needed, and we run regular security checks on what we built for you, so your app stays current and safe months and years down the line.',
       },
     ],
   },
   nl: {
-    title: 'Van idee tot iets dat blijft werken',
+    title: 'Van idee tot iets dat gebruikt wordt',
     subtitle:
-      'We bouwen niets van een sjabloon af. We kijken eerst naar wat u nodig hebt, en maken daar het juiste voor. Dit is wat daarbij komt kijken.',
+      'We leggen uw idee op tafel, of eigenlijk spreiden we het uit, of het nu al helemaal uitgedacht is of nog maar een eerste inval. We bekijken tot in detail wat het nodig heeft, gaan aan het werk, en blijven daarna opvolgen.',
     items: [
       {
         title: 'We ontwarren uw idee',
         image: '/services/timeline-app-1.webp',
         clean: '/services/timeline-app-clean-1.webp',
         icon: '/services/icon-app-1.png',
-        body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde. Hoe complexer het begint, hoe belangrijker dit deel.',
+        body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde.',
       },
       {
         title: 'We ontwerpen hoe het voelt',
         image: '/services/timeline-app-2.webp',
         clean: '/services/timeline-app-clean-2.webp',
         icon: '/services/icon-app-2.png',
-        body: 'Elk scherm tekenen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. Hoe iemand door uw app beweegt, waar alles staat, wat er gebeurt bij elke stap. Dit bepaalt of mensen het graag gebruiken of na een week wegklikken.',
+        body: 'Elk scherm ontwerpen we zelf, geen kant-en-klaar ontwerp dat u overal terugziet. We denken vooraf goed na over hoe mensen uw app in de praktijk gebruiken, zodat elke stap vanzelfsprekend aanvoelt: hoe iemand erdoorheen beweegt, waar alles staat, wat er gebeurt bij elke stap.',
       },
       {
         title: 'We bouwen wat het echt moet doen',
         image: '/services/timeline-app-3.webp',
         clean: '/services/timeline-app-clean-3.webp',
         icon: '/services/icon-app-3.png',
-        body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het werk ook echt af krijgt. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
+        body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het ook echt succesvol uitvoert. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
       },
       {
-        title: 'We laten het werk voor u doen',
+        title: 'We houden hem up-to-date en veilig',
         image: '/services/timeline-app-4.webp',
         clean: '/services/timeline-app-clean-4.webp',
         icon: '/services/icon-app-4.png',
-        body: 'Waar het tijd scheelt, laten we de app meedenken in plaats van u het werk te laten doen. Taken die zichzelf afhandelen, dingen die vanzelf ingevuld worden, werk dat op de achtergrond doorloopt terwijl u iets anders doet. Niet om te kunnen zeggen dat er AI in zit, maar omdat u er elke dag uren mee wint.',
+        body: 'Na de lancering laten we de app niet los. Nodige aanpassingen voeren we door zodra ze nodig zijn, en we voeren geregeld security-checks uit op wat we voor u gebouwd hebben, zodat uw app ook maanden en jaren later nog actueel en veilig blijft.',
       },
     ],
   },
@@ -2331,8 +2315,8 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
             ? 'Geen consultant die een rapport achterlaat. Wij bewijzen het met een werkende pilot en bouwen dan wat werkt.'
             : 'No consultant who leaves a report behind. We prove it with a working pilot, then build what works.'
           : lang === 'nl'
-            ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
-            : 'No agency passing you around. The people who shape your app are the same people who build it.'
+            ? 'Van idee tot een product op het hoogste niveau, en dat blijft zo, ook na de lancering. U komt van idee tot product, zonder zelf met de techniek bezig te hoeven zijn.'
+            : 'From idea to a product built to the highest level, and kept there long after launch. You get from idea to product without touching any of the technical side yourself.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
       {/* bandRef wraps the backdrop AND the cards, so the peak reads across the whole

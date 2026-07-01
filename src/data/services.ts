@@ -68,10 +68,10 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     differentiators: {
       title: 'Why build with us',
       items: [
-        { title: 'Builders, not an agency', body: 'We design and write the code ourselves. You talk to the people building your product, not an account manager relaying messages.' },
-        { title: 'The idea drives the design', body: 'We do not fit your app into a template. We learn what it needs to be and who it is for, then design around that.' },
-        { title: 'You own everything', body: 'The code, the design files, the data, all yours. No lock-in, no licence fee, no dependency on us to keep it running.' },
-        { title: 'We build what others cannot ship', body: 'The ideas too complex for a quick tool, too refined for a template, or too ambitious for a shortcut. That is exactly what we are here for.' },
+        { title: 'Your partner', body: 'You talk directly to the people building your product, not an account manager relaying messages. We design it ourselves and build with AI, staying in close contact with you throughout, so everything gets made exactly to what you need.' },
+        { title: 'Tailored, not thrown together', body: 'We want to be the difference from apps that get thrown together fast and generic. Every screen is designed to fit your idea, with an eye for detail and feel, not just assembled.' },
+        { title: 'Maintained, and transferable', body: 'We manage the code, keep it up to date, and make sure everything keeps running. Want to take it in-house yourself at some point? Handing over the code and design is always an option, with no lock-in.' },
+        { title: 'Flexible on how we work together', body: 'Beyond a fixed build price, we are open to other ways of working together: coming in as a partner for part of the project, or a commission on what the app earns from your users. We find the shape that fits your situation.' },
       ],
     },
     audience: {
@@ -91,15 +91,15 @@ export const SERVICE_CONTENT_EN: Record<ServiceSlug, ServiceContent> = {
     },
     faq: [
       { q: 'How long does it take?', a: 'It depends on the scope. A focused internal tool takes weeks; a full consumer product takes longer. After our first call you get an honest timeline for your build, not a number pulled from thin air.' },
-      { q: 'What does it cost?', a: 'It is priced to the scope, not a fixed package. Once we understand what you need, you get a clear number and what it covers before you commit. No surprise invoices later.' },
-      { q: 'Do I own the code and design?', a: 'Yes. The code, the design files, and the data are yours, with no lock-in. If you ever want to bring it in-house or move it elsewhere, you can.' },
-      { q: 'Can you build consumer apps, not just business tools?', a: 'Yes, that is a big part of what we do. If you have an app idea and want it turned into a real product people love using, that is exactly the conversation to have with us.' },
-      { q: 'We already use some tools, does this replace them?', a: 'Not necessarily. We integrate with what works and replace only what holds you back. The goal is one product that fits your workflow, not another disconnected system.' },
+      { q: 'What does it cost?', a: 'It is priced to the scope, not a fixed package. Beyond a fixed build price, we are also open to other arrangements, such as a partnership or a commission on usage. Once we understand what you need, you get a clear proposal and what it covers before you commit.' },
+      { q: 'Do I own the code and design?', a: 'The code and design stay yours, and we manage and maintain them, keep them up to date and make sure everything keeps running safely. Want to bring it in-house yourself one day? A handover is always an option, with no lock-in.' },
+      { q: 'Can you build consumer apps, not just business tools?', a: 'Yes, that is a big part of what we do. Whether your idea is for the consumer market (B2C), for other businesses (B2B), or a business tool built specifically for your own company, in every case we turn it into a real product people love using.' },
+      { q: 'Can you connect my app to other tools?', a: 'Yes. Any app or service with an API or MCP connection can be linked to your idea.' },
       { q: 'How do we get started?', a: 'Book a strategy call. We talk through your idea and your situation, and give you a straight answer on whether it is the right fit and what it would take.' },
     ],
     finalCta: {
       title: 'The app you have been picturing is closer than it looks.',
-      body: 'Bring us the idea. We will show you what it takes to build it properly, and whether we are the right team to do it.',
+      body: 'Bring us your ideas. We will show you what it takes to build it properly, and whether we are the right team to do it.',
       button: 'Book a strategy call',
       reassurance: 'A 30-minute call. No pitch, no obligation, just a straight answer on what it would take. We usually reply within a day.',
     },
@@ -478,7 +478,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       chips: ['Eigenaar van het product', 'Elk platform', 'Geen templates'],
     },
     reveal:
-      'Een app láten maken kan iedereen. Een app die meegroeit en die u over een jaar nog rustig kunt uitbreiden, dat is waar het echte werk zit. In de keuzes die u niet ziet en de basis eronder. Daar bouwen wij voor.',
+      'Een app laten maken kan iedereen. Een app die meegroeit en die u over een jaar nog rustig kunt uitbreiden, dat is waar het echte werk zit. In de keuzes die u niet ziet en de basis eronder. Daar bouwen wij voor.',
     problem: {
       title: 'Uw app-idee verdient beter dan de shortcuts',
       intro: 'De meeste app-ideeën stranden bij het bouwen, niet omdat het idee verkeerd is, maar omdat een concept omzetten in een product waar mensen van houden moeilijker is dan het lijkt.',
@@ -521,10 +521,10 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     differentiators: {
       title: 'Waarom met ons bouwen',
       items: [
-        { title: 'Bouwers, geen bureau', body: 'We ontwerpen en schrijven de code zelf. U praat met de mensen die uw product bouwen, niet met een accountmanager die berichten doorgeeft.' },
-        { title: 'Het idee stuurt het ontwerp', body: 'We persen uw app niet in een template. We leren wat het moet zijn en voor wie het is, en ontwerpen daaromheen.' },
-        { title: 'Alles is van u', body: 'De code, de ontwerpbestanden, de data, allemaal van u. Geen lock-in, geen licentiekost, geen afhankelijkheid van ons om het draaiend te houden.' },
-        { title: 'We bouwen wat anderen niet gelanceerd krijgen', body: 'De ideeën die te complex zijn voor een snelle tool, te verfijnd voor een template, of te ambitieus voor een shortcut. Daar zijn wij net voor.' },
+        { title: 'Uw partner', body: 'U praat rechtstreeks met de mensen die uw product bouwen, niet met een accountmanager die berichten doorgeeft. We ontwerpen zelf en werken met AI om te bouwen, en houden tijdens het hele traject nauw contact met u, zodat alles precies wordt gemaakt zoals u het nodig hebt.' },
+        { title: 'Op maat, niet aan elkaar geklikt', body: 'We willen het verschil maken met apps die snel en generiek in elkaar zijn gezet. Elk scherm wordt op maat ontworpen voor uw idee, met aandacht voor detail en gevoel, niet zomaar samengeraapt.' },
+        { title: 'Onderhouden, en overdraagbaar', body: 'Wij beheren de code, houden hem up-to-date en zorgen dat alles blijft draaien. Wilt u het toch zelf in handen nemen? Dan is overdracht van code en ontwerp altijd een optie, zonder lock-in.' },
+        { title: 'Flexibel in samenwerking', body: 'Naast een vaste bouwprijs staan we open voor andere vormen van samenwerken: instappen als partner voor een deel van het project, of een commissie op wat de app oplevert bij uw gebruikers. We zoeken de vorm die bij uw situatie past.' },
       ],
     },
     audience: {
@@ -544,17 +544,17 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     },
     faq: [
       { q: 'Hoe lang duurt het?', a: 'Dat hangt af van de scope. Een gerichte interne tool is een kwestie van weken; een volwaardig consumentenproduct duurt langer. Na ons eerste gesprek krijgt u een eerlijke timing voor uw build, geen getal uit de lucht gegrepen.' },
-      { q: 'Wat kost het?', a: 'De prijs hangt af van de scope, niet van een vast pakket. Zodra we begrijpen wat u nodig hebt, krijgt u een helder bedrag en wat het dekt, voordat u zich vastlegt. Geen verrassingsfacturen achteraf.' },
-      { q: 'Bezit ik de code en het ontwerp?', a: 'Ja. De code, de ontwerpbestanden en de data zijn van u, zonder lock-in. Als u het ooit in eigen huis wilt halen of ergens anders naartoe wilt verhuizen, kan dat.' },
-      { q: 'Bouwen jullie consumenten-apps, niet alleen zakelijke tools?', a: 'Ja, dat is een groot deel van wat we doen. Als u een app-idee hebt en het wilt omzetten in een echt product waar mensen graag mee werken, is dat precies het juiste gesprek om met ons te voeren.' },
-      { q: 'We gebruiken al enkele tools, vervangt dit die?', a: 'Niet noodzakelijk. We integreren met wat werkt en vervangen alleen wat u tegenhoudt. Het doel is één product dat in uw workflow past, niet nog een losstaand systeem.' },
-      { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen uw idee en uw situatie, en geven u een eerlijk antwoord over of dit de juiste match is en wat het zou vergen.' },
+      { q: 'Wat kost het?', a: 'De prijs hangt af van de scope, niet van een vast pakket. Naast een vaste bouwprijs staan we ook open voor andere vormen, zoals partnerschap of een commissie op het gebruik. Zodra we begrijpen wat u nodig hebt, krijgt u een helder voorstel en wat het dekt, voordat u zich vastlegt.' },
+      { q: 'Bezit ik de code en het ontwerp?', a: 'De code en het ontwerp blijven van u, en wij beheren en onderhouden ze, houden ze up-to-date en zorgen dat alles veilig blijft draaien. Wilt u het ooit zelf in eigen huis halen? Overdracht is altijd een optie, zonder lock-in.' },
+      { q: 'Bouwen jullie consumenten-apps, niet alleen zakelijke tools?', a: 'Ja, dat is een groot deel van wat we doen. Of uw idee nu voor de consumentenmarkt is (B2C), voor andere bedrijven (B2B), of een zakelijke tool die alleen voor uw eigen bedrijf gemaakt wordt, in elk van die gevallen zetten we het om in een echt product waar mensen graag mee werken.' },
+      { q: 'Kunnen jullie mijn app koppelen aan andere tools?', a: 'Ja. Elke app of dienst met een API- of MCP-koppeling kan verbonden worden met uw idee.' },
+      { q: 'Hoe gaan we van start?', a: 'Boek een strategiegesprek. We overlopen uw idee en uw situatie, en geven u een eerlijk antwoord over of dit de juiste match is en wat er nodig is.' },
     ],
     finalCta: {
       title: 'De app die u voor ogen hebt is dichterbij dan hij lijkt.',
-      body: 'Breng ons het idee. We tonen u wat er nodig is om het goed te bouwen, en of wij het juiste team zijn om het te doen.',
+      body: 'Breng ons uw ideeën. We tonen u wat er nodig is om het goed te bouwen, en of wij het juiste team zijn om het te doen.',
       button: 'Boek een strategiegesprek',
-      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over wat het zou vergen. We reageren meestal binnen een dag.',
+      reassurance: 'Een gesprek van 30 minuten. Geen verkooppraatje, geen verplichting, gewoon een eerlijk antwoord over wat er nodig is. We reageren meestal binnen een dag.',
     },
   },
   'local-ai': {
