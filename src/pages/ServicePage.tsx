@@ -280,6 +280,8 @@ export function ServicePage() {
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
         {meta.slug === 'aios' && <AiosTimeline />}
         {meta.slug === 'aios' && <AiosWorkGrid />}
+        {meta.slug === 'aios' && <RoiBand meta={meta} />}
+        {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <LocalWhoFor />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
@@ -287,16 +289,16 @@ export function ServicePage() {
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug === 'local-ai'
           ? <LocalAiTension content={content} />
-          : meta.slug !== 'app-design' && <Problem content={content} />}
+          : meta.slug !== 'app-design' && meta.slug !== 'aios' && <Problem content={content} />}
         {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Solution content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <PrivacyBand meta={meta} />}
         {meta.objectImage && <BrandObject meta={meta} />}
-        {meta.slug !== 'app-design' && <Capabilities content={content} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Capabilities content={content} />}
         {meta.slug === 'app-design' && <AppShowcase />}
-        <WhyUs content={content} meta={meta} />
-        {meta.slug !== 'app-design' && <Process content={content} meta={meta} />}
+        {meta.slug !== 'aios' && <WhyUs content={content} meta={meta} />}
+        {meta.slug !== 'app-design' && meta.slug !== 'aios' && <Process content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <JourneyTimeline />}
-        <RoiBand meta={meta} />
+        {meta.slug !== 'aios' && <RoiBand meta={meta} />}
         <FitFaq content={content} />
         <FinalCta content={content} meta={meta} />
         <OtherServices current={meta.slug} />
@@ -2565,9 +2567,15 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
       <div className="relative mx-auto w-full max-w-[1200px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <p className="mt-5 font-serif text-[24px] leading-[1.3] tracking-[-0.01em] text-ink sm:text-[28px] lg:text-[32px]">
-              {config.framing}
-            </p>
+            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{config.eyebrow}</p>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <h2 className="mt-4 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+              {config.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{config.subtitle}</p>
           </Reveal>
         </div>
         <Reveal delay={0.1}>
@@ -2590,11 +2598,15 @@ function FitFaq({ content }: { content: ServiceContent }) {
 
   // App Design: stripped to just the FAQ, centred, with a warm-red (terracotta)
   // heading like the homepage. No "is this the right fit" comparison block.
-  if (content.slug === 'app-design') {
+  if (content.slug === 'app-design' || content.slug === 'aios') {
     const faqSub =
-      lang === 'nl'
-        ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
-        : 'The things you probably want to know before we start on your app.'
+      content.slug === 'aios'
+        ? lang === 'nl'
+          ? 'De dingen die u waarschijnlijk wilt weten voordat we uw AIOS bouwen.'
+          : 'The things you probably want to know before we build your AIOS.'
+        : lang === 'nl'
+          ? 'De dingen die u waarschijnlijk wilt weten voordat we aan uw app beginnen.'
+          : 'The things you probably want to know before we start on your app.'
     return (
       <section className="relative mx-auto w-full max-w-[1100px] px-6 py-14 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-2xl text-center">

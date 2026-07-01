@@ -17,8 +17,10 @@ import type { ServiceSlug } from './serviceContent'
 
 export type RoiFraming = {
   eyebrow: string
-  /** One serif line that sets up the number. */
-  framing: string
+  /** Short heading over the calculator. */
+  title: string
+  /** One line that sets up the number. */
+  subtitle: string
 }
 
 export const SERVICE_ROI_EN: Partial<Record<ServiceSlug, RoiFraming>> = {
@@ -26,16 +28,18 @@ export const SERVICE_ROI_EN: Partial<Record<ServiceSlug, RoiFraming>> = {
   // no longer show it; AI Consulting never did.
   aios: {
     eyebrow: 'The cost of doing nothing',
-    framing:
-      'Add up what tool-switching and double entry really cost your team across a year. The number tends to surprise people.',
+    title: 'Put a number on it',
+    subtitle:
+      'Add up what tool-switching and double entry cost your team over a year. The number tends to surprise people.',
   },
 }
 
 export const SERVICE_ROI_NL: Partial<Record<ServiceSlug, RoiFraming>> = {
   aios: {
     eyebrow: 'De kosten van niets doen',
-    framing:
-      'Tel op wat schakelen tussen tools en dubbele invoer uw team echt kosten over een jaar. Het getal verrast de meeste mensen.',
+    title: 'Zet er een getal op',
+    subtitle:
+      'Tel op wat schakelen tussen tools en dubbele invoer uw team over een jaar kosten. Het getal verrast de meeste mensen.',
   },
 }
 
