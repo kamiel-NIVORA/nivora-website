@@ -95,12 +95,31 @@ const COPY = {
     preparing: 'Preparing…',
     questions: 'Questions? Get in touch',
     toc: {
+      guidelines: 'Posting',
       logo: 'Logo',
       colour: 'Colour',
       type: 'Typography',
       layout: 'Layout',
       photography: 'Photography',
       voice: 'Voice',
+    },
+    guidelines: {
+      eyebrow: 'For affiliates & partners',
+      title: 'What to post, and how.',
+      intro:
+        'Sharing Nivora through the affiliate program? Here is what makes a good post, where to share it, and the assets to build from. Stay close to these and everything you make feels on-brand.',
+      postLabel: 'What to post',
+      posts: [
+        'Show a real problem, then Box or Voice quietly solving it. A genuine moment beats any feature list.',
+        'Keep the tone calm and honest. No hype, no countdowns, no invented numbers or made-up results.',
+        'Always include your personal link, so every signup is tied to you.',
+        'Build from the assets below. Use the logo as it is, never redraw or recolour it.',
+      ],
+      whereLabel: 'Where to post',
+      whereIntro: 'Post wherever your people already are, or simply tell them directly.',
+      platforms: ['Instagram', 'TikTok', 'YouTube', 'LinkedIn', 'X', 'Facebook', 'Word of mouth'],
+      assetsCta: 'Download the asset bundle',
+      affiliateCta: 'Back to the affiliate program',
     },
     logo: {
       eyebrow: 'Logo & mark',
@@ -181,12 +200,31 @@ const COPY = {
     preparing: 'Bezig…',
     questions: 'Vragen? Neem contact op',
     toc: {
+      guidelines: 'Posten',
       logo: 'Logo',
       colour: 'Kleur',
       type: 'Typografie',
       layout: 'Layout',
       photography: 'Fotografie',
       voice: 'Stem',
+    },
+    guidelines: {
+      eyebrow: 'Voor affiliates & partners',
+      title: 'Wat u post, en hoe.',
+      intro:
+        'Deelt u Nivora via het affiliateprogramma? Hier leest u wat een goede post maakt, waar u het deelt, en met welke assets u bouwt. Blijf hier dicht bij en alles wat u maakt voelt on-brand.',
+      postLabel: 'Wat u post',
+      posts: [
+        'Toon een echt probleem, en dan Box of Voice die het rustig oplost. Een oprecht moment wint van elke opsomming.',
+        'Houd de toon kalm en eerlijk. Geen hype, geen aftelklokken, geen verzonnen cijfers of resultaten.',
+        'Voeg altijd uw persoonlijke link toe, zodat elke aanmelding aan u gekoppeld wordt.',
+        'Bouw met de assets hieronder. Gebruik het logo zoals het is, teken of herkleur het nooit.',
+      ],
+      whereLabel: 'Waar u post',
+      whereIntro: 'Post waar uw mensen al zijn, of vertel het gewoon rechtstreeks.',
+      platforms: ['Instagram', 'TikTok', 'YouTube', 'LinkedIn', 'X', 'Facebook', 'Mond-op-mond'],
+      assetsCta: 'Download de asset-bundel',
+      affiliateCta: 'Terug naar het affiliateprogramma',
     },
     logo: {
       eyebrow: 'Logo & teken',
@@ -289,6 +327,7 @@ export function MediaKit() {
   }
 
   const TOC = [
+    { id: 'guidelines', label: t.toc.guidelines },
     { id: 'logo', label: t.toc.logo },
     { id: 'colour', label: t.toc.colour },
     { id: 'type', label: t.toc.type },
@@ -354,6 +393,63 @@ export function MediaKit() {
       </header>
 
       <div className="mx-auto w-full max-w-[1200px] px-6">
+        {/* ── Posting guidelines · for affiliates & partners ── */}
+        <section id="guidelines" className="scroll-mt-28 py-14 sm:py-20 lg:py-24">
+          <Reveal>
+            <span className="label-mono text-olive">{t.guidelines.eyebrow}</span>
+            <h2 className="mt-5 max-w-2xl font-serif text-[32px] leading-[1.12] tracking-[-0.02em] text-ink sm:text-[40px]">
+              {t.guidelines.title}
+            </h2>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-faint">{t.guidelines.intro}</p>
+          </Reveal>
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            {/* What to post */}
+            <Reveal>
+              <div className="h-full rounded-2xl border border-line bg-white/[0.02] p-6 lg:p-8">
+                <p className="label-mono mb-5 text-olive">{t.guidelines.postLabel}</p>
+                <ul className="flex flex-col gap-3.5">
+                  {t.guidelines.posts.map((p) => (
+                    <li key={p} className="flex gap-3 text-[14.5px] leading-relaxed text-ink-soft/85">
+                      <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-olive" strokeWidth={2} />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+
+            {/* Where to post + the assets */}
+            <Reveal delay={0.06}>
+              <div className="flex h-full flex-col rounded-2xl border border-line bg-white/[0.02] p-6 lg:p-8">
+                <p className="label-mono mb-3">{t.guidelines.whereLabel}</p>
+                <p className="text-[14px] leading-relaxed text-faint">{t.guidelines.whereIntro}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {t.guidelines.platforms.map((p) => (
+                    <span
+                      key={p}
+                      className="rounded-full border border-line bg-white/[0.03] px-3 py-1.5 text-[12.5px] text-ink-soft/80"
+                    >
+                      {p}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-auto flex flex-col gap-3 pt-8 sm:flex-row sm:flex-wrap sm:items-center">
+                  <Button onClick={onDownloadAll} disabled={downloading}>
+                    <Download className="h-4 w-4" />
+                    {downloading ? t.preparing : t.guidelines.assetsCta}
+                  </Button>
+                  <Button variant="dark" asChild>
+                    <a href="/affiliate">
+                      {t.guidelines.affiliateCta} <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* ── 1 · Logo ── */}
         <Section
           id="logo"

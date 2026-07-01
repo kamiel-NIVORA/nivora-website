@@ -14,6 +14,19 @@ export const CONTACT = {
  */
 export const BOOKING_URL = 'https://booking.nivoraworks.com'
 
+/**
+ * The standalone waiting page (Box & Voice). Like the booking page, it opens in
+ * its own browser tab. Kept as a base URL so it can be pointed at the dedicated
+ * domain in one place: set this to 'https://waitingpage.nivoraworks.com' once
+ * that subdomain is live, and every product CTA follows. The relative '/waitlist'
+ * default already works today (same origin, new tab, chrome-less route).
+ */
+export const WAITLIST_URL = '/waitlist'
+
+/** Build the waiting-page link, optionally tagged with the product (box|voice). */
+export const waitlistHref = (product?: string): string =>
+  product ? `${WAITLIST_URL}?product=${product}` : WAITLIST_URL
+
 /** Nivora's home base, shown on the contact page with a map. */
 export const ADDRESS = {
   line1: 'Julius en Maurits Sabbestraat 15',

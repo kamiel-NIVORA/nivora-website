@@ -324,16 +324,16 @@ export type GalleryShot = { src: string; caption: string; span?: 'wide' | 'tall'
 const PHOTO_GALLERY: Localized<GalleryShot[]> = {
   en: [
     { src: '/home/hero-nivora.webp', caption: 'Hero, misty ridges at dawn', span: 'wide' },
-    { src: '/brand/2S9MZkkrhQhX1BXE7eQesdMNEk.webp', caption: 'Cover, labelled "24M"' },
-    { src: '/brand/89dxBkhlY82YRVjvzzxceldnL0.webp', caption: 'Cover, labelled "REPORT #127"' },
+    { src: '/affiliate/grass.webp', caption: 'Wind through tall grass' },
+    { src: '/affiliate/hero-hills.webp', caption: 'Rolling hills at first light' },
     { src: '/brand/landscape-ridges.webp', caption: 'Open ridges, generous sky' },
     { src: '/home/cta-landscape.webp', caption: 'Lone subject, deep green field' },
     { src: '/home/IMG_0743.webp', caption: 'Aerial field texture', span: 'tall' },
   ],
   nl: [
     { src: '/home/hero-nivora.webp', caption: 'Hero, mistige bergkammen bij dageraad', span: 'wide' },
-    { src: '/brand/2S9MZkkrhQhX1BXE7eQesdMNEk.webp', caption: 'Cover, met label "24M"' },
-    { src: '/brand/89dxBkhlY82YRVjvzzxceldnL0.webp', caption: 'Cover, met label "REPORT #127"' },
+    { src: '/affiliate/grass.webp', caption: 'Wind door het hoge gras' },
+    { src: '/affiliate/hero-hills.webp', caption: 'Glooiende heuvels bij het eerste licht' },
     { src: '/brand/landscape-ridges.webp', caption: 'Open bergkammen, ruime lucht' },
     { src: '/home/cta-landscape.webp', caption: 'Eenzaam onderwerp, diepgroen veld' },
     { src: '/home/IMG_0743.webp', caption: 'Veldtextuur van bovenaf', span: 'tall' },
