@@ -420,16 +420,16 @@ function FinalCta() {
           <p className="mx-auto mt-5 max-w-xl text-[15.5px] leading-relaxed text-muted lg:text-base">
             {t.ctaBody}
           </p>
-          <div className="mt-9 flex justify-center">
+          <div className="group mt-9 flex flex-col items-center">
             <BookCallButton className="h-12 px-7 text-[15px]">{t.bookCall}</BookCallButton>
+            <p className="mt-6 text-center text-[13px] text-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              {t.ctaFootPre}
+              <a href={`mailto:${CONTACT.email}`} className="text-faint underline-offset-4 hover:text-ink hover:underline">
+                {CONTACT.email}
+              </a>
+              .
+            </p>
           </div>
-          <p className="mt-6 text-[13px] text-dim">
-            {t.ctaFootPre}
-            <a href={`mailto:${CONTACT.email}`} className="text-faint underline-offset-4 hover:text-ink hover:underline">
-              {CONTACT.email}
-            </a>
-            .
-          </p>
         </div>
       </Reveal>
     </section>

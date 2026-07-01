@@ -2121,14 +2121,13 @@ function offsetWithin(el: HTMLElement, ancestor: HTMLElement) {
    differentiators: free-standing frosted-glass cards over a sharp peak, crisp in
    the gaps and blurred through each card via an aligned blurred copy of the peak,
    with a cursor-driven 3D tilt. The peak is faded into the page so it blends. */
-type WhyBg = { src: string; w: number; h: number }
+type WhyBg = { src: string; w: number; h: number; posY: number; opacity: number }
 const WHY_BG: Record<string, WhyBg> = {
-  'app-design': { src: '/services/whyus-wave.webp', w: 800, h: 448 },
-  aios: { src: '/services/whyus-aios.webp', w: 1500, h: 841 },
+  'app-design': { src: '/services/whyus-wave.webp', w: 800, h: 448, posY: 0.5, opacity: 0.72 },
+  aios: { src: '/services/whyus-aios.webp', w: 1500, h: 841, posY: 0.28, opacity: 0.48 },
 }
 const whyBg = (slug: string): WhyBg => WHY_BG[slug] ?? WHY_BG['app-design']
 const WHY_POS_X = 0.5
-const WHY_POS_Y = 0.5
 
 function AppWhyCard({
   title,
@@ -2166,7 +2165,7 @@ function AppWhyCard({
       const sw = bg.w * scale
       const sh = bg.h * scale
       const bandX = (bw - sw) * WHY_POS_X
-      const bandY = (bh - sh) * WHY_POS_Y
+      const bandY = (bh - sh) * bg.posY
       const { x: cardX, y: cardY } = offsetWithin(card, band)
       setFrost({ w: sw, h: sh, left: bandX - cardX, top: bandY - cardY })
     }
@@ -2243,7 +2242,8 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
           <img
             src={bg.src}
             alt=""
-            className="h-full w-full object-cover object-[50%_50%] opacity-[0.72]"
+            className="h-full w-full object-cover"
+            style={{ objectPosition: `50% ${bg.posY * 100}%`, opacity: bg.opacity }}
           />
           <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg via-bg/65 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg via-bg/65 to-transparent" />
@@ -2599,12 +2599,12 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
         <motion.p variants={heroFade} className="mx-auto mt-6 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">
           {content.finalCta.body}
         </motion.p>
-        <motion.div variants={heroFade} className="mt-9 flex justify-center">
+        <motion.div variants={heroFade} className="group mt-9 flex flex-col items-center">
           <BookCallButton className="h-12 px-7 text-[15px]">{content.finalCta.button}</BookCallButton>
+          <p className="pointer-events-none mt-5 max-w-xl text-center text-[13px] text-dim opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {content.finalCta.reassurance}
+          </p>
         </motion.div>
-        <motion.p variants={heroFade} className="mt-5 text-[13px] text-dim">
-          {content.finalCta.reassurance}
-        </motion.p>
       </motion.div>
     </section>
   )
