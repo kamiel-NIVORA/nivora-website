@@ -2,11 +2,13 @@ import { useEffect } from 'react'
 import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
+import { LocationMap } from '@/components/ui/LocationMap'
 import { CONTACT, ADDRESS, SOCIAL_LINKS } from '@/data/contact'
 import { useLang } from '@/i18n'
 
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS.mapQuery)}`
-const MAP_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS.mapQuery)}&z=15&output=embed`
+/** The studio, geocoded once so the map centres exactly on it (no runtime lookup). */
+const STUDIO = { lat: 51.2179184, lng: 3.2273973 } as const
 
 const COPY = {
   en: {
@@ -128,14 +130,8 @@ export function ContactPage() {
               </p>
             </Reveal>
             <Reveal mode="mount" delay={0.15}>
-              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-9 flex items-center justify-center">
                 <BookCallButton className="h-[52px] px-7 text-[15px]">{t.bookCall}</BookCallButton>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="inline-flex h-[52px] items-center gap-2 rounded-full border border-white/[0.18] bg-white/[0.06] px-7 text-[15px] text-ink backdrop-blur-md transition-colors hover:border-white/30 hover:bg-white/[0.12]"
-                >
-                  {t.emailUs}
-                </a>
               </div>
             </Reveal>
           </div>
@@ -175,63 +171,19 @@ export function ContactPage() {
         </div>
       </section>
 
-      {/* Frameless monochrome map that melts into the page — one quiet accent: the marker */}
+      {/* Interactive dark map that melts into the page — drag and scroll to explore,
+          one quiet terracotta marker, and a lower-left chip out to Google Maps. */}
       <section className="mx-auto w-full max-w-[1120px] px-6 pb-28 pt-12 lg:pb-36">
         <Reveal>
-          <div className="relative h-[440px] overflow-hidden rounded-[28px] bg-bg sm:h-[540px]">
-            {/* The map is blown up well past the frame and kept non-interactive, so every
-                bit of Google's own chrome — the top-left place panel, the logo, the zoom
-                controls, the attribution strip — is cropped away. Centered, so the studio
-                stays dead-centre and the visible street extent matches a normal z=15 view. */}
-            <iframe
-              title={t.mapTitle}
-              src={MAP_EMBED}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              tabIndex={-1}
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[300%] w-[300%] -translate-x-1/2 -translate-y-1/2 border-0 [filter:invert(0.92)_grayscale(1)_brightness(0.6)_contrast(0.95)] sm:h-[220%] sm:w-[220%]"
-            />
-            {/* Tint + heavy edge feather so the map sinks into the near-black page */}
-            <div className="pointer-events-none absolute inset-0 bg-bg/40" />
-            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_130px_64px_#060606]" />
-
-            {/* The single colour on the page: a quiet terracotta marker on the studio */}
-            <div className="pointer-events-none absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2">
-              <span className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta/15 blur-lg" />
-              <svg
-                viewBox="0 0 24 24"
-                className="relative h-8 w-8 -translate-y-[16px] text-terracotta drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 2c-3.87 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-                />
-                <circle cx="12" cy="9" r="2.5" fill="#060606" />
-              </svg>
-            </div>
-
-            {/* Address / route chip — the lower-left card, kept clean */}
-            <a
-              href={MAPS_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group absolute inset-x-4 bottom-4 z-[3] flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-bg/80 px-4 py-3.5 backdrop-blur-md transition-colors hover:border-white/15 hover:bg-bg/90 sm:inset-x-auto sm:left-5 sm:max-w-md"
-            >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-terracotta">
-                <MapPin className="h-[19px] w-[19px]" strokeWidth={1.7} />
-              </span>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate text-[14px] text-ink">{ADDRESS.line1}</span>
-                <span className="truncate text-[12.5px] text-faint">{ADDRESS.line2}</span>
-              </span>
-              <span className="inline-flex shrink-0 items-center gap-1 text-[12.5px] text-faint transition-colors group-hover:text-ink">
-                <span className="hidden sm:inline">{t.route} </span>
-                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
-              </span>
-            </a>
-          </div>
+          <LocationMap
+            coords={STUDIO}
+            mapsUrl={MAPS_LINK}
+            line1={ADDRESS.line1}
+            line2={ADDRESS.line2}
+            routeLabel={t.route}
+            title={t.mapTitle}
+            className="h-[440px] sm:h-[540px]"
+          />
         </Reveal>
       </section>
     </main>
