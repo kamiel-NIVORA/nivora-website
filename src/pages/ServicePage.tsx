@@ -260,6 +260,7 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
+        {meta.slug === 'ai-consulting' && <ConsultingWhoFor />}
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
         {meta.slug === 'aios' && <AiosWorkGrid />}
         {meta.slug === 'aios' && <AiosTimeline />}
@@ -1819,6 +1820,88 @@ function LocalWhoFor() {
             <motion.div style={{ y }} className="will-change-transform">
               <img
                 src="/services/whofor-localai.gif"
+                alt=""
+                loading="lazy"
+                className="mx-auto aspect-square w-full max-w-[440px] object-contain"
+              />
+            </motion.div>
+          </Reveal>
+        </div>
+
+        {/* copy — right on desktop */}
+        <div className="order-2">
+          <Reveal>
+            <h2 className="font-serif text-[30px] leading-[1.1] tracking-[-0.015em] text-ink sm:text-[40px] lg:text-[46px]">
+              {data.title}
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-md text-[16px] leading-relaxed text-faint">{data.subtitle}</p>
+          </Reveal>
+          <ul className="mt-8 flex flex-col gap-4">
+            {data.lines.map((line, i) => (
+              <Reveal as="li" key={line.head} delay={0.14 + i * 0.07} className="flex items-start gap-3.5">
+                <Check className="mt-0.5 h-[18px] w-[18px] shrink-0 text-ink" strokeWidth={2} />
+                <span className="text-[15.5px] leading-relaxed text-ink-soft">
+                  <span className="font-semibold text-ink">{line.head}.</span> {line.body}
+                </span>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* AI Consulting · "who this is for". Same quiet who-for layout as AIOS and
+   Local AI (particle gif + three lines with bold heads), with its own copy: the
+   three kinds of doubters, so each reader recognises themselves in one. ─────── */
+
+const CONSULTING_WHO: Record<Lang, { title: string; subtitle: string; lines: { head: string; body: string }[] }> = {
+  en: {
+    title: 'Who this is for',
+    subtitle:
+      'For those serious about putting AI to work, but who want to know where it truly pays off first.',
+    lines: [
+      { head: 'You do not know where to start', body: 'Companies that feel they should do something with AI, but do not know where to begin. They see it is possible, just not where it makes the difference for them.' },
+      { head: 'You have tried without results', body: 'Companies that have tried all sorts of things, without it really changing anything. A tool here, an experiment there, and afterwards the question of what it actually changed.' },
+      { head: 'You want to invest with certainty', body: 'Companies that want to invest in AI, but first want to be sure they put it into the right things, and not into whatever happens to be popular.' },
+    ],
+  },
+  nl: {
+    title: 'Voor wie hier klaar voor is',
+    subtitle:
+      'Voor wie serieus met AI aan de slag wil, maar eerst wil weten waar het echt loont.',
+    lines: [
+      { head: 'Je weet niet waar te beginnen', body: 'Bedrijven die voelen dat ze iets moeten met AI, maar niet weten waar te beginnen. Ze zien dat het kan, alleen niet waar het voor hén het verschil maakt.' },
+      { head: 'Je hebt al geprobeerd zonder resultaat', body: 'Bedrijven die al van alles geprobeerd hebben, zonder dat het echt iets opleverde. Een tool hier, een experiment daar, en achteraf de vraag wat het nu eigenlijk veranderd heeft.' },
+      { head: 'Je wil zeker investeren', body: 'Bedrijven die willen investeren in AI, maar eerst zeker willen zijn dat ze het in de juiste dingen steken, en niet in wat toevallig populair is.' },
+    ],
+  },
+}
+
+function ConsultingWhoFor() {
+  const { lang } = useLang()
+  const data = CONSULTING_WHO[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1100px] px-6 py-20 sm:py-24 lg:py-32">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        {/* the particle animation — left on desktop, melts into the page */}
+        <div ref={ref} className="relative order-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-[90px]"
+            style={{ background: 'radial-gradient(52% 46% at 50% 48%, rgba(245,245,245,0.10), transparent 72%)' }}
+          />
+          <Reveal y={24}>
+            <motion.div style={{ y }} className="will-change-transform">
+              <img
+                src="/services/whofor-consulting.gif"
                 alt=""
                 loading="lazy"
                 className="mx-auto aspect-square w-full max-w-[440px] object-contain"
