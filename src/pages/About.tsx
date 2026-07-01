@@ -19,7 +19,7 @@ const VOICE_IMG = '/about/voice-glossy.webp'
 const VOICE_LOGO = '/products/voice-logo.webp'
 const BOX_IMG = '/about/box-glossy.webp'
 const BOX_LOGO = '/products/box-logo.webp'
-const CTA_IMG = '/home/cta-landscape.webp'
+const CTA_IMG = '/about/cta-sea.webp'
 
 const SERVICE_ICON: Record<string, string> = {
   'app-design': '/services/icon-appdesign.png',
@@ -40,8 +40,8 @@ const COPY = {
     docTitle: 'About · Nivora',
     metaDescription:
       'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
-    heroHeadline: 'Technology can be fun again.',
-    heroSub: "We're Nivora, and that is exactly what we build.",
+    heroHeadline: 'We build technology that works.',
+    heroSub: "We're Nivora. We design and build software and AI that simply do their job.",
     voiceStory:
       'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around: you speak, and out comes text that reads like you actually write. Ready to send, not to rewrite.',
     boxStory:
@@ -83,8 +83,8 @@ const COPY = {
     docTitle: 'Over ons · Nivora',
     metaDescription:
       'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
-    heroHeadline: 'Technologie mag weer leuk zijn.',
-    heroSub: 'Wij zijn Nivora, en dat is precies wat we bouwen.',
+    heroHeadline: 'Wij bouwen technologie die werkt.',
+    heroSub: 'Wij zijn Nivora. We ontwerpen en bouwen software en AI die gewoon doen wat ze moeten.',
     voiceStory:
       'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en er komt tekst uit die klinkt zoals u écht schrijft. Klaar om te versturen, niet om over te doen.',
     boxStory:
@@ -473,11 +473,11 @@ function FinalCta() {
   return (
     <section id="contact" className="relative w-full overflow-hidden px-6 py-28 sm:py-32 lg:py-40">
       <ParallaxImage src={CTA_IMG} range={['-5%', '5%']} />
-      <div className="absolute inset-0 bg-black/55" />
+      <div className="absolute inset-0 bg-black/35" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(72% 60% at 50% 48%, rgba(6,6,6,0.6), transparent 78%)' }}
+        style={{ background: 'radial-gradient(72% 62% at 50% 46%, rgba(6,6,6,0.62), transparent 80%)' }}
       />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-bg via-bg/70 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg via-bg/70 to-transparent" />
