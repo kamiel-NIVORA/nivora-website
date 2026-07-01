@@ -2123,6 +2123,7 @@ type WhyBg = { src: string; w: number; h: number; posY: number; opacity: number 
 const WHY_BG: Record<string, WhyBg> = {
   'app-design': { src: '/services/whyus-wave.webp', w: 800, h: 448, posY: 0.5, opacity: 0.72 },
   aios: { src: '/services/whyus-aios.webp', w: 1500, h: 841, posY: 0.28, opacity: 0.48 },
+  'local-ai': { src: '/services/why-localai.webp', w: 1200, h: 675, posY: 0.5, opacity: 0.55 },
 }
 const whyBg = (slug: string): WhyBg => WHY_BG[slug] ?? WHY_BG['app-design']
 const WHY_POS_X = 0.5
@@ -2226,9 +2227,13 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
       ? lang === 'nl'
         ? 'Geen kant-en-klaar systeem dat u naar zich toe buigt. Wij bouwen het rond hoe u werkt, en het blijft helemaal van u.'
         : 'No off-the-shelf system you have to bend to. We build it around how you work, and it stays entirely yours.'
-      : lang === 'nl'
-        ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
-        : 'No agency passing you around. The people who shape your app are the same people who build it.'
+      : content.slug === 'local-ai'
+        ? lang === 'nl'
+          ? 'Geen leverancier die u een systeem verhuurt. Wij bouwen uw eigen AI, en die blijft volledig van u, op uw eigen server.'
+          : 'No vendor renting you a system. We build your own AI, and it stays entirely yours, on your own server.'
+        : lang === 'nl'
+          ? 'Geen bureau dat u doorschuift. De mensen die uw app bedenken, zijn ook de mensen die hem bouwen.'
+          : 'No agency passing you around. The people who shape your app are the same people who build it.'
   return (
     <section className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-32">
       {/* bandRef wraps the backdrop AND the cards, so the peak reads across the whole
@@ -2277,7 +2282,7 @@ function AppWhyUs({ content }: { content: ServiceContent }) {
 /* Why us · selling reasons over a scenic, drifting band ─────────────────────── */
 
 function WhyUs({ content, meta }: { content: ServiceContent; meta: ServiceMeta }) {
-  if (meta.slug === 'app-design' || meta.slug === 'aios') return <AppWhyUs content={content} />
+  if (meta.slug === 'app-design' || meta.slug === 'aios' || meta.slug === 'local-ai') return <AppWhyUs content={content} />
 
   return (
     <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-28">
@@ -2568,7 +2573,9 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
             ? '/services/cta-appdesign.webp'
             : meta.slug === 'aios'
               ? '/services/cta-aios.webp'
-              : meta.photo
+              : meta.slug === 'local-ai'
+                ? '/services/cta-localai.webp'
+                : meta.photo
         }
         range={['-8%', '8%']}
       />
