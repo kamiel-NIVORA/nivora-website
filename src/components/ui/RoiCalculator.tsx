@@ -36,8 +36,10 @@ const AREAS: { key: AreaKey; icon: string; nl: string; en: string }[] = [
 
 const COPY = {
   en: {
-    selectTitle: 'Where it piles up',
-    selectHelp: 'Click the departments where recurring work piles up for you.',
+    selectQuestion: 'Where does work pile up for you?',
+    selectHelp: 'Pick the departments that apply to you.',
+    deptQuestion: (name: string) => `How much time goes into ${name}?`,
+    deptHelp: 'The people doing it, the hours a week, and the cost per hour.',
     pickHint: 'Pick at least one department to continue.',
     ofN: (i: number, n: number) => `${i} / ${n}`,
     people: { label: 'People doing this work', render: (v: number) => `${nf().format(v)} ${v === 1 ? 'person' : 'people'}` },
@@ -54,8 +56,10 @@ const COPY = {
     cta: "Let's make this happen",
   },
   nl: {
-    selectTitle: 'Waar loopt het vast',
-    selectHelp: 'Klik de afdelingen aan waar bij u werk blijft liggen.',
+    selectQuestion: 'Waar blijft er bij u werk liggen?',
+    selectHelp: 'Klik de afdelingen aan die op u van toepassing zijn.',
+    deptQuestion: (name: string) => `Hoeveel tijd kruipt er in ${name}?`,
+    deptHelp: 'De mensen die het doen, de uren per week en de kost per uur.',
     pickHint: 'Kies minstens één afdeling om verder te gaan.',
     ofN: (i: number, n: number) => `${i} / ${n}`,
     people: { label: 'Mensen die dit doen', render: (v: number) => `${nf().format(v)} ${v === 1 ? 'persoon' : 'mensen'}` },
@@ -203,7 +207,7 @@ export function RoiCalculator() {
     if (!dept) return
     setConfig((c) => ({ ...c, [dept.key]: { ...c[dept.key], ...patch } }))
   }
-  const isLast = step === chosen.length
+  const showReveal = step >= 1 && step === chosen.length
   const canNext = step !== 0 || chosen.length > 0
   const allSelected = AREAS.every((a) => selected[a.key])
   const toggleAll = () => {
@@ -226,10 +230,25 @@ export function RoiCalculator() {
             {!done ? (
               <motion.div key="config" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3, ease }} className="flex flex-1 flex-col">
                 <div className="flex items-start justify-between gap-4">
-                  <p className="max-w-[62%] text-[13px] leading-snug text-faint">{step === 0 ? t.selectHelp : ''}</p>
-                  <span className="shrink-0 text-[12px] uppercase tracking-[0.18em] text-faint">
-                    {step === 0 ? t.selectTitle : dept ? t.ofN(step, chosen.length) : ''}
-                  </span>
+                  {step === 0 ? (
+                    <div>
+                      <p className="text-[17px] font-medium leading-snug text-ink sm:text-[18px]">{t.selectQuestion}</p>
+                      <p className="mt-1.5 text-[13px] leading-snug text-faint">{t.selectHelp}</p>
+                    </div>
+                  ) : dept ? (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] border border-white/20 bg-white/[0.08]">
+                          <img src={dept.icon} alt="" className="h-5 w-5 object-contain" />
+                        </span>
+                        <div>
+                          <p className="text-[17px] font-medium leading-snug text-ink sm:text-[18px]">{t.deptQuestion(dept[lang])}</p>
+                          <p className="mt-1 text-[13px] leading-snug text-faint">{t.deptHelp}</p>
+                        </div>
+                      </div>
+                      <span className="shrink-0 self-start text-[12px] uppercase tracking-[0.16em] text-faint">{t.ofN(step, chosen.length)}</span>
+                    </>
+                  ) : null}
                 </div>
 
                 <div className="mt-6 flex flex-1 flex-col justify-center">
@@ -261,18 +280,10 @@ export function RoiCalculator() {
                           })}
                         </div>
                       ) : dept ? (
-                        <div>
-                          <div className="flex items-center gap-3">
-                            <span className="flex h-10 w-10 items-center justify-center rounded-[12px] border border-white/20 bg-white/[0.08]">
-                              <img src={dept.icon} alt="" className="h-5 w-5 object-contain" />
-                            </span>
-                            <h3 className="font-serif text-[22px] leading-none tracking-[-0.01em] text-ink">{dept[lang]}</h3>
-                          </div>
-                          <div className="mt-7 flex flex-col gap-6">
-                            <Slider id={`roi-${dept.key}-people`} label={t.people.label} value={config[dept.key].people} valueText={t.people.render(config[dept.key].people)} min={B.people.min} max={B.people.max} step={B.people.step} onChange={(n) => setDept({ people: n })} />
-                            <Slider id={`roi-${dept.key}-hours`} label={t.hours.label} value={config[dept.key].hours} valueText={t.hours.render(config[dept.key].hours)} min={B.hours.min} max={B.hours.max} step={B.hours.step} onChange={(n) => setDept({ hours: n })} />
-                            <Slider id={`roi-${dept.key}-rate`} label={t.rate.label} value={config[dept.key].rate} valueText={t.rate.render(config[dept.key].rate)} min={B.rate.min} max={B.rate.max} step={B.rate.step} onChange={(n) => setDept({ rate: n })} />
-                          </div>
+                        <div className="flex flex-col gap-6">
+                          <Slider id={`roi-${dept.key}-people`} label={t.people.label} value={config[dept.key].people} valueText={t.people.render(config[dept.key].people)} min={B.people.min} max={B.people.max} step={B.people.step} onChange={(n) => setDept({ people: n })} />
+                          <Slider id={`roi-${dept.key}-hours`} label={t.hours.label} value={config[dept.key].hours} valueText={t.hours.render(config[dept.key].hours)} min={B.hours.min} max={B.hours.max} step={B.hours.step} onChange={(n) => setDept({ hours: n })} />
+                          <Slider id={`roi-${dept.key}-rate`} label={t.rate.label} value={config[dept.key].rate} valueText={t.rate.render(config[dept.key].rate)} min={B.rate.min} max={B.rate.max} step={B.rate.step} onChange={(n) => setDept({ rate: n })} />
                         </div>
                       ) : null}
                     </motion.div>
@@ -285,7 +296,7 @@ export function RoiCalculator() {
                   ) : (
                     <PillButton onClick={() => setStep((s) => Math.max(0, s - 1))}>{t.back}</PillButton>
                   )}
-                  {!isLast ? (
+                  {!showReveal ? (
                     <PillButton primary disabled={!canNext} onClick={() => setStep((s) => Math.min(chosen.length, s + 1))}>
                       {t.next}
                     </PillButton>
