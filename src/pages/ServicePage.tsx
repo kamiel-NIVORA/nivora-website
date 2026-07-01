@@ -253,6 +253,7 @@ export function ServicePage() {
           copy={content.reveal}
           accent={meta.accent}
         />
+        {meta.slug === 'ai-consulting' && <ConsultingTimeline />}
         {meta.slug === 'aios' && <AiosWhoFor meta={meta} />}
         {meta.slug === 'aios' && <AiosWorkGrid />}
         {meta.slug === 'aios' && <AiosTimeline />}
@@ -2064,6 +2065,124 @@ function ServerTimeline() {
         ))}
 
         <LocalSafeCard />
+      </div>
+    </section>
+  )
+}
+
+/* AI Consulting · the engagement as an alternating photo/text timeline, same lane
+   and glossy-reveal treatment as Local AI's ServerTimeline (reuses ServerStepRow),
+   with its own four steps and its own icons: listen, weigh, plan, stay. ───────── */
+
+const CONSULTING_STEPS: Record<
+  Lang,
+  { title: string; subtitle: string; items: { title: string; body: string; image: string; clean?: string; icon?: string }[] }
+> = {
+  en: {
+    title: 'From a question to a plan that fits',
+    subtitle: 'We do not start with answers, but with understanding how you work.',
+    items: [
+      {
+        title: 'We listen to how you work',
+        body: 'We map what happens every day, where time slips away, and where the frustration sits. Not only with the leadership, but with the people who really do the work. The better we understand how your business runs, the sharper we can see where AI can mean something.',
+        image: '/services/timeline-1.webp',
+        clean: '/services/timeline-clean-1.webp',
+        icon: '/services/icon-consulting-1.png',
+      },
+      {
+        title: 'We find where AI truly pays off',
+        body: 'Not everywhere it could, but where it returns the most. We weigh what it costs against what it brings in, and line the opportunities up from most to least valuable. So you know where to put it first.',
+        image: '/services/timeline-2.webp',
+        clean: '/services/timeline-clean-2.webp',
+        icon: '/services/icon-consulting-2.png',
+      },
+      {
+        title: 'We make a plan you can follow',
+        body: 'You get a clear plan: what first, what later, roughly what it costs and what it returns. Not a vague report full of possibilities, but a concrete direction you can act on tomorrow.',
+        image: '/services/timeline-3.webp',
+        clean: '/services/timeline-clean-3.webp',
+        icon: '/services/icon-consulting-3.png',
+      },
+      {
+        title: 'We stay with you if you want to build',
+        body: 'Want to do it yourself, then you have a clear direction. Want us to build it, or to guide your team, then we are ready. Our advice does not stop at a report, it runs on until it truly works.',
+        image: '/services/timeline-4.webp',
+        clean: '/services/timeline-clean-4.webp',
+        icon: '/services/icon-consulting-4.png',
+      },
+    ],
+  },
+  nl: {
+    title: 'Van vraag naar een plan dat klopt',
+    subtitle: 'We beginnen niet met antwoorden, maar met begrijpen hoe jij werkt.',
+    items: [
+      {
+        title: 'We luisteren naar hoe je werkt',
+        body: 'We brengen in kaart wat er elke dag gebeurt, waar tijd verloren gaat, en waar de frustratie zit. Niet alleen bij de leiding, maar bij de mensen die het werk echt doen. Hoe beter we begrijpen hoe je bedrijf draait, hoe scherper we kunnen zien waar AI iets kan betekenen.',
+        image: '/services/timeline-1.webp',
+        clean: '/services/timeline-clean-1.webp',
+        icon: '/services/icon-consulting-1.png',
+      },
+      {
+        title: 'We zoeken waar AI echt loont',
+        body: 'Niet overal waar het kan, maar waar het het meeste oplevert. We wegen wat het kost tegen wat het opbrengt, en zetten de kansen op een rij van meest naar minst waardevol. Zo weet je waar je het eerst op moet inzetten.',
+        image: '/services/timeline-2.webp',
+        clean: '/services/timeline-clean-2.webp',
+        icon: '/services/icon-consulting-2.png',
+      },
+      {
+        title: 'We maken een plan dat je kan volgen',
+        body: 'Je krijgt een helder plan: wat eerst, wat later, wat het ongeveer kost en wat het oplevert. Geen vaag rapport vol mogelijkheden, maar een concrete richting die je morgen al kan inzetten.',
+        image: '/services/timeline-3.webp',
+        clean: '/services/timeline-clean-3.webp',
+        icon: '/services/icon-consulting-3.png',
+      },
+      {
+        title: 'We blijven erbij als je wil bouwen',
+        body: 'Wil je het zelf doen, dan heb je een duidelijke richting. Wil je dat wij het bouwen, of dat we je team begeleiden, dan staan we klaar. Ons advies stopt niet bij een rapport, het loopt door tot het echt werkt.',
+        image: '/services/timeline-4.webp',
+        clean: '/services/timeline-clean-4.webp',
+        icon: '/services/icon-consulting-4.png',
+      },
+    ],
+  },
+}
+
+function ConsultingTimeline() {
+  const { lang } = useLang()
+  const data = CONSULTING_STEPS[lang]
+  const lineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: lineRef, offset: ['start 60%', 'end 62%'] })
+  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-2xl text-center">
+        <Reveal>
+          <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            {data.title}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{data.subtitle}</p>
+        </Reveal>
+      </div>
+
+      <div ref={lineRef} className="relative mx-auto mt-12 max-w-[1160px] lg:mt-16">
+        {/* one centre line, fading in at the top and out at the bottom, filling as you scroll */}
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent_0%,#000_5%,#000_95%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,#000_5%,#000_95%,transparent_100%)]"
+        >
+          <motion.div
+            style={{ scaleY: fill }}
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/85 via-white/80 to-white/80"
+          />
+        </div>
+
+        {data.items.map((it, i) => (
+          <ServerStepRow key={it.title} title={it.title} body={it.body} image={it.image} clean={it.clean} icon={it.icon} reverse={i % 2 === 0} />
+        ))}
       </div>
     </section>
   )
