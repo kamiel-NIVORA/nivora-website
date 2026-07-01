@@ -2567,14 +2567,11 @@ function RoiBand({ meta }: { meta: ServiceMeta }) {
       <div className="relative mx-auto w-full max-w-[1200px] px-6">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>
-            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{config.eyebrow}</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-4 font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
+            <h2 className="font-serif text-[30px] leading-[1.12] tracking-[-0.01em] text-ink sm:text-[38px] lg:text-[44px]">
               {config.title}
             </h2>
           </Reveal>
-          <Reveal delay={0.12}>
+          <Reveal delay={0.08}>
             <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-faint">{config.subtitle}</p>
           </Reveal>
         </div>

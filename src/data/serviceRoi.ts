@@ -16,7 +16,6 @@ import type { ServiceSlug } from './serviceContent'
  */
 
 export type RoiFraming = {
-  eyebrow: string
   /** Short heading over the calculator. */
   title: string
   /** One line that sets up the number. */
@@ -27,7 +26,6 @@ export const SERVICE_ROI_EN: Partial<Record<ServiceSlug, RoiFraming>> = {
   // Only AIOS shows the calculator (Kamiel, 2026-06-23). App Design and Local AI
   // no longer show it; AI Consulting never did.
   aios: {
-    eyebrow: 'The cost of doing nothing',
     title: 'Put a number on it',
     subtitle:
       'Add up what tool-switching and double entry cost your team over a year. The number tends to surprise people.',
@@ -36,7 +34,6 @@ export const SERVICE_ROI_EN: Partial<Record<ServiceSlug, RoiFraming>> = {
 
 export const SERVICE_ROI_NL: Partial<Record<ServiceSlug, RoiFraming>> = {
   aios: {
-    eyebrow: 'De kosten van niets doen',
     title: 'Zet er een getal op',
     subtitle:
       'Tel op wat schakelen tussen tools en dubbele invoer uw team over een jaar kosten. Het getal verrast de meeste mensen.',
