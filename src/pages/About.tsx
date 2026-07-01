@@ -1,6 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
-import { ArrowUpRight, Inbox, Mic, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -16,7 +16,9 @@ const ease = [0.16, 1, 0.3, 1] as const
 /** Scenic photos, incl. the glossy glass-slat frames for the product stories. */
 const HERO_IMG = '/about/hero.jpg'
 const VOICE_IMG = '/about/voice-glossy.webp'
+const VOICE_LOGO = '/products/voice-logo.webp'
 const BOX_IMG = '/about/box-glossy.webp'
+const BOX_LOGO = '/products/box-logo.webp'
 const CTA_IMG = '/home/cta-landscape.webp'
 
 const SERVICE_ICON: Record<string, string> = {
@@ -26,8 +28,8 @@ const SERVICE_ICON: Record<string, string> = {
   'ai-consulting': '/services/icon-consulting.png',
 }
 
-/** Company LinkedIn (kept in sync with the footer/contact data). */
-const LINKEDIN_URL = 'https://www.linkedin.com/company/116050071'
+/** Kamiel's personal LinkedIn, shown on the founder plate. */
+const LINKEDIN_URL = 'https://www.linkedin.com/in/kamiel-niville-067ba2366/'
 const LINKEDIN_PATH =
   'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'
 
@@ -41,9 +43,9 @@ const COPY = {
     heroHeadline: 'It started with one frustration.',
     heroSub: "We're Nivora, a small studio in Brugge, building software and AI the way technology should feel.",
     voiceStory:
-      'We watched people fight dictation tools that made them sound like a machine, never like themselves. A shame, because typing eats time no one has. So we are making Voice: you talk, and clean text comes out that reads exactly like you write. Finished, right away.',
+      'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around: you speak, and out comes text that reads like you actually write. Ready to send, not to rewrite.',
     boxStory:
-      'We watched people jump between ten apps just to keep up with their messages. Email here, chat there, DMs somewhere else. So we are building Box: one calm inbox where it all comes together. Read, sort and reply, without ever switching again.',
+      'Your attention lives across ten apps. A mail here, a chat there, a DM you only spot at night. Box pulls it all into one calm inbox, so nothing slips through the cracks again, and so you stop hunting for where things are. Read, sort, reply, all in one quiet place.',
     joinWaitlist: 'Join the waiting list',
     servicesHeading: 'Custom software and AI, built around your business.',
     servicesIntro:
@@ -84,9 +86,9 @@ const COPY = {
     heroHeadline: 'Het begon met één frustratie.',
     heroSub: 'Wij zijn Nivora, een kleine studio uit Brugge, die software en AI bouwt zoals technologie hoort te voelen.',
     voiceStory:
-      'We zagen mensen worstelen met dicteersoftware die hen liet klinken als een machine, nooit als zichzelf. Zonde, want typen kost tijd die niemand heeft. Dus maken we Voice: u praat, en er komt nette tekst uit die leest precies zoals u schrijft. Meteen af.',
+      'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en er komt tekst uit die klinkt zoals u écht schrijft. Klaar om te versturen, niet om over te doen.',
     boxStory:
-      'We zagen mensen springen tussen tien apps, alleen al om hun berichten bij te houden. E-mail hier, chat daar, DMs ergens anders. Dus bouwen we Box: één rustige inbox waar alles samenkomt. Lezen, sorteren en antwoorden, zonder ooit nog te wisselen.',
+      'Uw aandacht ligt verspreid over tien apps. Een mail hier, een chat daar, een DM die u pas ’s avonds opmerkt. Box brengt het allemaal samen in één rustige inbox, zodat niets nog tussen de mazen glipt en u niet meer moet zoeken waar iets staat. Lezen, sorteren, antwoorden, op één rustige plek.',
     joinWaitlist: 'Schrijf u in op de wachtlijst',
     servicesHeading: 'Software en AI op maat, gebouwd rond uw bedrijf.',
     servicesIntro:
@@ -178,7 +180,7 @@ export function About() {
       <ProductStory
         name="Voice"
         story={t.voiceStory}
-        Icon={Mic}
+        logo={VOICE_LOGO}
         image={VOICE_IMG}
         cta={t.joinWaitlist}
         ctaHref={waitlistHref('voice')}
@@ -187,7 +189,7 @@ export function About() {
         reverse
         name="Box"
         story={t.boxStory}
-        Icon={Inbox}
+        logo={BOX_LOGO}
         image={BOX_IMG}
         cta={t.joinWaitlist}
         ctaHref={waitlistHref('box')}
@@ -261,7 +263,7 @@ function Hero() {
 function ProductStory({
   name,
   story,
-  Icon,
+  logo,
   image,
   cta,
   ctaHref,
@@ -269,7 +271,7 @@ function ProductStory({
 }: {
   name: string
   story: string
-  Icon: LucideIcon
+  logo: string
   image: string
   cta: string
   ctaHref: string
@@ -285,7 +287,11 @@ function ProductStory({
             <img src={image} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div aria-hidden className="absolute h-40 w-40 rounded-full bg-black/35 blur-2xl" />
-              <Icon className="relative h-[76px] w-[76px] text-white drop-shadow-[0_8px_22px_rgba(0,0,0,0.6)] sm:h-[88px] sm:w-[88px]" strokeWidth={1.3} />
+              <img
+                src={logo}
+                alt={name}
+                className="relative h-[84px] w-[84px] rounded-[22px] object-cover shadow-[0_12px_34px_rgba(0,0,0,0.55)] sm:h-[96px] sm:w-[96px]"
+              />
             </div>
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
           </div>
@@ -430,10 +436,7 @@ function Founder() {
         {/* The note */}
         <div>
           <Reveal>
-            <p className="text-[12px] uppercase tracking-[0.18em] text-faint">{t.founderEyebrow}</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-4 font-serif text-[28px] leading-[1.18] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
+            <h2 className="font-serif text-[28px] leading-[1.18] tracking-[-0.01em] text-ink sm:text-[34px] lg:text-[40px]">
               {t.founderHeading}
             </h2>
           </Reveal>
