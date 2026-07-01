@@ -400,7 +400,7 @@ const SHOWCASE: Record<ServiceSlug, { img?: string; video?: string; gif?: string
     alt: 'A hand holding a private folder, your own data turned into an AI that works for you.',
   },
   aios: { gif: '/services/aios-network.gif' },
-  'ai-consulting': { video: '/media/threads.mp4' },
+  'ai-consulting': { gif: '/services/consulting-discovery.gif' },
 }
 const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: string; body: string }>> = {
   en: {
@@ -420,9 +420,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Every part of your business lives in a different program, and none of them know what the others are doing. We bring it all together into one smart whole that knows your entire company and takes the work off your hands, so your team can focus on what matters and your business runs on AI instead of reaching for it now and then.',
     },
     'ai-consulting': {
-      eyebrow: 'What you get',
-      title: 'Know what to build before you spend a cent.',
-      body: 'We find where AI actually pays off, prove it with a small pilot, and hand you a ranked roadmap. No tool to sell, so the advice stays honest.',
+      eyebrow: '',
+      title: 'We go deep into your business before we recommend anything',
+      body: 'No generic advice from a distance. We look closely at how you really work, where it gets stuck and where time disappears, and only once we understand that do we tell you where AI makes the difference for you.',
     },
   },
   nl: {
@@ -442,9 +442,9 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
       body: 'Elk stuk van je bedrijf zit in een ander programma, en niemand weet van elkaar wat er speelt. Wij brengen alles samen in één slim geheel dat je hele bedrijf kent en het werk overneemt, zodat je team focust op wat telt en je bedrijf voortaan op AI draait in plaats van het er af en toe bij te pakken.',
     },
     'ai-consulting': {
-      eyebrow: 'Wat u krijgt',
-      title: 'Weet wat u moet bouwen, voor u een euro uitgeeft.',
-      body: 'We zoeken waar AI echt loont, bewijzen het met een kleine pilot, en geven u een geprioriteerde roadmap. Geen tool te verkopen, dus eerlijk advies.',
+      eyebrow: '',
+      title: 'We duiken diep in je bedrijf voor we iets aanraden',
+      body: 'Geen algemeen advies van een afstand. We kijken van dichtbij hoe je echt werkt, waar het stroef loopt en waar tijd verdwijnt, en pas als we dat begrijpen zeggen we waar AI voor jou het verschil maakt.',
     },
   },
 }
