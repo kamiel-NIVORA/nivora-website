@@ -1812,27 +1812,88 @@ const SAFE_APPROACH: Record<Lang, { title: string; body: string }> = {
 function LocalSafeApproaches() {
   const { lang } = useLang()
   const t = SAFE_APPROACH[lang]
+  const reduced = usePrefersReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 82%', 'end 45%'] })
+  const p = useSpring(scrollYProgress, { stiffness: 110, damping: 30, mass: 0.4 })
+  // First the centre line drops from the timeline into the card, then the border
+  // draws all the way around it as you keep scrolling.
+  const connectorFill = useTransform(p, [0, 0.4], [0, 1])
+  const sweepDeg = useTransform(p, [0.34, 0.92], [0, 360])
+  const borderBg = useMotionTemplate`conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.62) ${sweepDeg}deg, rgba(255,255,255,0) ${sweepDeg}deg)`
+
   return (
-    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-2 sm:pb-20 lg:pb-28">
-      <Reveal y={16}>
-        <div className="relative mx-auto grid max-w-[1100px] items-center gap-8 overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-12">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          <div className="flex items-center justify-center">
-            <img
-              src="/services/grass-mound.png"
-              alt=""
-              loading="lazy"
-              className="w-full max-w-[440px] object-contain drop-shadow-[0_34px_60px_rgba(0,0,0,0.55)]"
-            />
-          </div>
-          <div className="lg:pr-2">
-            <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
-              {t.title}
-            </h2>
-            <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
-          </div>
+    <section ref={ref} className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-8 sm:pb-20 lg:pb-28 lg:pt-16">
+      <div className="relative mx-auto max-w-[1100px]">
+        {/* connector: the timeline centre line continues down into the card */}
+        <div
+          aria-hidden
+          className="absolute left-1/2 -top-24 hidden h-24 w-[3px] -translate-x-1/2 overflow-hidden rounded-full lg:block [mask-image:linear-gradient(to_bottom,transparent,#000_45%)]"
+        >
+          <motion.div
+            style={reduced ? { scaleY: 1 } : { scaleY: connectorFill }}
+            className="absolute inset-0 origin-top bg-gradient-to-b from-white/25 via-white/50 to-white/80"
+          />
         </div>
-      </Reveal>
+
+        <Reveal y={16}>
+          <div className="relative grid items-center gap-8 overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-12">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            {/* the border that closes around the card as you scroll past it */}
+            {!reduced && (
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-[28px]"
+                style={{
+                  background: borderBg,
+                  padding: 1.5,
+                  WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                }}
+              />
+            )}
+
+            {/* left: the grass, settled into the card rather than pasted on top */}
+            <div className="relative flex items-center justify-center">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 h-[76%] w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+                style={{ background: 'radial-gradient(closest-side, rgba(150,167,102,0.18), transparent)' }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute bottom-[14%] left-1/2 h-7 w-[64%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-xl"
+              />
+              <img
+                src="/services/grass-mound.png"
+                alt=""
+                loading="lazy"
+                className="relative w-full max-w-[440px] object-contain [mask-image:linear-gradient(to_bottom,#000_74%,transparent_99%)]"
+              />
+              {/* glossy badge floating on the scene, same treatment as the 'De grote modellen' logos */}
+              <div className="absolute left-1/2 top-[14%] -translate-x-1/2 sm:top-[10%]">
+                <Drift radius={7} duration={28} phase={40}>
+                  <div
+                    className="flex items-center justify-center rounded-[16px] border border-white/12 bg-white/[0.07] shadow-[0_14px_36px_rgba(0,0,0,0.55)] backdrop-blur-md"
+                    style={{ width: 78, height: 78, padding: 18 }}
+                  >
+                    <img src="/services/web-white.png" alt="" className="h-full w-full object-contain" />
+                  </div>
+                </Drift>
+              </div>
+            </div>
+
+            {/* right: title + text */}
+            <div className="relative lg:pr-2">
+              <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
+                {t.title}
+              </h2>
+              <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+            </div>
+          </div>
+        </Reveal>
+      </div>
     </section>
   )
 }
