@@ -75,14 +75,14 @@ const COPY = {
         keyword: 'Link',
       },
       {
-        title: 'Share it with your people',
-        body: 'Post it, send it, recommend it. Anywhere the right businesses already listen to you. The word travels, and every click stays tied to you.',
+        title: 'Share them with friends',
+        body: 'Post it, send it, recommend it. To friends, acquaintances, anyone who could use it. The word travels, and every click stays tied to you.',
         keyword: 'Share',
       },
       {
-        title: 'They become customers',
+        title: 'They become an App user',
         body: 'When someone signs up through your link and starts paying, we tie it to you. No forms to chase, no proof to gather. It simply counts.',
-        keyword: 'Clients',
+        keyword: 'Users',
       },
       {
         title: 'You earn 20%',
@@ -145,14 +145,14 @@ const COPY = {
         keyword: 'Link',
       },
       {
-        title: 'Deel hem met uw mensen',
-        body: 'Post hem, stuur hem, beveel hem aan. Overal waar de juiste bedrijven al naar u luisteren. Het gaat rond, en elke klik blijft aan u gekoppeld.',
+        title: 'Deel hen met vrienden',
+        body: 'Post hem, stuur hem, beveel hem aan. Aan vrienden, kennissen, iedereen die er iets aan heeft. Het gaat rond, en elke klik blijft aan u gekoppeld.',
         keyword: 'Delen',
       },
       {
-        title: 'Zij worden klant',
+        title: 'Zij worden een App-gebruiker',
         body: 'Wanneer iemand zich via uw link aanmeldt en begint te betalen, koppelen we het aan u. Geen formulieren, geen bewijzen verzamelen. Het telt gewoon.',
-        keyword: 'Klanten',
+        keyword: 'Gebruikers',
       },
       {
         title: 'U verdient 20%',
