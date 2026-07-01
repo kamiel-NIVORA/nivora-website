@@ -265,6 +265,7 @@ export function ServicePage() {
         {meta.slug === 'aios' && <WhyUs content={content} meta={meta} />}
         {meta.slug === 'local-ai' && <ComparisonBand />}
         {meta.slug === 'local-ai' && <ServerTimeline />}
+        {meta.slug === 'local-ai' && <LocalSafeApproaches />}
         {meta.slug === 'app-design' && <AppWhoFor />}
         {meta.slug === 'app-design' && <AppBuildShapes />}
         {meta.slug !== 'app-design' && meta.slug !== 'aios' && meta.slug !== 'local-ai' && <Problem content={content} />}
@@ -1794,6 +1795,47 @@ function ComparisonBand() {
             </svg>
           </span>
           <p className="text-[15px] leading-relaxed text-ink-soft/90 sm:text-[16px]">{data.honest}</p>
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
+/* Local AI · secure-AI approaches (horizontal frosted card, grass mark on the left) */
+
+const SAFE_APPROACH: Record<Lang, { title: string; body: string }> = {
+  en: {
+    title: 'More than one path to safe AI',
+    body: 'Most of the time everything runs entirely on your own server, and your data simply stays inside. But when a certain job needs the most powerful models, we connect them over a shielded link, without your data being stored or reused. That way you get maximum power exactly when you need it. The trade-off: it adds a cost per use, so this is the more expensive route.',
+  },
+  nl: {
+    title: 'Meerdere benaderingen voor veilige AI',
+    body: 'Meestal draait alles volledig op uw eigen server, en blijft uw data gewoon binnen. Maar heeft u voor bepaald werk de allerkrachtigste modellen nodig, dan sluiten we die aan via een afgeschermde verbinding, zonder dat uw data bewaard of hergebruikt wordt. Zo krijgt u maximale kracht wanneer u die nodig hebt. Het nadeel: er komt een kost per gebruik bij, dus dit is de duurdere weg.',
+  },
+}
+
+function LocalSafeApproaches() {
+  const { lang } = useLang()
+  const t = SAFE_APPROACH[lang]
+  return (
+    <section className="relative mx-auto w-full max-w-[1200px] px-6 pb-16 pt-2 sm:pb-20 lg:pb-28">
+      <Reveal y={16}>
+        <div className="relative mx-auto grid max-w-[1100px] items-center gap-8 overflow-hidden rounded-[28px] border border-line-strong bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14 lg:p-12">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="flex items-center justify-center">
+            <img
+              src="/services/grass-mound.png"
+              alt=""
+              loading="lazy"
+              className="w-full max-w-[440px] object-contain drop-shadow-[0_34px_60px_rgba(0,0,0,0.55)]"
+            />
+          </div>
+          <div className="lg:pr-2">
+            <h2 className="font-serif text-[26px] leading-[1.14] tracking-[-0.01em] text-ink sm:text-[32px] lg:text-[38px]">
+              {t.title}
+            </h2>
+            <p className="mt-5 text-[15px] leading-relaxed text-faint sm:text-[16px]">{t.body}</p>
+          </div>
         </div>
       </Reveal>
     </section>
