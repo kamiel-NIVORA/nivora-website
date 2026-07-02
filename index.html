@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Set the html lang before first paint, mirroring the i18n language choice
+         (saved preference, else browser language). Without this the shell says
+         "en" while Dutch visitors see Dutch content, and Chrome pops up its
+         translate bar on every visit. -->
+    <script>
+      try {
+        var nivLang = localStorage.getItem('nivora.lang') || navigator.language || 'en'
+        document.documentElement.lang = nivLang.toLowerCase().indexOf('nl') === 0 ? 'nl' : 'en'
+      } catch (e) {}
+    </script>
     <link rel="icon" href="/favicon.ico?v=5" sizes="any" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png?v=5" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=5" />
