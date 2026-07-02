@@ -16,6 +16,7 @@
  */
 import { useEffect } from 'react'
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@/lib/blog'
+import { getCookieConsent } from '@/components/CookieConsent'
 
 const ENDPOINT = `${SUPABASE_URL}/rest/v1/blog_events`
 const PING_INTERVAL_MS = 15_000
@@ -25,7 +26,14 @@ const MAX_SECONDS = 14_400
 const uuid = (): string =>
   globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`
 
-function visitorId(): string {
+/**
+ * Anoniem first-party bezoekers-id, ALLEEN wanneer de bezoeker cookies heeft
+ * geaccepteerd (nivora.consent). Zonder acceptatie raken we localStorage niet
+ * aan en sturen we geen id mee: de meting blijft dan puur geaggregeerd
+ * (weergaven/leestijd), zonder herkenning over bezoeken heen.
+ */
+function visitorId(): string | null {
+  if (getCookieConsent() !== 'accepted') return null
   try {
     const key = 'nv_vid'
     let v = localStorage.getItem(key)
@@ -35,7 +43,7 @@ function visitorId(): string {
     }
     return v.slice(0, 64)
   } catch {
-    return 'no-storage'
+    return null
   }
 }
 
