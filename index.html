@@ -48,19 +48,49 @@
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Nivora",
-        "alternateName": ["Nivora Works", "NivoraWorks"],
+        "@id": "https://nivoraworks.com/#organization",
+        "name": "Nivora Works",
+        "legalName": "Nivora",
+        "alternateName": ["Nivora", "NivoraWorks", "Nivora AI"],
         "url": "https://nivoraworks.com",
-        "logo": "https://nivoraworks.com/brand/nivora-logo.png",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://nivoraworks.com/brand/nivora-logo.png"
+        },
+        "image": "https://nivoraworks.com/brand/og-card.png",
         "email": "kamiel@nivoraworks.com",
         "telephone": "+32 489 00 77 37",
-        "description": "Nivora is a software and AI studio in Brugge, Belgium. It builds its own apps, Box and Voice, and designs custom apps, local AI systems and AI operating systems for companies.",
+        "description": "Nivora Works is a software and AI studio in Brugge, Belgium. It builds its own apps, Box and Voice, and designs custom apps, local (on-premise) AI installations, AI operating systems and AI consulting for companies that want intelligent systems built around how they actually operate.",
+        "slogan": "Intelligent systems for ambitious companies.",
+        "knowsAbout": [
+          "Local AI",
+          "Private AI",
+          "On-premise AI installation",
+          "Custom software development",
+          "Custom app development",
+          "AI operating systems",
+          "AI consulting",
+          "Business automation"
+        ],
+        "areaServed": [
+          { "@type": "Country", "name": "Belgium" },
+          { "@type": "Country", "name": "Netherlands" }
+        ],
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Julius en Maurits Sabbestraat 15",
           "postalCode": "8000",
           "addressLocality": "Brugge",
+          "addressRegion": "West-Vlaanderen",
           "addressCountry": "BE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "email": "kamiel@nivoraworks.com",
+          "telephone": "+32 489 00 77 37",
+          "areaServed": ["BE", "NL"],
+          "availableLanguage": ["Dutch", "English"]
         },
         "founder": {
           "@type": "Person",
@@ -78,9 +108,52 @@
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": "https://nivoraworks.com/#website",
         "name": "Nivora Works",
         "alternateName": "Nivora",
-        "url": "https://nivoraworks.com"
+        "url": "https://nivoraworks.com",
+        "publisher": { "@id": "https://nivoraworks.com/#organization" },
+        "inLanguage": ["en", "nl"]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What exactly does Nivora do?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Two things. Nivora builds and installs custom AI systems for your business, from private AI inside your own infrastructure to custom apps and complete ERP systems. And it makes its own software, Box and Voice, that you can use directly. Either way, it is shaped around how you already work."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my data safe with private (local) AI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems Nivora builds are fully yours to keep."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to be technical to work with Nivora?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. You bring the problem, or the idea you cannot get built, and Nivora handles the rest, from design to building to installing it inside your tools. You stay in plain language the whole way."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where is Nivora based?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nivora is a software and AI studio based in Brugge, Belgium, working with companies across Belgium and the Netherlands."
+            }
+          }
+        ]
       }
     </script>
     <!-- Hero background: fetch in parallel with the bundle so it's ready before first paint (no pop-in). -->

@@ -21,3 +21,15 @@ Nivora (also written as Nivora Works or NivoraWorks) works with companies that w
 - [About](https://nivoraworks.com/about): the studio and founder Kamiel Niville.
 - [Blog](https://nivoraworks.com/blog): notes on building Box and Voice and where AI creates real value.
 - [Contact](https://nivoraworks.com/contact): Julius en Maurits Sabbestraat 15, 8000 Brugge, Belgium. kamiel@nivoraworks.com, +32 489 00 77 37.
+
+## Frequently asked
+
+What does Nivora do? Nivora builds and installs custom AI systems for companies, from private (local) AI inside your own infrastructure to custom apps and complete AI operating systems, and it makes its own software, Box and Voice.
+
+Where is Nivora based? Nivora is a software and AI studio in Brugge, Belgium, working with companies across Belgium and the Netherlands.
+
+Is my data safe with local AI? Yes. Local AI runs inside your own infrastructure, so your data never leaves your servers. Everything is GDPR-ready and the systems Nivora builds are fully yours to keep.
+
+Who founded Nivora? Nivora was founded by Kamiel Niville.
+
+How can I contact Nivora? Email kamiel@nivoraworks.com or call +32 489 00 77 37. Nivora usually replies within a day.
