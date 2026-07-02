@@ -14,7 +14,7 @@ import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
 import MacOSDock, { type DockApp } from '@/components/ui/MacOSDock'
 import { cn } from '@/lib/utils'
-import { useLang, type Lang } from '@/i18n'
+import { useLang, localizePath, type Lang } from '@/i18n'
 
 /** Soft luminous backdrop — placeholder, swap for the final art later. */
 const GLOW = '/products/IMG_0683.webp'
@@ -127,7 +127,7 @@ export function Products() {
             progress={progress}
             dx={-44}
             dark
-            href={waitlistHref('box')}
+            href={localizePath(waitlistHref('box'), lang)}
             ariaLabel={t.boxAria}
             className="min-h-[460px] lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2 lg:min-h-0"
           >
@@ -151,7 +151,7 @@ export function Products() {
             dy={-20}
             start={0.06}
             dark
-            href={waitlistHref('voice')}
+            href={localizePath(waitlistHref('voice'), lang)}
             ariaLabel={t.voiceAria}
             className="min-h-[300px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
@@ -468,7 +468,7 @@ function DesktopCard() {
         <MacOSDock
           apps={getDockApps(lang)}
           openApps={['box', 'voice']}
-          onAppClick={() => window.open(waitlistHref(), '_blank', 'noopener,noreferrer')}
+          onAppClick={() => window.open(localizePath(waitlistHref(), lang), '_blank', 'noopener,noreferrer')}
         />
       </div>
 
@@ -543,7 +543,7 @@ function DownloadCard() {
 
         {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
         <a
-          href={waitlistHref(tab)}
+          href={localizePath(waitlistHref(tab), lang)}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t.lockAria(appName)}

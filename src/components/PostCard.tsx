@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { LangLink as Link } from '@/components/ui/LangLink'
 import { Avatar } from '@/components/ui/Avatar'
 import { BlogCover } from '@/components/BlogCover'
 import type { Post } from '@/data/posts'

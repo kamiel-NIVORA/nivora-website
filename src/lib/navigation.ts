@@ -1,6 +1,6 @@
 import { HelpCircle, Leaf, type LucideIcon } from 'lucide-react'
 import { waitlistHref } from '@/data/contact'
-import type { Lang, Localized } from '@/i18n'
+import { localizePath, type Lang, type Localized } from '@/i18n'
 
 /** Shared navigation source of truth — used by both the Navbar and the Footer
  *  so the two never drift apart. Each list exists in English and Dutch; call the
@@ -68,10 +68,18 @@ const RESOURCES_NL: NavItem[] = [
   { title: 'Helpcentrum', desc: 'Vraag het onze assistent of bereik een mens.', href: '/help', Icon: HelpCircle },
 ]
 
-export const getProducts = (lang: Lang): NavItem[] => (lang === 'nl' ? PRODUCTS_NL : PRODUCTS_EN)
-export const getServices = (lang: Lang): NavItem[] => (lang === 'nl' ? SERVICES_NL : SERVICES_EN)
-export const getCompanyPrimary = (lang: Lang): NavItem[] => (lang === 'nl' ? COMPANY_PRIMARY_NL : COMPANY_PRIMARY_EN)
-export const getResources = (lang: Lang): NavItem[] => (lang === 'nl' ? RESOURCES_NL : RESOURCES_EN)
+/* Prefix each internal href with the active language (/nl) so links stay in
+   language in every consumer, nav, footer and the home sections, without each
+   render site having to remember to localize. Idempotent, so a consumer that
+   also calls localizePath is harmless. */
+const withLang = (items: NavItem[], lang: Lang): NavItem[] =>
+  lang === 'nl' ? items.map((i) => ({ ...i, href: localizePath(i.href, lang) })) : items
+
+export const getProducts = (lang: Lang): NavItem[] => withLang(lang === 'nl' ? PRODUCTS_NL : PRODUCTS_EN, lang)
+export const getServices = (lang: Lang): NavItem[] => withLang(lang === 'nl' ? SERVICES_NL : SERVICES_EN, lang)
+export const getCompanyPrimary = (lang: Lang): NavItem[] =>
+  withLang(lang === 'nl' ? COMPANY_PRIMARY_NL : COMPANY_PRIMARY_EN, lang)
+export const getResources = (lang: Lang): NavItem[] => withLang(lang === 'nl' ? RESOURCES_NL : RESOURCES_EN, lang)
 
 /* Stable internal menu keys (never shown raw) + their localized display labels. */
 export type MenuKey = 'Products' | 'Services' | 'Company' | 'Resources'

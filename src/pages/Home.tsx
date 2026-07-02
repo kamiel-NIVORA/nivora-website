@@ -13,7 +13,10 @@ import { useSeo, DEFAULT_TITLE } from '@/lib/seo'
 export function Home() {
   const { lang } = useLang()
   useSeo({
-    title: DEFAULT_TITLE,
+    title:
+      lang === 'nl'
+        ? 'Nivora Works - Intelligente systemen voor ambitieuze bedrijven'
+        : DEFAULT_TITLE,
     description:
       lang === 'nl'
         ? 'Nivora ontwerpt AI-systemen, apps en software op maat van hoe uw bedrijf werkt. Slimme tools die uw bedrijf beter, sneller en rustiger laten draaien. Gevestigd in Brugge.'

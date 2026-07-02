@@ -5,7 +5,7 @@ import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { cn } from '@/lib/utils'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -130,7 +130,7 @@ export function Faq() {
           <p className="text-center text-[14px] leading-relaxed text-faint">
             {t.stillHaveQuestion}
           </p>
-          <RippleButton variant="ghost" href="/help" className="h-11 px-5 text-sm">
+          <RippleButton variant="ghost" href={localizePath('/help', lang)} className="h-11 px-5 text-sm">
             {t.visitHelp}
           </RippleButton>
         </div>

@@ -1,13 +1,18 @@
 import { useEffect } from 'react'
+import { useLang, splitLangPath, langHref } from '@/i18n'
 
 /**
  * Site-wide SEO layer. One hook, `useSeo`, owns every SEO-relevant head tag:
- * title, meta description, robots, canonical, Open Graph and optional JSON-LD.
- * Every routed page calls it, so tags can never leak from one route into the
- * next, and search engines always see one canonical URL per page (the real
- * domain, never the vercel.app host).
+ * title, meta description, robots, canonical, hreflang alternates, Open Graph
+ * and optional JSON-LD. Every routed page calls it, so tags can never leak from
+ * one route into the next, and search engines always see one canonical URL per
+ * page and language (the real domain, never the vercel.app host).
  *
  *   useSeo({ title: 'About · Nivora', description: t.metaDescription, path: '/about' })
+ *
+ * `path` is the language-agnostic base ('/about'); the hook derives the English
+ * URL (/about) and the Dutch URL (/nl/about) from it, points canonical at the
+ * active language, and emits hreflang for both plus x-default.
  */
 
 /** Canonical production origin. Canonical + OG URLs always point here. */
@@ -28,7 +33,7 @@ type SeoInput = {
   title: string
   /** Search-result snippet, ~150-160 chars. Falls back to the site default. */
   description?: string
-  /** Route path ('/about') for the canonical + og:url. Defaults to the current path. */
+  /** Language-agnostic base path ('/about') for canonical + hreflang. Defaults to the current path. */
   path?: string
   /** Keep utility pages (confirmations, 404) out of Google's index. */
   noindex?: boolean
@@ -50,12 +55,29 @@ function setMeta(attr: 'name' | 'property', key: string, content: string) {
   el.setAttribute('content', content)
 }
 
+function setAlternate(hreflang: string, href: string) {
+  let el = document.head.querySelector<HTMLLinkElement>(
+    `link[rel="alternate"][hreflang="${hreflang}"]`,
+  )
+  if (!el) {
+    el = document.createElement('link')
+    el.rel = 'alternate'
+    el.hreflang = hreflang
+    document.head.appendChild(el)
+  }
+  el.href = href
+}
+
 export function useSeo({ title, description, path, noindex, ogImage, ogType, jsonLd }: SeoInput) {
+  const { lang } = useLang()
   const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : undefined
 
   useEffect(() => {
     const desc = description ?? DEFAULT_DESCRIPTION
-    const url = `${SITE_URL}${path ?? window.location.pathname}`
+    const base = path ?? splitLangPath(window.location.pathname).base
+    const enUrl = `${SITE_URL}${langHref('en', base)}`
+    const nlUrl = `${SITE_URL}${langHref('nl', base)}`
+    const url = lang === 'nl' ? nlUrl : enUrl
     const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`) : DEFAULT_OG_IMAGE
 
     document.title = title
@@ -66,6 +88,7 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
     setMeta('property', 'og:url', url)
     setMeta('property', 'og:image', image)
     setMeta('property', 'og:type', ogType ?? 'website')
+    setMeta('property', 'og:locale', lang === 'nl' ? 'nl_BE' : 'en_US')
     setMeta('name', 'twitter:title', title)
     setMeta('name', 'twitter:image', image)
 
@@ -76,6 +99,11 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
       document.head.appendChild(canonical)
     }
     canonical.href = url
+
+    // hreflang alternates so Google serves the right language per searcher.
+    setAlternate('en', enUrl)
+    setAlternate('nl-BE', nlUrl)
+    setAlternate('x-default', enUrl)
 
     let script: HTMLScriptElement | null = null
     if (jsonLdText) {
@@ -97,5 +125,5 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
       setMeta('name', 'twitter:image', DEFAULT_OG_IMAGE)
       script?.remove()
     }
-  }, [title, description, path, noindex, ogImage, ogType, jsonLdText])
+  }, [title, description, path, noindex, ogImage, ogType, jsonLdText, lang])
 }

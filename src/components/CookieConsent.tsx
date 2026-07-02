@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { LangLink as Link } from '@/components/ui/LangLink'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Cookie } from 'lucide-react'
 import { useLang } from '@/i18n'

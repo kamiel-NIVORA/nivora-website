@@ -1,21 +1,25 @@
 #!/usr/bin/env node
 /**
- * Per-route prerendered metadata for the SPA.
+ * Per-route prerendered metadata for the SPA, in both languages.
  *
- * Problem: every URL serves the same dist/index.html, so link previews
- * (WhatsApp, LinkedIn) and crawlers that do not run JavaScript see the
- * homepage title/description/og-image for every page.
+ * Problem: every URL serves the same dist/index.html, so link previews and
+ * crawlers that do not run JavaScript see the homepage title/description/schema
+ * for every page and every language.
  *
- * Fix: after `vite build`, copy the built shell to dist/<route>/index.html
- * with the title, meta description, canonical and og/twitter tags swapped for
- * that route. Vercel serves these static files before the SPA rewrite; React
- * hydrates the same shell, so the site behaves identically for visitors.
+ * Fix: after `vite build`, write a static shell per route AND per language:
+ *   - English at dist/<route>/index.html
+ *   - Dutch   at dist/nl/<route>/index.html
+ * Each shell carries the right title, description, canonical, og/twitter tags,
+ * <html lang>, per-route JSON-LD, and hreflang alternates (en / nl-BE /
+ * x-default). Vercel serves these before the SPA rewrite; React hydrates the
+ * same shell, so the site behaves identically for visitors. Language at runtime
+ * comes from the URL (see src/i18n).
  *
- * Meta sources (English, the crawler default):
- *   - services: hero/intro copy extracted from src/data/services.ts
- *   - blog:     title/excerpt/cover extracted from src/data/posts.ts
- *   - the rest: the STATIC_ROUTES map below, kept in sync with the useSeo
- *     calls in src/pages/*.
+ * Meta sources:
+ *   - services: src/data/services.ts (EN + NL blocks)
+ *   - blog:     src/data/posts.ts (EN + NL blocks)
+ *   - the rest: the STATIC_* maps below, kept in sync with the useSeo calls in
+ *     src/pages/*.
  * Noindex routes (confirm/unsubscribe/404) are deliberately absent.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
@@ -33,8 +37,30 @@ if (!existsSync(shellPath)) {
 }
 const shell = readFileSync(shellPath, 'utf8')
 
-/* ── meta per static route (mirrors the useSeo calls in src/pages) ───────── */
-const STATIC_ROUTES = {
+/** Absolute URL for a base path in a language. langUrl('nl','/about') -> .../nl/about */
+const langUrl = (lang, base) =>
+  `${SITE_URL}${lang === 'nl' ? (base === '/' ? '/nl' : `/nl${base}`) : base}`
+
+/* Reused as provider/publisher inside per-route JSON-LD. */
+const ORG = {
+  '@type': 'Organization',
+  name: 'Nivora',
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/nivora-logo.png`,
+}
+
+/** "Jun 20, 2026" -> "2026-06-20", using local date parts so a UTC shift can't move it. */
+const toIsoDate = (s) => {
+  if (!s) return null
+  const d = new Date(s)
+  if (Number.isNaN(d.getTime())) return null
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${m}-${day}`
+}
+
+/* ── static route meta, both languages (mirrors the useSeo calls in src/pages) ─ */
+const STATIC_EN = {
   '/about': {
     title: 'About · Nivora',
     description:
@@ -78,8 +104,98 @@ const STATIC_ROUTES = {
     description: 'How Nivora handles your data: what we collect, why we collect it, and the rights you have.',
   },
 }
+const STATIC_NL = {
+  '/about': {
+    title: 'Over Nivora · Nivora',
+    description:
+      'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er het meeste uit willen halen.',
+  },
+  '/blog': {
+    title: 'Blog · Nivora',
+    description:
+      'Notities van Nivora: hoe we onze apps Box en Voice bouwen, waar AI echt loont, en wat we leren bij het bouwen van intelligente systemen voor bedrijven.',
+  },
+  '/media': {
+    title: 'Mediakit · Nivora',
+    description:
+      'De officiële Nivora-mediakit: logo, kleuren, typografie, fotografie en merkstem, klaar om te downloaden voor pers en partners.',
+  },
+  '/waitlist': {
+    title: 'Wachtlijst · Nivora',
+    description: 'Schrijf u in op de wachtlijst voor Box en Voice, de Nivora-apps, en verneem het moment dat ze live gaan.',
+  },
+  '/affiliate': {
+    title: 'Affiliate · Nivora',
+    description:
+      'Word Nivora-affiliate: deel de apps Box en Voice met uw netwerk en verdien voor elke nieuwe gebruiker. Schrijf u in en wees als eerste aan de beurt.',
+  },
+  '/help': {
+    title: 'Helpcentrum · Nivora',
+    description:
+      'Het Nivora-helpcentrum: vraag de Nivora-assistent alles over onze apps, AI-systemen en diensten, of praat rechtstreeks met het team.',
+  },
+  '/contact': {
+    title: 'Contact · Nivora',
+    description:
+      'Vertel ons de uitdaging, of het idee dat u niet gebouwd krijgt. Boek een gesprek, of bereik ons rechtstreeks. We reageren meestal binnen een dag.',
+  },
+  '/terms': {
+    title: 'Servicevoorwaarden · Nivora',
+    description: 'De voorwaarden die van toepassing zijn op de Nivora-website, producten en diensten.',
+  },
+  '/privacy': {
+    title: 'Privacybeleid · Nivora',
+    description: 'Hoe Nivora met uw gegevens omgaat: wat we verzamelen, waarom, en welke rechten u hebt.',
+  },
+}
 
-/* ── extract service + blog meta from the data files ─────────────────────── */
+const HOME_NL = {
+  title: 'Nivora Works - Intelligente systemen voor ambitieuze bedrijven',
+  description:
+    'Nivora ontwerpt AI-systemen en software op maat van hoe u werkt. Intelligente tools die uw bedrijf beter, sneller en slimmer laten draaien.',
+}
+
+/* Dutch homepage FAQ, mirroring the English FAQPage baked into index.html. */
+const NL_FAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Wat doet Nivora precies?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Twee dingen. Nivora bouwt en installeert AI-systemen op maat voor uw bedrijf, van private AI binnen uw eigen infrastructuur tot apps op maat en complete ERP-systemen. En het maakt zijn eigen software, Box en Voice, die u meteen kunt gebruiken. Hoe dan ook, het wordt gevormd rond hoe u vandaag al werkt.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Zijn mijn gegevens veilig met private (lokale) AI?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die Nivora bouwt blijven volledig van u.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Moet ik technisch zijn om met Nivora te werken?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nee. U brengt het probleem, of het idee dat u niet gebouwd krijgt, en Nivora regelt de rest, van ontwerp tot bouw tot installatie binnen uw tools. Van begin tot eind blijft het in gewone taal.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Waar is Nivora gevestigd?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nivora is een software- en AI-studio in Brugge, België, en werkt met bedrijven in heel België en Nederland.',
+      },
+    },
+  ],
+}
+
+/* ── extract service + blog meta from the data files ─────────────────────────── */
 const QUOTED = "'((?:[^'\\\\]|\\\\.)*)'"
 const unescape = (s) => s.replace(/\\'/g, "'")
 const field = (block, name) => {
@@ -88,114 +204,115 @@ const field = (block, name) => {
 }
 const blocksBySlug = (src) => src.split(/(?=slug: ')/).slice(1)
 
-/* Reused as provider/publisher inside per-route JSON-LD. Mirrors the Organization
-   entity in index.html, kept small on purpose (the full entity is site-wide in
-   the shell; here it only has to identify the provider). */
-const ORG = {
-  '@type': 'Organization',
-  name: 'Nivora',
-  url: SITE_URL,
-  logo: `${SITE_URL}/brand/nivora-logo.png`,
-}
+const servicesSrc = readFileSync(join(root, 'src/data/services.ts'), 'utf8')
+const [servicesEnSrc, servicesNlSrc = ''] = servicesSrc.split('export const SERVICE_CONTENT_NL')
 
-/** "Jun 20, 2026" -> "2026-06-20", or null if it does not parse. Uses the local
-   date parts, not toISOString, so a UTC shift can never move it a day back. */
-const toIsoDate = (s) => {
-  if (!s) return null
-  const d = new Date(s)
-  if (Number.isNaN(d.getTime())) return null
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${day}`
-}
-
-const servicesEn = readFileSync(join(root, 'src/data/services.ts'), 'utf8').split(
-  'export const SERVICE_CONTENT_NL',
-)[0]
-const serviceRoutes = {}
-for (const block of blocksBySlug(servicesEn)) {
-  const slug = field(block, 'slug')
-  const name = field(block, 'name')
-  const eyebrow = field(block, 'eyebrow')
-  const subhead = field(block, 'subhead')
-  const statement = field(block, 'statement')
-  if (!slug || !eyebrow) continue
-  const url = `${SITE_URL}/services/${slug}`
-  const description = [subhead, statement].filter(Boolean).join(' ')
-  serviceRoutes[`/services/${slug}`] = {
-    title: `${eyebrow} · Nivora`,
-    description,
-    // Same shape the client injects in src/pages/ServicePage.tsx, but now baked
-    // into the static HTML so non-JS + AI crawlers see it on first fetch.
-    jsonLd: [
-      {
-        '@context': 'https://schema.org',
-        '@type': 'Service',
-        name: name ?? eyebrow,
-        description,
-        url,
-        areaServed: { '@type': 'Country', name: 'Belgium' },
-        provider: ORG,
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-          { '@type': 'ListItem', position: 2, name: name ?? eyebrow, item: url },
-        ],
-      },
-    ],
-  }
-}
-
-const postsEn = readFileSync(join(root, 'src/data/posts.ts'), 'utf8').split(/\n\s*nl: \[/)[0]
-const postRoutes = {}
-for (const block of blocksBySlug(postsEn)) {
-  const slug = field(block, 'slug')
-  const title = field(block, 'title')
-  const excerpt = field(block, 'excerpt')
-  const image = field(block, 'image')
-  const author = field(block, 'author')
-  const iso = toIsoDate(field(block, 'date'))
-  if (!slug || !title) continue
-  const url = `${SITE_URL}/blog/${slug}`
-  postRoutes[`/blog/${slug}`] = {
-    title: `${title} · Nivora`,
-    description: excerpt ?? undefined,
-    ogImage: image ?? undefined,
-    ogType: 'article',
-    jsonLd: [
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: title,
-        description: excerpt ?? undefined,
-        image: image ? `${SITE_URL}${image}` : undefined,
-        datePublished: iso ?? undefined,
-        author: { '@type': 'Person', name: author ?? 'Kamiel Niville' },
-        publisher: {
-          '@type': 'Organization',
-          name: 'Nivora',
-          logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/nivora-logo.png` },
+function parseServices(src, lang) {
+  const out = {}
+  for (const block of blocksBySlug(src)) {
+    const slug = field(block, 'slug')
+    const name = field(block, 'name')
+    const eyebrow = field(block, 'eyebrow')
+    const subhead = field(block, 'subhead')
+    const statement = field(block, 'statement')
+    if (!slug || !eyebrow) continue
+    const url = langUrl(lang, `/services/${slug}`)
+    const description = [subhead, statement].filter(Boolean).join(' ')
+    out[slug] = {
+      title: `${eyebrow} · Nivora`,
+      description,
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: name ?? eyebrow,
+          description,
+          url,
+          inLanguage: lang === 'nl' ? 'nl-BE' : 'en',
+          areaServed: { '@type': 'Country', name: 'Belgium' },
+          provider: ORG,
         },
-        mainEntityOfPage: url,
-        inLanguage: 'en',
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-          { '@type': 'ListItem', position: 3, name: title, item: url },
-        ],
-      },
-    ],
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: langUrl(lang, '/') },
+            { '@type': 'ListItem', position: 2, name: name ?? eyebrow, item: url },
+          ],
+        },
+      ],
+    }
+  }
+  return out
+}
+const serviceEn = parseServices(servicesEnSrc, 'en')
+const serviceNl = parseServices(servicesNlSrc, 'nl')
+
+const postsSrc = readFileSync(join(root, 'src/data/posts.ts'), 'utf8')
+const [postsEnSrc, postsNlSrc = ''] = postsSrc.split(/\n\s*nl: \[/)
+
+// Language-neutral post facts (date, image, author) come from the English blocks.
+const postFacts = {}
+for (const block of blocksBySlug(postsEnSrc)) {
+  const slug = field(block, 'slug')
+  if (!slug) continue
+  postFacts[slug] = {
+    image: field(block, 'image'),
+    author: field(block, 'author') ?? 'Kamiel Niville',
+    iso: toIsoDate(field(block, 'date')),
   }
 }
 
-/* ── rewrite the shell's head per route ───────────────────────────────────── */
+function parsePosts(src, lang) {
+  const out = {}
+  for (const block of blocksBySlug(src)) {
+    const slug = field(block, 'slug')
+    const title = field(block, 'title')
+    if (!slug || !title) continue
+    const facts = postFacts[slug] ?? {}
+    const excerpt = field(block, 'excerpt') ?? undefined
+    const image = facts.image ?? undefined
+    const url = langUrl(lang, `/blog/${slug}`)
+    out[slug] = {
+      title: `${title} · Nivora`,
+      description: excerpt,
+      ogImage: image,
+      ogType: 'article',
+      jsonLd: [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: title,
+          description: excerpt,
+          image: image ? `${SITE_URL}${image}` : undefined,
+          datePublished: facts.iso ?? undefined,
+          author: { '@type': 'Person', name: facts.author ?? 'Kamiel Niville' },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Nivora',
+            logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/nivora-logo.png` },
+          },
+          mainEntityOfPage: url,
+          inLanguage: lang === 'nl' ? 'nl-BE' : 'en',
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: langUrl(lang, '/') },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: langUrl(lang, '/blog') },
+            { '@type': 'ListItem', position: 3, name: title, item: url },
+          ],
+        },
+      ],
+    }
+  }
+  return out
+}
+const postEn = parsePosts(postsEnSrc, 'en')
+const postNl = parsePosts(postsNlSrc, 'nl')
+
+/* ── render ─────────────────────────────────────────────────────────────────── */
 const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
 
 /* One JSON-LD object -> a <script> block. Escape "<" so no string value can ever
@@ -203,56 +320,87 @@ const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace
 const ldBlock = (obj) =>
   `    <script type="application/ld+json">\n${JSON.stringify(obj, null, 2).replace(/</g, '\\u003c')}\n    </script>`
 
-/* The homepage FAQ is site-wide in the shell (index.html) but belongs only on the
-   homepage. Strip it from every copied sub-route shell. The negative lookahead
-   keeps the match inside a single script block (it can never cross a </script>). */
+/* The homepage FAQ is site-wide in the shell (index.html), English. It belongs
+   only on the English homepage. Bounded so the match stays inside one script block. */
 const FAQ_LD =
   /\n?\s*<script type="application\/ld\+json">(?:(?!<\/script>)[\s\S])*?"FAQPage"(?:(?!<\/script>)[\s\S])*?<\/script>/
 
 function replaceMeta(html, attr, key, value) {
   const re = new RegExp(`(<meta[^>]*${attr}="${key}"[^>]*content=")[^"]*(")`)
-  if (!re.test(html)) {
-    console.warn(`prerender-meta: tag ${attr}="${key}" not found in shell`)
-    return html
-  }
+  if (!re.test(html)) return html
   return html.replace(re, `$1${escapeHtml(value)}$2`)
 }
 
-function renderRoute(path, { title, description, ogImage, ogType, jsonLd }) {
-  let html = shell.replace(FAQ_LD, '')
-  const url = `${SITE_URL}${path}`
-  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
-  html = html.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
-  html = replaceMeta(html, 'property', 'og:title', title)
-  html = replaceMeta(html, 'property', 'og:url', url)
-  html = replaceMeta(html, 'name', 'twitter:title', title)
-  if (description) {
-    html = replaceMeta(html, 'name', 'description', description)
-    html = replaceMeta(html, 'property', 'og:description', description)
+// Default English homepage meta comes straight from the shell, so it never drifts.
+const shellTitle = (shell.match(/<title>([\s\S]*?)<\/title>/) || [, 'Nivora Works'])[1]
+const shellDesc = (shell.match(/<meta name="description"[^>]*content="([^"]*)"/) || [, ''])[1]
+
+function renderShell(base, lang, meta) {
+  let html = shell
+  const isHome = base === '/'
+  // FAQ: English homepage keeps it; Dutch homepage swaps in the Dutch FAQ; every
+  // sub-route drops it (it does not show those questions).
+  if (!isHome) html = html.replace(FAQ_LD, '')
+  else if (lang === 'nl') html = html.replace(FAQ_LD, `\n${ldBlock(NL_FAQ)}`)
+
+  if (lang === 'nl') html = html.replace('<html lang="en">', '<html lang="nl">')
+
+  const url = langUrl(lang, base)
+  if (meta.title) {
+    html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(meta.title)}</title>`)
+    html = replaceMeta(html, 'property', 'og:title', meta.title)
+    html = replaceMeta(html, 'name', 'twitter:title', meta.title)
   }
-  if (ogType) html = replaceMeta(html, 'property', 'og:type', ogType)
-  if (ogImage) {
-    const abs = `${SITE_URL}${ogImage}`
+  html = html.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
+  html = replaceMeta(html, 'property', 'og:url', url)
+  if (meta.description) {
+    html = replaceMeta(html, 'name', 'description', meta.description)
+    html = replaceMeta(html, 'property', 'og:description', meta.description)
+  }
+  if (meta.ogType) html = replaceMeta(html, 'property', 'og:type', meta.ogType)
+  if (meta.ogImage) {
+    const abs = `${SITE_URL}${meta.ogImage}`
     html = replaceMeta(html, 'property', 'og:image', abs)
     html = replaceMeta(html, 'name', 'twitter:image', abs)
-    // the fixed 1200x630 belongs to the default og-card, not this image
     html = html
       .replace(/\s*<meta property="og:image:width"[^>]*\/>/, '')
       .replace(/\s*<meta property="og:image:height"[^>]*\/>/, '')
   }
-  if (jsonLd && jsonLd.length) {
-    html = html.replace('</head>', `${jsonLd.map(ldBlock).join('\n')}\n  </head>`)
-  }
+
+  const alts = [
+    `    <link rel="alternate" hreflang="en" href="${langUrl('en', base)}" />`,
+    `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', base)}" />`,
+    `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', base)}" />`,
+  ].join('\n')
+  const ld = meta.jsonLd && meta.jsonLd.length ? meta.jsonLd.map(ldBlock).join('\n') + '\n' : ''
+  html = html.replace('</head>', `${ld}${alts}\n  </head>`)
   return html
 }
 
-const routes = { ...STATIC_ROUTES, ...serviceRoutes, ...postRoutes }
-for (const [path, meta] of Object.entries(routes)) {
-  const outDir = join(dist, ...path.split('/').filter(Boolean))
-  mkdirSync(outDir, { recursive: true })
-  writeFileSync(join(outDir, 'index.html'), renderRoute(path, meta))
+/* ── assemble the page list (base path + en/nl meta) ─────────────────────────── */
+const pages = [{ base: '/', en: { title: shellTitle, description: shellDesc }, nl: HOME_NL }]
+for (const base of Object.keys(STATIC_EN)) {
+  pages.push({ base, en: STATIC_EN[base], nl: STATIC_NL[base] ?? STATIC_EN[base] })
 }
+for (const slug of Object.keys(serviceEn)) {
+  pages.push({ base: `/services/${slug}`, en: serviceEn[slug], nl: serviceNl[slug] ?? serviceEn[slug] })
+}
+for (const slug of Object.keys(postEn)) {
+  pages.push({ base: `/blog/${slug}`, en: postEn[slug], nl: postNl[slug] ?? postEn[slug] })
+}
+
+let count = 0
+for (const page of pages) {
+  for (const lang of ['en', 'nl']) {
+    const parts = page.base.split('/').filter(Boolean)
+    const dir = join(dist, ...(lang === 'nl' ? ['nl'] : []), ...parts)
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'index.html'), renderShell(page.base, lang, page[lang]))
+    count++
+  }
+}
+
 console.log(
-  `prerender-meta: wrote ${Object.keys(routes).length} route shells (` +
-    `${Object.keys(serviceRoutes).length} services, ${Object.keys(postRoutes).length} posts)`,
+  `prerender-meta: wrote ${count} shells (${pages.length} routes x 2 languages; ` +
+    `${Object.keys(serviceEn).length} services, ${Object.keys(postEn).length} posts)`,
 )

@@ -1,7 +1,7 @@
 import { motion, type Variants } from 'framer-motion'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { BOOKING_URL } from '@/data/contact'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -115,7 +115,7 @@ export function Hero() {
           >
             {t.bookCall}
           </RippleButton>
-          <RippleButton variant="ghost" href="/contact" className="h-12 w-full px-7 text-[15px] sm:w-auto">
+          <RippleButton variant="ghost" href={localizePath('/contact', lang)} className="h-12 w-full px-7 text-[15px] sm:w-auto">
             {t.contact}
           </RippleButton>
         </motion.div>

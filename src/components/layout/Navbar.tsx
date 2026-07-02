@@ -15,7 +15,7 @@ import {
   type MenuKey,
   type NavItem as Item,
 } from '@/lib/navigation'
-import { useLang, type Lang } from '@/i18n'
+import { useLang, localizePath, type Lang } from '@/i18n'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { useScrollLock } from '@/lib/useScrollLock'
 import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
@@ -83,10 +83,11 @@ function ComingSoonTag({ className }: { className?: string }) {
 
 /* ── Item primitives ── */
 function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
+  const { lang } = useLang()
   return (
     <a
-      href={href}
-      {...(href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      href={localizePath(href, lang)}
+      {...(href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className="group/i flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-white/[0.06]"
     >
       {img ? (
@@ -311,7 +312,7 @@ export function Navbar() {
         >
           <div className="flex items-center justify-between">
             {/* Left: logo */}
-            <a href="/" className="flex items-center pl-1" aria-label={t.home}>
+            <a href={localizePath('/', lang)} className="flex items-center pl-1" aria-label={t.home}>
               <img src="/brand/nivora-logo.png" alt="Nivora" className="h-[22px] w-auto" />
             </a>
 
@@ -340,7 +341,7 @@ export function Navbar() {
 
             {/* Right: actions */}
             <div className="hidden items-center gap-2.5 lg:flex">
-              <RippleButton variant="ghost" href="/contact" className="h-10 px-5">{t.contactUs}</RippleButton>
+              <RippleButton variant="ghost" href={localizePath('/contact', lang)} className="h-10 px-5">{t.contactUs}</RippleButton>
               <RippleButton href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="h-10 px-5">{t.bookCall}</RippleButton>
             </div>
 
@@ -361,22 +362,22 @@ export function Navbar() {
             <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
               <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
               {getProducts(lang).map((l) => (
-                <a key={l.title} href={l.href} {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+                <a key={l.title} href={localizePath(l.href, lang)} {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
               <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
               {getServices(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
               <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Company', lang)}</p>
               {getCompanyPrimary(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
+                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
                   {l.title}
                   {l.comingSoon && <ComingSoonTag />}
                 </a>
               ))}
               <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Resources', lang)}</p>
               {getResources(lang).map((l) => (
-                <a key={l.title} href={l.href} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
               ))}
               <div className="mt-3 flex items-center justify-between gap-2 border-t border-line px-3 pt-3">
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>

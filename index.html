@@ -8,7 +8,9 @@
          translate bar on every visit. -->
     <script>
       try {
-        var nivLang = localStorage.getItem('nivora.lang') || navigator.language || 'en'
+        var p = location.pathname
+        var urlNl = p === '/nl' || p.indexOf('/nl/') === 0
+        var nivLang = urlNl ? 'nl' : localStorage.getItem('nivora.lang') || navigator.language || 'en'
         document.documentElement.lang = nivLang.toLowerCase().indexOf('nl') === 0 ? 'nl' : 'en'
       } catch (e) {}
     </script>

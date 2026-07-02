@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { LangLink as Link } from '@/components/ui/LangLink'
 import { ArrowLeft, Compass } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { useLang } from '@/i18n'

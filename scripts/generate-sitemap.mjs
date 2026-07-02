@@ -45,18 +45,33 @@ const routes = [
 ]
 
 const today = new Date().toISOString().slice(0, 10)
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${routes
-  .map(
-    (path) => `  <url>
-    <loc>${SITE_URL}${path}</loc>
+
+/** English + Dutch URL for a base path. Dutch lives under /nl (see src/i18n). */
+const enUrl = (base) => `${SITE_URL}${base}`
+const nlUrl = (base) => `${SITE_URL}${base === '/' ? '/nl' : `/nl${base}`}`
+
+/** hreflang alternates every language entry must list (including itself + x-default). */
+const alternates = (base) =>
+  [
+    `    <xhtml:link rel="alternate" hreflang="en" href="${enUrl(base)}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="nl-BE" href="${nlUrl(base)}"/>`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl(base)}"/>`,
+  ].join('\n')
+
+const urlEntry = (loc, base) => `  <url>
+    <loc>${loc}</loc>
     <lastmod>${today}</lastmod>
-  </url>`,
-  )
-  .join('\n')}
+${alternates(base)}
+  </url>`
+
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${routes.map((base) => `${urlEntry(enUrl(base), base)}\n${urlEntry(nlUrl(base), base)}`).join('\n')}
 </urlset>
 `
 
 writeFileSync(join(root, 'public/sitemap.xml'), xml)
-console.log(`sitemap.xml: ${routes.length} URLs (${serviceSlugs.length} services, ${postSlugs.length} posts)`)
+console.log(
+  `sitemap.xml: ${routes.length * 2} URLs (${routes.length} routes x en+nl; ` +
+    `${serviceSlugs.length} services, ${postSlugs.length} posts)`,
+)

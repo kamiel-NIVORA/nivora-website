@@ -7,7 +7,7 @@ import { NotificationStack } from '@/components/ui/NotificationStack'
 import { ServicesShowcase } from '@/components/ui/ServicesShowcase'
 import { getServices, type NavItem } from '@/lib/navigation'
 import { WAITLIST_URL } from '@/data/contact'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
 
 const cycleEase = [0.22, 1, 0.36, 1] as const
 
@@ -125,6 +125,7 @@ function FeatureCard({
   serviceItems: NavItem[]
 }) {
   const { title, body, image, notifications, services, comingSoon, cta, href, secondaryCta, secondaryHref } = feature
+  const { lang } = useLang()
   const serviceTitles = serviceItems.map((s) => s.title)
   // Welke dienst nu in de showcase-carousel te zien is; knop-label + link volgen mee.
   const [activeService, setActiveService] = useState(0)
@@ -163,7 +164,7 @@ function FeatureCard({
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-faint">{body}</p>
           {services ? (
-            <RippleButton variant="ghost" href={activeSvc?.href ?? href} className="mt-7 min-h-11 max-w-full self-start px-5 py-2.5 text-sm">
+            <RippleButton variant="ghost" href={activeSvc?.href ?? localizePath(href, lang)} className="mt-7 min-h-11 max-w-full self-start px-5 py-2.5 text-sm">
               {labels.learnMoreAbout}
               <CyclingWord words={serviceTitles} index={activeService} />
             </RippleButton>
@@ -171,7 +172,7 @@ function FeatureCard({
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <RippleButton
                 variant="solid"
-                href={href}
+                href={localizePath(href, lang)}
                 target={href === WAITLIST_URL ? '_blank' : undefined}
                 rel={href === WAITLIST_URL ? 'noopener noreferrer' : undefined}
                 className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto"
@@ -179,7 +180,7 @@ function FeatureCard({
                 {cta}
               </RippleButton>
               {secondaryCta && secondaryHref && (
-                <RippleButton variant="ghost" href={secondaryHref} className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto">
+                <RippleButton variant="ghost" href={localizePath(secondaryHref, lang)} className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto">
                   {secondaryCta}
                 </RippleButton>
               )}

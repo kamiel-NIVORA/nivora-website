@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { LangLink as Link } from '@/components/ui/LangLink'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import type { BlockFont } from '@/data/posts'
 import { Reveal } from '@/components/animations/Reveal'

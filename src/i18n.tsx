@@ -4,16 +4,19 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
   type ReactNode,
 } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 /**
- * Site-wide language layer. The whole site is bilingual (English + Dutch) and
- * switches at runtime, with no page reload. The chosen language is remembered in
- * localStorage and, on a first visit, guessed from the browser language. There
- * is no URL routing per language on purpose: the toggle in the nav is meant to
- * be one clean, simple control, exactly as asked.
+ * Site-wide language layer. The whole site is bilingual (English + Dutch).
+ *
+ * The URL is the source of truth for language, so every language has its own
+ * indexable address: English lives at the root (`/`, `/about`, ...) and Dutch
+ * under a `/nl` prefix (`/nl`, `/nl/about`, ...). This lets Google index and
+ * rank each language separately (with hreflang, see src/lib/seo.ts), which the
+ * old runtime-only toggle could not do. The nav toggle simply navigates between
+ * the two URLs.
  *
  *  Usage in a component:
  *    const { lang } = useLang()
@@ -35,21 +38,36 @@ const LanguageContext = createContext<LanguageContextValue | null>(null)
 
 const STORAGE_KEY = 'nivora.lang'
 
-function readInitialLang(): Lang {
-  if (typeof window === 'undefined') return 'en'
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY)
-    if (saved === 'en' || saved === 'nl') return saved
-  } catch {
-    /* localStorage can throw in private modes — fall back to detection */
+/** Split a pathname into its language and the language-agnostic base path.
+ *  '/nl/about' -> { lang: 'nl', base: '/about' }; '/about' -> { lang: 'en', base: '/about' } */
+export function splitLangPath(pathname: string): { lang: Lang; base: string } {
+  if (pathname === '/nl' || pathname.startsWith('/nl/')) {
+    const base = pathname.slice(3)
+    return { lang: 'nl', base: base.startsWith('/') ? base : '/' }
   }
-  const nav =
-    (typeof navigator !== 'undefined' && navigator.language) || ''
-  return nav.toLowerCase().startsWith('nl') ? 'nl' : 'en'
+  return { lang: 'en', base: pathname || '/' }
+}
+
+/** Build the URL for a base path in a given language. langHref('nl', '/about') -> '/nl/about'. */
+export function langHref(lang: Lang, base: string): string {
+  if (lang !== 'nl') return base
+  return base === '/' ? '/nl' : `/nl${base}`
+}
+
+/** Prefix an internal href with the active language so navigation stays in-language.
+ *  Leaves external links, anchors, mailto/tel and already-prefixed /nl links alone.
+ *  Handpaths keep their query/hash ('/waitlist?product=box' -> '/nl/waitlist?product=box'). */
+export function localizePath(href: string, lang: Lang): string {
+  if (lang !== 'nl') return href
+  if (!href.startsWith('/')) return href // http(s), #, mailto:, tel:, relative
+  if (href === '/nl' || href.startsWith('/nl/')) return href
+  return href === '/' ? '/nl' : `/nl${href}`
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(readInitialLang)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { lang } = splitLangPath(location.pathname)
 
   useEffect(() => {
     try {
@@ -57,16 +75,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       /* no document (tests) — ignore */
     }
-  }, [lang])
-
-  const setLang = useCallback((next: Lang) => {
-    setLangState(next)
     try {
-      window.localStorage.setItem(STORAGE_KEY, next)
+      window.localStorage.setItem(STORAGE_KEY, lang)
     } catch {
       /* ignore persistence failures */
     }
-  }, [])
+  }, [lang])
+
+  const setLang = useCallback(
+    (next: Lang) => {
+      const { base } = splitLangPath(window.location.pathname)
+      const target = langHref(next, base)
+      navigate(`${target}${window.location.search}${window.location.hash}`)
+    },
+    [navigate],
+  )
 
   const value = useMemo(() => ({ lang, setLang }), [lang, setLang])
 

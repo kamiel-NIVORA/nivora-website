@@ -5,7 +5,7 @@ import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { getServices, type NavItem } from '@/lib/navigation'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
 
 const COPY = {
   en: {
@@ -117,6 +117,7 @@ function ServiceCard({
   learnMore: string
 }) {
   const { title, desc, href } = service
+  const { lang } = useLang()
   const icon = ICONS[title]
   const cardRef = useRef<HTMLAnchorElement>(null)
 
@@ -169,7 +170,7 @@ function ServiceCard({
     <div style={{ perspective: '1000px' }}>
       <MotionLink
         ref={cardRef}
-        to={href}
+        to={localizePath(href, lang)}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}

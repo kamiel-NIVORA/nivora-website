@@ -1,12 +1,13 @@
 import { lazy, Suspense } from 'react'
 import { ReactLenis } from 'lenis/react'
-import { Routes, Route, useParams, useLocation, Navigate } from 'react-router-dom'
+import { Routes, Route, useParams, useLocation, Navigate, Outlet } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollManager } from '@/components/ScrollManager'
 import { CookieConsent } from '@/components/CookieConsent'
 import { Home } from '@/pages/Home'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
+import { splitLangPath } from '@/i18n'
 
 /* The landing page stays in the main bundle so it paints immediately. Every
    other route is split into its own chunk, fetched only when visited, which
@@ -31,13 +32,42 @@ function ServiceRoute() {
   return <ServicePage key={slug} />
 }
 
+/* The one route table, rendered twice: once at the root (English) and once under
+   /nl (Dutch). Every page reads the active language from the URL (see src/i18n),
+   so the same components serve both. `homeHref` keeps in-tree redirects on the
+   right language. Returned as a fragment so React Router can read the <Route>s. */
+function routeTree(homeHref: string) {
+  return (
+    <>
+      <Route index element={<Home />} />
+      <Route path="about" element={<About />} />
+      <Route path="services/:slug" element={<ServiceRoute />} />
+      <Route path="blog" element={<BlogIndex />} />
+      <Route path="blog/:slug" element={<BlogPost />} />
+      <Route path="media" element={<MediaKit />} />
+      <Route path="waitlist" element={<WaitlistPage />} />
+      <Route path="affiliate" element={<AffiliatePage />} />
+      <Route path="help" element={<HelpCenterPage />} />
+      <Route path="contact" element={<ContactPage />} />
+      {/* Partnership page temporarily hidden, redirect to home for now. */}
+      <Route path="partnership" element={<Navigate to={homeHref} replace />} />
+      <Route path="newsletter/confirmed" element={<NewsletterConfirmed />} />
+      <Route path="unsubscribed" element={<Unsubscribed />} />
+      <Route path="terms" element={<LegalPage slug="terms" />} />
+      <Route path="privacy" element={<LegalPage slug="privacy" />} />
+    </>
+  )
+}
+
 /* Routes that render as a single focused frame: no site chrome (the waitlist
-   stands on its own, like the Nivora booking page). */
+   stands on its own, like the Nivora booking page). Matched on the base path so
+   /waitlist and /nl/waitlist behave the same. */
 const BARE_ROUTES = ['/waitlist']
 
 export default function App() {
   const { pathname } = useLocation()
-  const bare = BARE_ROUTES.includes(pathname)
+  const { base } = splitLangPath(pathname)
+  const bare = BARE_ROUTES.includes(base)
   return (
     <ReactLenis root>
       <ContactModalProvider>
@@ -52,22 +82,10 @@ export default function App() {
             }
           >
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services/:slug" element={<ServiceRoute />} />
-              <Route path="/blog" element={<BlogIndex />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/media" element={<MediaKit />} />
-              <Route path="/waitlist" element={<WaitlistPage />} />
-              <Route path="/affiliate" element={<AffiliatePage />} />
-              <Route path="/help" element={<HelpCenterPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              {/* Partnership page temporarily hidden, redirect to home for now. */}
-              <Route path="/partnership" element={<Navigate to="/" replace />} />
-              <Route path="/newsletter/confirmed" element={<NewsletterConfirmed />} />
-              <Route path="/unsubscribed" element={<Unsubscribed />} />
-              <Route path="/terms" element={<LegalPage slug="terms" />} />
-              <Route path="/privacy" element={<LegalPage slug="privacy" />} />
+              {routeTree('/')}
+              <Route path="nl" element={<Outlet />}>
+                {routeTree('/nl')}
+              </Route>
               {/* Real 404 (noindex) so unknown URLs never duplicate the homepage. */}
               <Route path="*" element={<NotFound />} />
             </Routes>

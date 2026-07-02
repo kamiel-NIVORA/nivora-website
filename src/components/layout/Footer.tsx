@@ -6,7 +6,7 @@ import {
 } from '@/lib/navigation'
 import { WAITLIST_URL } from '@/data/contact'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
-import { useLang, type Lang } from '@/i18n'
+import { useLang, localizePath, type Lang } from '@/i18n'
 
 const toLinks = (items: NavItem[]) => items.map((i) => ({ label: i.title, href: i.href }))
 
@@ -130,8 +130,8 @@ export function Footer() {
                     return (
                       <li key={l.label}>
                         <a
-                          href={l.href}
-                          {...(l.href.startsWith(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          href={localizePath(l.href, lang)}
+                          {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           className={`inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors hover:text-ink ${wrapClass}`}
                         >
                           {atIndex >= 0 ? (

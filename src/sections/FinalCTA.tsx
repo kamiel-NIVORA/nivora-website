@@ -1,7 +1,7 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { BOOKING_URL } from '@/data/contact'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
 
 const COPY = {
   en: {
@@ -45,7 +45,7 @@ export function FinalCTA() {
             >
               {t.bookCall}
             </RippleButton>
-            <RippleButton variant="ghost" href="/contact" className="h-12 px-6 text-[15px]">
+            <RippleButton variant="ghost" href={localizePath('/contact', lang)} className="h-12 px-6 text-[15px]">
               {t.contact}
             </RippleButton>
           </div>

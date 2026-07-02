@@ -1,4 +1,5 @@
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import { LangLink as Link } from '@/components/ui/LangLink'
 import { Check, ArrowLeft } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { useLang } from '@/i18n'
