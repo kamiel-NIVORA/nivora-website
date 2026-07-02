@@ -14,9 +14,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { getPosts, type Post, type PostBlock } from '@/data/posts'
 import { useLang, type Lang } from '@/i18n'
 
-const SUPABASE_URL =
+export const SUPABASE_URL =
   (import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? 'https://agpjxjujzjzasgizpphz.supabase.co'
-const SUPABASE_ANON_KEY =
+export const SUPABASE_ANON_KEY =
   (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ??
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFncGp4anVqemp6YXNnaXpwcGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTk5MzQsImV4cCI6MjA4NTk3NTkzNH0.-Rz-xk09qfg39dsBMXYRApzktEDz6qr1rsnscF_JX3Q'
 

@@ -9,6 +9,7 @@ import { BlogCover } from '@/components/BlogCover'
 import { NewsletterSignup } from '@/components/NewsletterSignup'
 import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
 import { usePost } from '@/lib/blog'
+import { useBlogAnalytics } from '@/lib/blogAnalytics'
 import { useLang } from '@/i18n'
 import { useSeo, SITE_URL, DEFAULT_TITLE } from '@/lib/seo'
 
@@ -52,6 +53,10 @@ export function BlogPost() {
   const { post, loaded } = usePost(slug)
   const { lang } = useLang()
   const t = COPY[lang]
+
+  // Meet dit bezoek (weergave, actieve leestijd, scroll-diepte) voor het
+  // AIOS blog-dashboard. Start pas zodra het artikel echt bestaat.
+  useBlogAnalytics(post?.slug, lang)
 
   // Per-post SEO: title, description, canonical and BlogPosting structured data.
   const postDate = post ? new Date(post.date) : null
