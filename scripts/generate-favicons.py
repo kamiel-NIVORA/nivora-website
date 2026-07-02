@@ -29,15 +29,19 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
-SRC = PUB / "LOGO APP (8).png"          # scherpste bron van het merk-mark (1024px)
+# Exact dezelfde bron als het Nivora dev app-icon (build/icon.png), in de repo
+# gekopieerd zodat dit script reproduceerbaar is. Bewust NIET in public/, zodat
+# Google deze bron niet crawlt.
+SRC = ROOT / "scripts" / "nivora-icon-source.png"
 
-# --- huisstijl-kleuren voor de donkere tegel ------------------------------
-TOP = (20, 20, 22)      # #141416  (donker bovenaan, zoals de app-icon)
-BOTTOM = (46, 46, 51)   # #2e2e33  (iets lichter onderaan)
+# --- huisstijl-kleuren, exact overgenomen uit het Nivora dev-icon ---------
+TOP = (16, 16, 16)      # #101010  (donker bovenaan)
+BOTTOM = (54, 54, 54)   # #363636  (iets lichter onderaan)
 MARK = (255, 255, 255)  # wit logo, maximaal contrast tot op 16px
 
 MASTER = 1024           # op hoge resolutie bouwen, daarna netjes downscalen
-MARK_WIDTH_FRAC = 0.60  # mark = 60% van de breedte -> ruime marge voor ronde crop
+MARK_WIDTH_FRAC = 0.608  # exact de mark-breedte van het Nivora dev-icon
+MARK_CENTER_Y = 0.468    # mark iets boven het midden, net als het dev-icon
 
 
 def extract_mark_alpha() -> Image.Image:
@@ -79,7 +83,7 @@ def compose(size: int, mark_width_frac: float, rounded: int = 0) -> Image.Image:
     white = Image.new("RGBA", (mw, mh), MARK + (0,))
     white.putalpha(sil_r)
     x = (MASTER - mw) // 2
-    y = (MASTER - mh) // 2                              # optisch gecentreerd
+    y = int(MASTER * MARK_CENTER_Y - mh / 2)           # iets boven het midden
     tile.alpha_composite(white, (x, y))
     if size != MASTER:
         tile = tile.resize((size, size), Image.LANCZOS)
