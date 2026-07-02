@@ -18,7 +18,14 @@ export type PostBlock =
    *  using the defaults). */
   | { p: string; font?: BlockFont; size?: number }
   | { h2: string; font?: BlockFont; size?: number }
+  | { h3: string; font?: BlockFont; size?: number }
   | { quote: string; font?: BlockFont; size?: number }
+  /** Bullet or numbered list (ordered:true = numbered). */
+  | { list: string[]; ordered?: boolean }
+  /** Highlighted note with an optional small label. */
+  | { callout: string; title?: string }
+  /** Thin section break. */
+  | { divider: true }
   | { image: string; alt: string; caption?: string; feather?: boolean }
   /** Inline call to action, e.g. a link to the waiting list. */
   | { cta: { label: string; href: string } }

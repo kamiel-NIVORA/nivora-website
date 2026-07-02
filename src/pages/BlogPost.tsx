@@ -182,6 +182,17 @@ export function BlogPost() {
                   </h2>
                 )
               }
+              if ('h3' in block) {
+                return (
+                  <h3
+                    key={i}
+                    className={`mt-3 ${blockFontClass(block.font, 'font-serif')} text-[21px] leading-[1.25] tracking-[-0.01em] text-ink sm:text-[24px]`}
+                    style={blockSizeStyle(block.size)}
+                  >
+                    {block.h3}
+                  </h3>
+                )
+              }
               if ('quote' in block) {
                 return (
                   <blockquote
@@ -192,6 +203,40 @@ export function BlogPost() {
                     {block.quote}
                   </blockquote>
                 )
+              }
+              if ('list' in block) {
+                const items = block.list.filter((it) => it && it.trim())
+                if (!items.length) return null
+                const cls = 'flex flex-col gap-2 pl-6 text-[17px] leading-[1.7] text-muted sm:text-[18px]'
+                return block.ordered ? (
+                  <ol key={i} className={`list-decimal ${cls} marker:text-faint`}>
+                    {items.map((it, j) => <li key={j} className="pl-1.5">{it}</li>)}
+                  </ol>
+                ) : (
+                  <ul key={i} className={`list-disc ${cls} marker:text-faint`}>
+                    {items.map((it, j) => <li key={j} className="pl-1.5">{it}</li>)}
+                  </ul>
+                )
+              }
+              if ('callout' in block) {
+                return (
+                  <aside
+                    key={i}
+                    className="my-2 rounded-2xl border border-line bg-white/[0.03] px-5 py-4"
+                  >
+                    {block.title && (
+                      <div className="mb-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-faint">
+                        {block.title}
+                      </div>
+                    )}
+                    {block.callout && (
+                      <p className="text-[16px] leading-[1.65] text-muted sm:text-[17px]">{block.callout}</p>
+                    )}
+                  </aside>
+                )
+              }
+              if ('divider' in block) {
+                return <hr key={i} className="my-4 border-0 border-t border-line" />
               }
               if ('cta' in block) {
                 const { label, href } = block.cta
