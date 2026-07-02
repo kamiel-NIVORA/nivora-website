@@ -14,7 +14,7 @@
  * dashboard unieke lezers kan tellen. Analytics mag NOOIT de pagina breken:
  * alles zit in try/catch en fouten worden stil genegeerd.
  */
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@/lib/blog'
 import { getCookieConsent } from '@/components/CookieConsent'
 
@@ -22,6 +22,12 @@ const ENDPOINT = `${SUPABASE_URL}/rest/v1/blog_events`
 const PING_INTERVAL_MS = 15_000
 const MAX_PINGS = 40 // ~10 min actieve meting per sessie; de slot-ping blijft altijd werken
 const MAX_SECONDS = 14_400
+// Eén settle mag nooit meer dan 2 ping-intervallen optellen: een grotere gap
+// betekent dat timers stilstonden (slaap/achtergrond) en is dus geen leestijd.
+const MAX_DELTA_S = (PING_INTERVAL_MS / 1000) * 2
+// Zichtbaar tabblad zonder enige interactie: na 90s pauzeert de klok, zodat een
+// vergeten open tab de gemiddelde leestijd niet kan vergiftigen.
+const IDLE_LIMIT_MS = 90_000
 
 const uuid = (): string =>
   globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`
@@ -87,8 +93,13 @@ function send(payload: Record<string, unknown>): void {
 /**
  * Meet één artikel-bezoek. Geef `slug` pas door zodra het artikel bestaat
  * (undefined = nog niet meten); bij een slug-wissel start een nieuwe sessie.
+ * De taal reist mee via een ref: een NL/EN-wissel mid-artikel verandert de
+ * payload maar start GEEN nieuwe sessie (zou anders een extra view tellen).
  */
 export function useBlogAnalytics(slug: string | undefined, lang: string): void {
+  const langRef = useRef(lang)
+  langRef.current = lang
+
   useEffect(() => {
     if (!slug || typeof window === 'undefined') return
     if (navigator.webdriver) return // bots/e2e-tests niet meetellen
@@ -100,12 +111,13 @@ export function useBlogAnalytics(slug: string | undefined, lang: string): void {
       visitor_id: visitorId(),
       referrer: refSource(),
       path: location.pathname.slice(0, 300),
-      lang: (lang || 'en').slice(0, 10),
       device: deviceType(),
     }
+    const payloadLang = () => (langRef.current || 'en').slice(0, 10)
 
     let activeSeconds = 0
     let visibleSince: number | null = document.visibilityState === 'visible' ? performance.now() : null
+    let lastActivityAt = performance.now()
     let maxScroll = 0
     let lastSentSeconds = -1
     let lastSentScroll = -1
@@ -113,9 +125,16 @@ export function useBlogAnalytics(slug: string | undefined, lang: string): void {
 
     const settleActive = () => {
       if (visibleSince != null) {
-        activeSeconds += (performance.now() - visibleSince) / 1000
+        activeSeconds += Math.min((performance.now() - visibleSince) / 1000, MAX_DELTA_S)
         visibleSince = performance.now()
       }
+    }
+
+    // Interactie = bewijs van aanwezigheid: klok (her)start wanneer de lezer
+    // iets doet terwijl het tabblad zichtbaar is.
+    const markActivity = () => {
+      lastActivityAt = performance.now()
+      if (visibleSince == null && document.visibilityState === 'visible') visibleSince = performance.now()
     }
 
     const ping = (force = false) => {
@@ -127,12 +146,13 @@ export function useBlogAnalytics(slug: string | undefined, lang: string): void {
       pings += 1
       lastSentSeconds = seconds
       lastSentScroll = scroll
-      send({ ...base, event: 'ping', seconds, scroll_pct: scroll })
+      send({ ...base, lang: payloadLang(), event: 'ping', seconds, scroll_pct: scroll })
     }
 
     const onVisibility = () => {
       if (document.visibilityState === 'visible') {
         visibleSince = performance.now()
+        lastActivityAt = performance.now()
       } else {
         settleActive()
         visibleSince = null
@@ -145,26 +165,37 @@ export function useBlogAnalytics(slug: string | undefined, lang: string): void {
       const scrollable = doc.scrollHeight - window.innerHeight
       const pct = scrollable > 0 ? Math.round((window.scrollY / scrollable) * 100) : 100
       if (pct > maxScroll) maxScroll = Math.min(100, Math.max(0, pct))
+      markActivity()
     }
 
     const onPageHide = () => ping(true)
 
-    send({ ...base, event: 'view', seconds: 0, scroll_pct: 0 })
+    send({ ...base, lang: payloadLang(), event: 'view', seconds: 0, scroll_pct: 0 })
     onScroll()
 
     const interval = window.setInterval(() => {
-      if (document.visibilityState === 'visible') ping()
+      if (document.visibilityState !== 'visible') return
+      if (performance.now() - lastActivityAt > IDLE_LIMIT_MS) {
+        // Lezer is er even niet: tel het stuk tot nu en pauzeer de klok.
+        settleActive()
+        visibleSince = null
+        return
+      }
+      ping()
     }, PING_INTERVAL_MS)
+    const activityEvents: (keyof WindowEventMap)[] = ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart']
+    activityEvents.forEach((ev) => window.addEventListener(ev, markActivity, { passive: true }))
     window.addEventListener('scroll', onScroll, { passive: true })
     document.addEventListener('visibilitychange', onVisibility)
     window.addEventListener('pagehide', onPageHide)
 
     return () => {
       window.clearInterval(interval)
+      activityEvents.forEach((ev) => window.removeEventListener(ev, markActivity))
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('visibilitychange', onVisibility)
       window.removeEventListener('pagehide', onPageHide)
       ping(true) // SPA-navigatie weg van het artikel telt ook als einde
     }
-  }, [slug, lang])
+  }, [slug])
 }
