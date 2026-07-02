@@ -42,6 +42,7 @@ MARK = (255, 255, 255)  # wit logo, maximaal contrast tot op 16px
 MASTER = 1024           # op hoge resolutie bouwen, daarna netjes downscalen
 MARK_WIDTH_FRAC = 0.608  # exact de mark-breedte van het Nivora dev-icon
 MARK_CENTER_Y = 0.468    # mark iets boven het midden, net als het dev-icon
+CORNER_FRAC = 0.235      # afgeronde hoeken (squircle), net als het dev app-icon
 
 
 def extract_mark_alpha() -> Image.Image:
@@ -73,9 +74,13 @@ def gradient_tile(size: int, rounded: int = 0) -> Image.Image:
     return tile
 
 
-def compose(size: int, mark_width_frac: float, rounded: int = 0) -> Image.Image:
-    """Bouw 1 icon: donkere vierkante tegel + gecentreerde witte mark."""
-    tile = gradient_tile(MASTER, rounded=int(rounded * MASTER / size) if rounded else 0)
+def compose(mark_width_frac: float, corner_frac: float = 0.0) -> Image.Image:
+    """Bouw het master-icon (MASTER x MASTER): donkere tegel + witte mark.
+
+    corner_frac > 0 geeft afgeronde hoeken (squircle) met transparante hoeken,
+    net als het Nivora dev app-icon. 0 = full-bleed vierkant.
+    """
+    tile = gradient_tile(MASTER, rounded=int(corner_frac * MASTER))
     sil = extract_mark_alpha()
     mw = int(MASTER * mark_width_frac)
     mh = int(sil.height * mw / sil.width)
@@ -85,46 +90,48 @@ def compose(size: int, mark_width_frac: float, rounded: int = 0) -> Image.Image:
     x = (MASTER - mw) // 2
     y = int(MASTER * MARK_CENTER_Y - mh / 2)           # iets boven het midden
     tile.alpha_composite(white, (x, y))
-    if size != MASTER:
-        tile = tile.resize((size, size), Image.LANCZOS)
     return tile
 
 
 def flatten(img: Image.Image) -> Image.Image:
-    """Voor ICO/apple: geen transparantie -> volle vierkante tegel."""
+    """Voor apple/maskable: geen transparantie -> volle vierkante tegel."""
     bg = Image.new("RGBA", img.size, TOP + (255,))
     bg.alpha_composite(img)
     return bg.convert("RGB")
 
 
-def main():
-    # Full-bleed VIERKANT (geen ronde hoeken) -> strak in de browser-tab.
-    master = compose(MASTER, MARK_WIDTH_FRAC)
+def down(master: Image.Image, size: int) -> Image.Image:
+    return master.resize((size, size), Image.LANCZOS)
 
-    # PNG-favicons (vierkant, full-bleed)
+
+def main():
+    # Afgeronde squircle (transparante hoeken) -> identiek aan het Nivora dev icon.
+    rounded = compose(MARK_WIDTH_FRAC, corner_frac=CORNER_FRAC)
+    # Full-bleed vierkant -> voor apple-touch & maskable (die worden OS-gemaskt).
+    square = compose(MARK_WIDTH_FRAC)
+
+    # PNG-favicons (afgeronde hoeken, transparant -> browser-tab toont squircle)
     for s in (16, 32, 48, 512):
-        out = master.resize((s, s), Image.LANCZOS)
         name = "favicon.png" if s == 512 else f"favicon-{s}.png"
-        flatten(out).save(PUB / name)
+        down(rounded, s).save(PUB / name)
         print("wrote", name, f"{s}x{s}")
 
-    # Multi-res .ico (16/32/48) voor Google + oudere browsers
-    ico = flatten(master)
-    ico.save(PUB / "favicon.ico", format="ICO", sizes=[(16, 16), (32, 32), (48, 48)])
+    # Multi-res .ico (16/32/48) met transparante hoeken (ICO ondersteunt alpha)
+    rounded.save(PUB / "favicon.ico", format="ICO", sizes=[(16, 16), (32, 32), (48, 48)])
     print("wrote favicon.ico (16/32/48)")
 
-    # Apple touch icon: full-bleed vierkant, iOS rondt zelf af. 180px.
-    flatten(master.resize((180, 180), Image.LANCZOS)).save(PUB / "apple-touch-icon.png")
-    print("wrote apple-touch-icon.png 180x180")
-
-    # PWA / Android manifest-icons
+    # PWA / Android manifest-icons "any": zelfde afgeronde look
     for s in (192, 512):
-        flatten(master.resize((s, s), Image.LANCZOS)).save(PUB / f"icon-{s}.png")
+        down(rounded, s).save(PUB / f"icon-{s}.png")
         print("wrote", f"icon-{s}.png", f"{s}x{s}")
 
-    # Maskable icon: extra marge zodat Android's mask nooit knipt.
-    maskable = compose(512, MARK_WIDTH_FRAC * 0.78)
-    flatten(maskable).save(PUB / "icon-512-maskable.png")
+    # Apple touch icon: full-bleed vierkant, iOS rondt zelf af. 180px.
+    flatten(down(square, 180)).save(PUB / "apple-touch-icon.png")
+    print("wrote apple-touch-icon.png 180x180")
+
+    # Maskable icon: full-bleed vierkant met extra marge zodat Android nooit knipt.
+    maskable = compose(MARK_WIDTH_FRAC * 0.78)
+    flatten(down(maskable, 512)).save(PUB / "icon-512-maskable.png")
     print("wrote icon-512-maskable.png 512x512")
 
 
