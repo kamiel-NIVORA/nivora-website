@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { AnimatePresence, animate, motion, useInView } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { useLang, type Lang } from '@/i18n'
 
 /** CSS style that also carries custom properties (e.g. --bar-min). */
@@ -82,7 +83,11 @@ export function VoiceSlingers() {
   const RAW = RAW_BY_LANG[lang]
   const CLEAN = CLEAN_BY_LANG[lang]
   const CORRECTIONS = CORRECTIONS_BY_LANG[lang]
-  const reduced = usePrefersReducedMotion()
+  const prefersReduced = usePrefersReducedMotion()
+  const isMobile = useIsMobile()
+  // Static on mobile: the continuous ribbon + waveform loop stuttered while
+  // scrolling. Mobile shows a clean, still frame of the same visual.
+  const reduced = prefersReduced || isMobile
   const rootRef = useRef<HTMLDivElement>(null)
   const rawPathRef = useRef<SVGTextPathElement>(null)
   const cleanPathRef = useRef<SVGTextPathElement>(null)

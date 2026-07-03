@@ -215,13 +215,13 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         placeholder="you@company.com"
                         aria-invalid={!!error}
                         aria-label={t.emailAria}
-                        className="h-14 w-full flex-1 rounded-full border border-line-strong bg-white/[0.05] px-5 text-center text-[16px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:h-12 sm:border-line sm:bg-white/[0.03] sm:text-left sm:text-[14px]"
+                        className="h-16 w-full flex-1 rounded-full border border-line-strong bg-white/[0.07] px-5 text-center text-[17px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:h-12 sm:border-line sm:bg-white/[0.03] sm:text-left sm:text-[14px]"
                       />
                       <RippleButton
                         type="submit"
                         variant="solid"
                         disabled={submitting}
-                        className="h-12 shrink-0 px-6 text-[14px]"
+                        className="h-14 shrink-0 px-6 text-[15px] sm:h-12 sm:text-[14px]"
                       >
                         {submitting ? t.joining : t.submit}
                       </RippleButton>

@@ -224,7 +224,7 @@ function LaunchBanner() {
         href={WAITLIST_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/55 px-4 py-2 text-center text-[12.5px] leading-snug text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors hover:text-ink"
+        className="group flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-line bg-black/80 px-4 py-2 text-center text-[12.5px] leading-snug text-muted shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-colors hover:text-ink lg:bg-black/55 lg:backdrop-blur-xl"
       >
         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
         <span className="hidden sm:inline">{t.bannerLead}</span>
@@ -239,7 +239,7 @@ function LaunchBanner() {
           localStorage.setItem('nivora.launchBanner.dismissed', '1')
           setShow(false)
         }}
-        className="flex w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-black/55 text-faint backdrop-blur-xl transition-colors hover:text-ink"
+        className="flex w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-black/80 text-faint transition-colors hover:text-ink lg:bg-black/55 lg:backdrop-blur-xl"
       >
         <X className="h-4 w-4" strokeWidth={1.8} />
       </button>
@@ -306,7 +306,9 @@ export function Navbar() {
             // Glass surface whenever scrolled OR the mobile menu is open, so the
             // menu always sits on a readable backing instead of floating over the hero.
             scrolled || open
-              ? 'bg-black/55 px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl'
+              // Solid (no backdrop-blur) on mobile: blurring the backdrop every
+              // scroll frame is the main cause of janky scrolling on iOS. Glass on desktop.
+              ? 'bg-black/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] lg:bg-black/55 lg:backdrop-blur-xl'
               : 'px-2 py-2',
           )}
         >
@@ -386,7 +388,7 @@ export function Navbar() {
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>
                 <LanguageSwitch />
               </div>
-              <Button size="lg" className="mt-3 h-14 w-full text-[15px]" asChild>
+              <Button size="lg" className="mt-3 h-16 w-full text-[15px]" asChild>
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t.bookCall}</a>
               </Button>
             </div>

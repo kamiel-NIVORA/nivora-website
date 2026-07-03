@@ -112,7 +112,7 @@ export function Products() {
         <img
           src={GLOW}
           alt=""
-          className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
+          className="absolute left-1/2 top-1/2 hidden h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] lg:block [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
         />
       </div>
 
@@ -227,7 +227,9 @@ function BentoCard({
         'group relative h-full min-h-[280px] overflow-hidden rounded-[28px] border border-line p-7 transition-[border-color] duration-300 hover:border-line-strong lg:p-8',
         dark
           ? 'bg-[#0a0a0a]'
-          : 'bg-gradient-to-b from-white/[0.10] via-white/[0.05] to-white/[0.02] backdrop-blur-md',
+          // Glass cards: solid on mobile (backdrop-blur wrecks scroll perf on phones),
+          // real frosted glass on desktop.
+          : 'bg-[#111114] lg:bg-gradient-to-b lg:from-white/[0.10] lg:via-white/[0.05] lg:to-white/[0.02] lg:backdrop-blur-md',
         className,
       )}
     >
@@ -361,7 +363,7 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t.phoneNotifAria(name)}
-        className="pointer-events-auto flex min-h-[40px] items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/55 px-[3.5%] py-[2.4%] backdrop-blur-xl transition-colors duration-200 hover:bg-white/70 lg:min-h-0"
+        className="pointer-events-auto flex min-h-[40px] items-center gap-[3.5%] rounded-[13px] border border-white/70 bg-white/90 px-[3.5%] py-[2.4%] transition-colors duration-200 hover:bg-white/70 lg:min-h-0 lg:bg-white/55 lg:backdrop-blur-xl"
         style={{
           boxShadow:
             'inset 0 1px 1.5px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.05), 0 10px 22px -8px rgba(0,0,0,0.4)',
