@@ -93,6 +93,7 @@ const COPY = {
 export function Products() {
   const { lang } = useLang()
   const t = COPY[lang]
+  const isMobile = useIsMobile()
   const bentoRef = useRef<HTMLDivElement | null>(null)
   const { scrollYProgress } = useScroll({
     target: bentoRef,
@@ -107,14 +108,18 @@ export function Products() {
 
   return (
     <section id="products" className="relative w-full overflow-hidden py-28 lg:py-36">
-      {/* Ambient glow — softly blurred, masked into the dark, so the glass cards glow */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <img
-          src={GLOW}
-          alt=""
-          className="absolute left-1/2 top-1/2 hidden h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] lg:block [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
-        />
-      </div>
+      {/* Ambient glow — softly blurred, masked into the dark, so the glass cards glow.
+          Not rendered on mobile at all (not just hidden) so the heavy image never
+          downloads there — faster load, and the cards stand clean on black anyway. */}
+      {!isMobile && (
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <img
+            src={GLOW}
+            alt=""
+            className="absolute left-1/2 top-1/2 h-[108%] w-[112%] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 blur-[4px] [mask-image:radial-gradient(56%_54%_at_50%_46%,black_24%,transparent_80%)]"
+          />
+        </div>
+      )}
 
       <div className="relative mx-auto w-full max-w-[1480px] px-6">
         <SectionHeading title={t.sectionTitle} subtitle={t.sectionSubtitle} />
@@ -140,7 +145,7 @@ export function Products() {
             progress={progress}
             dy={-26}
             start={0.1}
-            className="lg:col-start-4 lg:col-span-3 lg:row-start-1"
+            className="min-h-[440px] lg:col-start-4 lg:col-span-3 lg:row-start-1 lg:min-h-0"
           >
             <MobileCard />
           </BentoCard>
@@ -437,8 +442,9 @@ function MobileCard() {
         <PhoneNotifications />
       </div>
 
-      {/* Soft scrim so the title + subtitle stay crisp over the phone's faded top */}
-      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[140px] bg-gradient-to-b from-black/90 via-black/45 to-transparent" />
+      {/* Solid top band so the title + subtitle stay crisp and never collide with the
+          notification pop-ups on the phone below (taller + stronger on mobile). */}
+      <div className="pointer-events-none absolute -inset-x-8 -top-8 z-[1] h-[188px] bg-gradient-to-b from-black via-black/80 to-transparent lg:h-[140px] lg:from-black/90 lg:via-black/45" />
 
       {/* Title — sits at the top, clear of the phone screen below */}
       <div className="relative z-[2]">

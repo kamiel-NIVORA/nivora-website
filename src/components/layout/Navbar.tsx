@@ -391,7 +391,7 @@ export function Navbar() {
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>
                 <LanguageSwitch />
               </div>
-              <Button size="lg" className="mt-3 h-16 w-full shrink-0 text-[15px]" asChild>
+              <Button size="lg" className="mt-3 h-14 w-full shrink-0 text-[15px]" asChild>
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t.bookCall}</a>
               </Button>
             </div>

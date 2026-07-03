@@ -5,6 +5,7 @@ import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { getServices, type NavItem } from '@/lib/navigation'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { useLang, localizePath } from '@/i18n'
 
 const COPY = {
@@ -56,6 +57,7 @@ export function Services() {
   const bandRef = useRef<HTMLDivElement>(null)
   const { lang } = useLang()
   const t = COPY[lang]
+  const isMobile = useIsMobile()
   const services = getServices(lang)
 
   return (
@@ -69,15 +71,18 @@ export function Services() {
           {/* Sharp backdrop, clipped to the band: peak centred, the star sky on top
               and the watermark on the bottom-right both cropped out, edges faded
               softly into the black. Shown crisp in the gaps between the cards. */}
-          {/* The peak backdrop reads as noise behind the cards on a small screen,
-              so it is desktop-only; on mobile the cards stand clean on black. */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block">
-            <img
-              src={GLOW}
-              alt=""
-              className="h-full w-full object-cover object-[50%_46%] opacity-[0.55] [mask-image:radial-gradient(88%_84%_at_50%_50%,black_44%,transparent_90%)]"
-            />
-          </div>
+          {/* The peak backdrop reads as noise behind the cards on a small screen, so
+              it is desktop-only. Not rendered on mobile (not just hidden) so the heavy
+              image never downloads there — the cards stand clean on black anyway. */}
+          {!isMobile && (
+            <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+              <img
+                src={GLOW}
+                alt=""
+                className="h-full w-full object-cover object-[50%_46%] opacity-[0.55] [mask-image:radial-gradient(88%_84%_at_50%_50%,black_44%,transparent_90%)]"
+              />
+            </div>
+          )}
 
           {/* Four free-standing cards, lifted above the backdrop */}
           <div className="relative z-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
@@ -144,8 +149,10 @@ function ServiceCard({
 
   // ── Frosted blur: a blurred peak copy, sized to the band and offset so it lines
   //    up with the sharp background behind THIS card (same cover-scale + position). ──
+  const isMobile = useIsMobile()
   const [frost, setFrost] = useState<Frost | null>(null)
   useLayoutEffect(() => {
+    if (isMobile) return // no frosted-peak copy on mobile (the backdrop isn't shown there)
     const band = bandRef.current
     const card = cardRef.current
     if (!band || !card) return
@@ -166,7 +173,7 @@ function ServiceCard({
     const ro = new ResizeObserver(measure)
     ro.observe(band)
     return () => ro.disconnect()
-  }, [bandRef])
+  }, [bandRef, isMobile])
 
   return (
     <div style={{ perspective: '1000px' }}>
@@ -179,13 +186,13 @@ function ServiceCard({
         className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#101014] p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:none)]:shadow-[0_18px_50px_-30px_rgba(0,0,0,0.6)] [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] sm:min-h-[340px] lg:min-h-[440px] lg:bg-[#0b0b0f]/30 lg:p-7"
       >
         {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
-        {frost && (
+        {frost && !isMobile && (
           <img
             src={GLOW}
             alt=""
             aria-hidden
             style={{ width: frost.w, height: frost.h, left: frost.left, top: frost.top }}
-            className="pointer-events-none absolute hidden max-w-none object-cover opacity-[0.7] blur-2xl lg:block"
+            className="pointer-events-none absolute max-w-none object-cover opacity-[0.7] blur-2xl"
           />
         )}
 

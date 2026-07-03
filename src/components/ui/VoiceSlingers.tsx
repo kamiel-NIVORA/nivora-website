@@ -217,7 +217,8 @@ export function VoiceSlingers() {
           stroke="url(#vw-ribbon)"
           strokeWidth="42"
           strokeLinecap="round"
-          style={{ filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))' }}
+          // The SVG drop-shadow is expensive to raster on mobile; drop it there.
+          style={{ filter: isMobile ? 'none' : 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))' }}
         />
 
         {/* Clean (right) — crisp white ink riding the ribbon up */}

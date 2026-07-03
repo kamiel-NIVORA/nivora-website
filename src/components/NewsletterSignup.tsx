@@ -215,9 +215,10 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
                         placeholder="you@company.com"
                         aria-invalid={!!error}
                         aria-label={t.emailAria}
-                        // NOTE: flex-1 only at sm+. In the mobile flex-col the vertical
-                        // flex-basis:0 of flex-1 collapsed the field to ~22px, ignoring h-16.
-                        className="h-16 w-full rounded-full border border-line-strong bg-white/[0.07] px-5 text-center text-[17px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:h-12 sm:flex-1 sm:border-line sm:bg-white/[0.03] sm:text-left sm:text-[14px]"
+                        // Same height as the "Keep me posted" button below it (h-14 on
+                        // mobile). NOTE: flex-1 only at sm+ — in the mobile flex-col the
+                        // vertical flex-basis:0 of flex-1 collapsed the field, ignoring h-*.
+                        className="h-14 w-full rounded-full border border-line-strong bg-white/[0.07] px-5 text-center text-[16px] text-ink outline-none transition-colors duration-300 placeholder:text-dim focus:border-line-strong sm:h-12 sm:flex-1 sm:border-line sm:bg-white/[0.03] sm:text-left sm:text-[14px]"
                       />
                       <RippleButton
                         type="submit"
