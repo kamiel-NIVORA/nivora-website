@@ -9,15 +9,23 @@ import { useEffect, useState } from 'react'
  * Tailwind's `lg` (where the bento / multi-column layouts kick in).
  */
 export function useIsMobile(maxWidth = 1024): boolean {
-  const [isMobile, setIsMobile] = useState(false)
+  const query = `(max-width: ${maxWidth - 0.02}px)`
+  // Initialise with the REAL value on the first client render (the app is CSR via
+  // createRoot, so there is no hydration mismatch). This matters for perf: a hook
+  // that starts false renders mobile-gated `{!isMobile && <img>}` once before the
+  // effect flips it, and the browser downloads that heavy image anyway. Starting
+  // correct means those images never render, so they never download on phones.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  )
 
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${maxWidth - 0.02}px)`)
+    const mq = window.matchMedia(query)
     setIsMobile(mq.matches)
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
-  }, [maxWidth])
+  }, [query])
 
   return isMobile
 }
