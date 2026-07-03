@@ -83,11 +83,10 @@ export function VoiceSlingers() {
   const RAW = RAW_BY_LANG[lang]
   const CLEAN = CLEAN_BY_LANG[lang]
   const CORRECTIONS = CORRECTIONS_BY_LANG[lang]
-  const prefersReduced = usePrefersReducedMotion()
+  const reduced = usePrefersReducedMotion()
   const isMobile = useIsMobile()
-  // Static on mobile: the continuous ribbon + waveform loop stuttered while
-  // scrolling. Mobile shows a clean, still frame of the same visual.
-  const reduced = prefersReduced || isMobile
+  // The flow animates on mobile too (a frozen ribbon mid-flow looked broken).
+  // Kept light there: the expensive SVG drop-shadow is dropped on mobile below.
   const rootRef = useRef<HTMLDivElement>(null)
   const rawPathRef = useRef<SVGTextPathElement>(null)
   const cleanPathRef = useRef<SVGTextPathElement>(null)

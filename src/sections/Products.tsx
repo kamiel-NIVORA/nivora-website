@@ -403,7 +403,7 @@ function PhoneNotifications() {
   useEffect(() => {
     if (!inView) return
     const timers = PHONE_NOTIFS.map((_, idx) =>
-      window.setTimeout(() => setShown(idx + 1), 650 + idx * 1250),
+      window.setTimeout(() => setShown(idx + 1), 300 + idx * 650),
     )
     return () => timers.forEach((t) => clearTimeout(t))
   }, [inView])

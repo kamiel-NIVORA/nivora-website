@@ -78,11 +78,11 @@ function FloatingIcon({ t, app, spread }: { t: MotionValue<number>; app: App; sp
 export function BoxConverge() {
   const { lang } = useLang()
   const ref = useRef<HTMLDivElement>(null)
-  const prefersReduced = usePrefersReducedMotion()
+  const reduced = usePrefersReducedMotion()
   const isMobile = useIsMobile()
-  // Hold the whole card static on mobile: the continuous loop plus the card blur
-  // made scrolling stutter. Static reads as the icons resting around the Box.
-  const reduced = prefersReduced || isMobile
+  // The animation runs on mobile too (it looked frozen/unfinished when static).
+  // It's smooth now that the card backdrop-blur is gone; the heavy paint was the
+  // blur, not these GPU-composited transforms.
   // Pull the scattered icons closer to centre on the narrow mobile card so they
   // never clip against the rounded edge (which read as a half-cut pink streak).
   const spread = isMobile ? 0.6 : 1
