@@ -8,6 +8,7 @@ import { CookieConsent } from '@/components/CookieConsent'
 import { Home } from '@/pages/Home'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
 import { splitLangPath } from '@/i18n'
+import { useSiteAnalytics } from '@/lib/siteAnalytics'
 
 /* The landing page stays in the main bundle so it paints immediately. Every
    other route is split into its own chunk, fetched only when visited, which
@@ -68,6 +69,7 @@ export default function App() {
   const { pathname } = useLocation()
   const { base } = splitLangPath(pathname)
   const bare = BARE_ROUTES.includes(base)
+  useSiteAnalytics()
   return (
     <ReactLenis root>
       <ContactModalProvider>
