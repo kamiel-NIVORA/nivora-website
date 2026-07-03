@@ -305,11 +305,14 @@ export function Navbar() {
             'mx-auto w-full rounded-2xl transition-[background-color,box-shadow,backdrop-filter] duration-300',
             // Glass surface whenever scrolled OR the mobile menu is open, so the
             // menu always sits on a readable backing instead of floating over the hero.
-            scrolled || open
-              // Solid (no backdrop-blur) on mobile: blurring the backdrop every
-              // scroll frame is the main cause of janky scrolling on iOS. Glass on desktop.
-              ? 'bg-black/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] lg:bg-black/55 lg:backdrop-blur-xl'
-              : 'px-2 py-2',
+            // Solid (no backdrop-blur) on mobile: blurring the backdrop every scroll
+            // frame is the main cause of janky scrolling on iOS. The OPEN menu needs a
+            // near-opaque backing (no blur to hide the hero behind it). Glass on desktop.
+            open
+              ? 'bg-[#0a0a0c] px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] lg:bg-black/55 lg:backdrop-blur-xl'
+              : scrolled
+                ? 'bg-black/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.35)] lg:bg-black/55 lg:backdrop-blur-xl'
+                : 'px-2 py-2',
           )}
         >
           <div className="flex items-center justify-between">
