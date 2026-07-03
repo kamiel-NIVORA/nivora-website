@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
+import { createPortal } from 'react-dom'
 import { Navigate, useParams } from 'react-router-dom'
 import { LangLink as Link } from '@/components/ui/LangLink'
+import { useIsMobile } from '@/lib/useIsMobile'
 import {
   AnimatePresence,
   motion,
@@ -612,7 +614,12 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
 
   const open = (hover || teaser) && visible
 
-  return (
+  if (typeof document === 'undefined') return null
+
+  // Rendered in a portal on <body> so no transformed / clipped ancestor (the
+  // service <main>, Lenis smooth-scroll) can knock the fixed pill into the
+  // middle of the screen on iOS — it now stays anchored bottom-right.
+  return createPortal(
     <Link
       to={`/help?ask=${encodeURIComponent(ask.prompt)}`}
       aria-label={ask.label}
@@ -621,23 +628,24 @@ function ServiceAskFab({ meta }: { meta: ServiceMeta }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       className={cn(
-        'fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-40 flex items-center rounded-[18px] border border-line bg-black/50 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-[opacity,transform,background-color,border-color] duration-[600ms] ease-out hover:border-line-strong hover:bg-black/60 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-[calc(1.5rem+env(safe-area-inset-right))]',
+        'fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-[calc(1rem+env(safe-area-inset-right))] z-40 flex items-center rounded-[16px] border border-line bg-black/50 shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-[opacity,transform,background-color,border-color] duration-[600ms] ease-out hover:border-line-strong hover:bg-black/60 sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:right-[calc(1.5rem+env(safe-area-inset-right))] sm:rounded-[18px]',
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
       )}
     >
       <span
         className={cn(
           'flex flex-col justify-center overflow-hidden whitespace-nowrap transition-all duration-[420ms] ease-out',
-          open ? 'max-w-[340px] pl-5 opacity-100' : 'max-w-0 opacity-0',
+          open ? 'max-w-[240px] pl-4 opacity-100 sm:max-w-[340px] sm:pl-5' : 'max-w-0 opacity-0',
         )}
       >
-        <span className="text-[11px] font-medium leading-none text-faint">{ASK_HELPER[lang]}</span>
-        <span className="mt-1.5 text-[14.5px] font-medium leading-none text-ink-soft">{ask.label}</span>
+        <span className="text-[10.5px] font-medium leading-none text-faint sm:text-[11px]">{ASK_HELPER[lang]}</span>
+        <span className="mt-1.5 text-[13px] font-medium leading-none text-ink-soft sm:text-[14.5px]">{ask.label}</span>
       </span>
-      <span className="flex h-14 w-14 shrink-0 items-center justify-center">
-        <img src="/brand/ask-icon.png" alt="" className="h-7 w-7 object-contain" />
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center sm:h-14 sm:w-14">
+        <img src="/brand/ask-icon.png" alt="" className="h-6 w-6 object-contain sm:h-7 sm:w-7" />
       </span>
-    </Link>
+    </Link>,
+    document.body,
   )
 }
 
@@ -1363,6 +1371,9 @@ function WorkColumn({
   icons: string[]
   badges: { left: string; top: string; size: number }[]
 }) {
+  // Scale the fixed-px floating badges down on the narrower mobile frame.
+  const isMobile = useIsMobile()
+  const scale = isMobile ? 0.64 : 1
   return (
     <Reveal>
       <div className="flex h-full flex-col rounded-[28px] border border-line bg-white/[0.02] p-4 lg:p-5">
@@ -1377,18 +1388,19 @@ function WorkColumn({
           <div className="pointer-events-none absolute inset-0">
             {icons.map((icon, i) => {
               const b = badges[i]
+              const s = Math.round(b.size * scale)
               return (
                 <div
                   key={i}
                   className="absolute"
-                  style={{ left: b.left, top: b.top, marginLeft: -b.size / 2, marginTop: -b.size / 2 }}
+                  style={{ left: b.left, top: b.top, marginLeft: -s / 2, marginTop: -s / 2 }}
                 >
-                  <Drift radius={13} duration={20 + (i % 4) * 4} phase={i * 90}>
+                  <Drift radius={isMobile ? 8 : 13} duration={20 + (i % 4) * 4} phase={i * 90}>
                     <div
                       className="flex items-center justify-center rounded-[18px] border border-white/12 bg-white/[0.08] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
-                      style={{ width: b.size, height: b.size }}
+                      style={{ width: s, height: s }}
                     >
-                      <img src={icon} alt="" className="object-contain opacity-95" style={{ width: b.size * 0.46, height: b.size * 0.46 }} />
+                      <img src={icon} alt="" className="object-contain opacity-95" style={{ width: s * 0.46, height: s * 0.46 }} />
                     </div>
                   </Drift>
                 </div>
@@ -1592,12 +1604,16 @@ function FloatingBadge({
   pad: number
   i: number
 }) {
+  // Fixed-px badges overflowed the narrower mobile frame; scale them down there.
+  const isMobile = useIsMobile()
+  const s = isMobile ? Math.round(size * 0.66) : size
+  const p = isMobile ? Math.round(pad * 0.66) : pad
   return (
-    <div className="absolute" style={{ left, top, marginLeft: -size / 2, marginTop: -size / 2 }}>
-      <Drift radius={7} duration={26 + (i % 3) * 4} phase={i * 72}>
+    <div className="absolute" style={{ left, top, marginLeft: -s / 2, marginTop: -s / 2 }}>
+      <Drift radius={isMobile ? 5 : 7} duration={26 + (i % 3) * 4} phase={i * 72}>
         <div
           className="flex items-center justify-center rounded-[15px] border border-white/12 bg-white/[0.07] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
-          style={{ width: size, height: size, padding: pad }}
+          style={{ width: s, height: s, padding: p }}
         >
           <img src={src} alt="" className="h-full w-full object-contain" />
         </div>

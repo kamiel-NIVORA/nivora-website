@@ -3,6 +3,7 @@ import { motion, useScroll, useSpring, useTransform, type Variants } from 'frame
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { cn } from '@/lib/utils'
 import { waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
@@ -339,15 +340,15 @@ function Facts() {
   const { lang } = useLang()
   const t = COPY[lang]
   return (
-    <section className="relative z-10 mx-auto -mt-24 w-full max-w-[1080px] px-6">
-      <div className="grid gap-px overflow-hidden rounded-[24px] border border-line bg-line sm:grid-cols-3">
+    <section className="relative z-10 mx-auto -mt-8 w-full max-w-[1080px] px-6 sm:-mt-24">
+      <div className="grid grid-cols-3 gap-px overflow-hidden rounded-[24px] border border-line bg-line">
         {t.facts.map((f, i) => (
           <Reveal key={f.big} delay={i * 0.08} y={16}>
-            <div className="h-full bg-bg-soft px-7 py-10 text-center lg:px-8">
-              <p className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink lg:text-[42px]">
+            <div className="h-full bg-bg-soft px-2.5 py-6 text-center sm:px-7 sm:py-10 lg:px-8">
+              <p className="font-serif text-[19px] leading-none tracking-[-0.01em] text-ink sm:text-[30px] lg:text-[42px]">
                 {f.big}
               </p>
-              <p className="mx-auto mt-3.5 max-w-[15rem] text-[13.5px] leading-relaxed text-faint">
+              <p className="mx-auto mt-2 max-w-[15rem] text-[10.5px] leading-snug text-faint sm:mt-3.5 sm:text-[13.5px] sm:leading-relaxed">
                 {f.label}
               </p>
             </div>
@@ -534,13 +535,16 @@ function Drift({ radius, duration, phase, children }: { radius: number; duration
 
 /** One social logo in a glassy floating badge, drifting on its own phase. */
 function SocialBadge({ src, name, left, top, size, i }: { src: string; name: string; left: string; top: string; size: number; i: number }) {
-  const pad = Math.round(size * 0.24)
+  // Shrink the fixed-px badges on the narrower mobile frame so they don't overlap.
+  const isMobile = useIsMobile()
+  const s = isMobile ? Math.round(size * 0.64) : size
+  const pad = Math.round(s * 0.24)
   return (
-    <div className="absolute" style={{ left, top, marginLeft: -size / 2, marginTop: -size / 2 }}>
-      <Drift radius={7} duration={24 + (i % 3) * 5} phase={i * 51}>
+    <div className="absolute" style={{ left, top, marginLeft: -s / 2, marginTop: -s / 2 }}>
+      <Drift radius={isMobile ? 5 : 7} duration={24 + (i % 3) * 5} phase={i * 51}>
         <div
           className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/[0.12] shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-md"
-          style={{ width: size, height: size, padding: pad }}
+          style={{ width: s, height: s, padding: pad }}
         >
           <img src={src} alt={name} loading="lazy" className="h-full w-full object-contain" />
         </div>

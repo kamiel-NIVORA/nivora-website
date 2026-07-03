@@ -197,14 +197,15 @@ export function WaitlistPage() {
       {/* Background — same Nivora landscape as the booking page, a touch darker */}
       <div aria-hidden className="pointer-events-none absolute inset-0 [transform:translateZ(0)]">
         <img src="/backgrounds/bg-hills.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/55 md:bg-black/40" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(2,2,2,0.72)_100%)]" />
       </div>
 
       <main className="relative z-10 w-full max-w-2xl">
         <div className="relative min-h-[520px] w-full md:h-[560px]">
-          {/* Progress glow border */}
-          <div aria-hidden className="absolute -inset-[2px] z-0 rounded-[26px]">
+          {/* Progress glow border — softened on mobile, where the tall narrow card
+              turned the blurred stroke into a harsh double line. */}
+          <div aria-hidden className="absolute -inset-[2px] z-0 rounded-[26px] opacity-40 md:opacity-100">
             <svg className="h-full w-full overflow-visible">
               <motion.rect
                 x="0"

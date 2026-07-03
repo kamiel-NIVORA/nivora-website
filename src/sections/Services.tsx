@@ -69,7 +69,9 @@ export function Services() {
           {/* Sharp backdrop, clipped to the band: peak centred, the star sky on top
               and the watermark on the bottom-right both cropped out, edges faded
               softly into the black. Shown crisp in the gaps between the cards. */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          {/* The peak backdrop reads as noise behind the cards on a small screen,
+              so it is desktop-only; on mobile the cards stand clean on black. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block">
             <img
               src={GLOW}
               alt=""
@@ -174,7 +176,7 @@ function ServiceCard({
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#0b0b0f]/30 p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:none)]:shadow-[0_18px_50px_-30px_rgba(0,0,0,0.6)] [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] sm:min-h-[340px] lg:min-h-[440px] lg:p-7"
+        className="group relative flex min-h-[260px] flex-col overflow-hidden rounded-[22px] border border-line bg-[#101014] p-6 transition-[border-color,box-shadow] duration-300 [@media(hover:none)]:shadow-[0_18px_50px_-30px_rgba(0,0,0,0.6)] [@media(hover:hover)]:hover:border-line-strong [@media(hover:hover)]:hover:shadow-[0_28px_70px_-24px_rgba(0,0,0,0.75)] sm:min-h-[340px] lg:min-h-[440px] lg:bg-[#0b0b0f]/30 lg:p-7"
       >
         {/* Blurred peak, aligned to the sharp background behind the card — the frost */}
         {frost && (
@@ -183,7 +185,7 @@ function ServiceCard({
             alt=""
             aria-hidden
             style={{ width: frost.w, height: frost.h, left: frost.left, top: frost.top }}
-            className="pointer-events-none absolute max-w-none object-cover opacity-[0.7] blur-2xl"
+            className="pointer-events-none absolute hidden max-w-none object-cover opacity-[0.7] blur-2xl lg:block"
           />
         )}
 

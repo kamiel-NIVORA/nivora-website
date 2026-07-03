@@ -171,7 +171,7 @@ export function VoiceSlingers() {
       <svg
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+        className="absolute inset-0 h-full w-full [mask-image:linear-gradient(to_right,transparent,black_17%,black_83%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
         aria-hidden
       >
         <defs>
@@ -242,7 +242,7 @@ export function VoiceSlingers() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -8 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="whitespace-nowrap text-[18px] font-medium text-white/65 [text-shadow:0_2px_14px_rgba(0,0,0,0.92)] sm:text-[22px]"
+              className="whitespace-nowrap text-[16px] font-medium text-white/65 [text-shadow:0_2px_14px_rgba(0,0,0,0.92)] sm:text-[22px]"
             >
               {c.pre}
               {c.strike ? (

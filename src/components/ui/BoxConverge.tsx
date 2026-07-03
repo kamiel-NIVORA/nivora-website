@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { animate, motion, useInView, useMotionValue, useTransform, type MotionValue } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { useLang } from '@/i18n'
 
 const COPY = {
@@ -37,21 +38,28 @@ const APPS: App[] = [
   { name: 'X', icon: '/products/box-icons/x.svg', sx: 66, sy: 122, appearAt: 0.3 },
 ]
 
-/** The channel logo on its own — no frame, just the clean mark with a soft lift. */
+/** The channel logo on its own — no frame, just the clean mark with a soft lift.
+ *  Smaller with a lighter shadow on mobile: the heavy blur under the scaled
+ *  transform was smearing the bright Instagram gradient into pink streaks. */
 function Logo({ app, className }: { app: App; className?: string }) {
   return (
     <img
       src={app.icon}
       alt={app.name}
-      className={'h-12 w-12 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)] ' + (className ?? '')}
+      className={
+        'h-9 w-9 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.45)] lg:h-12 lg:w-12 lg:drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)] ' +
+        (className ?? '')
+      }
       loading="lazy"
     />
   )
 }
 
-function FloatingIcon({ t, app }: { t: MotionValue<number>; app: App }) {
-  const x = useTransform(t, [0, 0.46, 0.64], [app.sx, app.sx, 0])
-  const y = useTransform(t, [0, 0.46, 0.64], [app.sy, app.sy, 0])
+function FloatingIcon({ t, app, spread }: { t: MotionValue<number>; app: App; spread: number }) {
+  const sx = app.sx * spread
+  const sy = app.sy * spread
+  const x = useTransform(t, [0, 0.46, 0.64], [sx, sx, 0])
+  const y = useTransform(t, [0, 0.46, 0.64], [sy, sy, 0])
   const opacity = useTransform(t, [app.appearAt, app.appearAt + 0.12, 0.48, 0.62], [0, 1, 1, 0])
   const scale = useTransform(t, [app.appearAt, app.appearAt + 0.12, 0.48, 0.62], [0.6, 1, 1, 0.35])
 
@@ -71,6 +79,10 @@ export function BoxConverge() {
   const { lang } = useLang()
   const ref = useRef<HTMLDivElement>(null)
   const reduced = usePrefersReducedMotion()
+  const isMobile = useIsMobile()
+  // Pull the scattered icons closer to centre on the narrow mobile card so they
+  // never clip against the rounded edge (which read as a half-cut pink streak).
+  const spread = isMobile ? 0.6 : 1
   const inView = useInView(ref, { amount: 0.3 })
   const t = useMotionValue(0)
 
@@ -99,23 +111,23 @@ export function BoxConverge() {
             <div
               key={app.name}
               className="pointer-events-none absolute opacity-80"
-              style={{ transform: `translate(${app.sx}px, ${app.sy}px)` }}
+              style={{ transform: `translate(${app.sx * spread}px, ${app.sy * spread}px)` }}
             >
               <Logo app={app} />
             </div>
           ))}
-          <img src={BOX_LOGO} alt="Box" className="h-24 w-24 rounded-[22px] object-cover shadow-[0_14px_40px_rgba(0,0,0,0.55)]" />
+          <img src={BOX_LOGO} alt="Box" className="h-20 w-20 rounded-[20px] object-cover shadow-[0_14px_40px_rgba(0,0,0,0.55)] lg:h-24 lg:w-24 lg:rounded-[22px]" />
         </div>
       ) : (
         <div className="absolute inset-0 grid place-items-center">
           {APPS.map((app) => (
-            <FloatingIcon key={app.name} t={t} app={app} />
+            <FloatingIcon key={app.name} t={t} app={app} spread={spread} />
           ))}
           <motion.img
             src={BOX_LOGO}
             alt="Box"
             style={{ opacity: boxOpacity, scale: boxScale }}
-            className="pointer-events-none absolute h-24 w-24 rounded-[22px] object-cover shadow-[0_18px_46px_rgba(0,0,0,0.6)]"
+            className="pointer-events-none absolute h-20 w-20 rounded-[20px] object-cover shadow-[0_18px_46px_rgba(0,0,0,0.6)] lg:h-24 lg:w-24 lg:rounded-[22px]"
           />
 
           {/* Box pop-up — lands under the logo when everything resolves into Box */}

@@ -13,6 +13,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
 import MacOSDock, { type DockApp } from '@/components/ui/MacOSDock'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { cn } from '@/lib/utils'
 import { useLang, localizePath, type Lang } from '@/i18n'
 
@@ -153,7 +154,7 @@ export function Products() {
             dark
             href={localizePath(waitlistHref('voice'), lang)}
             ariaLabel={t.voiceAria}
-            className="min-h-[300px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
+            className="min-h-[360px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <VoiceCard />
           </BentoCard>
@@ -211,14 +212,17 @@ function BentoCard({
   className?: string
   children: ReactNode
 }) {
+  const isMobile = useIsMobile()
   const x = useTransform(progress, [start, 1], [dx, 0])
   const y = useTransform(progress, [start, 1], [dy, 0])
   const scale = useTransform(progress, [start, 1], [0.96, 1])
   const opacity = useTransform(progress, [start, Math.min(start + 0.4, 1)], [0.35, 1])
 
   return (
+    // On mobile the scroll-driven transform/opacity on 5 blurred glass cards
+    // janked the whole section; there we render the cards static and clean.
     <motion.div
-      style={{ x, y, scale, opacity }}
+      style={isMobile ? undefined : { x, y, scale, opacity }}
       className={cn(
         'group relative h-full min-h-[280px] overflow-hidden rounded-[28px] border border-line p-7 transition-[border-color] duration-300 hover:border-line-strong lg:p-8',
         dark

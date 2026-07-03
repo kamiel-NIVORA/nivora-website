@@ -362,7 +362,10 @@ export function Navbar() {
             <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
               <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
               {getProducts(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+                <a key={l.title} href={localizePath(l.href, lang)} {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
+                  {l.title}
+                  {l.comingSoon && <ComingSoonTag />}
+                </a>
               ))}
               <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
               {getServices(lang).map((l) => (
@@ -383,7 +386,7 @@ export function Navbar() {
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>
                 <LanguageSwitch />
               </div>
-              <Button size="md" className="mt-3 w-full" asChild>
+              <Button size="lg" className="mt-3 h-14 w-full text-[15px]" asChild>
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>{t.bookCall}</a>
               </Button>
             </div>
