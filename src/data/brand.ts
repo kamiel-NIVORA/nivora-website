@@ -265,6 +265,40 @@ const LOGOS: Localized<LogoAsset[]> = {
 
 export const getLogos = (lang: Lang): LogoAsset[] => LOGOS[lang]
 
+/* ── Product & service marks ──
+   The app icons for Box and Voice, and the icon for each service. Same handling
+   rules as the logo: copy or download, never redraw or recolour. ── */
+export type IconMark = { name: string; desc: string; src: string; filename: string }
+
+const PRODUCT_MARKS: Localized<IconMark[]> = {
+  en: [
+    { name: 'Box', desc: 'The app icon for Box, all your communication in one place.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Voice', desc: 'The app icon for Voice, speech to text tuned to how you write.', src: '/products/voice-logo.webp', filename: 'nivora-voice.webp' },
+  ],
+  nl: [
+    { name: 'Box', desc: 'Het app-icoon voor Box, al uw communicatie op één plek.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Voice', desc: 'Het app-icoon voor Voice, spraak naar tekst afgestemd op uw stijl.', src: '/products/voice-logo.webp', filename: 'nivora-voice.webp' },
+  ],
+}
+
+const SERVICE_MARKS: Localized<IconMark[]> = {
+  en: [
+    { name: 'AIOS', desc: 'One system that runs the whole company.', src: '/services/icon-aios.png', filename: 'nivora-service-aios.png' },
+    { name: 'App Design', desc: 'Custom apps, designed and built end to end.', src: '/services/icon-appdesign.png', filename: 'nivora-service-app-design.png' },
+    { name: 'Local AI', desc: 'Private AI, installed on hardware you control.', src: '/services/icon-localai.png', filename: 'nivora-service-local-ai.png' },
+    { name: 'AI Consulting', desc: 'Find where AI pays off before you invest.', src: '/services/icon-consulting.png', filename: 'nivora-service-ai-consulting.png' },
+  ],
+  nl: [
+    { name: 'AIOS', desc: 'Eén systeem dat het hele bedrijf draait.', src: '/services/icon-aios.png', filename: 'nivora-service-aios.png' },
+    { name: 'App Design', desc: 'Apps op maat, ontworpen en gebouwd van begin tot eind.', src: '/services/icon-appdesign.png', filename: 'nivora-service-app-design.png' },
+    { name: 'Local AI', desc: 'Private AI, geïnstalleerd op hardware die u beheert.', src: '/services/icon-localai.png', filename: 'nivora-service-local-ai.png' },
+    { name: 'AI Consulting', desc: 'Ontdek waar AI loont voordat u investeert.', src: '/services/icon-consulting.png', filename: 'nivora-service-ai-consulting.png' },
+  ],
+}
+
+export const getProductMarks = (lang: Lang): IconMark[] => PRODUCT_MARKS[lang]
+export const getServiceMarks = (lang: Lang): IconMark[] => SERVICE_MARKS[lang]
+
 /* ── Corner radius scale ── */
 export type RadiusToken = { name: string; value: string; usage: string; px: number }
 
@@ -394,6 +428,12 @@ export const ALL_ASSETS: string[] = [
   '/brand/nivora-mark-dark.webp',
   '/brand/icon-app.webp',
   '/favicon.png',
+  '/products/box-logo.webp',
+  '/products/voice-logo.webp',
+  '/services/icon-aios.png',
+  '/services/icon-appdesign.png',
+  '/services/icon-localai.png',
+  '/services/icon-consulting.png',
 ]
 
 /* ── Brand voice ── */

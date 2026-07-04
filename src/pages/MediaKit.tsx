@@ -16,11 +16,14 @@ import {
   getColorGroups,
   getFonts,
   getLogos,
+  getProductMarks,
+  getServiceMarks,
   getPhotoGallery,
   getPhotoPrinciples,
   getPhotoPrompts,
   getVoice,
   ALL_ASSETS,
+  type IconMark,
 } from '@/data/brand'
 
 /* ── A frosted "kader", same feel as the home/service cards: hairline border,
@@ -101,6 +104,42 @@ function ActionButton({
   )
 }
 
+/* ── An icon/app-mark tile: the mark on a dark surface, name, one line, and the
+   same copy + download affordances as the logo rack. ── */
+function IconCard({
+  mark,
+  copied,
+  onCopy,
+  onDownload,
+  copyIdle,
+  copyDone,
+  downloadLabel,
+}: {
+  mark: IconMark
+  copied: boolean
+  onCopy: () => void
+  onDownload: () => void
+  copyIdle: string
+  copyDone: string
+  downloadLabel: string
+}) {
+  return (
+    <Kader className="flex h-full flex-col">
+      <div className="flex h-28 items-center justify-center bg-white/[0.03] px-6">
+        <img src={mark.src} alt={mark.name} className="max-h-14 w-auto max-w-[60%] object-contain" />
+      </div>
+      <div className="flex flex-1 flex-col p-4">
+        <p className="text-[14px] font-semibold text-ink">{mark.name}</p>
+        <p className="mt-1 flex-1 text-[12px] leading-snug text-faint">{mark.desc}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <ActionButton active={copied} onClick={onCopy} idle={copyIdle} done={copyDone} icon={ImageDown} />
+          <ActionButton active={false} onClick={onDownload} idle={downloadLabel} done={downloadLabel} icon={Download} />
+        </div>
+      </div>
+    </Kader>
+  )
+}
+
 const COPY = {
   en: {
     headerTitle: 'The Nivora brand kit',
@@ -111,11 +150,22 @@ const COPY = {
     scroll: 'Scroll',
     nav: {
       logo: 'Logo',
+      icons: 'Icons',
       colour: 'Colour',
       type: 'Type',
       photography: 'Photography',
       voice: 'Voice',
       guidelines: 'Posting',
+    },
+    icons: {
+      title: 'The apps, and the services.',
+      intro:
+        'The app icons for Box and Voice, and the icon for each service. Same rules as the logo: copy or download, never redraw or recolour.',
+      productsLabel: 'Product apps',
+      servicesLabel: 'Services',
+      copyImage: 'Copy',
+      copied: 'Copied',
+      download: 'Download',
     },
     logo: {
       title: 'The mark.',
@@ -195,11 +245,22 @@ const COPY = {
     scroll: 'Scroll',
     nav: {
       logo: 'Logo',
+      icons: 'Iconen',
       colour: 'Kleur',
       type: 'Type',
       photography: 'Fotografie',
       voice: 'Stem',
       guidelines: 'Posten',
+    },
+    icons: {
+      title: 'De apps, en de diensten.',
+      intro:
+        'De app-iconen voor Box en Voice, en het icoon voor elke dienst. Dezelfde regels als het logo: kopieer of download, teken of herkleur ze nooit.',
+      productsLabel: 'Product-apps',
+      servicesLabel: 'Diensten',
+      copyImage: 'Kopieer',
+      copied: 'Gekopieerd',
+      download: 'Download',
     },
     logo: {
       title: 'Het teken.',
@@ -272,7 +333,7 @@ const COPY = {
   },
 } as const
 
-const NAV_IDS = ['logo', 'colour', 'type', 'photography', 'voice', 'guidelines'] as const
+const NAV_IDS = ['logo', 'icons', 'colour', 'type', 'photography', 'voice', 'guidelines'] as const
 
 export function MediaKit() {
   const { lang } = useLang()
@@ -288,6 +349,8 @@ export function MediaKit() {
   const colorGroups = getColorGroups(lang)
   const fonts = getFonts(lang)
   const logos = getLogos(lang)
+  const productMarks = getProductMarks(lang)
+  const serviceMarks = getServiceMarks(lang)
   const photoGallery = getPhotoGallery(lang)
   const photoPrinciples = getPhotoPrinciples(lang)
   const photoPrompts = getPhotoPrompts(lang)
@@ -456,6 +519,51 @@ export function MediaKit() {
                 </div>
               </Kader>
             </Reveal>
+          </Section>
+
+          {/* ── Product & service icons ── */}
+          <Section id="icons" title={t.icons.title} intro={t.icons.intro}>
+            <MiniLabel>{t.icons.productsLabel}</MiniLabel>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {productMarks.map((mark) => {
+                const key = `mark-${mark.filename}`
+                return (
+                  <Reveal key={mark.filename}>
+                    <IconCard
+                      mark={mark}
+                      copied={copiedKey === key}
+                      onCopy={() => onCopyImage(key, mark.src)}
+                      onDownload={() => downloadAsset(mark.src, mark.filename)}
+                      copyIdle={t.icons.copyImage}
+                      copyDone={t.icons.copied}
+                      downloadLabel={t.icons.download}
+                    />
+                  </Reveal>
+                )
+              })}
+            </div>
+
+            <div className="mt-10">
+              <MiniLabel>{t.icons.servicesLabel}</MiniLabel>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {serviceMarks.map((mark) => {
+                  const key = `mark-${mark.filename}`
+                  return (
+                    <Reveal key={mark.filename}>
+                      <IconCard
+                        mark={mark}
+                        copied={copiedKey === key}
+                        onCopy={() => onCopyImage(key, mark.src)}
+                        onDownload={() => downloadAsset(mark.src, mark.filename)}
+                        copyIdle={t.icons.copyImage}
+                        copyDone={t.icons.copied}
+                        downloadLabel={t.icons.download}
+                      />
+                    </Reveal>
+                  )
+                })}
+              </div>
+            </div>
           </Section>
 
           {/* ── Colour · spectrum bars ── */}
