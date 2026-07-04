@@ -283,16 +283,16 @@ const PRODUCT_MARKS: Localized<IconMark[]> = {
 
 const SERVICE_MARKS: Localized<IconMark[]> = {
   en: [
-    { name: 'AIOS', desc: 'One system that runs the whole company.', src: '/services/icon-aios.png', filename: 'nivora-service-aios.png' },
-    { name: 'App Design', desc: 'Custom apps, designed and built end to end.', src: '/services/icon-appdesign.png', filename: 'nivora-service-app-design.png' },
-    { name: 'Local AI', desc: 'Private AI, installed on hardware you control.', src: '/services/icon-localai.png', filename: 'nivora-service-local-ai.png' },
-    { name: 'AI Consulting', desc: 'Find where AI pays off before you invest.', src: '/services/icon-consulting.png', filename: 'nivora-service-ai-consulting.png' },
+    { name: 'AIOS', desc: 'One system that runs the whole company.', src: '/services/service-aios.webp', filename: 'nivora-service-aios.webp' },
+    { name: 'App Design', desc: 'Custom apps, designed and built end to end.', src: '/services/service-appdesign.webp', filename: 'nivora-service-app-design.webp' },
+    { name: 'Local AI', desc: 'Private AI, installed on hardware you control.', src: '/services/service-localai.webp', filename: 'nivora-service-local-ai.webp' },
+    { name: 'AI Consulting', desc: 'Find where AI pays off before you invest.', src: '/services/service-consulting.webp', filename: 'nivora-service-ai-consulting.webp' },
   ],
   nl: [
-    { name: 'AIOS', desc: 'Eén systeem dat het hele bedrijf draait.', src: '/services/icon-aios.png', filename: 'nivora-service-aios.png' },
-    { name: 'App Design', desc: 'Apps op maat, ontworpen en gebouwd van begin tot eind.', src: '/services/icon-appdesign.png', filename: 'nivora-service-app-design.png' },
-    { name: 'Local AI', desc: 'Private AI, geïnstalleerd op hardware die u beheert.', src: '/services/icon-localai.png', filename: 'nivora-service-local-ai.png' },
-    { name: 'AI Consulting', desc: 'Ontdek waar AI loont voordat u investeert.', src: '/services/icon-consulting.png', filename: 'nivora-service-ai-consulting.png' },
+    { name: 'AIOS', desc: 'Eén systeem dat het hele bedrijf draait.', src: '/services/service-aios.webp', filename: 'nivora-service-aios.webp' },
+    { name: 'App Design', desc: 'Apps op maat, ontworpen en gebouwd van begin tot eind.', src: '/services/service-appdesign.webp', filename: 'nivora-service-app-design.webp' },
+    { name: 'Local AI', desc: 'Private AI, geïnstalleerd op hardware die u beheert.', src: '/services/service-localai.webp', filename: 'nivora-service-local-ai.webp' },
+    { name: 'AI Consulting', desc: 'Ontdek waar AI loont voordat u investeert.', src: '/services/service-consulting.webp', filename: 'nivora-service-ai-consulting.webp' },
   ],
 }
 
@@ -430,10 +430,10 @@ export const ALL_ASSETS: string[] = [
   '/favicon.png',
   '/products/box-logo.webp',
   '/products/voice-logo.webp',
-  '/services/icon-aios.png',
-  '/services/icon-appdesign.png',
-  '/services/icon-localai.png',
-  '/services/icon-consulting.png',
+  '/services/service-aios.webp',
+  '/services/service-appdesign.webp',
+  '/services/service-localai.webp',
+  '/services/service-consulting.webp',
 ]
 
 /* ── Brand voice ── */
