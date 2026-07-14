@@ -15,7 +15,7 @@ const COPY = {
   },
   nl: {
     headlineLines: ['Intelligente systemen', 'voor ambitieuze bedrijven.'],
-    sub: 'Elk bedrijf voelt de druk om meer te doen met AI. Nivora bouwt wat uw bedrijf echt vooruithelpt, en laat u de waarde van een AI-toepassing zien voordat u de investering maakt.',
+    sub: 'Elk bedrijf voelt de druk om meer te doen met AI. Nivora bouwt wat uw bedrijf echt vooruithelpt,\nen laat u de waarde van een AI-toepassing zien voordat u de investering maakt.',
     bookCall: 'Boek een gesprek',
     contact: 'Neem contact op',
   },
@@ -99,7 +99,13 @@ export function Hero() {
           variants={fadeUp}
           className="mt-7 max-w-2xl text-[15px] leading-relaxed text-ink-soft/80 lg:text-base"
         >
-          {t.sub}
+          {/* Een \n in de sub-tekst wordt een regelovergang (per taal instelbaar). */}
+          {t.sub.split('\n').map((line, i) => (
+            <span key={i}>
+              {i > 0 && <br />}
+              {line}
+            </span>
+          ))}
         </motion.p>
 
         <motion.div
