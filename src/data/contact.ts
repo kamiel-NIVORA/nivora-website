@@ -23,9 +23,13 @@ export const BOOKING_URL = 'https://booking.nivoraworks.com'
  */
 export const WAITLIST_URL = '/waitlist'
 
+/** Box has its own site now; every Box CTA points there instead of the
+ *  waiting page. Voice (and the generic waitlist) keep the old flow. */
+export const BOX_SITE_URL = 'https://box.nivoraworks.com'
+
 /** Build the waiting-page link, optionally tagged with the product (box|voice). */
 export const waitlistHref = (product?: string): string =>
-  product ? `${WAITLIST_URL}?product=${product}` : WAITLIST_URL
+  product === 'box' ? BOX_SITE_URL : product ? `${WAITLIST_URL}?product=${product}` : WAITLIST_URL
 
 /** Nivora's home base, shown on the contact page with a map. */
 export const ADDRESS = {

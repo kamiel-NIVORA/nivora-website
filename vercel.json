@@ -5,17 +5,58 @@
       "source": "/nivora-api/:path*",
       "destination": "https://nivora-api.srv938837.hstgr.cloud/:path*"
     },
-    { "source": "/((?!api/)(?!.*\\.).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!api/)(?!.*\\.).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/waitlist",
+      "has": [
+        {
+          "type": "query",
+          "key": "product",
+          "value": "box"
+        }
+      ],
+      "destination": "https://box.nivoraworks.com",
+      "permanent": true
+    },
+    {
+      "source": "/nl/waitlist",
+      "has": [
+        {
+          "type": "query",
+          "key": "product",
+          "value": "box"
+        }
+      ],
+      "destination": "https://box.nivoraworks.com",
+      "permanent": true
     }
   ]
 }

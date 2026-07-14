@@ -79,6 +79,13 @@ export function WaitlistPage() {
   const t = COPY[lang]
   const [params] = useSearchParams()
   const productSlug = (params.get('product') ?? '').toLowerCase()
+
+  /* Box has its own site now: old /waitlist?product=box links (ads, socials)
+     forward straight to box.nivoraworks.com. The Vercel edge redirect handles
+     this before React even loads; this is the client-side fallback. */
+  useEffect(() => {
+    if (productSlug === 'box') window.location.replace('https://box.nivoraworks.com')
+  }, [productSlug])
   const product = PRODUCT_LABELS[productSlug]
   // Affiliate flow: same card, one extra step. The signup asks WHY you want to
   // become an affiliate (the vision) and is stored as an affiliate signup in
@@ -191,6 +198,10 @@ export function WaitlistPage() {
       fn()
     }
   }
+
+  /* While the box redirect runs, show only the dark canvas: rendering the
+     waitlist card here caused a visible flash of the old waitlist page. */
+  if (productSlug === 'box') return <div className="min-h-screen w-full bg-[#020202]" />
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center bg-[#020202] p-4 text-white selection:bg-white/20 selection:text-white">
