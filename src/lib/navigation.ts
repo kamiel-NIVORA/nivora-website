@@ -89,7 +89,7 @@ const MENU_LABELS: Record<MenuKey, Localized<string>> = {
   Products: { en: 'Products', nl: 'Producten' },
   Services: { en: 'Services', nl: 'Diensten' },
   Company: { en: 'Company', nl: 'Bedrijf' },
-  Resources: { en: 'Resources', nl: 'Resources' },
+  Resources: { en: 'Resources', nl: 'Bronnen' },
 }
 
 export const getMenuLabel = (key: MenuKey, lang: Lang): string => MENU_LABELS[key][lang]
