@@ -434,7 +434,7 @@ const SHOWCASE_COPY: Record<Lang, Record<ServiceSlug, { eyebrow: string; title: 
     'app-design': {
       eyebrow: '',
       title: 'Uw idee, aangescherpt tot een app die leeft.',
-      body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk, fris en solide, klaar om in te zetten als interne B2B-tool, als B2C-product voor uw klanten, of als app voor een breed publiek.',
+      body: 'Breng ons uw idee, ook het meest gewaagde. We scherpen het samen aan en tillen het van concept naar een levende, werkende app: zakelijk, fris en solide, klaar om in te zetten als interne B2B-tool, als B2C-product voor uw klanten of als app voor een breed publiek.',
     },
     'local-ai': {
       eyebrow: '',
@@ -862,14 +862,14 @@ const APP_SHAPES: Record<
   nl: {
     title: 'Van idee tot iets dat gebruikt wordt',
     subtitle:
-      'We leggen uw idee op tafel, of eigenlijk spreiden we het uit, of het nu al helemaal uitgedacht is of nog maar een eerste inval. We bekijken tot in detail wat het nodig heeft, gaan aan het werk, en blijven daarna opvolgen.',
+      'We leggen uw idee op tafel of spreiden het uit, of het nu al helemaal uitgedacht is of nog maar een eerste inval. We bekijken tot in detail wat het nodig heeft, gaan aan het werk, en blijven daarna opvolgen.',
     items: [
       {
         title: 'We ontwarren uw idee',
         image: '/services/timeline-app-1.webp',
         clean: '/services/timeline-app-clean-1.webp',
         icon: '/services/icon-app-1.png',
-        body: 'U komt met iets dat in uw hoofd al groot en ingewikkeld is. Wij pluizen het samen met u uit tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde.',
+        body: 'U botst op praktische problemen die u creatief wilt oplossen en niet weet hoe eraan te beginnen. Wij analyseren het samen met u tot het helder is. Wat moet het echt doen, voor wie, en in welke volgorde.',
       },
       {
         title: 'We ontwerpen hoe het voelt',
@@ -883,14 +883,14 @@ const APP_SHAPES: Record<
         image: '/services/timeline-app-3.webp',
         clean: '/services/timeline-app-clean-3.webp',
         icon: '/services/icon-app-3.png',
-        body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het ook echt succesvol uitvoert. En gebouwd op een basis die overeind blijft als er meer mensen op komen en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
+        body: 'Hier draait het om functionaliteit. Niet een mooi scherm dat verder niks doet, maar een app die het ook echt succesvol uitvoert, gebouwd op een basis die overeind blijft als er meer mensen er gebruik van maken en als u er later dingen aan toevoegt. Dit is het verschil met snel in elkaar geklikte apps die breken zodra ze serieus gebruikt worden.',
       },
       {
         title: 'We houden hem up-to-date en veilig',
         image: '/services/timeline-app-4.webp',
         clean: '/services/timeline-app-clean-4.webp',
         icon: '/services/icon-app-4.png',
-        body: 'Na de lancering laten we de app niet los. Nodige aanpassingen voeren we door zodra ze nodig zijn, en we voeren geregeld security-checks uit op wat we voor u gebouwd hebben, zodat uw app ook maanden en jaren later nog actueel en veilig blijft.',
+        body: 'Na de lancering laten we de app niet los. Noodzakelijke aanpassingen voeren we door zodra ze nodig zijn, en we voeren geregeld security-checks uit op wat we voor u gebouwd hebben, zodat uw app ook maanden en jaren later nog actueel en veilig blijft.',
       },
     ],
   },
