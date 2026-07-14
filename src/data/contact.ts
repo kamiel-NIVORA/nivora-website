@@ -31,6 +31,13 @@ export const BOX_SITE_URL = 'https://box.nivoraworks.com'
 export const waitlistHref = (product?: string): string =>
   product === 'box' ? BOX_SITE_URL : product ? `${WAITLIST_URL}?product=${product}` : WAITLIST_URL
 
+/** Should this link open in a NEW tab? Anything that leaves nivoraworks.com does:
+ *  the Box site (box.nivoraworks.com) and any other absolute http(s) URL, plus
+ *  the standalone waiting page. This keeps the current nivoraworks.com tab open
+ *  instead of navigating away from it. */
+export const opensInNewTab = (href: string): boolean =>
+  /^https?:\/\//.test(href) || href.includes(WAITLIST_URL)
+
 /** Nivora's home base, shown on the contact page with a map. */
 export const ADDRESS = {
   line1: 'Julius en Maurits Sabbestraat 15',

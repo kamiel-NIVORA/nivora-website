@@ -18,7 +18,7 @@ import {
 import { useLang, localizePath, type Lang } from '@/i18n'
 import { useContactModal } from '@/components/contact/ContactModal'
 import { useScrollLock } from '@/lib/useScrollLock'
-import { BOOKING_URL, WAITLIST_URL } from '@/data/contact'
+import { BOOKING_URL, WAITLIST_URL, opensInNewTab } from '@/data/contact'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -87,7 +87,7 @@ function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   return (
     <a
       href={localizePath(href, lang)}
-      {...(href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...(opensInNewTab(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className="group/i flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-white/[0.06]"
     >
       {img ? (
@@ -367,7 +367,7 @@ export function Navbar() {
             <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
               <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
               {getProducts(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
+                <a key={l.title} href={localizePath(l.href, lang)} {...(opensInNewTab(l.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
                   {l.title}
                   {l.comingSoon && <ComingSoonTag />}
                 </a>

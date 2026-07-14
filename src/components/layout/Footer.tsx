@@ -4,7 +4,7 @@ import {
   getServices,
   type NavItem,
 } from '@/lib/navigation'
-import { WAITLIST_URL } from '@/data/contact'
+import { opensInNewTab } from '@/data/contact'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { useLang, localizePath, type Lang } from '@/i18n'
 
@@ -131,7 +131,7 @@ export function Footer() {
                       <li key={l.label}>
                         <a
                           href={localizePath(l.href, lang)}
-                          {...(l.href.includes(WAITLIST_URL) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          {...(opensInNewTab(l.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           className={`inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors hover:text-ink ${wrapClass}`}
                         >
                           {atIndex >= 0 ? (
