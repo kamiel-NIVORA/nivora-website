@@ -80,6 +80,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore persistence failures */
     }
+    // Ook als cookie, zodat de Edge Middleware (server-side, ziet localStorage
+    // niet) de taalkeuze kent en een eerste bezoeker in NL/BE/LU automatisch naar
+    // /nl stuurt zonder een latere handmatige keuze te overrulen.
+    try {
+      document.cookie = `${STORAGE_KEY}=${lang}; path=/; max-age=31536000; samesite=lax`
+    } catch {
+      /* ignore cookie failures */
+    }
   }, [lang])
 
   const setLang = useCallback(
