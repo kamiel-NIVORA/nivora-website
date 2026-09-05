@@ -33,8 +33,8 @@ const COPY = {
         a: 'Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems we build are fully yours to keep.',
       },
       {
-        q: 'When do Box and Voice launch?',
-        a: 'They are coming soon. Join the waiting list and you will be the first to know the moment they are live, with early access before the public launch.',
+        q: 'Can I use Box and Voice today?',
+        a: 'Box is live at box.nivoraworks.com. It brings Gmail, Outlook and WhatsApp together in one inbox, with AI that says what actually needs an answer and writes the reply in your own tone. There is a free plan, so you can try it without paying. Voice is still in development; join the waiting list for that one.',
       },
       {
         q: 'How do we get started?',
@@ -65,8 +65,8 @@ const COPY = {
         a: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die we bouwen blijven volledig van u.',
       },
       {
-        q: 'Wanneer lanceren Box en Voice?',
-        a: 'Ze komen binnenkort. Schrijf u in op de wachtlijst en u bent de eerste die het weet zodra ze live zijn, met vroege toegang nog voor de publieke lancering.',
+        q: 'Kan ik Box en Voice vandaag gebruiken?',
+        a: 'Box is live op box.nivoraworks.com. Het brengt Gmail, Outlook en WhatsApp samen in één postvak, met AI die zegt welke berichten echt op een antwoord wachten en die het antwoord al voorschrijft in uw eigen toon. Er is een gratis plan, dus u kunt het proberen zonder te betalen. Voice is nog in ontwikkeling; daarvoor kunt u zich op de wachtlijst zetten.',
       },
       {
         q: 'Hoe gaan we van start?',

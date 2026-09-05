@@ -278,7 +278,9 @@ export function WaitlistPage() {
                     alt={product ?? 'Nivora'}
                     className={product ? 'mb-8 h-20 w-20 object-contain md:h-24 md:w-24' : 'mb-8 h-9 w-auto object-contain opacity-90'}
                   />
-                  <h2 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h2>
+                  {/* Dit is de kop van de pagina, dus een h1. Stond hier als h2,
+                      waardoor /waitlist en /nl/waitlist geen enkele h1 hadden. */}
+                  <h1 className="max-w-lg font-serif text-[32px] leading-[1.08] tracking-tight text-white md:text-[40px]">{heading}</h1>
                   <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-400">{subtitle}</p>
 
                   <div className="mt-8 w-full max-w-md">

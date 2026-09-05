@@ -1,11 +1,26 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MotionConfig } from 'framer-motion'
 import { StaticRouter } from 'react-router'
-import { LanguageProvider, langHref, type Lang } from '@/i18n'
+import { Routes, Route, Outlet } from 'react-router-dom'
+import { LanguageProvider, langHref, splitLangPath, type Lang } from '@/i18n'
 import { ContactModalProvider } from '@/components/contact/ContactModal'
+import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { LandingPageView } from '@/pages/LandingPage'
 import { SitemapPage } from '@/pages/SitemapPage'
+/* Direct, niet-lazy imports: renderToStaticMarkup kan React.lazy niet oplossen,
+   dus de statische route-tabel hieronder importeert elke pagina rechtstreeks. */
+import { Home } from '@/pages/Home'
+import { About } from '@/pages/About'
+import { ServicePage } from '@/pages/ServicePage'
+import { BlogIndex } from '@/pages/BlogIndex'
+import { BlogPost } from '@/pages/BlogPost'
+import { MediaKit } from '@/pages/MediaKit'
+import { WaitlistPage } from '@/pages/WaitlistPage'
+import { AffiliatePage } from '@/pages/AffiliatePage'
+import { HelpCenterPage } from '@/pages/HelpCenterPage'
+import { ContactPage } from '@/pages/ContactPage'
+import { LegalPage } from '@/pages/LegalPage'
 import { landingJsonLd } from '@/lib/landingSchema'
 import { LANDING_ENTRIES, landingBase } from '@/data/landing/slugs'
 import type { LandingContent } from '@/data/landing/types'
@@ -56,7 +71,7 @@ export type RenderResult = {
  *  The Footer is included on purpose: it carries the links to the services,
  *  the legal pages and /sitemap, so every prerendered page hands a crawler the
  *  rest of the site even when no JavaScript runs. */
-function renderAt(url: string, node: React.ReactNode): string {
+function renderAt(url: string, node: React.ReactNode, withNav = false): string {
   return renderToStaticMarkup(
     /* isStatic turns off every dynamic behaviour in framer-motion, so components
        render their resolved state instead of their `initial` one. Without it
@@ -68,6 +83,7 @@ function renderAt(url: string, node: React.ReactNode): string {
       <StaticRouter location={url}>
         <LanguageProvider>
           <ContactModalProvider>
+            {withNav ? <Navbar /> : null}
             {node}
             <Footer />
           </ContactModalProvider>
@@ -75,6 +91,67 @@ function renderAt(url: string, node: React.ReactNode): string {
       </StaticRouter>
     </MotionConfig>,
   )
+}
+
+/* Routes that render as a single focused frame, zonder site-chrome. Spiegelt
+   BARE_ROUTES in App.tsx: staat het hier, dan krijgt de pagina geen Navbar. */
+const BARE_ROUTES = new Set(['/waitlist'])
+
+/**
+ * De statische route-tabel. Spiegelt routeTree() in src/App.tsx, maar met
+ * directe imports in plaats van React.lazy, want renderToStaticMarkup kan lazy
+ * niet oplossen. De <Routes> zijn nodig omdat ServicePage en BlogPost hun slug
+ * uit useParams halen.
+ *
+ * Bewust NIET hierin: /partnership (client-side Navigate), /newsletter/confirmed,
+ * /unsubscribed en de 404. Die zijn noindex en krijgen geen shell.
+ */
+function staticRouteTree() {
+  return (
+    <>
+      <Route index element={<Home />} />
+      <Route path="about" element={<About />} />
+      <Route path="services/:slug" element={<ServicePage />} />
+      <Route path="blog" element={<BlogIndex />} />
+      <Route path="blog/:slug" element={<BlogPost />} />
+      <Route path="media" element={<MediaKit />} />
+      <Route path="waitlist" element={<WaitlistPage />} />
+      <Route path="affiliate" element={<AffiliatePage />} />
+      <Route path="help" element={<HelpCenterPage />} />
+      <Route path="contact" element={<ContactPage />} />
+      <Route path="terms" element={<LegalPage slug="terms" />} />
+      <Route path="privacy" element={<LegalPage slug="privacy" />} />
+      <Route path="sitemap" element={<SitemapPage />} />
+    </>
+  )
+}
+
+/**
+ * Rendert een van de vaste routes tot echte HTML.
+ *
+ * Dit is het stuk dat het grootste inhoudelijke probleem oplost: tot nu toe
+ * kregen alleen de landings en /sitemap een body, en serveerden de homepage,
+ * /about, alle /services/* en alle /blog/* een lege `<div id="root">`. Elke
+ * crawler die geen JavaScript draait zag op al die pagina's exact dezelfde
+ * generieke noscript-tekst, wat ze onderling niet te onderscheiden maakt.
+ *
+ * Geeft null terug als de route niets rendert, zodat de build terugvalt op de
+ * oude alleen-head-shell in plaats van een lege body te schrijven.
+ */
+export function renderStatic(base: string, lang: Lang): string | null {
+  const url = langHref(lang, base)
+  const { base: cleanBase } = splitLangPath(url)
+  const body = renderAt(
+    url,
+    <Routes>
+      {staticRouteTree()}
+      <Route path="nl" element={<Outlet />}>
+        {staticRouteTree()}
+      </Route>
+    </Routes>,
+    !BARE_ROUTES.has(cleanBase),
+  )
+  return body && body.trim() ? body : null
 }
 
 /**

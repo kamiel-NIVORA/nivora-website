@@ -1,13 +1,13 @@
 # Nivora Works
 
-> Nivora is a software and AI studio in Brugge, Belgium. It builds its own consumer apps, Box and Voice, and designs custom software and AI systems for companies: bespoke apps, local (on-premise) AI installations, AI operating systems and AI consulting.
+> Nivora is a software and AI studio in Brugge, Belgium. It builds its own apps, Box (live at box.nivoraworks.com) and Voice (in development), and designs custom software and AI systems for companies: bespoke apps, local (on-premise) AI installations, AI operating systems and AI consulting.
 
 Nivora (also written as Nivora Works or NivoraWorks) works with companies that want intelligent systems built around how they actually operate, with a strong focus on data privacy: its Local AI service runs powerful AI models on the customer's own servers so data never leaves the building.
 
 ## Products
 
-- [Box](https://nivoraworks.com/waitlist?product=box): all your communication (email, chat, DMs) in one calm inbox. In development, waitlist open.
-- [Voice](https://nivoraworks.com/waitlist?product=voice): turns the way you talk into finished, well-formatted text in your own style. In development, waitlist open.
+- [Box](https://box.nivoraworks.com/): live and available today. Gmail, Outlook and WhatsApp in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone. Free plan, Pro at 19 euro per month (189 per year), Team at 25 euro per user per month (249 per year). Web and iOS.
+- [Voice](https://nivoraworks.com/waitlist?product=voice): turns the way you talk into finished, well-formatted text in your own style. Still in development, waiting list open.
 
 ## Services
 
@@ -31,5 +31,7 @@ Where is Nivora based? Nivora is a software and AI studio in Brugge, Belgium, wo
 Is my data safe with local AI? Yes. Local AI runs inside your own infrastructure, so your data never leaves your servers. Everything is GDPR-ready and the systems Nivora builds are fully yours to keep.
 
 Who founded Nivora? Nivora was founded by Kamiel Niville.
+
+Is Box available now? Yes. Box is live at https://box.nivoraworks.com and you can start on the free plan without paying. It connects Gmail, Outlook and WhatsApp; Instagram and Messenger are built and waiting on Meta's approval.
 
 How can I contact Nivora? Email kamiel@nivoraworks.com or call +32 489 00 77 37. Nivora usually replies within a day.

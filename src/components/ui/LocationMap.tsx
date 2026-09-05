@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 import { MapPin, ArrowUpRight } from 'lucide-react'
+
+/* Leaflet wordt bewust NIET boven in het bestand geimporteerd. De module raakt
+   `window` aan zodra ze geladen wordt, en sinds de prerender elke pagina tot
+   echte HTML rendert draait deze component ook in Node. Een gewone import liet
+   de hele build klappen op "window is not defined". Nu laadt Leaflet pas in de
+   browser, binnen het effect. */
 
 type Coords = { lat: number; lng: number }
 
@@ -35,42 +39,53 @@ export function LocationMap({
 
   useEffect(() => {
     if (!elRef.current) return
-    const map = L.map(elRef.current, {
-      center: [coords.lat, coords.lng],
-      zoom,
-      zoomControl: false,
-      scrollWheelZoom: true,
-      attributionControl: true,
-    })
-    if (title) map.getContainer().setAttribute('aria-label', title)
+    let map: import('leaflet').Map | null = null
+    let cancelled = false
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 19,
-    }).addTo(map)
+    void (async () => {
+      const [{ default: L }] = await Promise.all([
+        import('leaflet'),
+        import('leaflet/dist/leaflet.css'),
+      ])
+      if (cancelled || !elRef.current) return
+      map = L.map(elRef.current, {
+        center: [coords.lat, coords.lng],
+        zoom,
+        zoomControl: false,
+        scrollWheelZoom: true,
+        attributionControl: true,
+      })
+      if (title) map.getContainer().setAttribute('aria-label', title)
 
-    const icon = L.divIcon({
-      className: 'nv-map-marker',
-      html:
-        '<span style="position:relative;display:block;">' +
-        '<span style="position:absolute;left:50%;top:50%;width:40px;height:40px;transform:translate(-50%,-50%);border-radius:9999px;background:rgba(208,122,84,0.18);filter:blur(9px);"></span>' +
-        '<span style="position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);border-radius:9999px;background:#d07a54;box-shadow:0 0 0 3px rgba(6,6,6,0.92),0 0 12px 2px rgba(208,122,84,0.55);"></span>' +
-        '</span>',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7],
-    })
-    L.marker([coords.lat, coords.lng], { icon, keyboard: false }).addTo(map)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        maxZoom: 19,
+      }).addTo(map)
 
-    // On touch devices one-finger dragging would trap the page scroll (a swipe
-    // that lands on the map pans it instead of scrolling past). Disable drag
-    // there so the page always scrolls; the map stays a calm still image and the
-    // chip still opens Google Maps for directions. Pinch-zoom keeps working.
-    if (typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches) {
-      map.dragging.disable()
-    }
+      const icon = L.divIcon({
+        className: 'nv-map-marker',
+        html:
+          '<span style="position:relative;display:block;">' +
+          '<span style="position:absolute;left:50%;top:50%;width:40px;height:40px;transform:translate(-50%,-50%);border-radius:9999px;background:rgba(208,122,84,0.18);filter:blur(9px);"></span>' +
+          '<span style="position:absolute;left:50%;top:50%;width:14px;height:14px;transform:translate(-50%,-50%);border-radius:9999px;background:#d07a54;box-shadow:0 0 0 3px rgba(6,6,6,0.92),0 0 12px 2px rgba(208,122,84,0.55);"></span>' +
+          '</span>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+      })
+      L.marker([coords.lat, coords.lng], { icon, keyboard: false }).addTo(map)
+
+      // On touch devices one-finger dragging would trap the page scroll (a swipe
+      // that lands on the map pans it instead of scrolling past). Disable drag
+      // there so the page always scrolls; the map stays a calm still image and the
+      // chip still opens Google Maps for directions. Pinch-zoom keeps working.
+      if (typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches) {
+        map.dragging.disable()
+      }
+    })()
 
     return () => {
-      map.remove()
+      cancelled = true
+      map?.remove()
     }
   }, [coords.lat, coords.lng, zoom, title])
 

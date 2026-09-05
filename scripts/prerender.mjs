@@ -53,17 +53,31 @@ if (!existsSync(shellPath)) {
 }
 const shell = readFileSync(shellPath, 'utf8')
 
+/* Voetangel: dit script schrijft zijn resultaat terug naar dist/index.html, en
+   leest datzelfde bestand hierboven als sjabloon. Draait het twee keer op
+   dezelfde dist (zonder vite build ertussen), dan zit de homepage-body al in
+   het sjabloon en krijgt elke pagina de homepage-tekst. Stoppen dus. */
+if (!shell.includes('<div id="root"></div>')) {
+  console.error(
+    'prerender: dist/index.html bevat al een gerenderde body. Draai eerst opnieuw `vite build`,\n' +
+      '           anders krijgt elke pagina de homepage-inhoud.',
+  )
+  process.exit(1)
+}
+
 /* The prerendered landing bodies come from the SSR bundle. Built by
    `vite build --config vite.ssr.config.ts`, which runs just before this. */
 const ssrEntry = join(dist, '..', 'dist-ssr', 'entry.js')
 let ROUTES = []
 let renderLanding = null
 let renderSitemap = null
+let renderStatic = null
 if (existsSync(ssrEntry)) {
   const mod = await import(`file://${ssrEntry}`)
   ROUTES = mod.ROUTES ?? []
   renderLanding = mod.renderLanding ?? null
   renderSitemap = mod.renderSitemap ?? null
+  renderStatic = mod.renderStatic ?? null
 } else {
   console.warn('prerender: dist-ssr/entry.js missing; landing pages get meta only')
 }
@@ -201,43 +215,46 @@ const HOME_NL = {
 }
 
 /* Dutch homepage FAQ, mirroring the English FAQPage baked into index.html. */
-const NL_FAQ = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
+/* ── FAQ-schema uit de zichtbare FAQ zelf ────────────────────────────────────
+ *
+ * Dit stond hier eerst met de hand: vier vragen in de JSON-LD, terwijl
+ * src/sections/Faq.tsx er zes toont, met andere formuleringen. Google eist dat
+ * FAQ-markup de zichtbare pagina weerspiegelt, dus dat was een risico op een
+ * handmatige maatregel en zeker geen rich result.
+ *
+ * Nu lezen we de vragen uit Faq.tsx, zodat schema en pagina niet meer uit
+ * elkaar kunnen lopen. Verandert de vorm van dat bestand, dan valt de build
+ * hieronder om, en dat is precies de bedoeling.
+ */
+const faqSrc = readFileSync(join(root, 'src/sections/Faq.tsx'), 'utf8')
+
+function parseFaq(lang) {
+  const marker = lang === 'nl' ? '\n  nl: {' : '\n  en: {'
+  const from = faqSrc.indexOf(marker)
+  if (from === -1) return null
+  const next = faqSrc.indexOf('\n  nl: {', from + 1)
+  const block = faqSrc.slice(from, lang === 'en' && next > -1 ? next : undefined)
+  const list = block.slice(block.indexOf('faq: ['))
+
+  const items = []
+  const re = /\{\s*\n\s*q: (['"`])([\s\S]*?)\1,\s*\n\s*a: (['"`])([\s\S]*?)\3,\s*\n\s*\}/g
+  let m
+  while ((m = re.exec(list))) {
+    items.push({
       '@type': 'Question',
-      name: 'Wat doet Nivora precies?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Twee dingen. Nivora bouwt en installeert AI-systemen op maat voor uw bedrijf, van private AI binnen uw eigen infrastructuur tot apps op maat en complete ERP-systemen. En het maakt zijn eigen software, Box en Voice, die u meteen kunt gebruiken. Hoe dan ook, het wordt gevormd rond hoe u vandaag al werkt.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Zijn mijn gegevens veilig met private (lokale) AI?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die Nivora bouwt blijven volledig van u.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Moet ik technisch zijn om met Nivora te werken?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Nee. U brengt het probleem, of het idee dat u niet gebouwd krijgt, en Nivora regelt de rest, van ontwerp tot bouw tot installatie binnen uw tools. Van begin tot eind blijft het in gewone taal.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Waar is Nivora gevestigd?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Nivora is een software- en AI-studio in Brugge, België, en werkt met bedrijven in heel België en Nederland.',
-      },
-    },
-  ],
+      name: m[2].replace(/\\'/g, "'"),
+      acceptedAnswer: { '@type': 'Answer', text: m[4].replace(/\\'/g, "'") },
+    })
+  }
+  if (!items.length) return null
+  return { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: items }
+}
+
+const EN_FAQ = parseFaq('en')
+const NL_FAQ = parseFaq('nl')
+if (!EN_FAQ || !NL_FAQ) {
+  console.error('prerender: kon de FAQ niet uit src/sections/Faq.tsx lezen. Is de vorm van dat bestand veranderd?')
+  process.exit(1)
 }
 
 /* ── extract service + blog meta from the data files ─────────────────────────── */
@@ -376,6 +393,36 @@ const FAQ_LD =
 /* The site-wide <noscript> fallback in index.html carries its own <h1> and a
    fixed link list. On a page that gets a real prerendered body it would mean two
    H1s and an off-topic link list, so it is stripped from those shells only. */
+
+/**
+ * Haalt de animatie-startstand uit de statische HTML.
+ *
+ * framer-motion rendert op de server de `initial`-stand, dus componenten die
+ * `motion.div` rechtstreeks gebruiken bakken style="opacity:0" in de HTML. Dat
+ * verbergt de tekst voor elke crawler die geen JavaScript draait, en dat is
+ * precies het publiek waarvoor we deze pagina's prerenderen. Reveal heeft
+ * hiervoor een eigen SSR-tak (zie src/components/animations/Reveal.tsx), maar
+ * de componenten die motion direct aanspreken niet.
+ *
+ * We halen alleen de startstand weg: opacity:0 plus de transform, blur en
+ * clip-path die in datzelfde style-attribuut staan. In de browser neemt React
+ * de DOM meteen over, dus visueel verandert er niets.
+ */
+function unhideStaticBody(html) {
+  return html.replace(/ style="([^"]*)"/g, (whole, style) => {
+    if (!/opacity:\s*0(?![.\d])/.test(style)) return whole
+    const kept = style
+      .split(';')
+      .map((d) => d.trim())
+      .filter(Boolean)
+      .filter((d) => !/^opacity:\s*0(?![.\d])$/.test(d))
+      .filter((d) => !/^transform:/.test(d))
+      .filter((d) => !/^filter:\s*blur/.test(d))
+      .filter((d) => !/^clip-path:/.test(d))
+    return kept.length ? ` style="${kept.join(';')}"` : ''
+  })
+}
+
 const NOSCRIPT_BLOCK = /\n?\s*<noscript>[\s\S]*?<\/noscript>/
 
 function replaceMeta(html, attr, key, value) {
@@ -394,8 +441,11 @@ function renderShell(bases, lang, meta) {
   const isHome = enBase === '/'
   // FAQ: English homepage keeps it; Dutch homepage swaps in the Dutch FAQ; every
   // sub-route drops it (it does not show those questions).
+  /* De FAQ hoort alleen op de homepage: alleen daar staan die vragen zichtbaar.
+     Beide talen krijgen het schema dat uit Faq.tsx gelezen is, zodat de markup
+     letterlijk de vragen op de pagina beschrijft. */
   if (!isHome) html = html.replace(FAQ_LD, '')
-  else if (lang === 'nl') html = html.replace(FAQ_LD, `\n${ldBlock(NL_FAQ)}`)
+  else html = html.replace(FAQ_LD, `\n${ldBlock(lang === 'nl' ? NL_FAQ : EN_FAQ)}`)
 
   if (lang === 'nl') html = html.replace('<html lang="en">', '<html lang="nl">')
 
@@ -404,6 +454,15 @@ function renderShell(bases, lang, meta) {
     html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(meta.title)}</title>`)
     html = replaceMeta(html, 'property', 'og:title', meta.title)
     html = replaceMeta(html, 'name', 'twitter:title', meta.title)
+  }
+  /* Utility-pagina's (404, uitschrijven, nieuwsbriefbevestiging) horen niet in
+     de index. Tot nu toe stond die noindex alleen client-side in useSeo, dus
+     geen enkele crawler zonder JavaScript zag hem. */
+  if (meta.noindex) {
+    html = html.replace(
+      /<meta name="robots" content="[^"]*" \/>/,
+      '<meta name="robots" content="noindex, follow" />',
+    )
   }
   html = html.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
   html = replaceMeta(html, 'property', 'og:url', url)
@@ -421,8 +480,11 @@ function renderShell(bases, lang, meta) {
       .replace(/\s*<meta property="og:image:height"[^>]*\/>/, '')
   }
 
+  /* Zowel `nl` als `nl-BE`. Met alleen nl-BE matcht Nederland niet, terwijl
+     areaServed en llms.txt Nederland expliciet als markt noemen. */
   const alts = [
     `    <link rel="alternate" hreflang="en" href="${langUrl('en', bases)}" />`,
+    `    <link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}" />`,
     `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}" />`,
     `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}" />`,
   ].join('\n')
@@ -440,7 +502,7 @@ function renderShell(bases, lang, meta) {
     const inline = meta.data
       ? `\n    <script id="nivora-landing" type="application/json">${jsonSafe(meta.data)}</script>`
       : ''
-    html = html.replace('<div id="root"></div>', `<div id="root">${meta.body}</div>${inline}`)
+    html = html.replace('<div id="root"></div>', `<div id="root">${unhideStaticBody(meta.body)}</div>${inline}`)
   }
   return html
 }
@@ -569,7 +631,8 @@ function checkLanding(id, lang, fullBody, meta) {
 }
 
 /* ── assemble the page list (base paths + en/nl meta) ────────────────────────── */
-const pages = [{ bases: '/', en: { title: shellTitle, description: shellDesc }, nl: HOME_NL }]
+const home = { bases: '/', en: { title: shellTitle, description: shellDesc }, nl: { ...HOME_NL } }
+const pages = [home]
 for (const base of Object.keys(STATIC_EN)) {
   const page = { bases: base, en: { ...STATIC_EN[base] }, nl: { ...(STATIC_NL[base] ?? STATIC_EN[base]) } }
   /* /sitemap is the link hub the footer points at. Without a real body a
@@ -580,11 +643,35 @@ for (const base of Object.keys(STATIC_EN)) {
   }
   pages.push(page)
 }
+
 for (const slug of Object.keys(serviceEn)) {
   pages.push({ bases: `/services/${slug}`, en: serviceEn[slug], nl: serviceNl[slug] ?? serviceEn[slug] })
 }
 for (const slug of Object.keys(postEn)) {
   pages.push({ bases: `/blog/${slug}`, en: postEn[slug], nl: postNl[slug] ?? postEn[slug] })
+}
+
+/* Elke vaste route een echte body geven. Tot deze regel bestond kregen alleen
+   de landings en /sitemap er een, en serveerden de homepage, /about, alle
+   /services/* en alle /blog/* een lege `<div id="root">` plus het generieke
+   noscript-blok. Voor een crawler zonder JavaScript waren die pagina's daardoor
+   onderling niet te onderscheiden: dezelfde tekst op 35 URL's.
+
+   Faalt de render van een losse pagina, dan valt die pagina terug op de oude
+   alleen-head-shell in plaats van de hele build te laten klappen. */
+if (renderStatic) {
+  for (const page of pages) {
+    if (typeof page.bases !== 'string') continue
+    for (const lang of ['en', 'nl']) {
+      if (page[lang]?.body) continue
+      try {
+        const body = renderStatic(page.bases, lang)
+        if (body) page[lang] = { ...page[lang], body }
+      } catch (err) {
+        console.warn(`prerender: ${page.bases} (${lang}) rendert niet, valt terug op alleen meta: ${err.message}`)
+      }
+    }
+  }
 }
 
 /* Landing pages: real rendered bodies, and slugs that differ per language. */
@@ -627,12 +714,40 @@ for (const page of pages) {
   }
 }
 
+/* ── 404 ─────────────────────────────────────────────────────────────────────── */
+/* Zonder dit bestand geeft de SPA-catch-all in vercel.json HTTP 200 met de
+   homepage terug voor élke onbekende URL. Dat is een soft-404: Google ziet
+   oneindig veel URL's die allemaal de homepage dupliceren. Vercel serveert
+   dit bestand met een echte 404-status zodra de catch-all weg is. */
+writeFileSync(
+  join(dist, '404.html'),
+  renderShell('/404', 'en', {
+    title: 'Page not found · Nivora',
+    description: 'This page does not exist. Find what you were looking for on nivoraworks.com.',
+    noindex: true,
+  }),
+)
+
 /* ── sitemap ─────────────────────────────────────────────────────────────────── */
 const today = new Date().toISOString().slice(0, 10)
+
+/* lastmod per pagina, niet de builddatum voor alles.
+   Google negeert een sitemap waarin elke URL dezelfde datum draagt, en dat was
+   hier het geval: elke deploy zette 70 URL's op "vandaag gewijzigd". Blogposts
+   dragen hun eigen publicatiedatum; de rest valt terug op de builddatum, want
+   een betere bron hebben we voor die pagina's niet. */
+const lastmodFor = (bases) => {
+  const base = typeof bases === 'string' ? bases : bases.en
+  const slug = base.startsWith('/blog/') ? base.slice('/blog/'.length) : null
+  const iso = slug && postFacts[slug]?.iso
+  return (iso || today).slice(0, 10)
+}
+
 const urlEntry = (lang, bases) => `  <url>
     <loc>${langUrl(lang, bases)}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmodFor(bases)}</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="${langUrl('en', bases)}"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}"/>
     <xhtml:link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}"/>
   </url>`

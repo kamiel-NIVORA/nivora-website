@@ -6,7 +6,19 @@
       "destination": "https://nivora-api.srv938837.hstgr.cloud/:path*"
     },
     {
-      "source": "/((?!api/)(?!.*\\.).*)",
+      "source": "/newsletter/confirmed",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nl/newsletter/confirmed",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/unsubscribed",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nl/unsubscribed",
       "destination": "/index.html"
     }
   ],
@@ -57,6 +69,217 @@
       ],
       "destination": "https://box.nivoraworks.com",
       "permanent": true
+    },
+    {
+      "source": "/partnership",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/nl/partnership",
+      "destination": "/nl",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-brugge",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-gent",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-antwerpen",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-leuven",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-hasselt",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-genk",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-kortrijk",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-oostende",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-roeselare",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-mechelen",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-turnhout",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-aalst",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-sint-niklaas",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-waregem",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-ieper",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-knokke-heist",
+      "destination": "/nl/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-bruges",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-ghent",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-antwerp",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-leuven",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-hasselt",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-genk",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-kortrijk",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-ostend",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-roeselare",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-mechelen",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-turnhout",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-aalst",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-sint-niklaas",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-waregem",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-ieper",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-knokke-heist",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-chatbot",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-consultant",
+      "destination": "/services/ai-consulting",
+      "permanent": true
+    },
+    {
+      "source": "/ai-customer-service",
+      "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/build-an-app",
+      "destination": "/services/app-design",
+      "permanent": true
+    },
+    {
+      "source": "/custom-software",
+      "destination": "/services/app-design",
+      "permanent": true
+    },
+    {
+      "source": "/private-ai",
+      "destination": "/services/local-ai",
+      "permanent": true
+    },
+    {
+      "source": "/quote-automation",
+      "destination": "/services/aios",
+      "permanent": true
     }
-  ]
+  ],
+  "trailingSlash": false
 }
