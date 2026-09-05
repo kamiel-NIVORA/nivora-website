@@ -468,8 +468,8 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     name: 'App Design',
     hero: {
       eyebrow: 'App Design & Ontwikkeling',
-      headline: 'De app die u voor ogen hebt Echt gebouwd helemaal van u',
-      subhead: 'Consumenten-apps, zakelijke tools, en alles wat verder gaat dan een standaardoplossing. Gebouwd in uw merk, in uw bezit.',
+      headline: 'De app die u voor ogen hebt. Echt gebouwd, helemaal van u.',
+      subhead: 'Consumenten-apps, zakelijke tools en alles wat verder gaat dan een standaardoplossing. Gebouwd in uw merk, in uw bezit.',
       primaryCta: 'Boek een strategiegesprek',
       secondaryCta: 'Neem contact op',
     },
