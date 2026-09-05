@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
@@ -81,9 +81,23 @@ const COPY = {
  * whole-company questions. Sits just before the conversion block so it catches
  * the last objections right before the ask.
  */
-export function Faq() {
+export function Faq({
+  title,
+  subtitle,
+  items,
+}: {
+  title?: string
+  subtitle?: string
+  items?: readonly { q: string; a: string }[]
+} = {}) {
   const { lang } = useLang()
-  const t = COPY[lang]
+  const base = COPY[lang]
+  const t = {
+    ...base,
+    title: title ?? base.title,
+    subtitle: subtitle ?? base.subtitle,
+    faq: items ?? base.faq,
+  }
   const [openIdx, setOpenIdx] = useState<number | null>(0)
 
   return (
@@ -107,18 +121,29 @@ export function Faq() {
                     className={cn('h-4 w-4 shrink-0 text-faint transition-transform duration-300', isOpen && 'rotate-180')}
                   />
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.32, ease }}
-                    >
-                      <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-faint">{item.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* The answer stays mounted whether the item is open or closed,
+                    and only its height animates. Mounting it on open (the old
+                    AnimatePresence approach) meant collapsed answers were absent
+                    from the DOM, so no crawler that skips JavaScript ever read
+                    them and the visible text could disagree with the FAQPage
+                    schema. Hidden from assistive tech while collapsed via
+                    inert + aria-hidden, so keyboard order stays correct. */}
+                {/* Height only, never opacity. Animating opacity would put
+                    style="opacity:0" on every collapsed answer in the
+                    prerendered HTML, which reads as hidden text. Collapsing the
+                    grid row to 0fr with overflow hidden achieves the same visual
+                    result and leaves the text plainly present. */}
+                <motion.div
+                  initial={false}
+                  animate={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
+                  transition={{ duration: 0.32, ease }}
+                  className="grid"
+                  {...(isOpen ? {} : { inert: true, 'aria-hidden': true })}
+                >
+                  <div className="overflow-hidden">
+                    <p className="px-5 pb-5 text-[14.5px] leading-relaxed text-faint">{item.a}</p>
+                  </div>
+                </motion.div>
               </div>
             </Reveal>
           )

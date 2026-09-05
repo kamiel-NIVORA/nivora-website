@@ -18,9 +18,10 @@ const COPY = {
   },
 } as const
 
-export function FinalCTA() {
+export function FinalCTA({ title, body }: { title?: string; body?: string } = {}) {
   const { lang } = useLang()
-  const t = COPY[lang]
+  const base = COPY[lang]
+  const t = { ...base, title: title ?? base.title, body: body ?? base.body }
   return (
     <section id="contact" className="relative mx-auto w-full max-w-[1200px] overflow-hidden px-6 py-20 sm:py-28 lg:py-36">
       <div className="relative z-10 flex flex-col items-center text-center">

@@ -23,10 +23,22 @@ export function ScrollStatement({
   image,
   copy,
   accent,
+  hold = 'h-[260svh]',
 }: {
   image: string
   copy: string
   accent?: string
+  /**
+   * Hoeveel scrollhoogte de vastgezette zin krijgt. De homepagina en de
+   * dienstenpagina's houden 260svh: daar IS dit het moment. Op een sectorpagina
+   * is het dat niet, en dan staat bijna drie schermhoogte voor één zin tussen de
+   * bezoeker en waarvoor hij gekomen is. Die geven een kortere waarde mee.
+   *
+   * De onthulling zelf verschuift niet mee: revealStart en revealEnd zijn
+   * breukdelen van de scrollvoortgang, dus de woorden lichten over dezelfde
+   * verhouding op, alleen sneller.
+   */
+  hold?: string
 }) {
   const sectionRef = useRef<HTMLElement | null>(null)
   const { scrollYProgress } = useScroll({
@@ -58,7 +70,7 @@ export function ScrollStatement({
     : 'radial-gradient(120% 90% at 50% 50%, transparent 32%, rgba(6,6,6,0.62) 100%)'
 
   return (
-    <section ref={sectionRef} className="relative h-[260svh] w-full">
+    <section ref={sectionRef} className={`relative ${hold} w-full`}>
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-bg">
         {/* The whole frame scales up as one unit, corners straightening to square */}
         <motion.div

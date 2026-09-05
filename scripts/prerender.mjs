@@ -1,21 +1,37 @@
 #!/usr/bin/env node
 /**
- * Per-route prerendered metadata for the SPA, in both languages.
+ * Per-route prerendering for the SPA, in both languages.
  *
- * Problem: every URL serves the same dist/index.html, so link previews and
- * crawlers that do not run JavaScript see the homepage title/description/schema
- * for every page and every language.
+ * Problem: every URL serves the same dist/index.html, so crawlers that do not
+ * run JavaScript see the homepage title/description/schema for every page and
+ * every language, and an entirely EMPTY body (15 bytes: `<div id="root">`).
+ * That is invisible not just to link previews but to every answer engine, since
+ * GPTBot, ClaudeBot, PerplexityBot and CCBot do not execute JavaScript.
  *
- * Fix: after `vite build`, write a static shell per route AND per language:
- *   - English at dist/<route>/index.html
- *   - Dutch   at dist/nl/<route>/index.html
- * Each shell carries the right title, description, canonical, og/twitter tags,
- * <html lang>, per-route JSON-LD, and hreflang alternates (en / nl-BE /
- * x-default). Vercel serves these before the SPA rewrite; React hydrates the
- * same shell, so the site behaves identically for visitors. Language at runtime
- * comes from the URL (see src/i18n).
+ * Fix, in two layers:
+ *
+ *   1. Metadata, for every route. A static shell per route per language, with
+ *      the right title, description, canonical, og/twitter tags, <html lang>,
+ *      per-route JSON-LD and hreflang alternates (en / nl-BE / x-default).
+ *        English at dist/<route>/index.html
+ *        Dutch   at dist/nl/<route>/index.html
+ *
+ *   2. A real HTML body, for the programmatic landing pages. dist-ssr/entry.js
+ *      (built by vite.ssr.config.ts from the SAME React components the browser
+ *      runs) is rendered with renderToStaticMarkup and injected into
+ *      `<div id="root">`. React replaces it on mount, so visitors see no
+ *      difference, but a crawler without JavaScript now reads ~1,300 words.
+ *
+ * Because both the static HTML and the browser render come from one component
+ * tree and one content module, they cannot drift apart. That is what keeps this
+ * a rendering optimisation rather than cloaking.
+ *
+ * This script also emits dist/sitemap.xml, so the URL list has a single source
+ * of truth (it used to live in a separate scripts/generate-sitemap.mjs that
+ * regex-scraped the data files).
  *
  * Meta sources:
+ *   - landing: dist-ssr/entry.js (real modules, not regexes)
  *   - services: src/data/services.ts (EN + NL blocks)
  *   - blog:     src/data/posts.ts (EN + NL blocks)
  *   - the rest: the STATIC_* maps below, kept in sync with the useSeo calls in
@@ -32,14 +48,33 @@ const SITE_URL = 'https://nivoraworks.com'
 
 const shellPath = join(dist, 'index.html')
 if (!existsSync(shellPath)) {
-  console.error('prerender-meta: dist/index.html not found; run after vite build')
+  console.error('prerender: dist/index.html not found; run after vite build')
   process.exit(1)
 }
 const shell = readFileSync(shellPath, 'utf8')
 
-/** Absolute URL for a base path in a language. langUrl('nl','/about') -> .../nl/about */
-const langUrl = (lang, base) =>
-  `${SITE_URL}${lang === 'nl' ? (base === '/' ? '/nl' : `/nl${base}`) : base}`
+/* The prerendered landing bodies come from the SSR bundle. Built by
+   `vite build --config vite.ssr.config.ts`, which runs just before this. */
+const ssrEntry = join(dist, '..', 'dist-ssr', 'entry.js')
+let ROUTES = []
+let renderLanding = null
+let renderSitemap = null
+if (existsSync(ssrEntry)) {
+  const mod = await import(`file://${ssrEntry}`)
+  ROUTES = mod.ROUTES ?? []
+  renderLanding = mod.renderLanding ?? null
+  renderSitemap = mod.renderSitemap ?? null
+} else {
+  console.warn('prerender: dist-ssr/entry.js missing; landing pages get meta only')
+}
+
+/** Absolute URL for a base path in a language. Takes `bases` because the
+ *  landing pages are spelled differently per language (/ai-automation vs
+ *  /nl/ai-automatisering). For every other route both spellings are equal. */
+const langUrl = (lang, bases) => {
+  const base = typeof bases === 'string' ? bases : bases[lang]
+  return `${SITE_URL}${lang === 'nl' ? (base === '/' ? '/nl' : `/nl${base}`) : base}`
+}
 
 /* Reused as provider/publisher inside per-route JSON-LD. */
 const ORG = {
@@ -103,6 +138,11 @@ const STATIC_EN = {
     title: 'Privacy Policy · Nivora',
     description: 'How Nivora handles your data: what we collect, why we collect it, and the rights you have.',
   },
+  '/sitemap': {
+    title: 'All pages · Nivora',
+    description:
+      'Every page on nivoraworks.com in one list: services, products, AI solutions, AI automation by city, and the rest.',
+  },
 }
 const STATIC_NL = {
   '/about': {
@@ -146,6 +186,11 @@ const STATIC_NL = {
   '/privacy': {
     title: 'Privacybeleid · Nivora',
     description: 'Hoe Nivora met uw gegevens omgaat: wat we verzamelen, waarom, en welke rechten u hebt.',
+  },
+  '/sitemap': {
+    title: 'Alle pagina’s · Nivora',
+    description:
+      'Elke pagina op nivoraworks.com in één lijst: diensten, producten, AI-oplossingen, AI-automatisering per stad, en de rest.',
   },
 }
 
@@ -320,10 +365,18 @@ const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace
 const ldBlock = (obj) =>
   `    <script type="application/ld+json">\n${JSON.stringify(obj, null, 2).replace(/</g, '\\u003c')}\n    </script>`
 
+/* Same escape, for the inline page data read by src/data/landing/index.ts. */
+const jsonSafe = (obj) => JSON.stringify(obj).replace(/</g, '\\u003c')
+
 /* The homepage FAQ is site-wide in the shell (index.html), English. It belongs
    only on the English homepage. Bounded so the match stays inside one script block. */
 const FAQ_LD =
   /\n?\s*<script type="application\/ld\+json">(?:(?!<\/script>)[\s\S])*?"FAQPage"(?:(?!<\/script>)[\s\S])*?<\/script>/
+
+/* The site-wide <noscript> fallback in index.html carries its own <h1> and a
+   fixed link list. On a page that gets a real prerendered body it would mean two
+   H1s and an off-topic link list, so it is stripped from those shells only. */
+const NOSCRIPT_BLOCK = /\n?\s*<noscript>[\s\S]*?<\/noscript>/
 
 function replaceMeta(html, attr, key, value) {
   const re = new RegExp(`(<meta[^>]*${attr}="${key}"[^>]*content=")[^"]*(")`)
@@ -335,9 +388,10 @@ function replaceMeta(html, attr, key, value) {
 const shellTitle = (shell.match(/<title>([\s\S]*?)<\/title>/) || [, 'Nivora Works'])[1]
 const shellDesc = (shell.match(/<meta name="description"[^>]*content="([^"]*)"/) || [, ''])[1]
 
-function renderShell(base, lang, meta) {
+function renderShell(bases, lang, meta) {
   let html = shell
-  const isHome = base === '/'
+  const enBase = typeof bases === 'string' ? bases : bases.en
+  const isHome = enBase === '/'
   // FAQ: English homepage keeps it; Dutch homepage swaps in the Dutch FAQ; every
   // sub-route drops it (it does not show those questions).
   if (!isHome) html = html.replace(FAQ_LD, '')
@@ -345,7 +399,7 @@ function renderShell(base, lang, meta) {
 
   if (lang === 'nl') html = html.replace('<html lang="en">', '<html lang="nl">')
 
-  const url = langUrl(lang, base)
+  const url = langUrl(lang, bases)
   if (meta.title) {
     html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(meta.title)}</title>`)
     html = replaceMeta(html, 'property', 'og:title', meta.title)
@@ -368,39 +422,230 @@ function renderShell(base, lang, meta) {
   }
 
   const alts = [
-    `    <link rel="alternate" hreflang="en" href="${langUrl('en', base)}" />`,
-    `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', base)}" />`,
-    `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', base)}" />`,
+    `    <link rel="alternate" hreflang="en" href="${langUrl('en', bases)}" />`,
+    `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}" />`,
+    `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}" />`,
   ].join('\n')
   const ld = meta.jsonLd && meta.jsonLd.length ? meta.jsonLd.map(ldBlock).join('\n') + '\n' : ''
   html = html.replace('</head>', `${ld}${alts}\n  </head>`)
+
+  /* The body. Only the landing pages carry one today; everything else keeps the
+     empty #root and the site-wide <noscript> fallback. */
+  if (meta.body) {
+    html = html.replace(NOSCRIPT_BLOCK, '')
+    /* The inline JSON only exists for landing pages, where it lets React render
+       the real content on its first commit instead of flashing a Suspense
+       fallback. Pages rendered from data already in the bundle (like /sitemap)
+       do not need it. */
+    const inline = meta.data
+      ? `\n    <script id="nivora-landing" type="application/json">${jsonSafe(meta.data)}</script>`
+      : ''
+    html = html.replace('<div id="root"></div>', `<div id="root">${meta.body}</div>${inline}`)
+  }
   return html
 }
 
-/* ── assemble the page list (base path + en/nl meta) ─────────────────────────── */
-const pages = [{ base: '/', en: { title: shellTitle, description: shellDesc }, nl: HOME_NL }]
-for (const base of Object.keys(STATIC_EN)) {
-  pages.push({ base, en: STATIC_EN[base], nl: STATIC_NL[base] ?? STATIC_EN[base] })
-}
-for (const slug of Object.keys(serviceEn)) {
-  pages.push({ base: `/services/${slug}`, en: serviceEn[slug], nl: serviceNl[slug] ?? serviceEn[slug] })
-}
-for (const slug of Object.keys(postEn)) {
-  pages.push({ base: `/blog/${slug}`, en: postEn[slug], nl: postNl[slug] ?? postEn[slug] })
+/* ── content guards ──────────────────────────────────────────────────────────
+   Quality is a build failure, not a good intention. A programmatic page set
+   fails in exactly these ways, so each one is asserted here rather than noticed
+   in Search Console three months later. */
+const problems = []
+
+/* Entiteiten terugvertalen voor elke tekstvergelijking hieronder. React schrijft
+   een apostrof als &#x27;, dus "foto's" of "zo'n" komt anders nooit overeen met
+   zichzelf en faalt een guard op een pagina die volkomen in orde is. */
+const unentity = (t) =>
+  t
+    .replace(/&#x27;|&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+const paragraphSeen = new Map()
+
+/* Word floor per language. Dutch compounds ("bedrijfsprocessen",
+   "orderbevestigingen") where English needs two or three words, so the same
+   content measures roughly 5% shorter. A single cross-language threshold would
+   flag a Dutch page as thin purely for being efficient, which is a measurement
+   artefact rather than a quality signal. A genuinely thin page still fails. */
+const WORD_FLOOR = { en: 200, nl: 190 }
+const CARD_TITLE_MAX = 22
+const WORD_CEILING = 2600 // generous: the shared home sections are excluded anyway
+
+/**
+ * Strip the sections marked `data-shared` plus the footer.
+ *
+ * A landing page is the home page with this page's words in it, so it carries
+ * the same product cards, service cards and footer as everything else. That is
+ * site furniture, the same category as a navigation bar, and Google judges
+ * duplication on a page's MAIN content rather than on its boilerplate.
+ *
+ * Measuring the whole body would therefore flag every page for text it is
+ * supposed to share, and would hide the thing actually worth catching: a page
+ * whose own writing is thin or recycled. So the guards below run on what is
+ * left after this.
+ */
+function pageOwnContent(body) {
+  let out = body.replace(/<footer[\s\S]*?<\/footer>/g, ' ')
+  // Every shared region is a <section data-shared>, and they never nest, so a
+  // non-greedy match to the next </section> is exact.
+  out = out.replace(/<section[^>]*\sdata-shared[^>]*>[\s\S]*?<\/section>/g, ' ')
+  return out
 }
 
+function checkLanding(id, lang, fullBody, meta) {
+  const where = `${id} [${lang}]`
+  const body = pageOwnContent(fullBody)
+  const h1 = (fullBody.match(/<h1/g) || []).length
+  const h2 = (body.match(/<h2/g) || []).length
+  const words = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
+
+  /* Kaarttitels moeten op twee regels passen in een kaart van ~300px. Meten op
+     WOORDEN is fout: "Scheepvaartcorrespondentie" is een woord van 26 tekens en
+     breekt over drie regels. Meten op tekens vangt dat wel. */
+  for (const t of fullBody.match(/<h3[^>]*text-\[19px\][^>]*>([^<]+)<\/h3>/g) ?? []) {
+    const text = t.replace(/<[^>]+>/g, '').trim()
+    if (text.length > CARD_TITLE_MAX) {
+      problems.push(`${where}: kaarttitel ${text.length} tekens, max ${CARD_TITLE_MAX}: "${text}"`)
+    }
+  }
+
+  /* Elk beeld waar de HTML naar verwijst moet ook echt in public/ staan. Een
+     verkeerd pad valt in de browser nauwelijks op (de kaart blijft staan, alleen
+     het beeld is leeg) maar zorgt op elke crawl voor een 404. Dit is eerder
+     misgegaan met Engelse pagina-ids naast Nederlandse bestandsnamen. */
+  for (const m of fullBody.matchAll(/(?:src|srcset)="(\/[^"?#]+\.(?:webp|png|jpe?g|svg|avif))"/g)) {
+    if (!existsSync(join(root, 'public', m[1]))) {
+      problems.push(`${where}: beeld bestaat niet in public/: ${m[1]}`)
+    }
+  }
+
+  // Hidden text is checked on the WHOLE body: a shared section that ships
+  // opacity:0 is invisible to crawlers just the same.
+  if (/opacity:\s*0(?![.\d])/.test(fullBody)) {
+    problems.push(`${where}: body contains opacity:0 (motion SSR state leaked into the HTML)`)
+  }
+
+  if (h1 !== 1) problems.push(`${where}: ${h1} <h1> (must be exactly 1)`)
+
+  /* The H1 has to read as words once the tags are gone. The hero animates each
+     word in its own span, and if the spacing comes only from a CSS margin the
+     text content arrives as "AIautomationinBruges" for every crawler and screen
+     reader. Compare the stripped text against the expected headline. */
+  const h1Text = unentity((fullBody.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [, ''])[1].replace(/<[^>]+>/g, ''))
+    .replace(/\s+/g, ' ')
+    .trim()
+  const expected = meta.h1?.replace(/\s+/g, ' ').trim()
+  if (expected && h1Text !== expected) {
+    problems.push(`${where}: H1 reads as "${h1Text.slice(0, 60)}" but should read "${expected.slice(0, 60)}"`)
+  }
+  if (h2 < 2) problems.push(`${where}: ${h2} <h2> (need at least 2)`)
+  if (words < WORD_FLOOR[lang] || words > WORD_CEILING) {
+    problems.push(`${where}: ${words} own words (want ${WORD_FLOOR[lang]}-${WORD_CEILING}, shared sections excluded)`)
+  }
+
+  // Every FAQ answer promised in the schema must be readable in the HTML.
+  const faq = meta.jsonLd.find((o) => o['@type'] === 'FAQPage')
+  /* Vergelijk op ONTSNAPTE tekst aan beide kanten. React schrijft een apostrof
+     als &#x27;, dus "zo'n scherm" komt anders nooit overeen met zichzelf. */
+  const plainBody = unentity(body.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ')
+  for (const q of faq?.mainEntity ?? []) {
+    const needle = q.name.replace(/\s+/g, ' ')
+    if (!plainBody.includes(needle)) problems.push(`${where}: FAQ question not in HTML: "${q.name}"`)
+  }
+
+  // Near-duplicate detection across the whole set. Shared helpers are supposed
+  // to supply structure, never sentences; this is what enforces it.
+  // Skip paragraphs marked data-boilerplate: section labels and the note that
+  // the examples are illustrative rather than client cases. Those are supposed
+  // to be identical everywhere, and the disclaimer must be.
+  for (const p of body.match(/<p(?![^>]*data-boilerplate)[^>]*>([^<]{80,})<\/p>/g) ?? []) {
+    const text = p.replace(/<[^>]+>/g, '').trim()
+    const seen = paragraphSeen.get(text) ?? []
+    seen.push(where)
+    paragraphSeen.set(text, seen)
+  }
+}
+
+/* ── assemble the page list (base paths + en/nl meta) ────────────────────────── */
+const pages = [{ bases: '/', en: { title: shellTitle, description: shellDesc }, nl: HOME_NL }]
+for (const base of Object.keys(STATIC_EN)) {
+  const page = { bases: base, en: { ...STATIC_EN[base] }, nl: { ...(STATIC_NL[base] ?? STATIC_EN[base]) } }
+  /* /sitemap is the link hub the footer points at. Without a real body a
+     crawler that does not run JavaScript sees an empty document here, and every
+     landing page behind it becomes an orphan. So it gets prerendered too. */
+  if (base === '/sitemap' && renderSitemap) {
+    for (const lang of ['en', 'nl']) page[lang].body = renderSitemap(lang)
+  }
+  pages.push(page)
+}
+for (const slug of Object.keys(serviceEn)) {
+  pages.push({ bases: `/services/${slug}`, en: serviceEn[slug], nl: serviceNl[slug] ?? serviceEn[slug] })
+}
+for (const slug of Object.keys(postEn)) {
+  pages.push({ bases: `/blog/${slug}`, en: postEn[slug], nl: postNl[slug] ?? postEn[slug] })
+}
+
+/* Landing pages: real rendered bodies, and slugs that differ per language. */
+let landingCount = 0
+for (const route of ROUTES) {
+  if (!renderLanding) break
+  const entry = { bases: route.bases }
+  for (const lang of ['en', 'nl']) {
+    const { body, data, meta } = renderLanding(route.id, lang)
+    checkLanding(route.id, lang, body, meta)
+    entry[lang] = { ...meta, body, data }
+  }
+  pages.push(entry)
+  landingCount++
+}
+
+for (const [text, where] of paragraphSeen) {
+  if (where.length > 3) {
+    problems.push(`paragraph reused on ${where.length} pages (${where.slice(0, 4).join(', ')}...): "${text.slice(0, 70)}..."`)
+  }
+}
+
+if (problems.length) {
+  console.error('\nprerender: content guards failed\n')
+  for (const p of problems) console.error('  ✗ ' + p)
+  console.error('')
+  process.exit(1)
+}
+
+/* ── write the shells ────────────────────────────────────────────────────────── */
 let count = 0
 for (const page of pages) {
   for (const lang of ['en', 'nl']) {
-    const parts = page.base.split('/').filter(Boolean)
+    const base = typeof page.bases === 'string' ? page.bases : page.bases[lang]
+    const parts = base.split('/').filter(Boolean)
     const dir = join(dist, ...(lang === 'nl' ? ['nl'] : []), ...parts)
     mkdirSync(dir, { recursive: true })
-    writeFileSync(join(dir, 'index.html'), renderShell(page.base, lang, page[lang]))
+    writeFileSync(join(dir, 'index.html'), renderShell(page.bases, lang, page[lang]))
     count++
   }
 }
 
+/* ── sitemap ─────────────────────────────────────────────────────────────────── */
+const today = new Date().toISOString().slice(0, 10)
+const urlEntry = (lang, bases) => `  <url>
+    <loc>${langUrl(lang, bases)}</loc>
+    <lastmod>${today}</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="${langUrl('en', bases)}"/>
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}"/>
+  </url>`
+
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${pages.map((p) => `${urlEntry('en', p.bases)}\n${urlEntry('nl', p.bases)}`).join('\n')}
+</urlset>
+`
+writeFileSync(join(dist, 'sitemap.xml'), xml)
+
 console.log(
-  `prerender-meta: wrote ${count} shells (${pages.length} routes x 2 languages; ` +
-    `${Object.keys(serviceEn).length} services, ${Object.keys(postEn).length} posts)`,
+  `prerender: ${count} shells (${pages.length} routes x 2 languages; ` +
+    `${Object.keys(serviceEn).length} services, ${Object.keys(postEn).length} posts, ` +
+    `${landingCount} landing pages with a real body), sitemap.xml with ${pages.length * 2} URLs`,
 )

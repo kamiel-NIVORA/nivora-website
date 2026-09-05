@@ -14,7 +14,7 @@ const COPY = {
  * now lives in ScrollStatement so the service pages can reuse it verbatim with
  * their own photo and copy. This keeps the home line exactly as it was.
  */
-export function Manifesto() {
+export function Manifesto({ copy, image, hold }: { copy?: string; image?: string; hold?: string } = {}) {
   const { lang } = useLang()
-  return <ScrollStatement image={IMAGE} copy={COPY[lang]} />
+  return <ScrollStatement image={image ?? IMAGE} copy={copy ?? COPY[lang]} hold={hold} />
 }

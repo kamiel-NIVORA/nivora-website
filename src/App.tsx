@@ -26,6 +26,8 @@ const LegalPage = lazy(() => import('@/pages/LegalPage').then((m) => ({ default:
 const NewsletterConfirmed = lazy(() => import('@/pages/NewsletterConfirmed').then((m) => ({ default: m.NewsletterConfirmed })))
 const Unsubscribed = lazy(() => import('@/pages/Unsubscribed').then((m) => ({ default: m.Unsubscribed })))
 const NotFound = lazy(() => import('@/pages/NotFound').then((m) => ({ default: m.NotFound })))
+const LandingRoute = lazy(() => import('@/pages/LandingPage').then((m) => ({ default: m.LandingRoute })))
+const SitemapPage = lazy(() => import('@/pages/SitemapPage').then((m) => ({ default: m.SitemapPage })))
 
 /* Force a fresh ServicePage mount per slug so the intro animation replays on every service. */
 function ServiceRoute() {
@@ -56,6 +58,17 @@ function routeTree(homeHref: string) {
       <Route path="unsubscribed" element={<Unsubscribed />} />
       <Route path="terms" element={<LegalPage slug="terms" />} />
       <Route path="privacy" element={<LegalPage slug="privacy" />} />
+      {/* Index of every URL. Linked from the footer's Legal column, and the
+          reason the programmatic landing pages stay two clicks from home. */}
+      <Route path="sitemap" element={<SitemapPage />} />
+      {/* Programmatic landing pages: /ai-automation, /nl/ai-automatisering, ...
+          Listed last for readability only. React Router ranks by specificity,
+          not declaration order, so every explicit route above still wins (a
+          static segment scores 10 against a dynamic segment's 3). Because a
+          dynamic segment also outranks the `*` splat below, this route owns the
+          404 for unknown single-segment paths; LandingRoute renders NotFound
+          itself when the slug is not in the registry. */}
+      <Route path=":landingSlug" element={<LandingRoute />} />
     </>
   )
 }

@@ -11,3 +11,27 @@ assets-source/
 
 # Unused public assets, kept locally for reference, not deployed
 _unused-assets/
+
+# Werkbestanden van de agents, horen niet in de site-build
+.agents/
+.claude/
+.nivora/geparkeerde-oplossingen/
+.nivora/geparkeerde-stadspaginas/
+.nivora/localai-linkedin/
+.nivora/research/
+.nivora/results/
+skills-lock.json
+
+# Losse camera-originelen en iCloud-duplicaten in public/: nergens gebruikt,
+# en public/ gaat integraal mee in de deploy. Bewust niet getrackt.
+public/IMG_*.JPG
+public/IMG_*.jpg
+public/*.gif
+public/*-removebg-preview.png
+public/Frame *.png
+public/Group *.png
+public/LOGO APP*.png
+public/web_white.png
+public/Icon's wbesite/
+* kopie.*
+* 2.tsx

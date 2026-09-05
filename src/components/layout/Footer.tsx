@@ -22,6 +22,7 @@ const COPY = {
     helpCenter: 'Help Center',
     privacy: 'Privacy Policy',
     terms: 'Terms',
+    sitemap: 'All pages',
     location: 'Brugge, Belgium',
     rights: '© 2026 Nivora. All rights reserved.',
     comingSoon: 'Coming soon',
@@ -37,6 +38,7 @@ const COPY = {
     helpCenter: 'Helpcentrum',
     privacy: 'Privacybeleid',
     terms: 'Voorwaarden',
+    sitemap: 'Alle pagina’s',
     location: 'Brugge, België',
     rights: '© 2026 Nivora. Alle rechten voorbehouden.',
     comingSoon: 'Binnenkort',
@@ -62,6 +64,9 @@ function getColumns(lang: Lang) {
       links: [
         { label: t.privacy, href: '/privacy' },
         { label: t.terms, href: '/terms' },
+        /* Index of every URL, including the programmatic landing pages. Sits
+           here rather than as a wall of keyword links in the footer itself. */
+        { label: t.sitemap, href: '/sitemap' },
       ],
     },
     {

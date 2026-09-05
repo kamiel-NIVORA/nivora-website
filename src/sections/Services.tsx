@@ -61,7 +61,10 @@ export function Services() {
   const services = getServices(lang)
 
   return (
-    <section id="services" className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-36">
+    /* data-shared: identical on every page that renders this section, so the
+       content guard in scripts/prerender.mjs excludes it when measuring how
+       much of a page is written for that page. */
+    <section id="services" data-shared className="relative w-full overflow-hidden py-20 sm:py-24 lg:py-36">
       <div className="relative mx-auto w-full max-w-[1400px] px-6">
         <SectionHeading title={t.title} subtitle={t.subtitle} />
 

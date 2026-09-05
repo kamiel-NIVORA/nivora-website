@@ -95,7 +95,9 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
   }
 
   return (
-    <section className={cn('relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-20', className)}>
+    /* data-shared: same block wherever it appears, excluded from the per-page
+       content measurement in scripts/prerender.mjs. */
+    <section data-shared className={cn('relative mx-auto w-full max-w-[1200px] px-6 py-16 lg:py-20', className)}>
       <Reveal>
         <div className="relative overflow-hidden rounded-[32px] border border-line bg-[#0a0a0a] px-6 py-16 text-center sm:px-12 sm:py-20 lg:py-24">
           {/* Dithered texture background, kept dark so the copy stays crisp */}
@@ -190,7 +192,11 @@ export function NewsletterSignup({ source = 'home', className }: Props) {
               ) : (
                 <motion.div
                   key="form"
-                  initial={{ opacity: 0 }}
+                  /* Prerendering renders this to static HTML, where an `initial`
+                     of opacity:0 would ship the heading and the form invisible.
+                     Skipping the entrance state on the server keeps the markup
+                     identical and only drops the fade. */
+                  initial={import.meta.env.SSR ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}

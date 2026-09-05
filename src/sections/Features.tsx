@@ -192,9 +192,10 @@ function FeatureCard({
   )
 }
 
-export function Features() {
+export function Features({ title, subtitle }: { title?: string; subtitle?: string } = {}) {
   const { lang } = useLang()
-  const t = COPY[lang]
+  const base = COPY[lang]
+  const t = { ...base, headingTitle: title ?? base.headingTitle, headingSubtitle: subtitle ?? base.headingSubtitle }
   const serviceItems = getServices(lang)
   const labels: Labels = {
     comingSoon: t.comingSoon,
@@ -202,7 +203,14 @@ export function Features() {
     altPrefix: t.altPrefix,
   }
   return (
-    <section id="features" className="relative mx-auto w-full max-w-[1200px] px-6 py-20 md:py-24 lg:py-32">
+    /* data-shared: the two cards below are the same on every page that uses this
+       section, so the content guard in scripts/prerender.mjs excludes them when
+       it measures how much of a page is written for that page. */
+    <section
+      id="features"
+      data-shared
+      className="relative mx-auto w-full max-w-[1200px] px-6 py-20 md:py-24 lg:py-32"
+    >
       <SectionHeading title={t.headingTitle} subtitle={t.headingSubtitle} />
       <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
         {t.features.map((f) => (
