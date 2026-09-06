@@ -20,11 +20,11 @@ export type NavItem = {
 
 /* ── Products ── */
 const PRODUCTS_EN: NavItem[] = [
-  { title: 'Box', desc: 'All your communication, brought together in one place.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Box', desc: 'Gmail, Outlook and WhatsApp in one calm inbox. Live, free to start.', href: waitlistHref('box'), img: '/products/box-logo.webp' },
   { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 const PRODUCTS_NL: NavItem[] = [
-  { title: 'Box', desc: 'Al uw communicatie, samengebracht op één plek.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Box', desc: 'Gmail, Outlook en WhatsApp in één rustig postvak. Live, gratis starten.', href: waitlistHref('box'), img: '/products/box-logo.webp' },
   { title: 'Voice', desc: 'Spraak naar tekst, afgestemd op uw stem en schrijfstijl.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 

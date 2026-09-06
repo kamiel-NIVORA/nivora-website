@@ -25,12 +25,13 @@ const COPY = {
   en: {
     sectionTitle: 'Our Products',
     sectionSubtitle:
-      'Intelligent software, built by Nivora. Box and Voice are coming soon, leave your details to get notified the moment they launch.',
+      'Intelligent software, built by Nivora. Box is live and free to start; Voice is on the way.',
     comingSoon: 'Coming soon',
-    boxAria: 'Box, get notified at launch',
+    live: 'Available now',
+    boxAria: 'Box, open box.nivoraworks.com',
     voiceAria: 'Voice, get notified at launch',
-    boxDesc: 'Email, chat and DMs in one calm inbox. Read, sort and reply without ever switching apps.',
-    boxCta: 'Keep me posted',
+    boxDesc: 'Gmail, Outlook and WhatsApp in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone.',
+    boxCta: 'Try Box free',
     voiceDesc: 'Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.',
     phoneNotifAria: (name: string) => `${name}, coming soon, get notified at launch`,
     now: 'now',
@@ -52,12 +53,13 @@ const COPY = {
   nl: {
     sectionTitle: 'Onze producten',
     sectionSubtitle:
-      'Intelligente software, gebouwd door Nivora. Box en Voice komen binnenkort, laat uw gegevens achter en we brengen u op de hoogte zodra ze er zijn.',
+      'Intelligente software, gebouwd door Nivora. Box is er al en u start gratis; Voice komt eraan.',
     comingSoon: 'Binnenkort',
-    boxAria: 'Box, laat u op de hoogte brengen bij de lancering',
+    live: 'Nu beschikbaar',
+    boxAria: 'Box, open box.nivoraworks.com',
     voiceAria: 'Voice, laat u op de hoogte brengen bij de lancering',
-    boxDesc: 'Zet e-mails, chats en DMs in een rustige box. Lees, sorteer en antwoord zonder ooit van app te wisselen.',
-    boxCta: 'Houd mij op de hoogte',
+    boxDesc: 'Gmail, Outlook en WhatsApp in één rustig postvak, met AI die zegt welke berichten echt op een antwoord wachten en die het antwoord al voorschrijft in uw eigen toon.',
+    boxCta: 'Probeer Box gratis',
     voiceDesc: 'Spraak naar tekst, afgestemd op hoe u praat en hoe u schrijft. Dicteer één keer, krijg nette tekst in de juiste vorm.',
     phoneNotifAria: (name: string) => `${name}, binnenkort, laat u op de hoogte brengen bij de lancering`,
     now: 'nu',
@@ -265,12 +267,15 @@ function BentoCard({
 }
 
 /* Small shared bits ──────────────────────────────────────────── */
-function ComingSoon() {
+/* Box is uitgebracht en verkoopt abonnementen; Voice is nog in ontwikkeling.
+   Beide droegen hier hetzelfde "binnenkort"-label, wat op de homepage stond
+   terwijl box.nivoraworks.com al live was. */
+function StatusBadge({ live = false }: { live?: boolean }) {
   const { lang } = useLang()
   return (
     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-1 text-[10.5px] font-medium text-muted">
       <span className="h-1.5 w-1.5 rounded-full bg-olive shadow-[0_0_8px_rgba(150,167,102,0.7)]" />
-      {COPY[lang].comingSoon}
+      {live ? COPY[lang].live : COPY[lang].comingSoon}
     </span>
   )
 }
@@ -303,7 +308,7 @@ function BoxCard() {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/products/box-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
-          <ComingSoon />
+          <StatusBadge live />
         </div>
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">{t.boxDesc}</p>
         {/* Presentational — the whole card is already the link, so this just
@@ -337,7 +342,7 @@ function VoiceCard() {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/products/voice-logo.webp" />
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
-          <ComingSoon />
+          <StatusBadge />
         </div>
         <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-faint">{COPY[lang].voiceDesc}</p>
       </div>
