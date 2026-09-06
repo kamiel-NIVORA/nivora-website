@@ -665,8 +665,41 @@ if (renderStatic) {
     for (const lang of ['en', 'nl']) {
       if (page[lang]?.body) continue
       try {
-        const body = renderStatic(page.bases, lang)
-        if (body) page[lang] = { ...page[lang], body }
+        const out = renderStatic(page.bases, lang)
+        if (!out) continue
+        page[lang] = { ...page[lang], body: out.body }
+
+        /* De titel en description komen nu uit de useSeo-aanroep op de pagina
+           zelf. De STATIC_EN/STATIC_NL-tabellen hierboven waren een tweede
+           kopie die "in sync" gehouden moest worden met die aanroepen, en dat
+           was al misgegaan: /media had in het Nederlands twee verschillende
+           beschrijvingen. Welke Google zag hing af van of hij de pagina wel of
+           niet renderde, en dat is precies het soort verschil dat je nooit ziet.
+
+           De tabellen blijven staan als terugval voor routes die geen body
+           krijgen, maar wat de pagina zegt wint. Loopt het uiteen, dan zegt de
+           build het hardop. */
+        const seo = out.seo
+        if (seo?.title) {
+          const oud = page[lang].title
+          if (oud && oud !== seo.title) {
+            console.warn(`prerender: ${page.bases} (${lang}) titel liep uiteen; de pagina wint\n  tabel:  ${oud}\n  pagina: ${seo.title}`)
+          }
+          page[lang].title = seo.title
+        }
+        if (seo?.description) {
+          const oud = page[lang].description
+          if (oud && oud !== seo.description) {
+            console.warn(`prerender: ${page.bases} (${lang}) description liep uiteen; de pagina wint\n  tabel:  ${oud.slice(0, 70)}...\n  pagina: ${seo.description.slice(0, 70)}...`)
+          }
+          page[lang].description = seo.description
+        }
+        if (seo?.noindex) page[lang].noindex = true
+        if (seo?.ogImage) page[lang].ogImage = seo.ogImage
+        if (seo?.ogType) page[lang].ogType = seo.ogType
+        if (seo?.jsonLd && !page[lang].jsonLd) {
+          page[lang].jsonLd = Array.isArray(seo.jsonLd) ? seo.jsonLd : [seo.jsonLd]
+        }
       } catch (err) {
         console.warn(`prerender: ${page.bases} (${lang}) rendert niet, valt terug op alleen meta: ${err.message}`)
       }

@@ -45,6 +45,42 @@ type SeoInput = {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
 
+/**
+ * Meta-opvangbak voor de prerender.
+ *
+ * De build had zijn eigen kopie van elke titel en description, in de
+ * STATIC_EN/STATIC_NL-tabellen in scripts/prerender.mjs, "kept in sync with the
+ * useSeo calls". Ze waren al uit elkaar gelopen: /media had in het Nederlands
+ * twee verschillende beschrijvingen, en welke Google zag hing af van of hij de
+ * pagina wel of niet renderde.
+ *
+ * Nu is er nog één bron: de useSeo-aanroep op de pagina zelf. Onder SSR draait
+ * het effect niet, dus schrijft de hook zijn invoer hier weg en leest de build
+ * hem uit. In de browser gebeurt er niets: `import.meta.env.SSR` is daar een
+ * letterlijke false, dus deze tak valt uit de client-bundel.
+ */
+export type CapturedSeo = {
+  title: string
+  description?: string
+  path?: string
+  noindex?: boolean
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+}
+
+let captured: CapturedSeo | null = null
+
+/** Leegt de opvangbak; de prerender roept dit aan vóór elke pagina. */
+export function resetCapturedSeo() {
+  captured = null
+}
+
+/** Wat de laatst gerenderde pagina aan useSeo gaf. */
+export function getCapturedSeo(): CapturedSeo | null {
+  return captured
+}
+
 function setMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
   if (!el) {
@@ -71,6 +107,12 @@ function setAlternate(hreflang: string, href: string) {
 export function useSeo({ title, description, path, noindex, ogImage, ogType, jsonLd }: SeoInput) {
   const { lang } = useLang()
   const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : undefined
+
+  /* Zie CapturedSeo hierboven: onder SSR draait het effect niet, dus leggen we
+     de invoer hier vast zodat de build dezelfde waarden gebruikt als de pagina. */
+  if (import.meta.env.SSR) {
+    captured = { title, description, path, noindex, ogImage, ogType, jsonLd }
+  }
 
   useEffect(() => {
     const desc = description ?? DEFAULT_DESCRIPTION

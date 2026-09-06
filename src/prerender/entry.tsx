@@ -22,6 +22,7 @@ import { HelpCenterPage } from '@/pages/HelpCenterPage'
 import { ContactPage } from '@/pages/ContactPage'
 import { LegalPage } from '@/pages/LegalPage'
 import { landingJsonLd } from '@/lib/landingSchema'
+import { getCapturedSeo, resetCapturedSeo, type CapturedSeo } from '@/lib/seo'
 import { LANDING_ENTRIES, landingBase } from '@/data/landing/slugs'
 import type { LandingContent } from '@/data/landing/types'
 
@@ -138,9 +139,12 @@ function staticRouteTree() {
  * Geeft null terug als de route niets rendert, zodat de build terugvalt op de
  * oude alleen-head-shell in plaats van een lege body te schrijven.
  */
-export function renderStatic(base: string, lang: Lang): string | null {
+export function renderStatic(base: string, lang: Lang): { body: string; seo: CapturedSeo | null } | null {
   const url = langHref(lang, base)
   const { base: cleanBase } = splitLangPath(url)
+  /* Legen vóór de render, zodat een pagina die useSeo niet aanroept niet stil
+     de meta van de vorige pagina erft. */
+  resetCapturedSeo()
   const body = renderAt(
     url,
     <Routes>
@@ -151,7 +155,8 @@ export function renderStatic(base: string, lang: Lang): string | null {
     </Routes>,
     !BARE_ROUTES.has(cleanBase),
   )
-  return body && body.trim() ? body : null
+  if (!body || !body.trim()) return null
+  return { body, seo: getCapturedSeo() }
 }
 
 /**
