@@ -25,13 +25,13 @@ const COPY = {
   en: {
     sectionTitle: 'Our Products',
     sectionSubtitle:
-      'Intelligent software, built by Nivora. Box is live and free to start; Voice is on the way.',
+      'Intelligent software, built by Nivora. Box is close: we are taking the time to get security right first. Leave your email and be among the first in.',
     comingSoon: 'Coming soon',
     live: 'Available now',
-    boxAria: 'Box, open box.nivoraworks.com',
+    boxAria: 'Box, request early access',
     voiceAria: 'Voice, get notified at launch',
     boxDesc: 'Gmail, Outlook and WhatsApp in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone.',
-    boxCta: 'Try Box free',
+    boxCta: 'Get early access',
     voiceDesc: 'Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.',
     phoneNotifAria: (name: string) => `${name}, coming soon, get notified at launch`,
     now: 'now',
@@ -53,13 +53,13 @@ const COPY = {
   nl: {
     sectionTitle: 'Onze producten',
     sectionSubtitle:
-      'Intelligente software, gebouwd door Nivora. Box is er al en u start gratis; Voice komt eraan.',
+      'Intelligente software, gebouwd door Nivora. Box is dichtbij: we nemen eerst de tijd om de beveiliging goed te zetten. Laat uw e-mailadres achter en u bent er als eerste bij.',
     comingSoon: 'Binnenkort',
     live: 'Nu beschikbaar',
-    boxAria: 'Box, open box.nivoraworks.com',
+    boxAria: 'Box, request early access',
     voiceAria: 'Voice, laat u op de hoogte brengen bij de lancering',
     boxDesc: 'Gmail, Outlook en WhatsApp in één rustig postvak, met AI die zegt welke berichten echt op een antwoord wachten en die het antwoord al voorschrijft in uw eigen toon.',
-    boxCta: 'Probeer Box gratis',
+    boxCta: 'Vraag vroege toegang aan',
     voiceDesc: 'Spraak naar tekst, afgestemd op hoe u praat en hoe u schrijft. Dicteer één keer, krijg nette tekst in de juiste vorm.',
     phoneNotifAria: (name: string) => `${name}, binnenkort, laat u op de hoogte brengen bij de lancering`,
     now: 'nu',
@@ -307,8 +307,11 @@ function BoxCard() {
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/products/box-logo.webp" />
+          {/* Zet hier `live` zodra Box open gaat voor iedereen. Nu loopt alles
+              nog via de wachtlijst, dus zou "Nu beschikbaar" een belofte zijn die
+              we niet waarmaken. */}
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
-          <StatusBadge live />
+          <StatusBadge />
         </div>
         <p className="mt-3.5 text-[14px] leading-relaxed text-faint">{t.boxDesc}</p>
         {/* Presentational — the whole card is already the link, so this just

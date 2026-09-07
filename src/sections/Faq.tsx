@@ -33,8 +33,8 @@ const COPY = {
         a: 'Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems we build are fully yours to keep.',
       },
       {
-        q: 'Can I use Box and Voice today?',
-        a: 'Box is live at box.nivoraworks.com. It brings Gmail, Outlook and WhatsApp together in one inbox, with AI that says what actually needs an answer and writes the reply in your own tone. There is a free plan, so you can try it without paying. Voice is still in development; join the waiting list for that one.',
+        q: 'When can I use Box and Voice?',
+        a: 'Box is finished and in closed beta. We planned to open it in early September and did not: security and privacy were not where they needed to be, and Box reads your mail and your WhatsApp, so that is not something to launch with loose ends. Ask for early access at box.nivoraworks.com and you are among the first in. Voice is still in development.',
       },
       {
         q: 'How do we get started?',
@@ -65,8 +65,8 @@ const COPY = {
         a: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die we bouwen blijven volledig van u.',
       },
       {
-        q: 'Kan ik Box en Voice vandaag gebruiken?',
-        a: 'Box is live op box.nivoraworks.com. Het brengt Gmail, Outlook en WhatsApp samen in één postvak, met AI die zegt welke berichten echt op een antwoord wachten en die het antwoord al voorschrijft in uw eigen toon. Er is een gratis plan, dus u kunt het proberen zonder te betalen. Voice is nog in ontwikkeling; daarvoor kunt u zich op de wachtlijst zetten.',
+        q: 'Wanneer kan ik Box en Voice gebruiken?',
+        a: 'Box is af en zit in een besloten beta. We wilden begin september opengaan en hebben dat niet gedaan: beveiliging en privacy stonden nog niet zoals ze moesten staan, en Box leest uw mail en uw WhatsApp, dus dat lanceert u niet met losse eindjes. Vraag vroege toegang aan op box.nivoraworks.com en u bent er als eerste bij. Voice is nog in ontwikkeling.',
       },
       {
         q: 'Hoe gaan we van start?',

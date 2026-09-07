@@ -37,9 +37,9 @@ const COPY = {
     toggleMenu: 'Toggle menu',
     dismiss: 'Dismiss',
     home: 'Nivora works home',
-    bannerLead: 'Box is live.',
-    bannerCta: 'Try it free',
-    bannerCtaShort: 'Try Box free',
+    bannerLead: 'Box is coming soon.',
+    bannerCta: 'Get early access',
+    bannerCtaShort: 'Get early access',
   },
   nl: {
     comingSoon: 'Binnenkort',
@@ -53,9 +53,9 @@ const COPY = {
     toggleMenu: 'Menu openen',
     dismiss: 'Sluiten',
     home: 'Nivora works home',
-    bannerLead: 'Box is er.',
-    bannerCta: 'Probeer het gratis',
-    bannerCtaShort: 'Probeer Box gratis',
+    bannerLead: 'Box komt binnenkort.',
+    bannerCta: 'Vraag vroege toegang aan',
+    bannerCtaShort: 'Vroege toegang',
   },
 } as const
 
