@@ -34,7 +34,7 @@ const COPY = {
       },
       {
         q: 'When can I use Box and Voice?',
-        a: 'Box is finished and in closed beta. We planned to open it in early September and did not: security and privacy were not where they needed to be, and Box reads your mail and your WhatsApp, so that is not something to launch with loose ends. Ask for early access at box.nivoraworks.com and you are among the first in. Voice is still in development.',
+        a: 'Box is finished and in closed beta. We planned to open it in early September and did not: security and privacy were not where they needed to be, and Box reads your mail and your WhatsApp, so that is not something to launch with loose ends. It connects Gmail, Outlook and WhatsApp today, with Instagram and Messenger built and waiting on Meta, and Telegram, Slack and LinkedIn planned. Ask for early access at box.nivoraworks.com and you are among the first in. Voice is still in development.',
       },
       {
         q: 'How do we get started?',
@@ -66,7 +66,7 @@ const COPY = {
       },
       {
         q: 'Wanneer kan ik Box en Voice gebruiken?',
-        a: 'Box is af en zit in een besloten beta. We wilden begin september opengaan en hebben dat niet gedaan: beveiliging en privacy stonden nog niet zoals ze moesten staan, en Box leest uw mail en uw WhatsApp, dus dat lanceert u niet met losse eindjes. Vraag vroege toegang aan op box.nivoraworks.com en u bent er als eerste bij. Voice is nog in ontwikkeling.',
+        a: 'Box is af en zit in een besloten beta. We wilden begin september opengaan en hebben dat niet gedaan: beveiliging en privacy stonden nog niet zoals ze moesten staan, en Box leest uw mail en uw WhatsApp, dus dat lanceert u niet met losse eindjes. Het koppelt vandaag Gmail, Outlook en WhatsApp, met Instagram en Messenger gebouwd en wachtend op Meta, en Telegram, Slack en LinkedIn op de planning. Vraag vroege toegang aan op box.nivoraworks.com en u bent er als eerste bij. Voice is nog in ontwikkeling.',
       },
       {
         q: 'Hoe gaan we van start?',

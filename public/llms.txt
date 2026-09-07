@@ -6,7 +6,7 @@ Nivora (also written as Nivora Works or NivoraWorks) works with companies that w
 
 ## Products
 
-- [Box](https://box.nivoraworks.com/): finished and in closed beta, opening soon. Gmail, Outlook and WhatsApp in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone. Planned pricing: free plan, Pro at 19 euro per month (189 per year), Team at 25 euro per user per month (249 per year). Ask for early access on the site.
+- [Box](https://box.nivoraworks.com/): finished and in closed beta, opening soon. Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone. Telegram, Slack and LinkedIn are planned. Pricing is not published yet. Ask for early access on the site.
 - [Voice](https://nivoraworks.com/waitlist?product=voice): turns the way you talk into finished, well-formatted text in your own style. Still in development, waiting list open.
 
 ## Services
@@ -32,6 +32,6 @@ Is my data safe with local AI? Yes. Local AI runs inside your own infrastructure
 
 Who founded Nivora? Nivora was founded by Kamiel Niville.
 
-Is Box available now? Not yet. Box is built and running in a closed beta at https://box.nivoraworks.com, where you can ask for early access. The public opening was planned for early September 2026 and was postponed: Box reads your mail and your WhatsApp, so security and privacy come first. There is no new date; Nivora would rather be late than launch with loose ends. It connects Gmail, Outlook and WhatsApp; Instagram and Messenger are built and waiting on Meta's approval.
+Is Box available now? Almost. Box is built and running in a closed beta at https://box.nivoraworks.com, where you can ask for early access and join the waiting list. Nivora is finishing the security work first, because Box reads your mail and your WhatsApp; part of that is an independent review by Google for full Gmail access and a review by Meta for Instagram and Messenger. No public date is announced yet. It connects Gmail, Outlook and WhatsApp today; Instagram and Messenger are built and waiting on Meta's approval; Telegram, Slack and LinkedIn are planned.
 
 How can I contact Nivora? Email kamiel@nivoraworks.com or call +32 489 00 77 37. Nivora usually replies within a day.
