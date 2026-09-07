@@ -34,4 +34,20 @@ public/LOGO APP*.png
 public/web_white.png
 public/Icon's wbesite/
 * kopie.*
+# iCloud-duplicaten. Let op: een bestand als "api/lead 2.ts" laat een deploy
+# omvallen met invalid_function_name, want een serverless-functienaam mag geen
+# spatie bevatten. Dat kost je een halve dag zoeken.
+* 2.ts
 * 2.tsx
+* 2.mjs
+* 2.js
+* 2.json
+
+# iCloud-duplicaten van afbeeldingen: 22 MB die nergens naar verwezen wordt.
+* 2.webp
+* 2.png
+* 2.jpg
+* 2.JPG
+* 2.gif
+* 2.svg
+* 2.ico
