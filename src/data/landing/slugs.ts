@@ -91,8 +91,11 @@ export const LANDING_ENTRIES = [
      breekt.
 
      Alle vijf staan op nlOnly. Ze gaan over de Open Oproep van de Vlaamse
-     Bouwmeester, over e-Procurement en over het UEA. Dat bestaat in Vlaanderen
-     en nergens anders, dus is er niets te vertalen dat een lezer zou helpen.
+     Bouwmeester, over het federale e-Procurementplatform en over het UEA zoals
+     het hier ingevuld wordt. Alleen de Open Oproep bestaat uitsluitend in
+     Vlaanderen; het UEA en e-Procurement bestaan breder. Maar het publiek voor
+     deze pagina's leest Nederlands, dus is er niets te vertalen dat iemand
+     helpt.
 
      Vier ervan zijn te koop, de vijfde is de gratis aanleiding om te bellen en
      staat daarom in elke CTA van de andere vier. */

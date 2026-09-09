@@ -72,7 +72,7 @@ export default nlOnlyPage({
       h2: 'Wat de Cockpit niet is',
       body: [
         'Geen tekensoftware, geen projectbeheer, en geen urenpakket dat u moet vervangen. Wat u vandaag gebruikt om te tekenen en om uren te registreren blijft staan; de Cockpit leest wat eruit komt.',
-        'En geen abonnement. U koopt een bouwproject met een vaste prijs, en na de bijsturingsperiode is de omgeving van u.',
+        'En geen abonnement. U koopt een bouwproject met een vaste prijs. Na de bijsturingsperiode zijn uw gegevens, uw configuratie en de code van u, en wij zetten op papier wat er nodig is om de omgeving te blijven draaien, inclusief welke externe diensten er onder zitten en wat die kosten.',
       ],
     },
     {
@@ -86,7 +86,7 @@ export default nlOnlyPage({
         'Zes maanden bijsturing en twee kwartaalreviews.',
         'Vijfentwintig werkdagen tot alles staat.',
       ],
-      note: 'De doorgestreepte prijs is de som van de drie onderdelen apart, en die drie zijn los te koop. Wij bouwen de Cockpit in 2026 met vijf Vlaamse bureaus van vijf tot vijftien mensen. In ruil voor de bouwprijs vragen wij twee feedbacksessies en, als het werkt, één case met cijfers voor deze website. Alleen als u dat dan zelf wil.',
+      note: 'De doorgestreepte prijs is de som van de drie onderdelen apart, en die drie zijn los te koop; verandert daar een prijs, dan verandert deze mee. Wij bouwen de Cockpit met vijf Vlaamse bureaus van vijf tot vijftien mensen, tot die vijf vol zijn en niet langer dan tot 31 december 2026. In ruil voor de bouwprijs vragen wij twee feedbacksessies en, als het werkt, één case met cijfers voor deze website. Alleen als u dat dan zelf wil.',
     },
     {
       kind: 'calculator',
@@ -95,12 +95,12 @@ export default nlOnlyPage({
       formula: 'urenPerJaar',
       fields: [
         { key: 'aantal', label: 'Wedstrijden per jaar', value: 12, suffix: 'per jaar' },
-        { key: 'urenPer', label: 'Uren per wedstrijd, zonder ontwerp', value: 26, suffix: 'uur' },
+        { key: 'urenPer', label: 'Uren per wedstrijd, zonder ontwerp', value: 38, suffix: 'uur' },
         { key: 'urenWeek', label: 'Uren zoeken en opzoeken per week', value: 4, suffix: 'uur' },
         { key: 'uurkost', label: 'Uurkost', value: 80, suffix: 'euro' },
       ],
       priceForPayback: 7500,
-      note: 'De standaardwaarden zijn onze schatting. Wij hebben er geen publiek sectoronderzoek voor gevonden, en dan is het beter om u zelf te laten rekenen.',
+      note: 'De uren per wedstrijd komen uit het KU Leuven-onderzoek naar nacalculatie van de architectenopdracht (Rutgeerts, 2015): gemiddeld 38 uur voor een kandidatuur op bureauvoorstelling en referenties. De uren zoeken per week zijn onze aanname, daar bestaat geen meting van. Reken met uw eigen cijfers.',
     },
     {
       kind: 'linkGrid',
@@ -121,7 +121,7 @@ export default nlOnlyPage({
     },
     {
       q: 'Wat als het na drie maanden niet doet wat hier staat?',
-      a: 'Dan spreken we vooraf één meetbaar punt af per onderdeel, met uw eigen uren als maatstaf en een datum erbij. Halen we dat niet, dan bouwen wij door zonder extra kosten tot het wel zo is. De eerste schijf dekt bouwwerk dat dan al gedaan is; dat zeggen wij liever nu dan achteraf.',
+      a: 'Bij de intake noteren wij samen hoeveel uren uw laatste drie kandidaturen kostten, zonder ontwerpwerk. Dat vertrekcijfer staat in de opdrachtbevestiging, samen met wat er meetelt en wat niet. Kosten uw eerste drie kandidaturen met de Cockpit, ingediend binnen twaalf maanden na oplevering, samen niet minstens dertig uur minder dan dat vertrekcijfer, gemeten in uw eigen urenregistratie, dan kiest u: wij werken maximaal twintig extra uren door zonder kosten, of wij betalen de laatste schijf terug. Raken wij het niet eens over de meting, dan legt uw boekhouder de uren voor en volgen wij dat. De eerste schijf dekt bouwwerk dat dan al gedaan is; dat zeggen wij liever nu dan achteraf.',
     },
     {
       q: 'Wat gebeurt er na zes maanden?',

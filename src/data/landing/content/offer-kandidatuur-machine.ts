@@ -15,11 +15,11 @@ export default nlOnlyPage({
     eyebrow: 'Aanbod voor architectenbureaus',
     h1: 'De Kandidatuur-Machine, van leidraad naar dossier in een dag',
     subhead:
-      'Elke kandidatuur vraagt hetzelfde: het aanbestedingsdocument, drie referenties in het formaat van déze opdrachtgever, de cv’s van het team, de attesten, en een nota waarom dit team voor deze opgave. Het grootste deel daarvan schreef u vorige keer ook al.',
+      'Elke kandidatuur vraagt hetzelfde: het UEA of de verklaring op erewoord, drie referenties in het formaat van déze opdrachtgever, de cv’s van het team, de attesten, en een nota waarom dit team voor deze opgave. Het grootste deel daarvan schreef u vorige keer ook al.',
     primaryCta: TERUGBLIK_CTA,
   },
   manifesto:
-    'Een dossier sneuvelt zelden op het ontwerp. Het sneuvelt op een attest van vorige zomer.',
+    'Een dossier sneuvelt zelden op het ontwerp. Het sneuvelt op het verzekeringsattest van een partner dat niemand op tijd opvroeg.',
   heroImage: '/landing/auto-sec-kantoor-a.webp',
   manifestoImage: '/landing/auto-opl-overname-a.webp',
   blocks: [
@@ -53,22 +53,22 @@ export default nlOnlyPage({
         {
           phase: 'Eenmalig',
           title: 'Het bureaugeheugen',
-          body: 'U geeft ons uw eerdere kandidaturen, uw referentieprojecten met hun cijfers en beelden, de cv’s van het team, de gegevens van uw vaste partners en uw attesten. Wij maken daar één geordend geheugen van waarin elk stuk een datum en een eigenaar heeft. Loopt een attest af, dan hoort u dat weken op voorhand in plaats van op de dag van indiening.',
+          body: 'U geeft ons uw eerdere kandidaturen, uw referentieprojecten met hun cijfers en beelden, de cv’s van het team, de gegevens van uw vaste partners en uw attesten. Wij maken daar één geordend geheugen van waarin elk stuk een datum en een eigenaar heeft. Wij bewaken de stukken die u zelf moet aanleveren: uw verzekering beroepsaansprakelijkheid, uw inschrijving bij de Orde van Architecten, het uittreksel uit het strafregister, en dezelfde stukken bij elke partner. Loopt er een af, dan hoort u dat weken op voorhand. Uw RSZ- en fiscale toestand haalt de opdrachtgever zelf op via Telemarc, dus die staat er niet in.',
         },
         {
           phase: 'Per oproep',
           title: 'De leidraad lezen',
-          body: 'U stuurt de leidraad door. Eruit komt wat er echt gevraagd wordt: het aantal referenties en hun formaat, de paginalimieten, de selectie- en gunningscriteria met hun gewicht, de uitsluitingsgronden, de data, en de stukken die u bij een partner moet opvragen. Dat wordt de checklist voor deze ene kandidatuur.',
+          body: 'U stuurt de selectieleidraad door. Eruit komt wat er echt gevraagd wordt: het aantal referenties en hun formaat, de paginalimieten, de selectiecriteria met hun gewicht, de uitsluitingsgronden, de data, en de stukken die u bij een partner moet opvragen. Boven de Europese drempel hoort er een UEA bij, elektronisch; eronder volstaat de impliciete verklaring op erewoord en is er geen UEA. Welk van de twee geldt, leest de Machine uit de aankondiging. Gaat u door naar de tweede ronde, dan doet ze hetzelfde met de gunningsleidraad.',
         },
         {
           phase: 'Daarna',
           title: 'Het concept-dossier',
-          body: 'De vaste stukken vooringevuld, de referentiefiches in het gevraagde formaat met een voorstel van welke van uw projecten hier het sterkst staan en waarom, de teamsamenstelling met cv-uittreksels op maat van de gevraagde rollen, de attesten gebundeld, en een eerste versie van de motivatienota met de criteria van de leidraad als structuur.',
+          body: 'De vaste stukken vooringevuld, de referenties op de fiches in het gevraagde formaat, met per referentie uw rol, het ereloon en het bereikte stadium, en een voorstel van welke van uw projecten hier het sterkst staan en waarom, de teamsamenstelling met cv-uittreksels op maat van de gevraagde rollen, de attesten gebundeld, en een eerste versie van de motivatienota met de criteria van de leidraad als structuur.',
         },
         {
           phase: 'Voor indiening',
           title: 'De controle',
-          body: 'Het dossier naast de checklist. Welk stuk ontbreekt, welke fiche gaat over de paginalimiet, welk attest is te oud, welke bijlage staat in het verkeerde formaat. Groen betekent dat alles wat gevraagd is erin zit. Het betekent niet dat u geselecteerd wordt, en die twee dingen worden nergens door elkaar gehaald.',
+          body: 'Het dossier naast de checklist. Welk stuk ontbreekt, welke fiche gaat over de paginalimiet, welk van uw eigen attesten is vervallen, welke bijlage staat in het verkeerde formaat. Groen betekent dat alles wat gevraagd is erin zit. Het betekent niet dat u geselecteerd wordt, en die twee dingen worden nergens door elkaar gehaald.',
         },
         {
           phase: 'Doorlopend',
@@ -92,7 +92,7 @@ export default nlOnlyPage({
         {
           title: 'Van dinsdagochtend tot donderdag',
           before:
-            'Acht werkdagen, verdeeld over drie mensen, met op de laatste dag de ontdekking dat een attest van de vorige zomer dateert en opnieuw opgevraagd moet worden.',
+            'Acht werkdagen, verdeeld over drie mensen, met op de laatste dag de ontdekking dat het verzekeringsattest van de stabiliteitsingenieur vervallen is en dat zijn kantoor twee dagen nodig heeft.',
           after:
             'Dinsdag tien uur gaat de leidraad erin, twaalf minuten later staat de checklist er met het concept grotendeels ingevuld. De projectleider vervangt één voorgestelde referentie, want hij weet iets dat het geheugen niet weet. Woensdag anderhalf uur aan de nota, vanuit een skelet in plaats van vanaf een leeg blad. Donderdag staat de controle op groen. Zes uur werk van één persoon.',
         },
@@ -106,11 +106,11 @@ export default nlOnlyPage({
       formula: 'urenPerJaar',
       fields: [
         { key: 'aantal', label: 'Kandidaturen per jaar', value: 12, suffix: 'per jaar' },
-        { key: 'urenPer', label: 'Uren per kandidatuur, zonder ontwerp', value: 20, suffix: 'uur' },
+        { key: 'urenPer', label: 'Uren per kandidatuur, zonder ontwerp', value: 38, suffix: 'uur' },
         { key: 'uurkost', label: 'Uurkost', value: 80, suffix: 'euro' },
       ],
       priceForPayback: 3900,
-      note: 'De standaardwaarden zijn onze schatting en geen sectorcijfer. Wij vonden er geen publiek onderzoek over, en dan is het eerlijker om dat te zeggen dan om een bron te suggereren.',
+      note: 'De achtendertig uur komt uit het onderzoek naar nacalculatie van de architectenopdracht (Rutgeerts, KU Leuven, Faculteit Architectuur, 2015, 687 architecten en 1.974 dossiers): gemiddeld 38 uur voor een kandidatuur op bureauvoorstelling en referenties. Komt er ontwerpwerk bij, dan loopt dat op tot gemiddeld 253 uur bij een schetsontwerp. Die studie is tien jaar oud en telt de uren van het hele team, dus pas ze gerust aan.',
     },
     {
       kind: 'price',
@@ -123,14 +123,14 @@ export default nlOnlyPage({
         'Wij bouwen het bureaugeheugen op; u levert de map aan.',
         'Drie maanden bijsturing, waarin wij de eerste drie kandidaturen samen met u doorlopen.',
       ],
-      note: 'Bouwprijs voor de eerste vijf bureaus, daarna hoger. Geen abonnement, en na de bijsturingsperiode is de omgeving van u.',
+      note: 'Bouwprijs voor de eerste vijf bureaus, en niet langer dan tot 31 december 2026. Daarna gaat de prijs omhoog. Geen abonnement: na de bijsturingsperiode zijn uw gegevens, uw configuratie en de code van u, en wij zetten op papier wat er nodig is om de omgeving te blijven draaien.',
     },
     {
       kind: 'checklist',
       h2: 'Wat wij van u nodig hebben',
       items: [
         'Uw laatste vijf kandidaturen zoals ze ingediend zijn.',
-        'Uw referentiefiches, de cv’s van het team en uw attesten.',
+        'Uw referentiefiches, de cv’s van het team, uw verzekering beroepsaansprakelijkheid en uw inschrijving bij de Orde, met de vervaldata, en dezelfde twee van elke vaste partner.',
         'De contactgegevens van uw vaste partners.',
         'Eén uur om samen door het geheugen te lopen. Daarna stuurt u alleen nog leidraden door.',
       ],
@@ -149,6 +149,14 @@ export default nlOnlyPage({
   ],
   faq: [
     {
+      q: 'Wat maakt zo’n bureaugeheugen meer waard dan een goed geordende map?',
+      a: 'Dat een kandidatuur in de Open Oproep twee jaar geldig blijft na de indieningsdatum. Wat u één keer goed zet, dient dus twee jaar mee. En de eisen zijn hard genoeg om erop te filteren: minstens drie projecten uit de laatste drie jaar, elk met een ereloon of wedstrijdvergoeding van minimaal duizend euro en met een bereikt stadium van minstens wedstrijdontwerp of voorontwerp. Een systeem dat referenties voorstelt, selecteert net op die drie filters.',
+    },
+    {
+      q: 'Onze mensen willen in de eerste ronde al ontwerp meesturen. Mag dat?',
+      a: 'In de kandidatuurfase van de Open Oproep uitdrukkelijk niet. Het reglement zegt dat er in die fase geen ontwerpvisie of ontwerpvoorstellen verwacht worden, en dat er geen rekening mee gehouden wordt als u ze toch opneemt. Dat is een dure val, want het is precies het werk dat een bureau er gratis in steekt. De controle vlagt het.',
+    },
+    {
       q: 'Wat als de leidraad iets vraagt dat er nooit eerder was?',
       a: 'Dan staat het in de checklist als nieuw en maakt de Machine er geen concept voor. Zij vult niets in wat ze niet weet. Dat is de enige manier waarop een controle iets waard is: een systeem dat gaten opvult die het niet kan opvullen, leert u de controle negeren.',
     },
@@ -158,16 +166,16 @@ export default nlOnlyPage({
     },
     {
       q: 'Blijven onze dossiers bij ons?',
-      a: 'Ja. Uw geheugen staat in uw eigen omgeving binnen Europa. Wij gebruiken uw stukken niet om modellen te trainen en wij kijken er niet in, tenzij u ons vraagt mee te kijken tijdens de bijsturing.',
+      a: 'Ja. Uw geheugen draait apart, op infrastructuur in de Europese Unie. Wij trainen geen modellen op uw stukken, en de leveranciers die wij inschakelen mogen dat contractueel evenmin. Onze verwerkersovereenkomst en de lijst van subverwerkers, met naam, land en rol, krijgt u bij de offerte. Wij kijken niet in uw dossiers, tenzij u ons vraagt mee te kijken tijdens de bijsturing.',
     },
     {
-      q: 'Wij werken vaak samen met andere bureaus. Kan dat?',
-      a: 'Ja. Per kandidatuur komt er een teamstructuur met de stukken van elke partner, en de vraag naar hun documenten vertrekt automatisch naar hen met de juiste deadline erbij.',
+      q: 'Wij dienen vaak in als combinatie, in een tijdelijke maatschap. Kan dat?',
+      a: 'Ja. Bij een combinatie gelden de uitsluitingsgronden individueel voor elke deelnemer, dus elk kantoor levert zijn eigen stukken. Per kandidatuur komt er een teamstructuur met de stukken van elke partner apart, en de vraag naar hun documenten vertrekt automatisch naar hen met de juiste deadline erbij.',
     },
   ],
   finalCta: {
     title: 'Zien wat dit op een van uw eigen kandidaturen had gedaan?',
-    body: 'Kies een wedstrijd van de laatste twee jaar. Wij lezen de originele leidraad, maken de checklist, en tonen welke van uw referenties de Machine had voorgesteld en waarom.',
+    body: 'Kies een wedstrijd van de laatste twee jaar. Wij lezen de originele selectieleidraad, maken de checklist, en tonen welke van uw referenties de Machine had voorgesteld en waarom.',
   },
   seo: {
     title: 'Kandidatuur-Machine: selectiedossier in één dag · Nivora',

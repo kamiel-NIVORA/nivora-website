@@ -34,7 +34,7 @@ export default nlOnlyPage({
       kind: 'checklist',
       h2: 'Wat u krijgt',
       items: [
-        'De tijdlijn: publicatie, vragenronde, indiening, selectie, offerte, gunning, met per stap de uren zoals u ze opgeeft.',
+        'De tijdlijn: publicatie, indiening kandidatuur, selectie, uitnodiging tot offerte, briefing en vragenronde, offerte, onderhandeling, gunning, met per stap de uren zoals u ze opgeeft.',
         'Wat de Radar toen gezegd had: de fiche voor die ene oproep, achteraf gemaakt, met de score en de reden erachter.',
         'Wat de Machine gemaakt had: de checklist uit de originele leidraad, en welke van uw referenties ze had voorgesteld.',
         'Wat Intelligence geweten had: wie deze opdrachtgever eerder koos, en wat er in de projectdefinitie zwaar woog.',
@@ -54,7 +54,7 @@ export default nlOnlyPage({
       h2: 'Hoe het loopt',
       steps: [
         { phase: 'U', title: 'Kiest één wedstrijd', body: 'Van de laatste twee jaar. Liefst een waar de leidraad en de gunning publiek zijn, want dan kunnen wij met de echte stukken werken in plaats van met wat u zich herinnert. Weet u er geen, dan kiezen wij er zelf een uit uw referenties.' },
-        { phase: 'Wij', title: 'Zoeken de stukken op', body: 'De originele leidraad, de publicatie en de gunning. Dat is het werk waar u zelf nooit aan toekomt, en het duurt bij ons ongeveer een avond.' },
+        { phase: 'Wij', title: 'Zoeken de stukken op', body: 'De originele selectieleidraad, de publicatie en de gunning, voor zover ze publiek zijn. De Vlaamse Bouwmeester documenteert alle procedures maar zet er maar een selectie van online, dus soms vinden wij niet alles. Wat wij niet vinden, zeggen wij. Het is het werk waar u zelf nooit aan toekomt, en het duurt bij ons ongeveer een avond.' },
         { phase: 'Wij', title: 'Spelen hem terug', body: 'De tijdlijn met uw uren ernaast, en de drie onderdelen toegepast op dat ene dossier alsof ze er toen geweest waren.' },
         { phase: 'U', title: 'Krijgt één pagina', body: 'Binnen twee werkdagen, in uw huisstijl, op een adres dat alleen u kent. Daarna is het aan u.' },
       ],
@@ -64,7 +64,7 @@ export default nlOnlyPage({
       h2: 'Vraag uw Terugblik aan',
       body: 'Stuur ons de naam van uw bureau, de wedstrijd die u wil laten terugspelen, en, als u het weet, hoeveel uren die kandidatuur ongeveer kostte. Weet u dat laatste niet, dan rekenen wij met een schatting en zeggen wij dat erbij.',
       button: 'Boek een gesprek',
-      reassurance: 'Eén pagina, één mail, geen gesprek tenzij u het wil. Uw gegevens blijven bij Nivora Works, binnen Europa.',
+      reassurance: 'Eén pagina, één mail, geen gesprek tenzij u het wil. Uw gegevens blijven bij Nivora Works, op infrastructuur in de Europese Unie, en wij trainen er geen modellen op.',
     },
     {
       kind: 'linkGrid',

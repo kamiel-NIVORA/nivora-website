@@ -11,9 +11,11 @@ import type { LandingContent, LandingPage } from './types'
  * volgorde nodig en een vaste volgorde zou hier tegenwerken.
  *
  * Wat hier wel staat is de taalbrug. `LandingContent` vraagt een Engelse en een
- * Nederlandse versie, maar deze pagina's gaan over de Open Oproep, e-Procurement
- * en het UEA. Dat bestaat in Vlaanderen en nergens anders, dus is er niets te
- * vertalen dat een lezer zou helpen. De entry in ./slugs.ts draagt daarom
+ * Nederlandse versie, maar deze pagina's gaan over de Open Oproep van de Vlaamse
+ * Bouwmeester, over het federale e-Procurementplatform en over het UEA zoals het
+ * hier ingevuld wordt. Alleen de Open Oproep bestaat uitsluitend in Vlaanderen;
+ * het UEA en e-Procurement bestaan breder. Maar het publiek leest Nederlands,
+ * dus is er niets te vertalen dat iemand helpt. De entry in ./slugs.ts draagt daarom
  * `nlOnly`, en dit is de plek waar dat zichtbaar is in plaats van dat er ergens
  * een Engelse versie ligt die per ongeluk toch gepubliceerd raakt.
  *

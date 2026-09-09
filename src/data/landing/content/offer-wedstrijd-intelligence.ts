@@ -52,7 +52,7 @@ export default nlOnlyPage({
         {
           phase: 'Bij elke go',
           title: 'Het opdrachtgeversprofiel',
-          body: 'Wie is deze opdrachtgever, welke ontwerpers werden bij zijn vorige opdrachten geselecteerd en aangesteld, welke thema’s en woorden keren terug in zijn projectdefinities, en kiest hij eerder jonge of gevestigde bureaus. Twee bladzijden, te lezen in vijf minuten, opgebouwd uit wat publiek gepubliceerd is.',
+          body: 'Wie is deze opdrachtgever, welke ontwerpers werden bij zijn vorige opdrachten geselecteerd en aangesteld, welke thema’s en woorden keren terug in de projectdefinities van zijn eerdere opdrachten, want die van deze opdracht krijgt u pas na de selectie, en kiest hij eerder jonge of gevestigde bureaus. Twee bladzijden, te lezen in vijf minuten, opgebouwd uit wat publiek gepubliceerd is.',
         },
         {
           phase: 'Voor de eerste schets',
@@ -92,9 +92,9 @@ export default nlOnlyPage({
       formula: 'winratio',
       fields: [
         { key: 'wedstrijden', label: 'Wedstrijden per jaar', value: 12, suffix: 'per jaar' },
-        { key: 'ereloon', label: 'Gemiddeld ereloon bij winst', value: 200000, suffix: 'euro' },
+        { key: 'ereloon', label: 'Gemiddeld ereloon bij winst', value: 350000, suffix: 'euro' },
       ],
-      note: 'Reken met uw eigen ereloon en uw eigen aantal. Het getal dat eruit komt is wat een hogere winratio zou opleveren, en dus wat het waard is om uit te zoeken waarom u verliest.',
+      note: 'De standaardwaarde van 350.000 euro komt uit acht nagerekende projectfiches van de Open Oproep, waar de erelonen liepen van 292.000 euro tot ruim vijf miljoen, met het zwaartepunt tussen 400.000 en 900.000. Reken met uw eigen ereloon en uw eigen aantal. Wat eruit komt is wat een hogere winratio zou opleveren, en dus wat het waard is om uit te zoeken waarom u verliest.'
     },
     {
       kind: 'price',
@@ -107,7 +107,7 @@ export default nlOnlyPage({
         'Wij voeren uw wedstrijden van de laatste drie jaar in, op basis van uw lijst.',
         'Drie maanden bijsturing, met één kwartaalreview.',
       ],
-      note: 'Bouwprijs voor de eerste vijf bureaus. Geen abonnement.',
+      note: 'Bouwprijs voor de eerste vijf bureaus, en niet langer dan tot 31 december 2026. Daarna gaat de prijs omhoog. Geen abonnement.',
     },
     {
       kind: 'checklist',
