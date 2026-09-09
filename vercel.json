@@ -2,10 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/architecten/:slug*",
-      "destination": "/api/gone"
-    },
-    {
       "source": "/ai-automation-notary",
       "destination": "/api/gone"
     },

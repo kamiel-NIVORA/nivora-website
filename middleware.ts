@@ -33,6 +33,16 @@
 import { LANDING_ENTRIES } from './src/data/landing/slugs'
 import { RETIRED_PATHS } from './src/data/landing/retired'
 
+/* Paden van pagina's die nog niet online staan. De middleware laat ze met rust:
+   doorsturen zou een 307 naar een 404 opleveren in plaats van meteen een 404,
+   en dat is een omweg zonder bestemming. */
+const DRAFT_PATHS = new Set<string>()
+for (const entry of LANDING_ENTRIES) {
+  if (!('draft' in entry && entry.draft === true)) continue
+  DRAFT_PATHS.add(`/${entry.slugs.en}`)
+  DRAFT_PATHS.add(`/nl/${entry.slugs.nl}`)
+}
+
 export const config = {
   // Alleen documenten: sla de api-routes, /assets en bestanden-met-extensie over.
   matcher: ['/((?!api/|assets/|.*\\.).*)'],
@@ -98,7 +108,7 @@ export default function middleware(request: Request) {
      eindigen op een pad dat nooit bestaan heeft. De 410 uit vercel.json kwam
      dan niet meer aan bod en werd een 404. Niets doen betekent hier dat beide
      talen hetzelfde antwoord krijgen, rechtstreeks en zonder omweg. */
-  if (RETIRED_PATHS.has(path)) return
+  if (RETIRED_PATHS.has(path) || DRAFT_PATHS.has(path)) return
 
   // Al Nederlands: niets doen.
   if (path === '/nl' || path.startsWith('/nl/')) return
