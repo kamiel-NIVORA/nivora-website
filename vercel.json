@@ -417,6 +417,16 @@
       "source": "/nl/ai-automatisering-havensector",
       "destination": "/nl/ai-automatisering-logistiek",
       "permanent": true
+    },
+    {
+      "source": "/architecten/:slug*",
+      "destination": "/nl/architecten/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/nl/architecten",
+      "destination": "/nl/ai-automatisering-architectenbureau",
+      "permanent": true
     }
   ],
   "trailingSlash": false

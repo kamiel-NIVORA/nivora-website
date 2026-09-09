@@ -24,6 +24,21 @@ export type LandingEntry = {
   hub: string
   /** Slug per language, without the leading slash. */
   slugs: { en: string; nl: string }
+  /**
+   * Deze pagina bestaat alleen in het Nederlands.
+   *
+   * Voor onderwerpen die alleen in Vlaanderen bestaan. De offerpagina's voor
+   * architecten gaan over de Open Oproep, e-Procurement, het UEA en de Vlaamse
+   * Bouwmeester: een Engelse vertaling daarvan bedient niemand, en ze zou het
+   * domein verdunnen met pagina's die wereldwijd meedingen zonder publiek.
+   *
+   * Gevolg op drie plaatsen: de build schrijft geen Engelse shell en zet alleen
+   * de Nederlandse URL in sitemap.xml, useSeo laat de hreflang naar en weg en
+   * wijst x-default naar het Nederlands, en vercel.json stuurt het Engelse pad
+   * met een 308 naar /nl. Zulke entries dragen daarom in beide talen DEZELFDE
+   * slug: er is maar één spelling, want er is maar één pagina.
+   */
+  nlOnly?: true
 }
 
 export const LANDING_ENTRIES = [
@@ -68,6 +83,25 @@ export const LANDING_ENTRIES = [
      geschreven zijn, staat hier niets, en toont een sectorpagina geen
      oplossingenrij. Dat is geregeld in solutionRailFor() in
      src/pages/LandingPage.tsx: geen items betekent geen blok. */
+
+  /* ── aanbod voor architectenbureaus (tier N+1) ──
+     Vijf pagina's onder /architecten/, en dat pad is geen sier: Google leest ze
+     als één cluster rond hetzelfde onderwerp, de sectorpagina geeft autoriteit
+     door aan de kinderen, en er kunnen er later bij zonder dat de structuur
+     breekt.
+
+     Alle vijf staan op nlOnly. Ze gaan over de Open Oproep van de Vlaamse
+     Bouwmeester, over e-Procurement en over het UEA. Dat bestaat in Vlaanderen
+     en nergens anders, dus is er niets te vertalen dat een lezer zou helpen.
+
+     Vier ervan zijn te koop, de vijfde is de gratis aanleiding om te bellen en
+     staat daarom in elke CTA van de andere vier. */
+  { id: 'offer-wedstrijd-radar', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-radar', nl: 'architecten/wedstrijd-radar' } },
+  { id: 'offer-kandidatuur-machine', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/kandidatuur-machine', nl: 'architecten/kandidatuur-machine' } },
+  { id: 'offer-wedstrijd-intelligence', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-intelligence', nl: 'architecten/wedstrijd-intelligence' } },
+  { id: 'offer-wedstrijd-cockpit', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-cockpit', nl: 'architecten/wedstrijd-cockpit' } },
+  { id: 'offer-wedstrijd-terugblik', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-terugblik', nl: 'architecten/wedstrijd-terugblik' } },
+
 ] as const satisfies readonly LandingEntry[]
 
 /** Literal union of every landing id, so related-links are compile-checked. */
@@ -84,6 +118,12 @@ const BY_SLUG = {
  *  Dutch slug does not resolve at the root, so each URL has one home. */
 export const findLandingEntry = (slug: string | undefined, lang: 'en' | 'nl'): LandingEntry | undefined =>
   slug ? BY_SLUG[lang].get(slug) : undefined
+
+/** Bestaat deze pagina alleen in het Nederlands? Leest de optionele vlag zonder
+ *  dat de aanroeper hoeft te weten dat `as const` hem op sommige entries
+ *  helemaal weglaat. */
+export const isNlOnly = (entry: LandingEntry | { nlOnly?: true }): boolean =>
+  'nlOnly' in entry && entry.nlOnly === true
 
 /** Canonical, language-agnostic base path for an entry (always the EN spelling). */
 export const landingBase = (entry: LandingEntry): string => `/${entry.slugs.en}`

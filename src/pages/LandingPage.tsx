@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useLang, type Lang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 import { landingJsonLd } from '@/lib/landingSchema'
-import { findLandingEntry, landingBase, type LandingEntry } from '@/data/landing/slugs'
+import { findLandingEntry, isNlOnly, landingBase, type LandingEntry } from '@/data/landing/slugs'
 import { loadLanding, WRITTEN_IDS, INLINE_LANDING } from '@/data/landing'
 import type { LandingId } from '@/data/landing/slugs'
 import type { LandingBlock, LandingPage as LandingPageData } from '@/data/landing/types'
@@ -157,6 +157,7 @@ export function LandingPageView({
     path: landingBase(entry),
     ogImage: page?.seo?.ogImage,
     jsonLd,
+    nlOnly: isNlOnly(entry),
   })
 
   // Only reachable during client-side navigation, while the chunk is in flight.
@@ -260,11 +261,23 @@ export function LandingPageView({
  * under /nl, so every page has exactly one address per language.
  */
 export function LandingRoute() {
-  const { landingSlug } = useParams<{ landingSlug: string }>()
+  const { pathname } = useLocation()
   const { lang } = useLang()
-  const entry = findLandingEntry(landingSlug, lang)
+
+  /* De slug uit het pad in plaats van uit één route-parameter, want sinds de
+     offerpagina's onder /architecten/ staan is een slug niet meer per se één
+     segment. Bewust het RUWE pad: splitLangPath() vertaalt een Nederlandse slug
+     naar zijn Engelse spelling, en dan zou een pagina op twee adressen te
+     bereiken zijn in plaats van één. */
+  const raw = (lang === 'nl' ? pathname.replace(/^\/nl(?=\/|$)/, '') : pathname)
+    .replace(/^\//, '')
+    .replace(/\/$/, '')
+  const entry = findLandingEntry(raw, lang)
 
   if (!entry || !WRITTEN_IDS.has(entry.id)) return <NotFound />
+  /* Een pagina die alleen in het Nederlands bestaat, heeft geen Engels adres.
+     vercel.json stuurt dat pad al door, dit vangt de client-side navigatie. */
+  if (isNlOnly(entry) && lang === 'en') return <NotFound />
 
   // Remount per page so intro state never leaks between landing pages.
   return <LandingPageView key={entry.id} entry={entry} />

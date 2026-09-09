@@ -129,12 +129,64 @@ export type LandingBlock =
       kind: 'compare'
       h2: string
       intro?: string
-      left: string
-      right: string
-      rows: { label: string; left: string; right: string }[]
+      /** De kolomkoppen, zonder de kolom met de rijlabels. Twee volstaat voor een
+       *  voor-en-na; meer is voor het naast elkaar zetten van varianten van een
+       *  aanbod. De LAATSTE kolom wordt benadrukt, want dat is waar zo'n tabel
+       *  naartoe leest. */
+      columns: string[]
+      /** `values` telt evenveel cellen als er kolommen zijn. Klopt dat niet, dan
+       *  blijft de rest van de rij leeg in plaats van te verschuiven. */
+      rows: { label: string; values: string[] }[]
     }
   | { kind: 'stats'; h2: string; intro?: string; items: { value: string; label: string }[] }
   | { kind: 'linkGrid'; h2: string; intro?: string; links: LandingLink[] }
+  /**
+   * Prijs en oplevering van één aanbod.
+   *
+   * Staat als eigen blok en niet als proza, omdat een prijs het eerste is
+   * waarnaar gezocht wordt en het laatste wat in een alinea gevonden wordt. De
+   * velden zijn bewust apart: het bedrag, waar het bedrag NIET alles van zegt
+   * (btw, schijven), wat erin zit, en de eerlijke voetnoot eronder. Het blok
+   * voedt ook de `offers` in het Service-schema, zodat de prijs kans maakt in
+   * een zoekresultaat.
+   */
+  | {
+      kind: 'price'
+      h2: string
+      /** Het getal zoals het gelezen wordt, bv. "€1.950". */
+      amount: string
+      /** "eenmalig, excl. btw" en dergelijke. Altijd invullen. */
+      qualifier: string
+      /** Doorstreepte prijs, alleen waar er echt een korting tegenover staat. */
+      was?: string
+      /** Betaalschijven, oplevertermijn, en wat er inbegrepen zit. */
+      terms: string[]
+      /** Wat er onder de streep hoort: de bouwprijs-afspraak, geen abonnement. */
+      note?: string
+    }
+  /**
+   * Het rekenblok: een handvol invoervelden en een uitkomst in uren en euro.
+   *
+   * Bewust interactief en bewust met zichtbare standaardwaarden. Een bezoeker
+   * die zijn eigen aantallen intikt, rekent zichzelf de zaak voor, en dat
+   * overtuigt beter dan ons cijfer. De regel eronder zegt dat de
+   * standaardwaarden onze schatting zijn, want dat zijn ze, en dat verzwijgen
+   * zou de rest van de pagina verdacht maken.
+   *
+   * `formula` verwijst naar een berekening in LandingBlocks.tsx. Een som in
+   * data zetten zou betekenen dat er ergens een uitdrukking uit een tekstbestand
+   * geëvalueerd wordt, en dat is een deur die niet open hoeft.
+   */
+  | {
+      kind: 'calculator'
+      h2: string
+      intro?: string
+      formula: 'urenPerJaar' | 'winratio'
+      fields: { key: string; label: string; value: number; suffix?: string }[]
+      /** Bijschrift onder de uitkomst, bv. de terugverdientijd. */
+      priceForPayback?: number
+      note: string
+    }
   | { kind: 'cta'; h2: string; body: string; button: string; reassurance?: string }
 
 export type LandingFaq = { q: string; a: string }

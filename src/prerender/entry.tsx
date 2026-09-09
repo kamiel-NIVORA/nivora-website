@@ -52,6 +52,9 @@ export const ROUTES = LANDING_ENTRIES.filter((e) => contentFor(e.id)).map((e) =>
   id: e.id,
   family: e.family,
   bases: { en: `/${e.slugs.en}`, nl: `/${e.slugs.nl}` },
+  /* Alleen-Nederlandse pagina's krijgen geen Engelse shell en geen Engelse
+     regel in de sitemap; zie het commentaar bij nlOnly in ../data/landing/slugs.ts. */
+  nlOnly: 'nlOnly' in e && e.nlOnly === true,
 }))
 
 export type RenderResult = {

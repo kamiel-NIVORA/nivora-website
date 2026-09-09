@@ -159,10 +159,45 @@ export default solutionPage(
         'Werfverslagen worden op vrijdag geschreven voor drie vergaderingen tegelijk',
         'Niemand kan zeggen wat dat project het bureau aan uren gekost heeft',
         'Een vergunningsdossier komt terug omdat één bijlage ontbrak',
+        'Een kandidatuur kost het bureau twee weken, ontwerp niet meegerekend',
+        'Achteraf wist iedereen dat we die wedstrijd niet hadden moeten doen',
       ],
-      automationsH2: 'Wat we kunnen automatiseren in een architectenbureau',
+      offersH2: 'Voor bureaus die wedstrijden doen',
+      offersIntro:
+        'Wie meedoet aan Open Oproepen, gemeentelijke aanbestedingen of ontwerpwedstrijden, levert weken werk voor er een opdracht is. Drie stukken daarvan hoeven niet meer met de hand. Elk heeft een eigen pagina met de prijs erop.',
+      offers: [
+        {
+          title: 'Wedstrijd-Radar',
+          body: 'Elke oproep die voor uw bureau in aanmerking komt, elke ochtend in één mail, gescoord op wat ze vraagt tegenover wat ze betaalt, met een go of no-go-fiche per stuk. Vanaf €1.950, eenmalig.',
+          image: '/landing/auto-opl-termijnwachter-hero.webp',
+          alt: 'Een agenda met termijnen op een bureau in een architectenatelier',
+          href: '/architecten/wedstrijd-radar',
+        },
+        {
+          title: 'Kandidatuur-Machine',
+          body: 'De selectieleidraad erin, het dossier eruit: referentiefiches in het gevraagde formaat, cv\u2019s, attesten, en een lijst van wat er nog ontbreekt voor u indient. Vanaf €3.900, eenmalig.',
+          image: '/landing/auto-sec-kantoor-a.webp',
+          alt: 'Een bureau met ingebonden dossiers en een lamp, klaar om een aanvraag samen te stellen',
+          href: '/architecten/kandidatuur-machine',
+        },
+        {
+          title: 'Intelligence',
+          body: 'Wie deze opdrachtgever eerder koos, waar de punten in de gunning liggen, en wat elke wedstrijd uw bureau tot nu toe gekost en opgeleverd heeft. Vanaf €2.900, eenmalig.',
+          image: '/landing/auto-opl-marge-a.webp',
+          alt: 'Cijfers op een scherm naast een plan op een werktafel',
+          href: '/architecten/wedstrijd-intelligence',
+        },
+        {
+          title: 'De Cockpit',
+          body: 'De drie samen in één omgeving in uw huisstijl, met één bureauprofiel eronder. €7.500 in plaats van €8.750, en zes maanden bijsturing in plaats van drie.',
+          image: '/landing/auto-opl-meetstaat-a.webp',
+          alt: 'Een werktafel met plannen, een maquette en een scherm naast elkaar',
+          href: '/architecten/wedstrijd-cockpit',
+        },
+      ],
+      automationsH2: 'Voor elk bureau: de projectadministratie',
       automationsIntro:
-        'Vier dingen die bij zowat elk bureau terugkomen. Wij bouwen ze één voor één, en meestal is de eerste terugverdiend voor de tweede begint.',
+        'Dit hangt aan projecten die al lopen, en het komt bij zowat elk bureau terug. Wij bouwen deze één voor één, tegen een vaste prijs, en meestal is de eerste terugverdiend voor de tweede begint. Voor deze vier is er nog geen eigen pagina: vraag ze aan via het formulier onderaan.',
       automations: [
         {
           title: 'Aftellen uit uw plan',
@@ -221,7 +256,7 @@ export default solutionPage(
         'Neem één project waar u nu aan werkt en de laatste drie werfverslagen ervan. Wij zeggen u binnen de week wat wij uit dat plan zouden halen en waar het tekortschiet, zonder dat er iets vastligt.',
       seoTitle: 'AI-automatisering voor architectenbureaus in Vlaanderen · Nivora Works',
       seoDescription:
-        'Nivora Works uit Brugge neemt de administratieve helft van een architectenbureau over: hoeveelheden uit uw eigen plan, werfverslagen dezelfde dag, vergunningsdossiers nagekeken op wat erin moet, en uren tegenover het afgesproken ereloon.',
+        'Nivora Works uit Brugge neemt de administratieve helft van een architectenbureau over: hoeveelheden uit uw plan, werfverslagen dezelfde dag, en uren tegenover het ereloon. En voor wedstrijdbureaus: oproepen gescoord, kandidaturen opgemaakt, cijfers per wedstrijd.',
     },
   },
   { hero: '/landing/auto-sec-architect-a.webp', manifesto: '/landing/auto-sec-architect-b.webp' },

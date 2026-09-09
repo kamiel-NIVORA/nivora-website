@@ -2,7 +2,7 @@ import { useLang, type Lang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 import { Reveal } from '@/components/animations/Reveal'
 import { LangLink as Link } from '@/components/ui/LangLink'
-import { LANDING_ENTRIES, type LandingEntry } from '@/data/landing/slugs'
+import { LANDING_ENTRIES, type LandingEntry, isNlOnly } from '@/data/landing/slugs'
 import { WRITTEN_IDS } from '@/data/landing'
 import { humanise } from '@/data/landing/related'
 import { getProducts, getServices, getCompanyPrimary, getResources } from '@/lib/navigation'
@@ -59,9 +59,15 @@ const COPY = {
 
 type Group = { title: string; links: { label: string; href: string }[] }
 
-/** Landing entries of one family that actually have copy written. */
+/** Landing entries of one family that actually have copy written.
+ *
+ *  Een pagina die alleen in het Nederlands bestaat, hoort niet in de Engelse
+ *  lijst: haar Engelse pad stuurt door naar /nl en zou hier dus als dode link
+ *  staan, precies op de pagina die de rest van de site bijeenhoudt. */
 function landingGroup(family: LandingEntry['family'], title: string, lang: Lang): Group | null {
-  const links = LANDING_ENTRIES.filter((e) => e.family === family && WRITTEN_IDS.has(e.id)).map((e) => ({
+  const links = LANDING_ENTRIES.filter(
+    (e) => e.family === family && WRITTEN_IDS.has(e.id) && (lang === 'nl' || !isNlOnly(e)),
+  ).map((e) => ({
     label: humanise(e, lang),
     href: `/${e.slugs.en}`,
   }))

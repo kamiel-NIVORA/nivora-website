@@ -43,6 +43,15 @@ type SeoInput = {
   ogType?: 'website' | 'article'
   /** Page-specific structured data (one object or several), rendered as JSON-LD while mounted. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  /**
+   * Deze pagina bestaat alleen in het Nederlands.
+   *
+   * Dan is er geen Engelse tegenhanger om naar te verwijzen: hreflang="en" zou
+   * naar een URL wijzen die 308 doorstuurt, en dat is precies het soort
+   * verwijzing dat een hreflang-cluster ongeldig maakt. De canonical en de
+   * x-default wijzen daarom allebei naar het Nederlands.
+   */
+  nlOnly?: boolean
 }
 
 /**
@@ -67,6 +76,7 @@ export type CapturedSeo = {
   ogImage?: string
   ogType?: 'website' | 'article'
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  nlOnly?: boolean
 }
 
 let captured: CapturedSeo | null = null
@@ -104,14 +114,14 @@ function setAlternate(hreflang: string, href: string) {
   el.href = href
 }
 
-export function useSeo({ title, description, path, noindex, ogImage, ogType, jsonLd }: SeoInput) {
+export function useSeo({ title, description, path, noindex, ogImage, ogType, jsonLd, nlOnly }: SeoInput) {
   const { lang } = useLang()
   const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : undefined
 
   /* Zie CapturedSeo hierboven: onder SSR draait het effect niet, dus leggen we
      de invoer hier vast zodat de build dezelfde waarden gebruikt als de pagina. */
   if (import.meta.env.SSR) {
-    captured = { title, description, path, noindex, ogImage, ogType, jsonLd }
+    captured = { title, description, path, noindex, ogImage, ogType, jsonLd, nlOnly }
   }
 
   useEffect(() => {
@@ -119,7 +129,7 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
     const base = path ?? splitLangPath(window.location.pathname).base
     const enUrl = `${SITE_URL}${langHref('en', base)}`
     const nlUrl = `${SITE_URL}${langHref('nl', base)}`
-    const url = lang === 'nl' ? nlUrl : enUrl
+    const url = nlOnly ? nlUrl : lang === 'nl' ? nlUrl : enUrl
     const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`) : DEFAULT_OG_IMAGE
 
     document.title = title
@@ -142,10 +152,13 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
     }
     canonical.href = url
 
-    // hreflang alternates so Google serves the right language per searcher.
-    setAlternate('en', enUrl)
+    /* hreflang alternates so Google serves the right language per searcher.
+       Een pagina die maar in één taal bestaat, krijgt geen verwijzing naar een
+       taal die er niet is: die zou naar een redirect wijzen en het hele cluster
+       ongeldig maken. */
+    if (!nlOnly) setAlternate('en', enUrl)
     setAlternate('nl-BE', nlUrl)
-    setAlternate('x-default', enUrl)
+    setAlternate('x-default', nlOnly ? nlUrl : enUrl)
 
     let script: HTMLScriptElement | null = null
     if (jsonLdText) {
@@ -167,5 +180,5 @@ export function useSeo({ title, description, path, noindex, ogImage, ogType, jso
       setMeta('name', 'twitter:image', DEFAULT_OG_IMAGE)
       script?.remove()
     }
-  }, [title, description, path, noindex, ogImage, ogType, jsonLdText, lang])
+  }, [title, description, path, noindex, ogImage, ogType, jsonLdText, lang, nlOnly])
 }

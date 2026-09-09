@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Check } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
 import { BandImage } from './BandImage'
@@ -250,18 +251,35 @@ export function LandingBlockView({ block, index }: { block: LandingBlock; index:
           <Reveal delay={delay + 0.06}>
             {/* Wide content scrolls inside its own container so the page body never does. */}
             <div className="mt-10 overflow-x-auto">
-              <table className="w-full min-w-[560px] border-collapse text-left">
+              {/* table-fixed: zonder dat bepaalt de langste cel de kolombreedte, en dan
+                    knijpt één zin van vijf woorden de andere kolommen dood. Met vaste
+                    breedtes krijgt elke variant evenveel ruimte en breekt de tekst
+                    netjes af. De minimumbreedte schaalt mee met het aantal kolommen,
+                    zodat de tabel liever scrolt dan verkrampt. */}
+              <table
+                className="w-full table-fixed border-collapse text-left"
+                style={{ minWidth: `${220 + block.columns.length * 130}px` }}
+              >
+                <colgroup>
+                  <col style={{ width: '22%' }} />
+                  {block.columns.map((c) => (
+                    <col key={c} style={{ width: `${78 / block.columns.length}%` }} />
+                  ))}
+                </colgroup>
                 <thead>
                   <tr className="border-b border-line-strong">
                     <th className="label-mono py-3 pr-4 font-normal text-faint" scope="col">
                       <span className="sr-only">Aspect</span>
                     </th>
-                    <th className="py-3 pr-4 text-[15px] font-medium text-ink-soft" scope="col">
-                      {block.left}
-                    </th>
-                    <th className="py-3 text-[15px] font-medium text-ink-soft" scope="col">
-                      {block.right}
-                    </th>
+                    {block.columns.map((c, ci) => (
+                      <th
+                        key={c}
+                        scope="col"
+                        className={`py-3 text-[15px] font-medium text-ink-soft ${ci < block.columns.length - 1 ? 'pr-4' : ''}`}
+                      >
+                        {c}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -270,8 +288,17 @@ export function LandingBlockView({ block, index }: { block: LandingBlock; index:
                       <th scope="row" className="py-5 pr-4 text-[14px] font-normal text-faint">
                         {row.label}
                       </th>
-                      <td className="py-5 pr-4 text-[15px] leading-[1.65] text-muted">{row.left}</td>
-                      <td className="py-5 text-[15px] leading-[1.65] text-ink-soft/90">{row.right}</td>
+                      {block.columns.map((c, ci) => {
+                        const laatste = ci === block.columns.length - 1
+                        return (
+                          <td
+                            key={c}
+                            className={`py-5 text-[15px] leading-[1.65] ${laatste ? 'text-ink-soft/90' : 'pr-4 text-muted'}`}
+                          >
+                            {row.values[ci] ?? ''}
+                          </td>
+                        )
+                      })}
                     </tr>
                   ))}
                 </tbody>
@@ -344,7 +371,142 @@ export function LandingBlockView({ block, index }: { block: LandingBlock; index:
         </section>
       )
 
+    case 'price':
+      return (
+        <section className={SECTION}>
+          <Reveal delay={delay}>
+            <div className="rounded-3xl border border-line bg-bg-soft px-6 py-10 sm:px-10">
+              <h2 className={H2}>{block.h2}</h2>
+              <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                {block.was && (
+                  <span className="font-serif text-[24px] text-dim line-through">{block.was}</span>
+                )}
+                <span className="font-serif text-[44px] leading-none text-ink sm:text-[52px]">{block.amount}</span>
+                <span className="text-[15px] text-faint">{block.qualifier}</span>
+              </p>
+              <ul className="mt-8 grid gap-3">
+                {block.terms.map((t) => (
+                  <li key={t} className="flex gap-3 text-[16px] leading-[1.7] text-muted">
+                    <Check aria-hidden className="mt-[6px] size-4 shrink-0 text-ink-soft/70" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+              {block.note && <p className="mt-8 border-t border-line pt-6 text-[15px] leading-[1.7] text-faint">{block.note}</p>}
+            </div>
+          </Reveal>
+        </section>
+      )
+
+    case 'calculator':
+      return (
+        <section className={SECTION}>
+          <Reveal delay={delay}>
+            <h2 className={H2}>{block.h2}</h2>
+            {block.intro && <p className={INTRO}>{block.intro}</p>}
+          </Reveal>
+          <Reveal delay={delay + 0.05}>
+            <Calculator block={block} />
+          </Reveal>
+        </section>
+      )
+
     default:
       return assertNever(block)
   }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   Het rekenblok
+
+   Eén klein interactief onderdeel op een verder statische pagina. De sommen
+   staan HIER en niet in de contentbestanden: een formule uit data halen zou
+   betekenen dat er ergens een uitdrukking uit een tekstbestand geëvalueerd
+   wordt, en dat is een deur die niet open hoeft voor een marketingpagina.
+
+   De uitkomst rekent altijd door op wat de bezoeker intikt. Blijft hij van de
+   velden af, dan ziet hij onze schatting, en dat staat er ook bij. Zonder die
+   zin is een rekenblok een belofte met een rekenmachine ervoor.
+   ──────────────────────────────────────────────────────────────────────── */
+
+type CalculatorBlock = Extract<LandingBlock, { kind: 'calculator' }>
+
+const euro = (n: number): string =>
+  `€${Math.round(n).toLocaleString('nl-BE')}`
+
+/** De twee sommen, elk met de velden die ze verwacht. Ontbreekt een veld, dan
+ *  telt het als nul en blijft de uitkomst leesbaar in plaats van NaN. */
+function compute(formula: CalculatorBlock['formula'], v: Record<string, number>) {
+  const uurkost = v.uurkost || 0
+  if (formula === 'winratio') {
+    const wedstrijden = v.wedstrijden || 0
+    const ereloon = v.ereloon || 0
+    const extra = (pp: number) => (wedstrijden * pp) / 100
+    return [
+      { label: '+5 procentpunten winratio', value: `${extra(5).toFixed(1)} opdrachten · ${euro(extra(5) * ereloon)}` },
+      { label: '+10 procentpunten winratio', value: `${extra(10).toFixed(1)} opdrachten · ${euro(extra(10) * ereloon)}` },
+    ]
+  }
+  /* urenPerJaar: het aantal keer dat iets gebeurt, maal de uren die het nu kost,
+     plus het wekelijkse zoekwerk als de pagina dat veld meegeeft. */
+  const perJaar = (v.aantal || 0) * (v.urenPer || 0)
+  const zoeken = (v.urenWeek || 0) * 45
+  const uren = perJaar + zoeken
+  return [
+    { label: 'Uren per jaar', value: `${Math.round(uren)} uur` },
+    { label: 'Aan uw uurkost', value: euro(uren * uurkost) },
+  ]
+}
+
+function Calculator({ block }: { block: CalculatorBlock }) {
+  const [values, setValues] = useState<Record<string, number>>(() =>
+    Object.fromEntries(block.fields.map((f) => [f.key, f.value])),
+  )
+  const rows = compute(block.formula, values)
+  const jaarwaarde = (values.uurkost || 0) * ((values.aantal || 0) * (values.urenPer || 0) + (values.urenWeek || 0) * 45)
+  const maanden = block.priceForPayback && jaarwaarde > 0 ? (block.priceForPayback / jaarwaarde) * 12 : null
+
+  return (
+    <div className="mt-8 grid gap-8 rounded-3xl border border-line bg-bg-soft px-6 py-8 sm:px-10 lg:grid-cols-[1fr_auto] lg:gap-12">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+        {block.fields.map((f) => (
+          <label key={f.key} className="grid gap-2">
+            <span className="text-[14px] text-faint">{f.label}</span>
+            <span className="flex items-center gap-2">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                value={values[f.key]}
+                onChange={(e) =>
+                  setValues((prev) => ({ ...prev, [f.key]: Math.max(0, Number(e.target.value) || 0) }))
+                }
+                className="w-28 rounded-xl border border-line bg-bg px-3 py-2 text-[17px] tabular-nums text-ink outline-none focus-visible:border-ink-soft/60"
+              />
+              {f.suffix && <span className="text-[14px] text-dim">{f.suffix}</span>}
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <dl className="grid content-start gap-5 border-t border-line pt-6 lg:min-w-[15rem] lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+        {rows.map((r) => (
+          <div key={r.label}>
+            <dt className="text-[14px] text-faint">{r.label}</dt>
+            <dd className="mt-1 font-serif text-[30px] leading-none tabular-nums text-ink">{r.value}</dd>
+          </div>
+        ))}
+        {maanden != null && Number.isFinite(maanden) && (
+          <div>
+            <dt className="text-[14px] text-faint">Terugverdiend na</dt>
+            <dd className="mt-1 font-serif text-[30px] leading-none tabular-nums text-ink">
+              {maanden < 1 ? 'minder dan een maand' : `${maanden.toFixed(1)} maanden`}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <p className="text-[14px] leading-[1.7] text-dim lg:col-span-2">{block.note}</p>
+    </div>
+  )
 }

@@ -57,6 +57,18 @@ export type SolutionCopy = {
   examplesH2?: string
   examplesIntro?: string
   examples?: { title: string; before: string; after: string }[]
+  /**
+   * Het AANBOD van deze sector: wat er te koop is, met een prijs en een eigen
+   * pagina. Verschijnt als kaartenrij BOVEN de automatiseringen, want een lezer
+   * die iets kan bestellen hoort dat te zien voor hij de lijst leest van wat er
+   * in het algemeen mogelijk is.
+   *
+   * Alleen invullen waar er echt pagina's achter zitten. Een kaart die naar een
+   * pagina wijst die nog niet bestaat, is erger dan geen kaart.
+   */
+  offersH2?: string
+  offersIntro?: string
+  offers?: { title: string; body: string; image: string; alt: string; href?: string }[]
   /** Four automations for this trade, shown as the endless card rail. Titles
    *  are capped at 22 characters by the build guard, so keep them short. */
   automationsH2?: string
@@ -128,6 +140,17 @@ function buildPage(lang: Lang, copy: Localized<SolutionCopy>): LandingPage {
               h2: c.examplesH2 ?? '',
               intro: c.examplesIntro,
               items: c.examples,
+            },
+          ]
+        : []),
+      ...(c.offers
+        ? [
+            {
+              kind: 'automations' as const,
+              h2: c.offersH2 ?? (nl ? 'Wat u vandaag kunt bestellen' : 'What you can order today'),
+              intro: c.offersIntro,
+              items: c.offers,
+              curated: true,
             },
           ]
         : []),

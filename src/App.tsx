@@ -70,6 +70,10 @@ function routeTree(homeHref: string) {
           404 for unknown single-segment paths; LandingRoute renders NotFound
           itself when the slug is not in the registry. */}
       <Route path=":landingSlug" element={<LandingRoute />} />
+      {/* De offerpagina's staan een niveau dieper (/architecten/wedstrijd-radar),
+          en `:landingSlug` matcht maar één segment. LandingRoute leest de slug
+          uit het pad, dus deze route heeft alleen de juiste diepte nodig. */}
+      <Route path="architecten/:offerSlug" element={<LandingRoute />} />
     </>
   )
 }

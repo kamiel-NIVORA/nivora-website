@@ -444,7 +444,7 @@ function replaceMeta(html, attr, key, value) {
 const shellTitle = (shell.match(/<title>([\s\S]*?)<\/title>/) || [, 'Nivora Works'])[1]
 const shellDesc = (shell.match(/<meta name="description"[^>]*content="([^"]*)"/) || [, ''])[1]
 
-function renderShell(bases, lang, meta) {
+function renderShell(bases, lang, meta, nlOnly = false) {
   let html = shell
   const enBase = typeof bases === 'string' ? bases : bases.en
   const isHome = enBase === '/'
@@ -490,13 +490,26 @@ function renderShell(bases, lang, meta) {
   }
 
   /* Zowel `nl` als `nl-BE`. Met alleen nl-BE matcht Nederland niet, terwijl
-     areaServed en llms.txt Nederland expliciet als markt noemen. */
-  const alts = [
-    `    <link rel="alternate" hreflang="en" href="${langUrl('en', bases)}" />`,
-    `    <link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}" />`,
-    `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}" />`,
-    `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}" />`,
-  ].join('\n')
+     areaServed en llms.txt Nederland expliciet als markt noemen.
+
+     Bestaat de pagina maar in één taal, dan valt de verwijzing naar het Engels
+     weg en wijst x-default naar het Nederlands. Een hreflang naar een URL die
+     doorstuurt, maakt het hele cluster ongeldig, en het Engelse pad van zo'n
+     pagina doet precies dat (zie de redirect in vercel.json). */
+  const alts = (
+    nlOnly
+      ? [
+          `    <link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}" />`,
+          `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}" />`,
+          `    <link rel="alternate" hreflang="x-default" href="${langUrl('nl', bases)}" />`,
+        ]
+      : [
+          `    <link rel="alternate" hreflang="en" href="${langUrl('en', bases)}" />`,
+          `    <link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}" />`,
+          `    <link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}" />`,
+          `    <link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}" />`,
+        ]
+  ).join('\n')
   const ld = meta.jsonLd && meta.jsonLd.length ? meta.jsonLd.map(ldBlock).join('\n') + '\n' : ''
   html = html.replace('</head>', `${ld}${alts}\n  </head>`)
 
@@ -720,12 +733,18 @@ if (renderStatic) {
 let landingCount = 0
 for (const route of ROUTES) {
   if (!renderLanding) break
-  const entry = { bases: route.bases, landingId: route.id }
-  for (const lang of ['en', 'nl']) {
+  const entry = { bases: route.bases, landingId: route.id, nlOnly: route.nlOnly === true }
+  /* Een alleen-Nederlandse pagina wordt niet in het Engels gerenderd. Dat spaart
+     niet alleen werk: de contentbewaker hieronder zou anders elke alinea twee
+     keer tellen en de pagina als duplicaat aanmerken, want en en nl dragen daar
+     dezelfde tekst. */
+  const langs = entry.nlOnly ? ['nl'] : ['en', 'nl']
+  for (const lang of langs) {
     const { body, data, meta } = renderLanding(route.id, lang)
     checkLanding(route.id, lang, body, meta)
     entry[lang] = { ...meta, body, data }
   }
+  if (entry.nlOnly) entry.en = entry.nl
   pages.push(entry)
   landingCount++
 }
@@ -746,12 +765,14 @@ if (problems.length) {
 /* ── write the shells ────────────────────────────────────────────────────────── */
 let count = 0
 for (const page of pages) {
-  for (const lang of ['en', 'nl']) {
+  /* nlOnly: geen Engelse shell. Zou hij er staan, dan zou Google een Engelse URL
+     vinden met Nederlandse inhoud, terwijl vercel.json datzelfde pad doorstuurt. */
+  for (const lang of page.nlOnly ? ['nl'] : ['en', 'nl']) {
     const base = typeof page.bases === 'string' ? page.bases : page.bases[lang]
     const parts = base.split('/').filter(Boolean)
     const dir = join(dist, ...(lang === 'nl' ? ['nl'] : []), ...parts)
     mkdirSync(dir, { recursive: true })
-    writeFileSync(join(dir, 'index.html'), renderShell(page.bases, lang, page[lang]))
+    writeFileSync(join(dir, 'index.html'), renderShell(page.bases, lang, page[lang], page.nlOnly === true))
     count++
   }
 }
@@ -862,24 +883,29 @@ const lastmodFor = (page) => {
 const urlEntry = (lang, page) => {
   const bases = page.bases
   const mod = lastmodFor(page)
+  /* Een pagina die maar in één taal bestaat, verwijst niet naar een taal die er
+     niet is: zo'n hreflang wijst naar een redirect en maakt het cluster ongeldig. */
+  const alts = page.nlOnly
+    ? [['nl', 'nl'], ['nl-BE', 'nl'], ['x-default', 'nl']]
+    : [['en', 'en'], ['nl', 'nl'], ['nl-BE', 'nl'], ['x-default', 'en']]
   return `  <url>
     <loc>${langUrl(lang, bases)}</loc>${mod ? `\n    <lastmod>${mod}</lastmod>` : ''}
-    <xhtml:link rel="alternate" hreflang="en" href="${langUrl('en', bases)}"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}"/>
-    <xhtml:link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}"/>
+${alts.map(([tag, l]) => `    <xhtml:link rel="alternate" hreflang="${tag}" href="${langUrl(l, bases)}"/>`).join('\n')}
   </url>`
 }
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${pages.map((p) => `${urlEntry('en', p)}\n${urlEntry('nl', p)}`).join('\n')}
+${pages.map((p) => (p.nlOnly ? urlEntry('nl', p) : `${urlEntry('en', p)}\n${urlEntry('nl', p)}`)).join('\n')}
 </urlset>
 `
 writeFileSync(join(dist, 'sitemap.xml'), xml)
 
+/* Tellen wat er echt geschreven is, niet routes maal twee: sinds er pagina's zijn
+   die alleen in het Nederlands bestaan, klopt die vermenigvuldiging niet meer. */
+const nlOnlyCount = pages.filter((p) => p.nlOnly).length
 console.log(
-  `prerender: ${count} shells (${pages.length} routes x 2 languages; ` +
+  `prerender: ${count} shells (${pages.length} routes, waarvan ${nlOnlyCount} alleen NL; ` +
     `${Object.keys(serviceEn).length} services, ${Object.keys(postEn).length} posts, ` +
-    `${landingCount} landing pages with a real body), sitemap.xml with ${pages.length * 2} URLs`,
+    `${landingCount} landing pages with a real body), sitemap.xml with ${count} URLs`,
 )
