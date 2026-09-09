@@ -17,6 +17,13 @@ const LABELS: Partial<Record<string, { en: string; nl: string }>> = {
   'niche-immo': { en: 'Estate agencies', nl: 'Immokantoren' },
   'niche-architect': { en: 'Architects', nl: 'Architectenbureaus' },
   'niche-logistiek': { en: 'Logistics', nl: 'Logistiek' },
+  /* De offerpagina's onder /architecten/. Zonder deze regels valt humanise()
+     terug op de slug en leest de sitemappagina "Architecten/wedstrijd-radar". */
+  'offer-wedstrijd-radar': { en: 'Wedstrijd-Radar', nl: 'De Wedstrijd-Radar' },
+  'offer-kandidatuur-machine': { en: 'Kandidatuur-Machine', nl: 'De Kandidatuur-Machine' },
+  'offer-wedstrijd-intelligence': { en: 'Wedstrijd-Intelligence', nl: 'Wedstrijd-Intelligence en Cijfers' },
+  'offer-wedstrijd-cockpit': { en: 'Wedstrijd-Cockpit', nl: 'De Wedstrijd-Cockpit' },
+  'offer-wedstrijd-terugblik': { en: 'Wedstrijd-Terugblik', nl: 'De Wedstrijd-Terugblik (gratis)' },
 }
 
 /** 'ai-automation-ghent' -> 'AI automation Ghent' / 'AI-automatisering Gent'.

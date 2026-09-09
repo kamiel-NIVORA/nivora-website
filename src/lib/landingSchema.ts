@@ -3,7 +3,8 @@ import { langHref } from '@/i18n'
 import { SITE_URL } from '@/lib/seo'
 import { CONTACT, ADDRESS } from '@/data/contact'
 import type { LandingPage } from '@/data/landing/types'
-import { landingBase, type LandingEntry } from '@/data/landing/slugs'
+import { BY_ID, landingBase, type LandingEntry } from '@/data/landing/slugs'
+import { humanise } from '@/data/landing/related'
 
 /**
  * Structured data for the landing pages.
@@ -49,6 +50,28 @@ const FOUNDER = {
   url: `${SITE_URL}/about`,
 }
 
+/** Het kruimelpad: Home, eventueel de sectorpagina waar deze pagina onder hangt,
+ *  en dan de pagina zelf. */
+function crumbs(entry: LandingEntry, lang: Lang, url: string) {
+  const items: Record<string, unknown>[] = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}${langHref(lang, '/')}` },
+  ]
+  const hub = entry.hub === entry.id ? undefined : BY_ID.get(entry.hub)
+  if (hub) {
+    items.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: humanise(hub, lang),
+      item: `${SITE_URL}${langHref(lang, `/${hub.slugs.en}`)}`,
+    })
+  }
+  /* De naam van DEZE pagina, niet de eyebrow: die is op alle offerpagina's
+     dezelfde ("Aanbod voor architectenbureaus") en dan zegt het kruimelpad
+     vijf keer hetzelfde. humanise() geeft de echte naam uit de labeltabel. */
+  items.push({ '@type': 'ListItem', position: items.length + 1, name: humanise(entry, lang), item: url })
+  return items
+}
+
 export function landingJsonLd(args: {
   entry: LandingEntry
   page: LandingPage
@@ -62,6 +85,32 @@ export function landingJsonLd(args: {
 
   /* The paragraph written to survive being quoted out of context. */
   const answerBlock = page.blocks.find((b) => b.kind === 'answer')
+
+  /* De prijs uit het prijsblok, als die er is.
+     Staat de prijs zichtbaar op de pagina, dan hoort hij ook in het schema: dat
+     is wat een zoekresultaat een prijs laat tonen. Het bedrag wordt uit de tekst
+     gelezen ("€1.950" wordt 1950) in plaats van apart onderhouden, want twee
+     bronnen voor hetzelfde bedrag lopen uit elkaar en dan staat er een andere
+     prijs in het zoekresultaat dan op de pagina. Lukt dat lezen niet, dan komt
+     er geen offers-veld: liever geen prijs dan een verkeerde. */
+  const priceBlock = page.blocks.find((b) => b.kind === 'price')
+  const priceValue = priceBlock ? Number(priceBlock.amount.replace(/[^\d]/g, '')) : NaN
+  const offers =
+    priceBlock && Number.isFinite(priceValue) && priceValue > 0
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: String(priceValue),
+            priceCurrency: 'EUR',
+            /* De getoonde prijs is exclusief btw, en dat zegt het schema er ook
+               bij in plaats van het aan de lezer over te laten. */
+            valueAddedTaxIncluded: false,
+            availability: 'https://schema.org/InStock',
+            url,
+            description: priceBlock.qualifier,
+          },
+        }
+      : {}
 
   const blocks: Record<string, unknown>[] = [
     {
@@ -85,14 +134,17 @@ export function landingJsonLd(args: {
         { '@type': 'Country', name: 'Netherlands' },
       ],
       ...(page.sector ? { audience: { '@type': 'Audience', audienceType: page.sector.audience } } : {}),
+      ...offers,
     },
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}${langHref(lang, '/')}` },
-        { '@type': 'ListItem', position: 2, name: page.hero.eyebrow, item: url },
-      ],
+      /* Drie niveaus waar er drie zijn. Een offerpagina hangt onder een
+         sectorpagina (`hub` in de registry), en dat pad zichtbaar maken helpt
+         Google de cluster te lezen en levert het kruimelpad in het
+         zoekresultaat. Wijst de hub naar zichzelf of naar een pagina zonder
+         tekst, dan blijft het bij twee niveaus in plaats van een lus. */
+      itemListElement: crumbs(entry, lang, url),
     },
   ]
 
