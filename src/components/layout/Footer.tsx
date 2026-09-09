@@ -5,7 +5,6 @@ import {
   type NavItem,
 } from '@/lib/navigation'
 import { opensInNewTab } from '@/data/contact'
-import { COMPANY_LINE_EN, COMPANY_LINE_NL } from '@/data/company'
 import { openCookieSettings } from '@/components/CookieConsent'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { useLang, localizePath, type Lang } from '@/i18n'
@@ -223,13 +222,6 @@ export function Footer() {
             <LanguageSwitch />
           </div>
         </div>
-
-        {/* Wettelijke identificatie. Artikel XII.6 WER vraagt dat naam,
-            ondernemingsnummer en adres permanent en makkelijk vindbaar op de
-            site staan; de footer is de enige plek die op elke pagina meekomt. */}
-        <p className="border-t border-line py-5 text-center text-xs leading-relaxed text-faint/80">
-          {lang === 'nl' ? COMPANY_LINE_NL : COMPANY_LINE_EN}
-        </p>
       </div>
     </footer>
   )
