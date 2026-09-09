@@ -20,6 +20,14 @@
     {
       "source": "/nl/unsubscribed",
       "destination": "/index.html"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/nl/blog/:slug",
+      "destination": "/index.html"
     }
   ],
   "headers": [
