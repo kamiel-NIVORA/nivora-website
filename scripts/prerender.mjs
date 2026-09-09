@@ -38,6 +38,7 @@
  *     src/pages/*.
  * Noindex routes (confirm/unsubscribe/404) are deliberately absent.
  */
+import { execFileSync } from 'node:child_process'
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -148,6 +149,10 @@ const STATIC_EN = {
     title: 'Terms of Service · Nivora',
     description: 'The terms that apply to the Nivora website, products and services.',
   },
+  '/dpa': {
+    title: 'Data Processing Agreement · Nivora',
+    description: 'The written agreement article 28 GDPR requires when Nivora handles personal data on your behalf.',
+  },
   '/privacy': {
     title: 'Privacy Policy · Nivora',
     description: 'How Nivora handles your data: what we collect, why we collect it, and the rights you have.',
@@ -196,6 +201,10 @@ const STATIC_NL = {
   '/terms': {
     title: 'Algemene voorwaarden · Nivora',
     description: 'De voorwaarden die van toepassing zijn op de Nivora-website, producten en diensten.',
+  },
+  '/dpa': {
+    title: 'Verwerkersovereenkomst · Nivora',
+    description: 'De schriftelijke overeenkomst die artikel 28 AVG vraagt zodra Nivora persoonsgegevens in uw opdracht verwerkt.',
   },
   '/privacy': {
     title: 'Privacybeleid · Nivora',
@@ -711,7 +720,7 @@ if (renderStatic) {
 let landingCount = 0
 for (const route of ROUTES) {
   if (!renderLanding) break
-  const entry = { bases: route.bases }
+  const entry = { bases: route.bases, landingId: route.id }
   for (const lang of ['en', 'nl']) {
     const { body, data, meta } = renderLanding(route.id, lang)
     checkLanding(route.id, lang, body, meta)
@@ -762,32 +771,109 @@ writeFileSync(
 )
 
 /* ── sitemap ─────────────────────────────────────────────────────────────────── */
-const today = new Date().toISOString().slice(0, 10)
 
-/* lastmod per pagina, niet de builddatum voor alles.
-   Google negeert een sitemap waarin elke URL dezelfde datum draagt, en dat was
-   hier het geval: elke deploy zette 70 URL's op "vandaag gewijzigd". Blogposts
-   dragen hun eigen publicatiedatum; de rest valt terug op de builddatum, want
-   een betere bron hebben we voor die pagina's niet. */
-const lastmodFor = (bases) => {
-  const base = typeof bases === 'string' ? bases : bases.en
-  const slug = base.startsWith('/blog/') ? base.slice('/blog/'.length) : null
-  const iso = slug && postFacts[slug]?.iso
-  return (iso || today).slice(0, 10)
+/* lastmod is een BELOFTE, geen tijdstempel van de build.
+   Google gebruikt het veld alleen "if it's consistently and verifiably
+   accurate", en negeert het voor de hele sitemap zodra het dat niet is. Hier
+   stond de builddatum op 64 van de 70 URL's, dus elke deploy beweerde dat de
+   hele site die dag herschreven was. Dat is niet waar, en het kostte precies
+   het versheidssignaal dat het moest opleveren.
+
+   Nu komt de datum uit git: de laatste commit die het bestand raakte waar die
+   pagina uit gemaakt wordt. Dat is controleerbaar en het beweegt alleen wanneer
+   er echt iets verandert. Is die datum er niet, dan krijgt de URL GEEN lastmod.
+   Niets zeggen is beter dan iets zeggen dat niet klopt, en het is wat Google
+   zelf aanraadt wanneer je geen betrouwbare datum hebt.
+
+   Een ondiepe checkout (git clone --depth=1, wat CI vaak doet) heeft geen
+   geschiedenis en zou elk bestand dezelfde commitdatum geven, dus precies de
+   builddatum-in-vermomming. Daar wordt op getest; in dat geval draagt alleen
+   een blogpost nog zijn eigen publicatiedatum. */
+const HAS_GIT_HISTORY = (() => {
+  try {
+    const n = Number(execFileSync('git', ['rev-list', '--count', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim())
+    return Number.isFinite(n) && n > 1
+  } catch {
+    return false
+  }
+})()
+if (!HAS_GIT_HISTORY) {
+  console.warn('prerender: geen git-geschiedenis, lastmod blijft weg behalve op blogposts')
 }
 
-const urlEntry = (lang, bases) => `  <url>
-    <loc>${langUrl(lang, bases)}</loc>
-    <lastmod>${lastmodFor(bases)}</lastmod>
+const gitDateCache = new Map()
+/** De nieuwste commitdatum over een reeks bronbestanden, of null. */
+const gitDate = (relPaths) => {
+  const key = relPaths.join('|')
+  if (gitDateCache.has(key)) return gitDateCache.get(key)
+  let newest = null
+  if (HAS_GIT_HISTORY) {
+    for (const rel of relPaths) {
+      if (!existsSync(join(root, rel))) continue
+      try {
+        const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', rel], {
+          cwd: root,
+          encoding: 'utf8',
+        }).trim()
+        if (/^\d{4}-\d{2}-\d{2}$/.test(out) && (!newest || out > newest)) newest = out
+      } catch {
+        /* bestand buiten git, of geen git: dan gewoon geen datum */
+      }
+    }
+  }
+  gitDateCache.set(key, newest)
+  return newest
+}
+
+/** De bronbestanden waaruit een pagina gemaakt wordt, voor de lastmod.
+ *  Bewust de INHOUD en niet het sjabloon: een wijziging aan LandingPage.tsx
+ *  raakt alle zeventien landingspagina's tegelijk en zou ze dus alle zeventien
+ *  op dezelfde dag zetten, wat precies de builddatum-in-vermomming is die we
+ *  hier weghalen. Een pagina is gewijzigd wanneer zijn tekst gewijzigd is. */
+const sourcesFor = (page) => {
+  const base = typeof page.bases === 'string' ? page.bases : page.bases.en
+  if (page.landingId) return [`src/data/landing/content/${page.landingId}.ts`]
+  if (base.startsWith('/services/')) return ['src/data/services.ts', 'src/data/serviceContent.ts']
+  if (base === '/terms' || base === '/privacy') return ['src/data/legal.ts']
+  if (base === '/') return ['src/pages/Home.tsx', 'src/sections']
+  if (base === '/blog') return ['src/data/posts.ts', 'src/pages/BlogIndex.tsx']
+  if (base === '/sitemap') return ['src/pages/SitemapPage.tsx', 'src/data/landing/slugs.ts']
+  const named = {
+    '/about': 'src/pages/About.tsx',
+    '/contact': 'src/pages/ContactPage.tsx',
+    '/help': 'src/pages/HelpCenterPage.tsx',
+    '/media': 'src/pages/MediaKit.tsx',
+    '/affiliate': 'src/pages/AffiliatePage.tsx',
+    '/waitlist': 'src/pages/WaitlistPage.tsx',
+  }
+  return named[base] ? [named[base]] : []
+}
+
+/** De datum voor deze pagina, of null wanneer we er geen kennen. */
+const lastmodFor = (page) => {
+  const base = typeof page.bases === 'string' ? page.bases : page.bases.en
+  if (base.startsWith('/blog/')) {
+    const iso = postFacts[base.slice('/blog/'.length)]?.iso
+    if (iso) return iso.slice(0, 10)
+  }
+  return gitDate(sourcesFor(page))
+}
+
+const urlEntry = (lang, page) => {
+  const bases = page.bases
+  const mod = lastmodFor(page)
+  return `  <url>
+    <loc>${langUrl(lang, bases)}</loc>${mod ? `\n    <lastmod>${mod}</lastmod>` : ''}
     <xhtml:link rel="alternate" hreflang="en" href="${langUrl('en', bases)}"/>
     <xhtml:link rel="alternate" hreflang="nl" href="${langUrl('nl', bases)}"/>
     <xhtml:link rel="alternate" hreflang="nl-BE" href="${langUrl('nl', bases)}"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="${langUrl('en', bases)}"/>
   </url>`
+}
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${pages.map((p) => `${urlEntry('en', p.bases)}\n${urlEntry('nl', p.bases)}`).join('\n')}
+${pages.map((p) => `${urlEntry('en', p)}\n${urlEntry('nl', p)}`).join('\n')}
 </urlset>
 `
 writeFileSync(join(dist, 'sitemap.xml'), xml)
