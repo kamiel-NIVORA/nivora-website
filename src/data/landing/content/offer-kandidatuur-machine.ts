@@ -1,4 +1,4 @@
-import { nlOnlyPage, TERUGBLIK_CTA, TERUGBLIK_HREF } from '../offerPage'
+import { nlOnlyPage, TERUGBLIK_CTA } from '../offerPage'
 
 /**
  * Kandidatuur-Machine: van selectieleidraad naar ingediend dossier.
@@ -139,6 +139,7 @@ export default nlOnlyPage({
       kind: 'linkGrid',
       h2: 'Past hierbij',
       links: [
+        { label: 'Vraag uw gratis Wedstrijd-Terugblik', href: '/architecten/wedstrijd-terugblik' },
         { label: 'De Wedstrijd-Radar', href: '/architecten/wedstrijd-radar' },
         { label: 'Wedstrijd-Intelligence en Cijfers', href: '/architecten/wedstrijd-intelligence' },
         { label: 'Alle drie samen in de Cockpit', href: '/architecten/wedstrijd-cockpit' },
@@ -168,7 +169,6 @@ export default nlOnlyPage({
     title: 'Zien wat dit op een van uw eigen kandidaturen had gedaan?',
     body: 'Kies een wedstrijd van de laatste twee jaar. Wij lezen de originele leidraad, maken de checklist, en tonen welke van uw referenties de Machine had voorgesteld en waarom.',
   },
-  related: [{ label: 'Vraag uw Wedstrijd-Terugblik', href: TERUGBLIK_HREF }],
   seo: {
     title: 'Kandidatuur-Machine: selectiedossier in één dag · Nivora',
     description:

@@ -4,6 +4,7 @@ import {
   getServices,
   type NavItem,
 } from '@/lib/navigation'
+import { SECTORS } from '@/data/landing/sectors'
 import { opensInNewTab } from '@/data/contact'
 import { openCookieSettings } from '@/components/CookieConsent'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
@@ -18,6 +19,7 @@ const COPY = {
   en: {
     products: 'Products',
     services: 'Services',
+    sectors: 'Sectors',
     company: 'Company',
     legal: 'Legal',
     contact: 'Contact',
@@ -36,6 +38,7 @@ const COPY = {
   nl: {
     products: 'Producten',
     services: 'Diensten',
+    sectors: 'Sectoren',
     company: 'Bedrijf',
     legal: 'Juridisch',
     contact: 'Contact',
@@ -58,6 +61,19 @@ function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
   return [
     { title: t.products, links: toLinks(getProducts(lang)) },
     { title: t.services, links: toLinks(getServices(lang)) },
+    /* De sectoren horen hier omdat ze anders nergens staan.
+       Gemeten in de gebouwde HTML kreeg elke sectorpagina precies ÉÉN inkomende
+       interne link, uit de lijst op /sitemap, terwijl /help en /media er
+       zevenentwintig hadden. Dat is de hele commerciële kant van de site
+       onderaan de eigen linkgraaf, onder de mediakit. De voettekst staat op elke
+       pagina, dus dit is de goedkoopste plek om dat recht te zetten.
+
+       Uit SECTORS en niet met de hand: verdwijnt of hernoemt een sector, dan
+       volgt de voettekst vanzelf in plaats van een dode link te houden. */
+    {
+      title: t.sectors,
+      links: SECTORS.map((sector) => ({ label: sector.name[lang], href: sector.href })),
+    },
     {
       title: t.company,
       links: [

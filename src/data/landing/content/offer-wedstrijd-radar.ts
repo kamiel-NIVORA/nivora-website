@@ -1,4 +1,4 @@
-import { nlOnlyPage, TERUGBLIK_CTA, TERUGBLIK_HREF } from '../offerPage'
+import { nlOnlyPage, TERUGBLIK_CTA } from '../offerPage'
 
 /**
  * Wedstrijd-Radar: oproepen vinden en scoren voor er tijd in gaat.
@@ -141,6 +141,7 @@ export default nlOnlyPage({
       kind: 'linkGrid',
       h2: 'Past hierbij',
       links: [
+        { label: 'Vraag uw gratis Wedstrijd-Terugblik', href: '/architecten/wedstrijd-terugblik' },
         { label: 'De Kandidatuur-Machine', href: '/architecten/kandidatuur-machine' },
         { label: 'Wedstrijd-Intelligence en Cijfers', href: '/architecten/wedstrijd-intelligence' },
         { label: 'Alle drie samen in de Cockpit', href: '/architecten/wedstrijd-cockpit' },
@@ -170,7 +171,6 @@ export default nlOnlyPage({
     title: 'Eerst zien wat dit op een van uw eigen wedstrijden had gedaan?',
     body: 'Kies één wedstrijd van de laatste twee jaar, gewonnen of verloren. Wij maken de fiche die de Radar toen gemaakt zou hebben en zetten de uren ernaast. Binnen twee werkdagen, zonder gesprek vooraf.',
   },
-  related: [{ label: 'Vraag uw Wedstrijd-Terugblik', href: TERUGBLIK_HREF }],
   seo: {
     title: 'Wedstrijd-Radar voor architecten: elke oproep gescoord · Nivora',
     description:

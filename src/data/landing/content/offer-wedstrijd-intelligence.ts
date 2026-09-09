@@ -1,4 +1,4 @@
-import { nlOnlyPage, TERUGBLIK_CTA, TERUGBLIK_HREF } from '../offerPage'
+import { nlOnlyPage, TERUGBLIK_CTA } from '../offerPage'
 
 /**
  * Wedstrijd-Intelligence en Cijfers: wie u tegenover u hebt, en wat het kostte.
@@ -122,6 +122,7 @@ export default nlOnlyPage({
       kind: 'linkGrid',
       h2: 'Past hierbij',
       links: [
+        { label: 'Vraag uw gratis Wedstrijd-Terugblik', href: '/architecten/wedstrijd-terugblik' },
         { label: 'De Wedstrijd-Radar', href: '/architecten/wedstrijd-radar' },
         { label: 'De Kandidatuur-Machine', href: '/architecten/kandidatuur-machine' },
         { label: 'Alle drie samen in de Cockpit', href: '/architecten/wedstrijd-cockpit' },
@@ -151,7 +152,6 @@ export default nlOnlyPage({
     title: 'Zien wat dit bij een verloren wedstrijd had opgeleverd?',
     body: 'Kies er een die u verloor. Wij maken het opdrachtgeversprofiel en de briefing zoals ze er toen uitgezien hadden, en u beoordeelt zelf of het iets veranderd zou hebben.',
   },
-  related: [{ label: 'Vraag uw Wedstrijd-Terugblik', href: TERUGBLIK_HREF }],
   seo: {
     title: 'Wedstrijd-Intelligence: wie won, en wat het kostte · Nivora',
     description:

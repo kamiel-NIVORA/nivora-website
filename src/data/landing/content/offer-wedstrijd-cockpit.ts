@@ -1,4 +1,4 @@
-import { nlOnlyPage, TERUGBLIK_CTA, TERUGBLIK_HREF } from '../offerPage'
+import { nlOnlyPage, TERUGBLIK_CTA } from '../offerPage'
 
 /**
  * De Wedstrijd-Cockpit: de drie onderdelen in één omgeving.
@@ -106,6 +106,7 @@ export default nlOnlyPage({
       kind: 'linkGrid',
       h2: 'De onderdelen apart',
       links: [
+        { label: 'Vraag uw gratis Wedstrijd-Terugblik', href: '/architecten/wedstrijd-terugblik' },
         { label: 'De Wedstrijd-Radar', href: '/architecten/wedstrijd-radar' },
         { label: 'De Kandidatuur-Machine', href: '/architecten/kandidatuur-machine' },
         { label: 'Wedstrijd-Intelligence en Cijfers', href: '/architecten/wedstrijd-intelligence' },
@@ -135,7 +136,6 @@ export default nlOnlyPage({
     title: 'Begin met één wedstrijd in plaats van met een offerte',
     body: 'Kies er een van de laatste twee jaar. Wij spelen hem terug zoals hij met de Cockpit gelopen had, en u ziet zelf of het klopt voor uw bureau.',
   },
-  related: [{ label: 'Vraag uw Wedstrijd-Terugblik', href: TERUGBLIK_HREF }],
   seo: {
     title: 'Wedstrijd-Cockpit voor architectenbureaus · Nivora',
     description:

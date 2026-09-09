@@ -188,6 +188,13 @@ export default solutionPage(
           href: '/architecten/wedstrijd-intelligence',
         },
         {
+          title: 'Gratis: de Terugblik',
+          body: 'Nog niet zeker of dit bij uw bureau past? Kies één wedstrijd van de laatste twee jaar en wij spelen hem terug: wat het kostte, en wat een systeem eraan gescheeld had. Binnen twee werkdagen, zonder gesprek vooraf.',
+          image: '/landing/auto-opl-analyse-a.webp',
+          alt: 'Een leeg blad en een potlood op een werktafel, klaar om een dossier na te rekenen',
+          href: '/architecten/wedstrijd-terugblik',
+        },
+        {
           title: 'De Cockpit',
           body: 'De drie samen in één omgeving in uw huisstijl, met één bureauprofiel eronder. €7.500 in plaats van €8.750, en zes maanden bijsturing in plaats van drie.',
           image: '/landing/auto-opl-meetstaat-a.webp',

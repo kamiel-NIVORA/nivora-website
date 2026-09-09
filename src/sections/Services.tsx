@@ -1,10 +1,11 @@
-import { useLayoutEffect, useRef, useState, type MouseEvent, type RefObject } from 'react'
+import { Fragment, useLayoutEffect, useRef, useState, type MouseEvent, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { getServices, type NavItem } from '@/lib/navigation'
+import { SECTORS } from '@/data/landing/sectors'
 import { useIsMobile } from '@/lib/useIsMobile'
 import { useLang, localizePath } from '@/i18n'
 
@@ -12,11 +13,13 @@ const COPY = {
   en: {
     title: 'Our Services',
     subtitle: 'Tell us the challenge. We design, build, and install exactly what your business needs.',
+    sectorsLead: 'Three trades we know from the inside:',
     learnMore: 'Learn more',
   },
   nl: {
     title: 'Onze diensten',
     subtitle: 'Vertel ons jullie uitdagingen. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
+    sectorsLead: 'Drie vakken die wij van binnenuit kennen:',
     learnMore: 'Lees meer',
   },
 } as const
@@ -96,6 +99,35 @@ export function Services() {
             ))}
           </div>
         </div>
+
+        {/* De drie sectoren, als één rustige regel onder de kaarten.
+
+            Reden: gemeten in de gebouwde HTML kreeg elke sectorpagina precies
+            ÉÉN inkomende interne link, en de homepage verwees naar geen enkele.
+            Dat is de commerciële kant van de site die onderaan de eigen
+            linkgraaf hangt. Dit is geen extra kaartenrij: die zou concurreren
+            met de diensten erboven. Eén regel volstaat om de pagina's aan het
+            gebouw vast te maken.
+
+            Deze sectie wordt niet gerenderd op sector- en oplossingspagina's
+            (zie hideCards in src/pages/LandingPage.tsx), dus een sectorpagina
+            linkt hiermee nooit naar zichzelf. */}
+        <Reveal delay={0.1}>
+          <p className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[15px] text-faint sm:mt-16">
+            <span>{t.sectorsLead}</span>
+            {SECTORS.map((sector, i) => (
+              <Fragment key={sector.id}>
+                {i > 0 && <span aria-hidden className="text-dim">·</span>}
+                <Link
+                  to={localizePath(sector.href, lang)}
+                  className="text-ink-soft/85 underline-offset-4 transition-colors hover:text-ink hover:underline"
+                >
+                  {sector.name[lang]}
+                </Link>
+              </Fragment>
+            ))}
+          </p>
+        </Reveal>
       </div>
     </section>
   )

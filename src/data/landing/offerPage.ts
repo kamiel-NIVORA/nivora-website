@@ -26,7 +26,3 @@ export const nlOnlyPage = (page: LandingPage): LandingContent => ({ en: page, nl
 /** De vaste tweede knop op elke offerpagina. Eén primaire actie per pagina, en
  *  dit is hem: de Terugblik kost de lezer niets en ons één avond. */
 export const TERUGBLIK_CTA = 'Vraag uw gratis Wedstrijd-Terugblik'
-
-/** Waar de Terugblik-pagina staat. Als los pad zodat een hernoeming van de slug
- *  niet in vijf contentbestanden hoeft. */
-export const TERUGBLIK_HREF = '/architecten/wedstrijd-terugblik'

@@ -1,17 +1,11 @@
 import type { Lang } from '@/i18n'
-import type { LandingLink, LandingPage } from './types'
-import { LANDING_ENTRIES, type LandingEntry } from './slugs'
+import type { LandingEntry } from './slugs'
 
 /**
- * Internal link mesh.
+ * Leesbare titels voor de landingspagina's.
  *
- * Every landing page ends with a block of related pages, derived by rule rather
- * than written by hand, so no page can end up orphaned as the set grows: a page
- * leans on its siblings within the same family, then on the services behind it.
- *
- * Labels come from the registry's slug, humanised, until a page has content of
- * its own to borrow a title from. Hrefs are always the canonical ENGLISH base;
- * <LangLink> translates them per language.
+ * Een slug leest zelden terug als een titel, en de sitemappagina heeft er een
+ * nodig voor elke pagina. Dit bestand levert die, en niets meer.
  */
 
 /* Een slug leest zelden terug als label: "AI-automatisering-boekhoudkantoor" is
@@ -37,53 +31,12 @@ export function humanise(entry: LandingEntry, lang: Lang): string {
     .replace(/^AI-/, 'AI-')
 }
 
-const toLink = (entry: LandingEntry, lang: Lang): LandingLink => ({
-  label: humanise(entry, lang),
-  href: `/${entry.slugs.en}`,
-})
+/* Hier stond resolveRelated(), dat per pagina een blok verwante links afleidde,
+   plus het component RelatedPages dat het toonde. Geen van beide werd nog
+   gerenderd: de landingspagina's zetten hun eigen linkGrid-blok in de content,
+   waar per pagina staat waar hij heen wijst in plaats van dat een regel het
+   afleidt. Het veld `related` op LandingPage deed daardoor niets, en dat is
+   erger dan dood: wie het invulde dacht een link te leggen die er nooit kwam.
 
-/** The core services, always worth linking to from a landing page. */
-const SERVICE_LINKS: Record<Lang, LandingLink[]> = {
-  en: [
-    { label: 'Local AI', href: '/services/local-ai' },
-    { label: 'AIOS', href: '/services/aios' },
-    { label: 'AI Consulting', href: '/services/ai-consulting' },
-    { label: 'App Design', href: '/services/app-design' },
-  ],
-  nl: [
-    { label: 'Local AI', href: '/services/local-ai' },
-    { label: 'AIOS', href: '/services/aios' },
-    { label: 'AI Consulting', href: '/services/ai-consulting' },
-    { label: 'App Design', href: '/services/app-design' },
-  ],
-}
-
-/**
- * Resolve the related-links block for one page. Returns 6 to 8 links: siblings
- * within the same family first (they share search intent), then the services
- * that back the page up.
- *
- * De stadspagina's overschreven die broers en zussen met hun echte buren uit
- * `geo.nearby`, zodat het net de aardrijkskunde volgde. Die familie bestaat niet
- * meer, dus die tak is weg; zie .nivora/geparkeerde-stadspaginas/.
- */
-export function resolveRelated(entry: LandingEntry, lang: Lang, page?: LandingPage | null): LandingLink[] {
-  const extra = page?.related
-
-  const siblings: LandingEntry[] = LANDING_ENTRIES.filter(
-    (e) => e.family === entry.family && e.id !== entry.id,
-  ).slice(0, 3)
-
-  /* De vroegere hubpagina's (/ai-oplossingen, /ai-per-beroep, ...) stonden wel
-     in de registry maar bestonden nooit als pagina, dus elke verwijzing ernaar
-     was een 404. De sitemappagina doet dat werk nu, en die bestaat wel. */
-  const links: LandingLink[] = [
-    ...siblings.map((e) => toLink(e, lang)),
-    ...(extra ?? []),
-    ...SERVICE_LINKS[lang],
-  ]
-
-  // De-duplicate by href, keeping the first (most relevant) occurrence.
-  const seen = new Set<string>()
-  return links.filter((l) => !seen.has(l.href) && seen.add(l.href)).slice(0, 8)
-}
+   Wat hier overblijft is humanise(), dat de sitemappagina gebruikt om een slug
+   als een leesbare titel te tonen. */
