@@ -10,9 +10,19 @@ import { useLang } from '@/i18n'
  * that needs consent runs before "accepted" (analytics added later must check
  * getCookieConsent() first). Shown once, after a short beat so it never fights
  * the hero.
+ *
+ * De twee knoppen zijn BEWUST identiek. De Gegevensbeschermingsautoriteit
+ * verwacht dat weigeren even zichtbaar en even bereikbaar is als aanvaarden,
+ * in dezelfde laag van de banner. Een gevulde witte "Accepteren" naast een
+ * grijs "Weigeren" met een randje is sturen via design, en dat maakt de
+ * toestemming ongeldig. Geef deze twee knoppen dus nooit een verschillende
+ * kleur, grootte of volgorde-nadruk.
  */
 
 const STORAGE_KEY = 'nivora.consent'
+/** Waarmee de footerlink de vraag opnieuw oproept. Intrekken moet even
+ *  makkelijk zijn als geven. */
+export const COOKIE_SETTINGS_EVENT = 'nivora:cookie-settings'
 
 export type CookieChoice = 'accepted' | 'declined'
 
@@ -25,10 +35,19 @@ export function getCookieConsent(): CookieChoice | null {
   }
 }
 
+/** Haalt de cookievraag terug op het scherm, vanaf eender welke pagina. */
+export function openCookieSettings(): void {
+  try {
+    window.dispatchEvent(new Event(COOKIE_SETTINGS_EVENT))
+  } catch {
+    /* geen window: niets te doen */
+  }
+}
+
 const COPY = {
   en: {
     title: 'We use cookies',
-    body: 'We use cookies to make this website work properly, remember your preferences and, only with your consent, analyse how the site is used. Read more in our ',
+    body: 'This site stores three small things to work properly, and one more only if you accept: a random number so repeat visits count as one reader. Read what each one does in our ',
     privacy: 'privacy policy',
     bodyEnd: '.',
     accept: 'Accept',
@@ -36,7 +55,7 @@ const COPY = {
   },
   nl: {
     title: 'Wij gebruiken cookies',
-    body: 'Wij gebruiken cookies om de website goed te laten werken, uw voorkeuren te onthouden en, alleen met uw toestemming, het gebruik van de site te analyseren. Lees meer in ons ',
+    body: 'Deze site bewaart drie kleine dingen om te werken, en één extra alleen als u aanvaardt: een willekeurig getal zodat herhaalbezoek als één lezer telt. Lees wat elk ding doet in ons ',
     privacy: 'privacybeleid',
     bodyEnd: '.',
     accept: 'Accepteren',
@@ -55,14 +74,29 @@ export function CookieConsent() {
     return () => window.clearTimeout(id)
   }, [])
 
+  /* De footerlink "Cookievoorkeuren" roept de vraag opnieuw op, ook als er al
+     lang een keuze staat. */
+  useEffect(() => {
+    const reopen = () => setOpen(true)
+    window.addEventListener(COOKIE_SETTINGS_EVENT, reopen)
+    return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, reopen)
+  }, [])
+
   const choose = (value: CookieChoice) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, value)
+      /* Weigeren wist ook wat een eerdere "accepteren" achterliet, anders
+         blijft het bezoekers-id staan na een intrekking. */
+      if (value === 'declined') window.localStorage.removeItem('nv_vid')
     } catch {
       /* private mode: the card simply stays away for this visit */
     }
     setOpen(false)
   }
+
+  /* Identieke opmaak voor beide knoppen. Zie de noot bovenaan dit bestand. */
+  const buttonClass =
+    'flex-1 rounded-full border border-line-strong bg-white/[0.06] px-5 py-2.5 text-[13.5px] font-medium text-ink transition-colors hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/40'
 
   return (
     <AnimatePresence>
@@ -95,20 +129,12 @@ export function CookieConsent() {
               {t.bodyEnd}
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2.5">
-              <button
-                type="button"
-                onClick={() => choose('accepted')}
-                className="rounded-full bg-[#f5f5f5] px-5 py-2.5 text-[13.5px] font-medium text-[#0a0a0c] transition-colors hover:bg-white"
-              >
-                {t.accept}
-              </button>
-              <button
-                type="button"
-                onClick={() => choose('declined')}
-                className="rounded-full border border-line bg-white/[0.04] px-5 py-2.5 text-[13.5px] text-muted transition-colors hover:bg-white/[0.09] hover:text-ink"
-              >
+            <div className="mt-4 flex gap-2.5">
+              <button type="button" onClick={() => choose('declined')} className={buttonClass}>
                 {t.decline}
+              </button>
+              <button type="button" onClick={() => choose('accepted')} className={buttonClass}>
+                {t.accept}
               </button>
             </div>
           </div>

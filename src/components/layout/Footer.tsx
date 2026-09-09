@@ -5,10 +5,15 @@ import {
   type NavItem,
 } from '@/lib/navigation'
 import { opensInNewTab } from '@/data/contact'
+import { COMPANY_LINE_EN, COMPANY_LINE_NL } from '@/data/company'
+import { openCookieSettings } from '@/components/CookieConsent'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { useLang, localizePath, type Lang } from '@/i18n'
 
-const toLinks = (items: NavItem[]) => items.map((i) => ({ label: i.title, href: i.href }))
+type FooterLink = { label: string; href: string; onClick?: () => void }
+
+const toLinks = (items: NavItem[]): FooterLink[] =>
+  items.map((i) => ({ label: i.title, href: i.href }))
 
 const COPY = {
   en: {
@@ -22,6 +27,7 @@ const COPY = {
     helpCenter: 'Help Center',
     privacy: 'Privacy Policy',
     terms: 'Terms',
+    cookieSettings: 'Cookie settings',
     sitemap: 'All pages',
     location: 'Brugge, Belgium',
     rights: '© 2026 Nivora. All rights reserved.',
@@ -38,6 +44,7 @@ const COPY = {
     helpCenter: 'Helpcentrum',
     privacy: 'Privacybeleid',
     terms: 'Voorwaarden',
+    cookieSettings: 'Cookievoorkeuren',
     sitemap: 'Alle pagina’s',
     location: 'Brugge, België',
     rights: '© 2026 Nivora. Alle rechten voorbehouden.',
@@ -45,7 +52,7 @@ const COPY = {
   },
 } as const
 
-function getColumns(lang: Lang) {
+function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
   const t = COPY[lang]
   return [
     { title: t.products, links: toLinks(getProducts(lang)) },
@@ -64,6 +71,9 @@ function getColumns(lang: Lang) {
       links: [
         { label: t.privacy, href: '/privacy' },
         { label: t.terms, href: '/terms' },
+        /* Toestemming intrekken moet even makkelijk zijn als ze geven. Deze
+           regel roept de cookievraag opnieuw op, op elke pagina. */
+        { label: t.cookieSettings, href: '#cookies', onClick: openCookieSettings },
         /* Index of every URL, including the programmatic landing pages. Sits
            here rather than as a wall of keyword links in the footer itself. */
         { label: t.sitemap, href: '/sitemap' },
@@ -136,6 +146,14 @@ export function Footer() {
                       <li key={l.label}>
                         <a
                           href={localizePath(l.href, lang)}
+                          {...(l.onClick
+                            ? {
+                                onClick: (e: React.MouseEvent) => {
+                                  e.preventDefault()
+                                  l.onClick?.()
+                                },
+                              }
+                            : {})}
                           {...(opensInNewTab(l.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           className={`inline-block py-1.5 -my-1.5 text-sm text-ink-soft/85 transition-colors hover:text-ink ${wrapClass}`}
                         >
@@ -205,6 +223,13 @@ export function Footer() {
             <LanguageSwitch />
           </div>
         </div>
+
+        {/* Wettelijke identificatie. Artikel XII.6 WER vraagt dat naam,
+            ondernemingsnummer en adres permanent en makkelijk vindbaar op de
+            site staan; de footer is de enige plek die op elke pagina meekomt. */}
+        <p className="border-t border-line py-5 text-center text-xs leading-relaxed text-faint/80">
+          {lang === 'nl' ? COMPANY_LINE_NL : COMPANY_LINE_EN}
+        </p>
       </div>
     </footer>
   )

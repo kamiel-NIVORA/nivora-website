@@ -44,6 +44,7 @@ const COPY = {
     heroAsk: 'Ask our Nivora assistant anything, or',
     contact: 'get in touch',
     placeholder: 'Ask a question or give Nivora a command...',
+    aiNotice: 'You are talking to an AI. The Nivora assistant can be wrong, and nothing it says is an offer or an agreement.',
     typing: 'Nivora is answering, wait or press stop...',
     experts: 'Experts',
     assistant: 'Assistant',
@@ -70,6 +71,7 @@ const COPY = {
     heroAsk: 'Vraag alles aan onze Nivora-assistent, of',
     contact: 'neem contact op',
     placeholder: 'Stel een vraag of geef een commando aan Nivora...',
+    aiNotice: 'U praat met een AI. De Nivora-assistent kan zich vergissen, en niets wat hij zegt is een aanbod of een overeenkomst.',
     typing: 'Nivora is aan het antwoorden, wacht of klik stop...',
     experts: 'Experts',
     assistant: 'Assistent',
@@ -241,6 +243,15 @@ export function HelpCenterPage() {
               hasMessages={!empty}
               busy={busy}
             />
+
+            {/* Artikel 50 van de AI-verordening: wie met een AI-systeem praat,
+                moet dat weten uiterlijk bij de eerste interactie, duidelijk en
+                te onderscheiden. Daarom staat dit onder het invoerveld en niet
+                in de algemene voorwaarden, en blijft het staan zodra het
+                gesprek loopt. */}
+            <p className="mt-3 px-1 text-center text-[12.5px] leading-relaxed text-faint/80">
+              {t.aiNotice}
+            </p>
           </div>
         </div>
       </section>

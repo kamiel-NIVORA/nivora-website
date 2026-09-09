@@ -194,7 +194,7 @@ const STATIC_NL = {
       'Vertel ons de uitdaging, of het idee dat u niet gebouwd krijgt. Boek een gesprek, of bereik ons rechtstreeks. We reageren meestal binnen een dag.',
   },
   '/terms': {
-    title: 'Servicevoorwaarden · Nivora',
+    title: 'Algemene voorwaarden · Nivora',
     description: 'De voorwaarden die van toepassing zijn op de Nivora-website, producten en diensten.',
   },
   '/privacy': {
