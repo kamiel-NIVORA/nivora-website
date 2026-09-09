@@ -1,6 +1,5 @@
 import { Reveal } from '@/components/animations/Reveal'
 import { getLegalDoc, type LegalSlug } from '@/data/legal'
-import { COMPANY_LINE_EN, COMPANY_LINE_NL } from '@/data/company'
 import { useLang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 
@@ -62,14 +61,6 @@ export function LegalPage({ slug }: { slug: LegalSlug }) {
             </section>
           ))}
         </div>
-
-        {/* Wettelijke identificatie. Artikel XII.6 WER wil dit permanent en
-            makkelijk vindbaar; onderaan elk juridisch document is de plek waar
-            een lezer het ook echt gaat zoeken. */}
-        <hr className="mt-14 border-line" />
-        <p className="mt-6 text-[13.5px] leading-relaxed text-faint">
-          {lang === 'nl' ? COMPANY_LINE_NL : COMPANY_LINE_EN}
-        </p>
       </article>
     </main>
   )

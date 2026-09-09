@@ -76,7 +76,8 @@ const TERMS_EN: LegalDoc = {
       heading: 'How an engagement works',
       blocks: [
         'Before a full project, we usually prove the value on a small, real slice of your work. That means taking one concrete task and building a working version of the system around it, using your data and your process. If it clearly helps, we scope the full build from there. If it does not, you have lost a small step instead of a large one.',
-        'A proposal becomes an agreement once you accept it in writing, which includes email.',
+        'A proposal becomes an agreement once you accept it in writing, which includes email. We confirm that acceptance, and you receive the proposal and these terms at that point in a form you can keep.',
+        'We conclude agreements in Dutch or in English, whichever you prefer. We keep the proposal and the acceptance on file; ask for a copy later and we will send it.',
       ],
     },
     {
@@ -163,6 +164,16 @@ const TERMS_EN: LegalDoc = {
       ],
     },
     {
+      /* Article VI.45, §1, 7° WER: the complaint handling policy has to be
+         known up front. See the Dutch version. */
+      heading: 'If something goes wrong',
+      blocks: [
+        `Tell us first. Email ${CONTACT_EMAIL} or call ${CONTACT_PHONE}, with what happened and what you would like to see. We confirm within two working days that we have read it, and within ten working days we come back with an answer or a proposal to put it right. If working it out takes longer, we say so and we say when you will hear from us.`,
+        'If we cannot resolve it together, the way to court stays open. If you are a consumer, you can go to the Belgian Consumer Mediation Service free of charge first; the consumer chapter above explains how.',
+        'We are not bound by any code of conduct.',
+      ],
+    },
+    {
       heading: 'Force majeure',
       blocks: [
         'Neither side is liable for a delay or failure caused by something outside its reasonable control, such as an outage at a hosting or model provider, a cyber attack, a strike, or a government measure. If that situation lasts longer than 60 days, either side can end the engagement in writing, and you pay for work done up to that point.',
@@ -195,7 +206,7 @@ const TERMS_EN: LegalDoc = {
             'Date, and on paper your signature as well.',
           ],
         },
-        'Your legal guarantee. If what we deliver does not match what we agreed, you have the rights Belgian consumer law gives you: repair, replacement, a price reduction, or termination of the agreement. Our thirty-day warranty above comes on top of that and does not limit those rights.',
+        'Your legal guarantee. If what we deliver does not match what we agreed, you have the rights Belgian consumer law gives you: repair, replacement, a price reduction, or termination of the agreement. For digital content and digital services that legal conformity guarantee runs for two years, and for as long as we keep supplying where supply is continuous. Our thirty-day warranty above comes on top of that and does not limit those rights. The ten working days for checking a delivery do not run against you either: your legal rights do not lapse because you reported something later.',
         'If you pay late. We send you a free reminder first. Costs can only be added fourteen calendar days after the day you receive that reminder, and they stay within the limits of Book XIX of the Belgian Code of Economic Law:',
         {
           list: [
@@ -257,7 +268,8 @@ const TERMS_NL: LegalDoc = {
       heading: 'Hoe een opdracht verloopt',
       blocks: [
         'Voor we aan een volledig project beginnen, bewijzen we de waarde meestal eerst op een klein, echt stuk van uw werk. Dat betekent dat we één concrete taak nemen en daar een werkende versie van het systeem omheen bouwen, met uw data en uw proces. Als het duidelijk helpt, bepalen we van daaruit de scope van de volledige bouw. Zo niet, dan hebt u een kleine stap verloren in plaats van een grote.',
-        'Een offerte wordt een overeenkomst zodra u ze schriftelijk aanvaardt. Een e-mail volstaat.',
+        'Een offerte wordt een overeenkomst zodra u ze schriftelijk aanvaardt. Een e-mail volstaat. We bevestigen die aanvaarding, en u krijgt de offerte en deze voorwaarden op dat moment in een vorm die u kunt bewaren.',
+        'We sluiten overeenkomsten in het Nederlands of in het Engels, wat u verkiest. We bewaren de offerte en de aanvaarding in ons dossier; vraagt u er later een kopie van, dan bezorgen we die.',
       ],
     },
     {
@@ -344,6 +356,17 @@ const TERMS_NL: LegalDoc = {
       ],
     },
     {
+      /* Artikel VI.45, §1, 7° WER: het klachtenbehandelingsbeleid moet vooraf
+         bekend zijn. Het stond nergens, terwijl het het goedkoopste artikel
+         van het hele document is om waar te maken. */
+      heading: 'Als er iets misloopt',
+      blocks: [
+        `Vertel het ons eerst. Mail naar ${CONTACT_EMAIL} of bel ${CONTACT_PHONE}, met wat er gebeurd is en wat u zou willen. We bevestigen binnen twee werkdagen dat we het gelezen hebben, en we komen binnen tien werkdagen met een antwoord of met een voorstel om het recht te zetten. Duurt het uitzoeken langer, dan zeggen we dat en zeggen we ook wanneer u wel iets hoort.`,
+        'Raken we er samen niet uit, dan staat de weg naar de rechter open. Bent u een consument, dan kunt u eerst gratis terecht bij de Consumentenombudsdienst; het consumentenhoofdstuk hierboven zegt hoe.',
+        'We zijn niet aangesloten bij een gedragscode.',
+      ],
+    },
+    {
       heading: 'Overmacht',
       blocks: [
         'Geen van beide partijen is aansprakelijk voor vertraging of niet-uitvoering door iets buiten haar redelijke controle, zoals een storing bij een hosting- of modelleverancier, een cyberaanval, een staking of een overheidsmaatregel. Duurt zo’n situatie langer dan 60 dagen, dan kan elke partij de opdracht schriftelijk beëindigen, en betaalt u het werk dat tot dan geleverd is.',
@@ -379,7 +402,7 @@ const TERMS_NL: LegalDoc = {
             'Datum, en op papier ook uw handtekening.',
           ],
         },
-        'Uw wettelijke garantie. Beantwoordt wat we leveren niet aan wat we afgesproken hadden, dan hebt u de rechten die het Belgische consumentenrecht u geeft: herstel, vervanging, een prijsvermindering of de ontbinding van de overeenkomst. Onze garantie van dertig dagen hierboven komt daar bovenop, en beperkt die rechten niet.',
+        'Uw wettelijke garantie. Beantwoordt wat we leveren niet aan wat we afgesproken hadden, dan hebt u de rechten die het Belgische consumentenrecht u geeft: herstel, vervanging, een prijsvermindering of de ontbinding van de overeenkomst. Voor digitale inhoud en digitale diensten loopt die wettelijke conformiteitsgarantie twee jaar, en bij doorlopende levering zolang we leveren. Onze garantie van dertig dagen hierboven komt daar bovenop en beperkt die rechten niet. Ook de termijn van tien werkdagen om een oplevering na te kijken geldt niet tegen u: uw wettelijke rechten vervallen niet omdat u iets later meldt.',
         'Als u te laat betaalt. Dan sturen we u eerst een gratis herinnering. Pas veertien kalenderdagen na de dag waarop u die herinnering ontvangt, kunnen er kosten bijkomen, en die blijven binnen de grenzen van boek XIX van het Wetboek van economisch recht:',
         {
           list: [
@@ -539,7 +562,7 @@ const PRIVACY_EN: LegalDoc = {
       heading: 'International transfers',
       blocks: [
         'We prefer providers that keep data within the European Economic Area. Our databases run in Ireland and Germany, and our own server runs in Paris.',
-        'The assistant on this site is an exception: your messages go to Anthropic in the United States. That transfer runs on the European Commission’s standard contractual clauses. If you would rather not have a conversation leave the EU, email or call us instead of using the assistant.',
+        'The assistant on this site is an exception: your messages go to Anthropic in the United States. That transfer runs on the European Commission’s standard contractual clauses, together with the supplementary measures that go with them. If you would like to see a copy of those clauses, ask for them at ' + CONTACT_EMAIL + ' and we will send them to you. If you would rather not have a conversation leave the EU, email or call us instead of using the assistant.',
       ],
     },
     {
@@ -555,6 +578,30 @@ const PRIVACY_EN: LegalDoc = {
             'Website measurement: aggregated and kept without an identifier.',
           ],
         },
+      ],
+    },
+    {
+      /* Article 13(2)(e) and (f) GDPR. Almost always forgotten, and both short
+         to answer honestly here. */
+      heading: 'What you have to give, and what happens if you do not',
+      blocks: [
+        'Nothing on this site requires you to hand anything over to read what you are reading. If you want something from us, we do need the minimum to answer:',
+        {
+          list: [
+            'A question or a quote: an email address, and enough about your situation to give a sensible answer. Without an address we cannot get back to you.',
+            'Booking a call: a name and an email address, so the invitation lands somewhere.',
+            'The newsletter: an email address. We ask for nothing else.',
+            'An engagement and an invoice: the details Belgian accounting and VAT law require. Those we cannot leave out, not even on request.',
+          ],
+        },
+        'Apart from that last point, none of this is a legal obligation. Leave something out and we simply cannot do that one thing; nothing else follows from it.',
+      ],
+    },
+    {
+      heading: 'No automated decisions about you',
+      blocks: [
+        'We take no decisions about you based solely on automated processing that produce legal effects or significantly affect you. There is no score, no profile deciding what you get to see, and no system that accepts or rejects you.',
+        'The company recognition described above is the only place where something happens automatically, and it says something about an organisation, not about you. Whether we contact someone, and what we write in that email, is decided by a person.',
       ],
     },
     {
@@ -579,6 +626,9 @@ const PRIVACY_EN: LegalDoc = {
           ],
         },
         `Email ${CONTACT_EMAIL} and we answer within one month. If you think we handled your data badly, you can lodge a complaint with the ${DPA.nameEn}, ${DPA.address}, ${DPA.email}, ${DPA.phone}.`,
+        /* Article 21(4) GDPR wants this right brought to attention explicitly
+           and separately, not buried in the list above. */
+        `One right on its own, because the law wants us to say it explicitly: you can object at any time to your data being used for direct marketing, including our newsletter and our cold emails. You do not need a reason and there is nothing to weigh up. Say so and it stops, and all we keep is the fact that you do not want to be approached again. A reply to any message, or an email to ${CONTACT_EMAIL}, is enough.`,
       ],
     },
     {
@@ -721,7 +771,7 @@ const PRIVACY_NL: LegalDoc = {
       heading: 'Internationale doorgiften',
       blocks: [
         'We geven de voorkeur aan dienstverleners die gegevens binnen de Europese Economische Ruimte houden. Onze databanken draaien in Ierland en Duitsland, en onze eigen server staat in Parijs.',
-        'De assistent op deze site is de uitzondering: uw berichten gaan naar Anthropic in de Verenigde Staten. Die doorgifte steunt op de standaardcontractbepalingen van de Europese Commissie. Wilt u liever niet dat een gesprek de EU verlaat, mail of bel ons dan in plaats van de assistent te gebruiken.',
+        'De assistent op deze site is de uitzondering: uw berichten gaan naar Anthropic in de Verenigde Staten. Die doorgifte steunt op de standaardcontractbepalingen van de Europese Commissie, samen met de bijkomende maatregelen die daarbij horen. Wilt u een kopie van die bepalingen inkijken, vraag ze op via ' + CONTACT_EMAIL + ' en we bezorgen ze u. Wilt u liever niet dat een gesprek de EU verlaat, mail of bel ons dan in plaats van de assistent te gebruiken.',
       ],
     },
     {
@@ -737,6 +787,32 @@ const PRIVACY_NL: LegalDoc = {
             'Websitemeting: geaggregeerd en zonder herkenningsteken bewaard.',
           ],
         },
+      ],
+    },
+    {
+      /* Artikel 13, lid 2, e) AVG: zeggen of gegevens verplicht zijn en wat er
+         gebeurt als iemand ze niet geeft. Artikel 13, lid 2, f): zeggen of er
+         automatische beslissingen worden genomen. Allebei worden ze bijna
+         altijd vergeten, en allebei zijn ze hier kort te beantwoorden. */
+      heading: 'Wat u moet geven, en wat er gebeurt als u het niet geeft',
+      blocks: [
+        'Niets op deze site is verplicht om te lezen wat u leest. Wilt u iets van ons, dan hebben we wel het minimum nodig om te antwoorden:',
+        {
+          list: [
+            'Een vraag of een offerte: een e-mailadres, en genoeg over uw situatie om een zinnig antwoord te geven. Zonder adres kunnen we niet terugkoppelen.',
+            'Een gesprek inplannen: naam en e-mailadres, zodat de uitnodiging ergens toekomt.',
+            'De nieuwsbrief: een e-mailadres. Meer vragen we niet.',
+            'Een opdracht en een factuur: de gegevens die de boekhoudwet en de btw-wetgeving verplicht maken. Die kunnen we niet weglaten, ook niet op vraag.',
+          ],
+        },
+        'Buiten dat laatste punt is niets een wettelijke verplichting. Geeft u iets niet, dan kunnen we die ene zaak niet doen, en verder gebeurt er niets.',
+      ],
+    },
+    {
+      heading: 'Geen automatische beslissingen over u',
+      blocks: [
+        'We nemen geen beslissingen over u die enkel op een geautomatiseerde verwerking steunen en die u in rechte treffen of u aanzienlijk raken. Er is geen score, geen profiel dat bepaalt wat u te zien krijgt, en geen systeem dat u aanvaardt of weigert.',
+        'De bedrijfsherkenning hierboven is de enige plek waar iets automatisch gebeurt, en die zegt iets over een organisatie, niet over u. Of we iemand contacteren, en wat we in die mail schrijven, beslist een mens.',
       ],
     },
     {
@@ -761,6 +837,9 @@ const PRIVACY_NL: LegalDoc = {
           ],
         },
         `Mail naar ${CONTACT_EMAIL} en we antwoorden binnen één maand. Vindt u dat we uw gegevens slecht behandeld hebben, dan kunt u klacht indienen bij de ${DPA.nameNl}, ${DPA.address}, ${DPA.email}, ${DPA.phone}.`,
+        /* Artikel 21, lid 4 AVG wil dat dit recht apart en uitdrukkelijk onder
+           de aandacht komt, niet weggestopt tussen de andere rechten. */
+        `Eén recht apart, omdat de wet wil dat we het uitdrukkelijk zeggen: u kunt op elk moment bezwaar maken tegen het gebruik van uw gegevens voor direct marketing, waaronder onze nieuwsbrief en onze koude e-mails. Daar hoeft u geen reden voor te geven en er valt niets af te wegen. Zegt u het, dan stopt het, en dan houden we enkel bij dat u niet meer benaderd wil worden. Een antwoord op eender welk bericht of een mail naar ${CONTACT_EMAIL} volstaat.`,
       ],
     },
     {
