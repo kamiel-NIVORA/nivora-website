@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties } from 'react'
+import { Fragment, useRef, type CSSProperties } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { BookCallButton } from '@/components/ui/BookCallButton'
@@ -261,10 +261,15 @@ function Hero() {
         className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center"
       >
         <h1 className="font-serif text-[76px] leading-[1.0] tracking-[-0.02em] text-ink [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] sm:text-[112px] lg:text-[164px] lg:leading-[0.95]">
-          {t.heroHeadline.split(' ').map((w, i) => (
-            <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
-              {w}
-            </motion.span>
+          {t.heroHeadline.split(' ').map((w, i, all) => (
+            <Fragment key={i}>
+              <motion.span variants={heroWord} className="inline-block">
+                {w}
+              </motion.span>
+              {/* Echte spatie, geen CSS-marge: met alleen `mr-` leest een
+                        crawler zonder CSS de kop als een aaneengeplakt woord. */}
+              {i < all.length - 1 ? ' ' : null}
+            </Fragment>
           ))}
         </h1>
 

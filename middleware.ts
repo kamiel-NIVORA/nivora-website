@@ -8,15 +8,29 @@
  * naar de Nederlandse `/nl`-variant.
  *
  * Beslissing per navigatie-request (alleen documenten):
- *   1. Pad staat al onder /nl        -> niets doen (al Nederlands).
- *   2. Cookie `nivora.lang` gezet     -> die keuze respecteren (handmatige toggle
+ *   1. Zoekmachine of AI-crawler      -> niets doen (zie CRAWLER hieronder).
+ *   2. Pad staat al onder /nl         -> niets doen (al Nederlands).
+ *   3. Cookie `nivora.lang` gezet      -> die keuze respecteren (handmatige toggle
  *                                        op de site zet deze cookie).
- *   3. Geen cookie (eerste bezoek)    -> land in {BE,NL,LU} of Nederlandse browser
+ *   4. Geen cookie (eerste bezoek)     -> land in {BE,NL,LU} of Nederlandse browser
  *                                        -> redirect naar /nl, anders Engels laten.
+ *
+ * VOETANGEL, en de reden dat dit bestand de sluglijst inleest: de programmatische
+ * landingspagina's hebben PER TAAL EEN ANDERE SLUG. `/ai-automation-estate-agency`
+ * heet in het Nederlands `/nl/ai-automatisering-immokantoor`. Deze middleware
+ * plakte er vroeger blind `/nl` voor, en stuurde iedere Vlaamse bezoeker dus naar
+ * `/nl/ai-automation-estate-agency`, een pad dat niet bestaat. Alle negen
+ * sector- en alle acht oplossingspagina's gaven daardoor een 404 voor precies het
+ * publiek waarvoor ze geschreven zijn, terwijl ze in sitemap.xml stonden en de
+ * hreflang- en x-default-annotatie van de Nederlandse pagina's ernaar wees.
+ * Vertalen dus, niet prefixen. De tabel komt uit dezelfde bron als de rest van de
+ * site (src/data/landing/slugs.ts), zodat een nieuwe landingspagina hier nooit
+ * apart hoeft te worden bijgehouden.
  *
  * Geen dependency nodig: het land komt uit de door Vercel gezette header
  * `x-vercel-ip-country`. Zonder Response gaat het request gewoon door.
  */
+import { LANDING_ENTRIES } from './src/data/landing/slugs'
 
 export const config = {
   // Alleen documenten: sla de api-routes, /assets en bestanden-met-extensie over.
@@ -24,6 +38,27 @@ export const config = {
 }
 
 const DUTCH_COUNTRIES = new Set(['BE', 'NL', 'LU'])
+
+/* Engelse basispaden naar hun Nederlandse spelling, en omgekeerd. Alleen de
+   landingspagina's staan hierin; elke andere route (/about, /services/:slug,
+   /blog, ...) deelt één pad in beide talen en blijft dus ongewijzigd. */
+const EN_TO_NL = new Map<string, string>()
+const NL_AT_ROOT = new Map<string, string>()
+for (const entry of LANDING_ENTRIES) {
+  const en: string = entry.slugs.en
+  const nl: string = entry.slugs.nl
+  if (en === nl) continue
+  EN_TO_NL.set(`/${en}`, `/${nl}`)
+  NL_AT_ROOT.set(`/${nl}`, `/${nl}`)
+}
+
+/* Zoekmachines en AI-antwoordmachines krijgen de pagina die ze opvragen, niet de
+   pagina die bij hun IP-land hoort. Google raadt automatische taalredirects af
+   juist omdat een crawler dan nooit alle taalversies te zien krijgt, en dat is
+   precies wat hreflang moet kunnen bevestigen. Mensen blijven de redirect wel
+   krijgen: die willen hun eigen taal, geen keuzescherm. */
+const CRAWLER =
+  /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|embedly|quora link preview|whatsapp|telegrambot|discordbot|linkedinbot|pinterest|vkshare|redditbot|applebot|petalbot|yandex|duckduckgo|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-web|perplexity|ccbot|google-extended|amazonbot|bytespider|meta-externalagent/i
 
 function cookieValue(request: Request, name: string): string | null {
   const raw = request.headers.get('cookie') || ''
@@ -40,12 +75,32 @@ function prefersDutch(request: Request): boolean {
   return /(^|[,;\s])nl\b/.test(accept)
 }
 
+/** Het Nederlandse pad voor een Engels pad. Vertaalt de landingsslug wanneer die
+ *  per taal anders geschreven wordt, en prefixt in alle andere gevallen. */
+function dutchPath(path: string): string {
+  if (path === '/') return '/nl'
+  const translated = EN_TO_NL.get(path)
+  if (translated) return `/nl${translated}`
+  return `/nl${path}`
+}
+
 export default function middleware(request: Request) {
   const url = new URL(request.url)
   const path = url.pathname
 
+  // Crawlers: laat het opgevraagde pad met rust, in beide talen.
+  if (CRAWLER.test(request.headers.get('user-agent') || '')) return
+
   // Al Nederlands: niets doen.
   if (path === '/nl' || path.startsWith('/nl/')) return
+
+  /* Een Nederlandse landingsslug aan de wortel (`/ai-automatisering-immokantoor`)
+     bestaat daar niet: die pagina woont onder /nl. Ongeacht taalvoorkeur hoort
+     zo'n URL naar zijn eigen plek te gaan in plaats van op een 404 te eindigen. */
+  if (NL_AT_ROOT.has(path)) {
+    url.pathname = `/nl${path}`
+    return Response.redirect(url.toString(), 308)
+  }
 
   // Bepaal de gewenste taal.
   const choice = cookieValue(request, 'nivora.lang')
@@ -57,6 +112,6 @@ export default function middleware(request: Request) {
   if (!wantNl) return // Engels: het Engelse pad zo laten.
 
   // Doorsturen naar de Nederlandse variant, met query + hash behouden.
-  url.pathname = path === '/' ? '/nl' : `/nl${path}`
+  url.pathname = dutchPath(path)
   return Response.redirect(url.toString(), 307)
 }

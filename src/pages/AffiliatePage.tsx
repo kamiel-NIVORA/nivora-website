@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react'
+import { Fragment, useRef, type ReactNode } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { Reveal } from '@/components/animations/Reveal'
 import { RippleButton } from '@/components/ui/RippleButton'
@@ -253,10 +253,15 @@ const heroFade: Variants = {
 function HeroWords({ text }: { text: string }) {
   return (
     <>
-      {text.split(' ').map((w, i) => (
-        <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
-          {w}
-        </motion.span>
+      {text.split(' ').map((w, i, all) => (
+        <Fragment key={i}>
+          <motion.span variants={heroWord} className="inline-block">
+            {w}
+          </motion.span>
+          {/* Echte spatie, geen CSS-marge: met alleen `mr-` leest een
+                        crawler zonder CSS de kop als een aaneengeplakt woord. */}
+          {i < all.length - 1 ? ' ' : null}
+        </Fragment>
       ))}
     </>
   )

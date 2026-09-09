@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react'
+import { Fragment, useRef, type ReactNode } from 'react'
 import {
   motion,
   useScroll,
@@ -95,9 +95,18 @@ export function ScrollStatement({
               {words.map((word, i) => {
                 const start = revealStart + i * step
                 return (
-                  <Word key={i} progress={progress} range={[start, start + step]}>
-                    {word}
-                  </Word>
+                  <Fragment key={i}>
+                    <Word progress={progress} range={[start, start + step]}>
+                      {word}
+                    </Word>
+                    {/* Een echte spatie, geen CSS-marge. Elk woord is een eigen
+                        span zodat het op zijn eigen tel kan oplichten, maar met
+                        spatiering die alleen uit marge komt las een crawler
+                        "Eenmakelaarverkooptbezoekenenvertrouwen". Deze witruimte
+                        valt tussen inline-elementen samen tot één woordspatie,
+                        dus het ziet er hetzelfde uit en het leest weer. */}
+                    {i < words.length - 1 ? ' ' : null}
+                  </Fragment>
                 )
               })}
             </p>
@@ -121,7 +130,7 @@ function Word({
   // the scroll passes over it.
   const opacity = useTransform(progress, range, [0.22, 1])
   return (
-    <span className="mx-[0.22em] my-[0.04em]">
+    <span className="my-[0.04em]">
       <motion.span style={{ opacity }} className="text-[#ece6d8]">
         {children}
       </motion.span>

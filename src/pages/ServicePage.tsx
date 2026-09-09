@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { Navigate, useParams } from 'react-router-dom'
 import { LangLink as Link } from '@/components/ui/LangLink'
@@ -708,10 +708,15 @@ function Hero({ content, meta }: { content: ServiceContent; meta: ServiceMeta })
           className="h-16 w-16 object-contain opacity-95 drop-shadow-[0_6px_26px_rgba(0,0,0,0.5)] sm:h-[72px] sm:w-[72px] lg:h-20 lg:w-20"
         />
         <h1 className="mt-5 font-serif text-[35px] leading-[1.06] tracking-[-0.02em] text-ink sm:text-[48px] lg:text-[60px] lg:leading-[1.05]">
-          {content.hero.headline.split(' ').map((w, i) => (
-            <motion.span key={i} variants={heroWord} className="mr-[0.22em] inline-block last:mr-0">
-              {w}
-            </motion.span>
+          {content.hero.headline.split(' ').map((w, i, all) => (
+            <Fragment key={i}>
+              <motion.span variants={heroWord} className="inline-block">
+                {w}
+              </motion.span>
+              {/* Echte spatie, geen CSS-marge: met alleen `mr-` leest een
+                        crawler zonder CSS de kop als een aaneengeplakt woord. */}
+              {i < all.length - 1 ? ' ' : null}
+            </Fragment>
           ))}
         </h1>
 
@@ -2706,10 +2711,13 @@ function FinalCta({ content, meta }: { content: ServiceContent; meta: ServiceMet
         className="relative z-10 mx-auto max-w-2xl text-center"
       >
         <h2 className="font-serif text-[32px] leading-[1.1] tracking-[-0.01em] text-ink sm:text-[42px] lg:text-[52px]">
-          {content.finalCta.title.split(' ').map((w, i) => (
-            <motion.span key={i} variants={heroWord} className="mr-[0.2em] inline-block last:mr-0">
-              {w}
-            </motion.span>
+          {content.finalCta.title.split(' ').map((w, i, all) => (
+            <Fragment key={i}>
+              <motion.span variants={heroWord} className="inline-block">
+                {w}
+              </motion.span>
+              {i < all.length - 1 ? ' ' : null}
+            </Fragment>
           ))}
         </h2>
         <motion.p variants={heroFade} className="mx-auto mt-6 max-w-xl text-[15.5px] leading-relaxed text-faint lg:text-base">
