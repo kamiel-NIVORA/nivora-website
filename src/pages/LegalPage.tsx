@@ -4,8 +4,8 @@ import { useLang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 
 const COPY = {
-  en: { label: 'Legal', lastUpdated: 'Last updated' },
-  nl: { label: 'Juridisch', lastUpdated: 'Laatst bijgewerkt' },
+  en: { lastUpdated: 'Last updated' },
+  nl: { lastUpdated: 'Laatst bijgewerkt' },
 } as const
 
 export function LegalPage({ slug }: { slug: LegalSlug }) {
@@ -18,8 +18,7 @@ export function LegalPage({ slug }: { slug: LegalSlug }) {
       <article className="relative mx-auto w-full max-w-[760px] px-6 pb-28 pt-36 lg:pb-32 lg:pt-44">
         {/* Header */}
         <Reveal mode="mount">
-          <span className="label-mono text-dim">{t.label}</span>
-          <h1 className="mt-4 font-serif text-[30px] leading-[1.12] tracking-[-0.02em] text-ink break-words sm:text-[44px] sm:leading-[1.1]">
+          <h1 className="font-serif text-[30px] leading-[1.12] tracking-[-0.02em] text-ink break-words sm:text-[44px] sm:leading-[1.1]">
             {doc.title}
           </h1>
           <p className="mt-4 text-sm text-faint">{t.lastUpdated} {doc.updated}</p>
