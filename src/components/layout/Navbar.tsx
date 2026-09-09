@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -365,27 +365,29 @@ export function Navbar() {
               page itself locked behind it. */}
           {open && (
             <div className="mt-3 flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto overscroll-contain border-t border-line pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden">
-              <p className="px-3 pb-1 pt-2 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Products', lang)}</p>
-              {getProducts(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} {...(opensInNewTab(l.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
-                  {l.title}
-                  {l.comingSoon && <ComingSoonTag />}
-                </a>
-              ))}
-              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Services', lang)}</p>
-              {getServices(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
-              ))}
-              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Company', lang)}</p>
-              {getCompanyPrimary(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">
-                  {l.title}
-                  {l.comingSoon && <ComingSoonTag />}
-                </a>
-              ))}
-              <p className="px-3 pb-1 pt-3 text-[11px] uppercase tracking-wide text-dim">{getMenuLabel('Resources', lang)}</p>
-              {getResources(lang).map((l) => (
-                <a key={l.title} href={localizePath(l.href, lang)} onClick={() => setOpen(false)} className="flex min-h-[44px] items-center rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5">{l.title}</a>
+              {/* Dezelfde secties als de balk op groot scherm, in dezelfde
+                  volgorde, want die komt uit MENU_KEYS. Stond hier vroeger vier
+                  keer uitgeschreven met de volgorde erin gebakken, en toen de
+                  balk van volgorde wisselde liep dit paneel daar stil op achter.
+                  getPanel() levert per sleutel de items, dus er is nog één bron. */}
+              {MENU_KEYS.map((key, i) => (
+                <Fragment key={key}>
+                  <p className={`px-3 pb-1 text-[11px] uppercase tracking-wide text-dim ${i === 0 ? 'pt-2' : 'pt-3'}`}>
+                    {getMenuLabel(key, lang)}
+                  </p>
+                  {getPanel(key, lang).items.map((l) => (
+                    <a
+                      key={l.title}
+                      href={localizePath(l.href, lang)}
+                      {...(opensInNewTab(l.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      onClick={() => setOpen(false)}
+                      className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5"
+                    >
+                      {l.title}
+                      {l.comingSoon && <ComingSoonTag />}
+                    </a>
+                  ))}
+                </Fragment>
               ))}
               <div className="mt-3 flex items-center justify-between gap-2 border-t border-line px-3 pt-3">
                 <span className="text-[11px] uppercase tracking-wide text-dim">{t.language}</span>

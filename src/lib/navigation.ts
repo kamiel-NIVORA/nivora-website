@@ -83,7 +83,13 @@ export const getResources = (lang: Lang): NavItem[] => withLang(lang === 'nl' ? 
 
 /* Stable internal menu keys (never shown raw) + their localized display labels. */
 export type MenuKey = 'Products' | 'Services' | 'Company' | 'Resources'
-export const MENU_KEYS: MenuKey[] = ['Products', 'Services', 'Company', 'Resources']
+
+/* De volgorde in de balk. Diensten staan vooraan omdat dat is wat Nivora
+   vandaag verkoopt; Box en Voice zijn nog niet uit, dus wie op Producten klikt
+   komt twee keer "Binnenkort" tegen voor hij gezien heeft wat er wel te koop
+   is. Dit is de leesvolgorde, niet de navigatiestructuur: elke sleutel houdt
+   zijn eigen items en labels hieronder. */
+export const MENU_KEYS: MenuKey[] = ['Services', 'Products', 'Company', 'Resources']
 
 const MENU_LABELS: Record<MenuKey, Localized<string>> = {
   Products: { en: 'Products', nl: 'Producten' },
