@@ -126,6 +126,17 @@ const TERMS_EN: LegalDoc = {
       ],
     },
     {
+      /* See the Dutch version: the first question a large client's legal team
+         asks anyone building AI. Keep this in step with which providers we
+         actually use. */
+      heading: 'Your data does not train models',
+      blocks: [
+        'What you give us, and what runs through a system we build for you, is not used to train or improve AI models. Not for us, not for the next client, and not to turn into a product.',
+        'We pick our providers on that too. The models we use run on business terms in which the provider contractually commits not to train on your content.',
+        'If we want to improve a system using real examples from your work, we ask separately and in writing. You can say no, and it changes nothing else about the engagement.',
+      ],
+    },
+    {
       heading: 'AI outputs and human oversight',
       blocks: [
         'AI systems produce useful results but they are not perfect and can be wrong or incomplete. The systems we build are tools to support your work, not a replacement for human judgement. You are responsible for reviewing outputs before relying on them for decisions, and for keeping a human in the loop where the stakes call for it. We will tell you plainly where a system is strong and where it needs checking.',
@@ -315,6 +326,20 @@ const TERMS_NL: LegalDoc = {
       blocks: [
         'Waar een project erom vraagt, bouwen we systemen die draaien binnen uw eigen omgeving of op infrastructuur die u beheert, zodat uw data uw muren niet hoeft te verlaten. Waar een systeem draait en wie er toegang toe heeft, spreken we per project af.',
         'Waar we persoonsgegevens verwerken in uw opdracht, treden we op als uw verwerker en sluiten we vóór die verwerking begint een verwerkersovereenkomst volgens artikel 28 AVG.',
+      ],
+    },
+    {
+      /* De vraag die de juridische dienst van een grote klant als eerste
+         stelt aan wie AI bouwt. Ze stond nergens, terwijl het antwoord in ons
+         voordeel is: de modellen die we gebruiken draaien op zakelijke
+         voorwaarden waarin de aanbieder zich ertoe verbindt niet op klant-
+         inhoud te trainen. Verandert die leverancierskeuze, dan verandert
+         deze belofte mee, of ze gaat eruit. */
+      heading: 'Uw data traint geen modellen',
+      blocks: [
+        'Wat u ons geeft, en wat door een systeem loopt dat we voor u bouwen, gebruiken we niet om AI-modellen te trainen of te verbeteren. Niet voor onszelf, niet voor een volgende klant, en niet om er een product van te maken.',
+        'We kiezen onze leveranciers ook daarop. De modellen die we inzetten draaien op zakelijke voorwaarden waarin de aanbieder zich er contractueel toe verbindt niet op uw inhoud te trainen.',
+        'Willen we een systeem verbeteren met echte voorbeelden uit uw werk, dan vragen we dat apart en schriftelijk. U mag nee zeggen, en dat heeft geen gevolg voor de rest van de opdracht.',
       ],
     },
     {
@@ -605,6 +630,14 @@ const PRIVACY_EN: LegalDoc = {
       ],
     },
     {
+      heading: 'Minors, and links to other sites',
+      blocks: [
+        'This site and our services are aimed at businesses and at adults. We do not knowingly collect personal data from minors. If you notice that it happened anyway, tell us and we will delete it.',
+        'Our pages and our emails sometimes link to other people’s sites. Their policy applies there, not ours. We choose carefully where we link, but we have no control over what they do with your data. Read their policy before you leave anything behind.',
+        `What you write to the assistant on this site is not used to train AI models. The same holds for client data in the systems we build; the terms put that in writing.`,
+      ],
+    },
+    {
       heading: 'How we protect it',
       blocks: [
         'Access is limited to the people who need it, traffic runs over TLS, our databases sit behind row-level security, and secrets never reach the browser. No system is perfectly secure, but we take this seriously and design for it. If a breach ever puts your rights at real risk, we tell the supervisory authority within 72 hours and we tell you.',
@@ -813,6 +846,14 @@ const PRIVACY_NL: LegalDoc = {
       blocks: [
         'We nemen geen beslissingen over u die enkel op een geautomatiseerde verwerking steunen en die u in rechte treffen of u aanzienlijk raken. Er is geen score, geen profiel dat bepaalt wat u te zien krijgt, en geen systeem dat u aanvaardt of weigert.',
         'De bedrijfsherkenning hierboven is de enige plek waar iets automatisch gebeurt, en die zegt iets over een organisatie, niet over u. Of we iemand contacteren, en wat we in die mail schrijven, beslist een mens.',
+      ],
+    },
+    {
+      heading: 'Minderjarigen, en links naar andere sites',
+      blocks: [
+        'Deze site en onze diensten richten zich op ondernemingen en op volwassenen. We verzamelen niet bewust persoonsgegevens van minderjarigen. Merkt u dat het toch gebeurd is, laat het ons weten en we verwijderen ze.',
+        'Onze pagina’s en onze mails verwijzen soms naar sites van anderen. Daar geldt hun beleid en niet het onze. We kiezen met zorg waar we naartoe linken, maar we hebben geen controle over wat zij met uw gegevens doen. Lees hun beleid voor u er iets achterlaat.',
+        `Wat u aan de assistent op deze site schrijft, wordt niet gebruikt om AI-modellen te trainen. Hetzelfde geldt voor de data van klanten in de systemen die we bouwen; de voorwaarden leggen dat vast.`,
       ],
     },
     {
