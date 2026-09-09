@@ -1,11 +1,14 @@
+import { ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/animations/Reveal'
+import { Button } from '@/components/ui/Button'
+import { LangLink } from '@/components/ui/LangLink'
 import { getLegalDoc, type LegalSlug } from '@/data/legal'
 import { useLang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 
 const COPY = {
-  en: { lastUpdated: 'Last updated' },
-  nl: { lastUpdated: 'Laatst bijgewerkt' },
+  en: { lastUpdated: 'Last updated', contact: 'Go to contact' },
+  nl: { lastUpdated: 'Laatst bijgewerkt', contact: 'Naar de contactpagina' },
 } as const
 
 export function LegalPage({ slug }: { slug: LegalSlug }) {
@@ -59,6 +62,18 @@ export function LegalPage({ slug }: { slug: LegalSlug }) {
               </div>
             </section>
           ))}
+
+          {/* De laatste sectie van beide documenten is "Contact", en die noemt
+              een mailadres en een telefoonnummer. Deze knop sluit daarop aan
+              voor wie liever een formulier invult dan zelf een mail opstelt. */}
+          <div>
+            <Button asChild variant="dark" size="md">
+              <LangLink to="/contact">
+                {t.contact}
+                <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+              </LangLink>
+            </Button>
+          </div>
         </div>
       </article>
     </main>
