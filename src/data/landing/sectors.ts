@@ -1,4 +1,5 @@
 import type { Localized } from '@/i18n'
+import { BY_ID, isDraft } from './slugs'
 
 /**
  * De drie sectoren waarvoor Nivora een eigen pagina heeft.
@@ -81,6 +82,22 @@ export const SECTORS: SectorSummary[] = [
 ]
 
 export const SECTOR_BY_ID = new Map(SECTORS.map((s) => [s.id, s]))
+
+/**
+ * De sectoren die vandaag echt op het web staan.
+ *
+ * SECTORS beschrijft wat er geschreven is, dit is wat er getoond mag worden.
+ * Een sector die in ./slugs.ts op `draft` staat, hoort nergens in de navigatie:
+ * een link naar een pagina die 404 geeft is erger dan geen link. Voettekst,
+ * homepage en de sitemappagina lezen daarom hieruit en niet uit SECTORS.
+ *
+ * Staat de lijst helemaal leeg, dan verdwijnt de sectorenkolom in de voettekst
+ * en de sectorregel op de homepage vanzelf. Dat is met opzet: een lege kop is
+ * slechter dan geen kop.
+ */
+export const VISIBLE_SECTORS: SectorSummary[] = SECTORS.filter(
+  (sector) => !isDraft(BY_ID.get(sector.id) ?? {}),
+)
 
 /* Hier stond `sectorCards()`, dat alle sectoren als kaartenrij teruggaf. Die rij
    stond alleen op de stadspagina's, en die bestaan niet meer. Zie

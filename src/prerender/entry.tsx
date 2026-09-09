@@ -48,7 +48,11 @@ const contentFor = (id: string): LandingContent | undefined =>
   CONTENT[`../data/landing/content/${id}.ts`]?.default
 
 /** Every landing page that has copy written, with its base path per language. */
-export const ROUTES = LANDING_ENTRIES.filter((e) => contentFor(e.id)).map((e) => ({
+/* Draft-pagina's vallen hier weg, en daarmee uit de hele build: geen shell,
+   geen regel in sitemap.xml, geen gerenderde body. Zie ../data/landing/slugs.ts. */
+export const ROUTES = LANDING_ENTRIES.filter(
+  (e) => contentFor(e.id) && !('draft' in e && e.draft === true),
+).map((e) => ({
   id: e.id,
   family: e.family,
   bases: { en: `/${e.slugs.en}`, nl: `/${e.slugs.nl}` },

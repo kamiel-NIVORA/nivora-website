@@ -39,6 +39,18 @@ export type LandingEntry = {
    * slug: er is maar één spelling, want er is maar één pagina.
    */
   nlOnly?: true
+  /**
+   * Nog niet publiek.
+   *
+   * De pagina blijft volledig bestaan in de repo, maar de build maakt er geen
+   * shell voor, ze staat niet in sitemap.xml, er wordt nergens naartoe gelinkt,
+   * en de router geeft er een 404 op. Terugzetten is deze regel weghalen.
+   *
+   * Bedoeld voor werk dat af genoeg is om te bewaren en niet af genoeg om te
+   * tonen. Beter dan een pagina op noindex zetten: die blijft bereikbaar voor
+   * wie het adres heeft, en dat is niet wat "nog niet online" betekent.
+   */
+  draft?: true
 }
 
 export const LANDING_ENTRIES = [
@@ -63,9 +75,9 @@ export const LANDING_ENTRIES = [
      Nederlands, `ai-automation-<sector>` in het Engels. Iemand die zoekt tikt
      zijn eigen vak in, niet een productnaam, en de Nederlandse slug draagt het
      woord dat het vak voor zichzelf gebruikt. */
-  { id: 'niche-immo', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-estate-agency', nl: 'ai-automatisering-immokantoor' } },
-  { id: 'niche-architect', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-architect', nl: 'ai-automatisering-architectenbureau' } },
-  { id: 'niche-logistiek', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-logistics', nl: 'ai-automatisering-logistiek' } },
+  { id: 'niche-immo', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-estate-agency', nl: 'ai-automatisering-immokantoor' } },
+  { id: 'niche-architect', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-architect', nl: 'ai-automatisering-architectenbureau' } },
+  { id: 'niche-logistiek', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-logistics', nl: 'ai-automatisering-logistiek' } },
 
   /* ── oplossingen ──
      Leeg, en dat is een stand van zaken en geen vergetelheid.
@@ -99,11 +111,11 @@ export const LANDING_ENTRIES = [
 
      Vier ervan zijn te koop, de vijfde is de gratis aanleiding om te bellen en
      staat daarom in elke CTA van de andere vier. */
-  { id: 'offer-wedstrijd-radar', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-radar', nl: 'architecten/wedstrijd-radar' } },
-  { id: 'offer-kandidatuur-machine', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/kandidatuur-machine', nl: 'architecten/kandidatuur-machine' } },
-  { id: 'offer-wedstrijd-intelligence', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-intelligence', nl: 'architecten/wedstrijd-intelligence' } },
-  { id: 'offer-wedstrijd-cockpit', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-cockpit', nl: 'architecten/wedstrijd-cockpit' } },
-  { id: 'offer-wedstrijd-terugblik', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-terugblik', nl: 'architecten/wedstrijd-terugblik' } },
+  { id: 'offer-wedstrijd-radar', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-radar', nl: 'architecten/wedstrijd-radar' } },
+  { id: 'offer-kandidatuur-machine', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/kandidatuur-machine', nl: 'architecten/kandidatuur-machine' } },
+  { id: 'offer-wedstrijd-intelligence', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-intelligence', nl: 'architecten/wedstrijd-intelligence' } },
+  { id: 'offer-wedstrijd-cockpit', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-cockpit', nl: 'architecten/wedstrijd-cockpit' } },
+  { id: 'offer-wedstrijd-terugblik', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-terugblik', nl: 'architecten/wedstrijd-terugblik' } },
 
 ] as const satisfies readonly LandingEntry[]
 
@@ -121,6 +133,10 @@ const BY_SLUG = {
  *  Dutch slug does not resolve at the root, so each URL has one home. */
 export const findLandingEntry = (slug: string | undefined, lang: 'en' | 'nl'): LandingEntry | undefined =>
   slug ? BY_SLUG[lang].get(slug) : undefined
+
+/** Staat deze pagina nog niet online? Zie het commentaar bij `draft` hierboven. */
+export const isDraft = (entry: LandingEntry | { draft?: true }): boolean =>
+  'draft' in entry && entry.draft === true
 
 /** Bestaat deze pagina alleen in het Nederlands? Leest de optionele vlag zonder
  *  dat de aanroeper hoeft te weten dat `as const` hem op sommige entries

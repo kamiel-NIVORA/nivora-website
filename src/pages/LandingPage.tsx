@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useLang, type Lang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 import { landingJsonLd } from '@/lib/landingSchema'
-import { findLandingEntry, isNlOnly, landingBase, type LandingEntry } from '@/data/landing/slugs'
+import { findLandingEntry, isDraft, isNlOnly, landingBase, type LandingEntry } from '@/data/landing/slugs'
 import { loadLanding, WRITTEN_IDS, INLINE_LANDING } from '@/data/landing'
 import type { LandingId } from '@/data/landing/slugs'
 import type { LandingBlock, LandingPage as LandingPageData } from '@/data/landing/types'
@@ -275,6 +275,10 @@ export function LandingRoute() {
   const entry = findLandingEntry(raw, lang)
 
   if (!entry || !WRITTEN_IDS.has(entry.id)) return <NotFound />
+  /* Nog niet online: de pagina bestaat wel in de repo, maar niet op het web.
+     De build maakt er ook geen shell voor, dus dit vangt alleen wie hem
+     client-side probeert te bereiken. */
+  if (isDraft(entry)) return <NotFound />
   /* Een pagina die alleen in het Nederlands bestaat, heeft geen Engels adres.
      vercel.json stuurt dat pad al door, dit vangt de client-side navigatie. */
   if (isNlOnly(entry) && lang === 'en') return <NotFound />

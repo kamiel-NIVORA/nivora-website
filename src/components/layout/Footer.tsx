@@ -3,7 +3,7 @@ import {
   getServices,
   type NavItem,
 } from '@/lib/navigation'
-import { SECTORS } from '@/data/landing/sectors'
+import { VISIBLE_SECTORS } from '@/data/landing/sectors'
 import { opensInNewTab } from '@/data/contact'
 import { openCookieSettings } from '@/components/CookieConsent'
 import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
@@ -73,10 +73,16 @@ function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
 
        Uit SECTORS en niet met de hand: verdwijnt of hernoemt een sector, dan
        volgt de voettekst vanzelf in plaats van een dode link te houden. */
-    {
-      title: t.sectors,
-      links: SECTORS.map((sector) => ({ label: sector.name[lang], href: sector.href })),
-    },
+    /* Geen zichtbare sectoren, geen kolom. Een kop zonder links eronder is
+       slechter dan geen kop, en het raster schuift vanzelf dicht. */
+    ...(VISIBLE_SECTORS.length
+      ? [
+          {
+            title: t.sectors,
+            links: VISIBLE_SECTORS.map((sector) => ({ label: sector.name[lang], href: sector.href })),
+          },
+        ]
+      : []),
     {
       title: t.company,
       links: [

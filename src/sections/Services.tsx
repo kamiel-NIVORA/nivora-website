@@ -5,7 +5,7 @@ import { Reveal } from '@/components/animations/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RippleButton } from '@/components/ui/RippleButton'
 import { getServices, type NavItem } from '@/lib/navigation'
-import { SECTORS } from '@/data/landing/sectors'
+import { VISIBLE_SECTORS } from '@/data/landing/sectors'
 import { useIsMobile } from '@/lib/useIsMobile'
 import { useLang, localizePath } from '@/i18n'
 
@@ -13,13 +13,13 @@ const COPY = {
   en: {
     title: 'Our Services',
     subtitle: 'Tell us the challenge. We design, build, and install exactly what your business needs.',
-    sectorsLead: 'Three trades we know from the inside:',
+    sectorsLead: 'The trades we know from the inside:',
     learnMore: 'Learn more',
   },
   nl: {
     title: 'Onze diensten',
     subtitle: 'Vertel ons jullie uitdagingen. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
-    sectorsLead: 'Drie vakken die wij van binnenuit kennen:',
+    sectorsLead: 'De vakken die wij van binnenuit kennen:',
     learnMore: 'Lees meer',
   },
 } as const
@@ -112,10 +112,13 @@ export function Services() {
             Deze sectie wordt niet gerenderd op sector- en oplossingspagina's
             (zie hideCards in src/pages/LandingPage.tsx), dus een sectorpagina
             linkt hiermee nooit naar zichzelf. */}
+        {/* Staat er geen enkele sector online, dan valt deze regel weg in plaats
+            van een aanhef zonder namen te tonen. */}
+        {VISIBLE_SECTORS.length > 0 && (
         <Reveal delay={0.1}>
           <p className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[15px] text-faint sm:mt-16">
             <span>{t.sectorsLead}</span>
-            {SECTORS.map((sector, i) => (
+            {VISIBLE_SECTORS.map((sector, i) => (
               <Fragment key={sector.id}>
                 {i > 0 && <span aria-hidden className="text-dim">·</span>}
                 <Link
@@ -128,6 +131,7 @@ export function Services() {
             ))}
           </p>
         </Reveal>
+        )}
       </div>
     </section>
   )

@@ -755,6 +755,38 @@ for (const [text, where] of paragraphSeen) {
   }
 }
 
+/* ── bewaker: wijst elke redirect naar een pagina die echt bestaat? ─────────────
+   Een 301 naar een pagina die er niet is, leest Google als een soft 404: hij
+   gooit de oude URL eruit en de nieuwe krijgt niets. Dat gebeurt vanzelf zodra
+   iemand een pagina op `draft` zet of verwijdert terwijl er nog naar
+   doorverwezen wordt, en het valt van buitenaf niet op, want de redirect zelf
+   werkt prima.
+
+   Daarom hier, bij de build, waar we precies weten welke pagina's er straks in
+   dist staan. Externe bestemmingen en alles onder /api slaan we over, en een
+   bestemming met een :parameter erin kunnen we niet natrekken. */
+{
+  const gepubliceerd = new Set()
+  for (const page of pages) {
+    for (const lang of page.nlOnly ? ['nl'] : ['en', 'nl']) {
+      const base = typeof page.bases === 'string' ? page.bases : page.bases[lang]
+      gepubliceerd.add(lang === 'nl' ? (base === '/' ? '/nl' : `/nl${base}`) : base)
+    }
+  }
+  const vercel = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8'))
+  for (const r of vercel.redirects ?? []) {
+    const dest = r.destination
+    if (!dest?.startsWith('/') || dest.startsWith('/api/') || dest.includes(':')) continue
+    const schoon = dest.replace(/\/$/, '') || '/'
+    if (!gepubliceerd.has(schoon)) {
+      problems.push(
+        `vercel.json: redirect ${r.source} wijst naar ${dest}, en die pagina wordt niet gepubliceerd. ` +
+          'Staat de bestemming op draft, laat de oude URL dan een 410 geven via /api/gone.',
+      )
+    }
+  }
+}
+
 if (problems.length) {
   console.error('\nprerender: content guards failed\n')
   for (const p of problems) console.error('  ✗ ' + p)

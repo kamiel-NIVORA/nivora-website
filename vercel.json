@@ -2,6 +2,54 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/architecten/:slug*",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-notary",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-notariskantoor",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/property-book-for-every-viewer",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/pandboek-voor-de-kandidaat-koper",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/property-analysis-from-your-photos",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/woninganalyse-uit-uw-eigen-fotos",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-building-contractor",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-aannemer",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-port-logistics",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-havensector",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/architecten",
+      "destination": "/api/gone"
+    },
+    {
       "source": "/ai-automation-loss-adjuster",
       "destination": "/api/gone"
     },
@@ -366,66 +414,6 @@
     {
       "source": "/quote-automation",
       "destination": "/services/aios",
-      "permanent": true
-    },
-    {
-      "source": "/ai-automation-notary",
-      "destination": "/ai-automation-estate-agency",
-      "permanent": true
-    },
-    {
-      "source": "/nl/ai-automatisering-notariskantoor",
-      "destination": "/nl/ai-automatisering-immokantoor",
-      "permanent": true
-    },
-    {
-      "source": "/property-book-for-every-viewer",
-      "destination": "/ai-automation-estate-agency",
-      "permanent": true
-    },
-    {
-      "source": "/nl/pandboek-voor-de-kandidaat-koper",
-      "destination": "/nl/ai-automatisering-immokantoor",
-      "permanent": true
-    },
-    {
-      "source": "/property-analysis-from-your-photos",
-      "destination": "/ai-automation-estate-agency",
-      "permanent": true
-    },
-    {
-      "source": "/nl/woninganalyse-uit-uw-eigen-fotos",
-      "destination": "/nl/ai-automatisering-immokantoor",
-      "permanent": true
-    },
-    {
-      "source": "/ai-automation-building-contractor",
-      "destination": "/ai-automation-architect",
-      "permanent": true
-    },
-    {
-      "source": "/nl/ai-automatisering-aannemer",
-      "destination": "/nl/ai-automatisering-architectenbureau",
-      "permanent": true
-    },
-    {
-      "source": "/ai-automation-port-logistics",
-      "destination": "/ai-automation-logistics",
-      "permanent": true
-    },
-    {
-      "source": "/nl/ai-automatisering-havensector",
-      "destination": "/nl/ai-automatisering-logistiek",
-      "permanent": true
-    },
-    {
-      "source": "/architecten/:slug*",
-      "destination": "/nl/architecten/:slug*",
-      "permanent": true
-    },
-    {
-      "source": "/nl/architecten",
-      "destination": "/nl/ai-automatisering-architectenbureau",
       "permanent": true
     }
   ],
