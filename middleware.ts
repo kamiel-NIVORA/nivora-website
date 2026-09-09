@@ -31,6 +31,7 @@
  * `x-vercel-ip-country`. Zonder Response gaat het request gewoon door.
  */
 import { LANDING_ENTRIES } from './src/data/landing/slugs'
+import { RETIRED_PATHS } from './src/data/landing/retired'
 
 export const config = {
   // Alleen documenten: sla de api-routes, /assets en bestanden-met-extensie over.
@@ -90,6 +91,14 @@ export default function middleware(request: Request) {
 
   // Crawlers: laat het opgevraagde pad met rust, in beide talen.
   if (CRAWLER.test(request.headers.get('user-agent') || '')) return
+
+  /* Verdwenen pagina's laten we hier los. Vercel draait deze middleware VÓÓR de
+     rewrites, dus zouden we een verdwenen Engelse URL alsnog naar /nl sturen:
+     de slug staat niet meer in EN_TO_NL, dus zou hij blind geprefixt worden en
+     eindigen op een pad dat nooit bestaan heeft. De 410 uit vercel.json kwam
+     dan niet meer aan bod en werd een 404. Niets doen betekent hier dat beide
+     talen hetzelfde antwoord krijgen, rechtstreeks en zonder omweg. */
+  if (RETIRED_PATHS.has(path)) return
 
   // Al Nederlands: niets doen.
   if (path === '/nl' || path.startsWith('/nl/')) return
