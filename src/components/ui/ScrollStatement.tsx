@@ -91,7 +91,7 @@ export function ScrollStatement({
 
           {/* The line — lives inside the frame, so it scales with it */}
           <div className="absolute inset-0 flex items-center justify-center px-[7%]">
-            <p className="flex max-w-4xl flex-wrap justify-center text-center font-serif text-[26px] leading-[1.42] tracking-[-0.01em] sm:text-[34px] sm:leading-[1.4] lg:text-[46px] lg:leading-[1.32]">
+            <p className="flex max-w-4xl flex-wrap justify-center gap-x-[0.44em] gap-y-[0.08em] text-center font-serif text-[26px] leading-[1.42] tracking-[-0.01em] sm:text-[34px] sm:leading-[1.4] lg:text-[46px] lg:leading-[1.32]">
               {words.map((word, i) => {
                 const start = revealStart + i * step
                 return (
@@ -99,12 +99,15 @@ export function ScrollStatement({
                     <Word progress={progress} range={[start, start + step]}>
                       {word}
                     </Word>
-                    {/* Een echte spatie, geen CSS-marge. Elk woord is een eigen
-                        span zodat het op zijn eigen tel kan oplichten, maar met
-                        spatiering die alleen uit marge komt las een crawler
-                        "Eenmakelaarverkooptbezoekenenvertrouwen". Deze witruimte
-                        valt tussen inline-elementen samen tot één woordspatie,
-                        dus het ziet er hetzelfde uit en het leest weer. */}
+                    {/* Een echte spatie, zodat een crawler niet
+                        "Eenmakelaarverkooptbezoekenenvertrouwen" leest. Elk woord
+                        is een eigen span om op zijn eigen tel te kunnen
+                        oplichten, en die spans zijn flex-items: witruimte tussen
+                        flex-items telt niet mee voor de opmaak. Deze spatie staat
+                        er dus puur om gelezen te worden, en de zichtbare afstand
+                        komt van gap-x op de alinea hierboven. Zet die afstand
+                        nooit als marge op het woord zelf, want dan verdwijnt de
+                        spatie uit de tekst en plakken de woorden weer aaneen. */}
                     {i < words.length - 1 ? ' ' : null}
                   </Fragment>
                 )
@@ -130,7 +133,7 @@ function Word({
   // the scroll passes over it.
   const opacity = useTransform(progress, range, [0.22, 1])
   return (
-    <span className="my-[0.04em]">
+    <span>
       <motion.span style={{ opacity }} className="text-[#ece6d8]">
         {children}
       </motion.span>
