@@ -1,6 +1,5 @@
 import {
   getCompanyPrimary,
-  getProducts,
   getServices,
   type NavItem,
 } from '@/lib/navigation'
@@ -17,7 +16,6 @@ const toLinks = (items: NavItem[]): FooterLink[] =>
 
 const COPY = {
   en: {
-    products: 'Products',
     services: 'Services',
     sectors: 'Sectors',
     company: 'Company',
@@ -36,7 +34,6 @@ const COPY = {
     comingSoon: 'Coming soon',
   },
   nl: {
-    products: 'Producten',
     services: 'Diensten',
     sectors: 'Sectoren',
     company: 'Bedrijf',
@@ -58,8 +55,14 @@ const COPY = {
 
 function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
   const t = COPY[lang]
+  /* Vijf kolommen, want het raster hieronder staat op vijf en een zesde duwt
+     Contact naar een tweede rij.
+
+     Producten (Box en Voice) staan hier bewust niet: allebei wijzen ze naar een
+     andere plek (box.nivoraworks.com en de wachtlijst), ze staan al in de
+     bovenbalk en op de homepage, en ze zijn nog niet uit. De sectoren zijn
+     nergens anders te vinden en verdienen die plaats dus meer. */
   return [
-    { title: t.products, links: toLinks(getProducts(lang)) },
     { title: t.services, links: toLinks(getServices(lang)) },
     /* De sectoren horen hier omdat ze anders nergens staan.
        Gemeten in de gebouwde HTML kreeg elke sectorpagina precies ÉÉN inkomende
@@ -159,7 +162,7 @@ export function Footer() {
                     // The e-mail is one long token; let it break ONLY after the "@"
                     // (via <wbr>), never mid-domain, so it always reads whole.
                     const atIndex = l.href.startsWith('mailto:') ? l.label.indexOf('@') : -1
-                    const wrapClass = atIndex >= 0 ? '[overflow-wrap:normal] [word-break:normal]' : '[overflow-wrap:anywhere]'
+                    const wrapClass = atIndex >= 0 ? '[overflow-wrap:normal] [word-break:normal]' : 'hyphens-auto [overflow-wrap:anywhere]'
                     return (
                       <li key={l.label}>
                         <a
