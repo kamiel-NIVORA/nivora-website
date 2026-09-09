@@ -2,6 +2,86 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/ai-automation-loss-adjuster",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-expertisekantoor",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-installation-company",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-installatiebedrijf",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-accountancy-firm",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-boekhoudkantoor",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/ai-automation-beach-bar",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/ai-automatisering-strandbar",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/virtual-staging-empty-properties",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/virtual-staging-lege-woning",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/beach-bar-reservations",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/reservaties-voor-een-strandbar",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/who-gets-the-bed",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/wie-krijgt-het-bed",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/your-day-on-one-screen",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/de-dag-op-een-scherm",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/staff-hours-and-availability",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/uren-en-beschikbaarheid",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/how-busy-it-gets",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/nl/hoe-druk-het-wordt",
+      "destination": "/api/gone"
+    },
+    {
       "source": "/nivora-api/:path*",
       "destination": "https://nivora-api.srv938837.hstgr.cloud/:path*"
     },
@@ -286,6 +366,56 @@
     {
       "source": "/quote-automation",
       "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-notary",
+      "destination": "/ai-automation-estate-agency",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-notariskantoor",
+      "destination": "/nl/ai-automatisering-immokantoor",
+      "permanent": true
+    },
+    {
+      "source": "/property-book-for-every-viewer",
+      "destination": "/ai-automation-estate-agency",
+      "permanent": true
+    },
+    {
+      "source": "/nl/pandboek-voor-de-kandidaat-koper",
+      "destination": "/nl/ai-automatisering-immokantoor",
+      "permanent": true
+    },
+    {
+      "source": "/property-analysis-from-your-photos",
+      "destination": "/ai-automation-estate-agency",
+      "permanent": true
+    },
+    {
+      "source": "/nl/woninganalyse-uit-uw-eigen-fotos",
+      "destination": "/nl/ai-automatisering-immokantoor",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-building-contractor",
+      "destination": "/ai-automation-architect",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-aannemer",
+      "destination": "/nl/ai-automatisering-architectenbureau",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-port-logistics",
+      "destination": "/ai-automation-logistics",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-havensector",
+      "destination": "/nl/ai-automatisering-logistiek",
       "permanent": true
     }
   ],

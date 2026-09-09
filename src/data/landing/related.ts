@@ -20,23 +20,9 @@ import { LANDING_ENTRIES, type LandingEntry } from './slugs'
    hier niet in staat, valt terug op de slug, zodat een nieuwe pagina nooit stuk
    kan door een vergeten regel. */
 const LABELS: Partial<Record<string, { en: string; nl: string }>> = {
-  'product-virtual-staging': { en: 'From an empty room to a furnished home', nl: 'Van lege kamer naar ingericht huis' },
-  'product-pandboek': { en: 'Every candidate gets their own page', nl: 'Elke kandidaat krijgt zijn eigen blad' },
-  'product-woninganalyse': { en: 'What the property still needs doing', nl: 'Wat er aan het pand te doen valt' },
-  'product-strandbar-reservaties': { en: 'Bookings out of WhatsApp', nl: 'Reservaties weg uit WhatsApp' },
-  'product-strandbar-bed': { en: 'Who gets a spot on a full Saturday', nl: 'Wie krijgt er een plaats op een volle zaterdag' },
-  'product-strandbar-dag': { en: 'The day on one screen', nl: 'De dag op één scherm' },
-  'product-strandbar-uren': { en: 'Hours and availability', nl: 'Uren en beschikbaarheid' },
-  'product-strandbar-drukte': { en: 'How busy it gets, two days out', nl: 'Hoe druk het wordt, twee dagen op voorhand' },
   'niche-immo': { en: 'Estate agencies', nl: 'Immokantoren' },
-  'niche-notaris': { en: 'Notary offices', nl: 'Notariskantoren' },
-  'niche-expertise': { en: 'Loss adjusters', nl: 'Expertisekantoren' },
   'niche-architect': { en: 'Architects', nl: 'Architectenbureaus' },
-  'niche-aannemer': { en: 'Contractors', nl: 'Aannemers' },
-  'niche-installateur': { en: 'Installers', nl: 'Installateurs' },
-  'niche-strandbar': { en: 'Beach bars', nl: 'Strandbars' },
-  'niche-boekhouder': { en: 'Accountancy firms', nl: 'Boekhoudkantoren' },
-  'niche-haven': { en: 'Port and logistics', nl: 'Havensector' },
+  'niche-logistiek': { en: 'Logistics', nl: 'Logistiek' },
 }
 
 /** 'ai-automation-ghent' -> 'AI automation Ghent' / 'AI-automatisering Gent'.

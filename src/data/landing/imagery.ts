@@ -77,136 +77,23 @@ const SOLUTIONS: Record<string, PageImagery> = {
       nl: 'Een negentiende-eeuws Vlaams herenhuis, van over de straat gezien in avondlicht',
     } },
   },
-  'niche-notaris': {
-    hero: '/landing/auto-sec-notaris-a.webp',
-    manifesto: '/landing/auto-sec-notaris-b.webp',
-    band: band('/landing/auto-opl-termijnwachter-band.webp', 'aios'),
-  },
-  'niche-expertise': {
-    hero: '/landing/auto-sec-expertise-a.webp',
-    manifesto: '/landing/auto-sec-expertise-c.webp',
-    band: band('/landing/auto-opl-fotodossier-band.webp', 'build'),
-  },
   'niche-architect': {
     hero: '/landing/auto-sec-architect-a.webp',
     manifesto: '/landing/auto-sec-architect-b.webp',
     band: band('/landing/auto-opl-meetstaat-b.webp', 'build'),
   },
-  'niche-aannemer': {
-    hero: '/landing/auto-sec-bouw-a.webp',
-    manifesto: '/landing/auto-sec-bouw-b.webp',
-    band: band('/landing/auto-opl-werfbon-a.webp', 'build'),
-  },
-  'niche-installateur': {
-    hero: '/landing/auto-sec-install-a.webp',
-    manifesto: '/landing/auto-sec-install-b.webp',
-    band: band('/landing/auto-opl-nietgefact-a.webp', 'aios'),
-  },
-  'niche-strandbar': {
-    hero: '/landing/auto-sec-strandbar-hero.webp',
-    manifesto: '/landing/auto-sec-strandbar-vol.webp',
-    band: {
-      src: '/landing/auto-sec-strandbar-a.webp',
-      alt: {
-        en: 'A beach bar counter with bentwood stools and the sea through an open frontage',
-        nl: 'De toog van een strandbar met houten krukken en de zee door een open gevel',
-      },
-    },
-  },
-  'niche-boekhouder': {
-    hero: '/landing/auto-sec-kantoor-a.webp',
-    manifesto: '/landing/auto-sec-kantoor-b.webp',
-    band: band('/landing/auto-opl-documentlaag-band.webp', 'aios'),
-  },
-  'niche-haven': {
+  'niche-logistiek': {
     hero: '/landing/auto-brugge-zeebrugge.webp',
     manifesto: '/landing/auto-antwerpen-schip.webp',
     band: band('/landing/auto-antwerpen-magazijn.webp', 'build'),
   },
 
   /* Oplossingen. */
-  'product-virtual-staging': {
-    hero: '/landing/auto-staging-villa-vol.webp',
-    manifesto: '/landing/auto-staging-appartement-leeg.webp',
-    band: band('/landing/auto-staging-appartement-vol.webp', 'build'),
-  },
-  'product-pandboek': {
-    hero: '/landing/auto-opl-pandboek-a.webp',
-    manifesto: '/landing/auto-opl-pandboek-b.webp',
-    band: band('/landing/auto-sec-immo-a.webp', 'consulting'),
-  },
-  'product-woninganalyse': {
-    hero: '/landing/auto-opl-analyse-a.webp',
-    manifesto: '/landing/auto-opl-analyse-b.webp',
-    band: {
-      src: '/landing/auto-opl-analyse-zolder.webp',
-      alt: {
-        en: 'A roof space with the underside of the tiles visible between bare rafters, no insulation',
-        nl: 'Een zolder met de onderkant van de pannen zichtbaar tussen kale kepers, zonder isolatie',
-      },
-    },
-  },
-
   /* De vijf strandbaroplossingen. Hero en manifesto staan per pagina in het
      contentbestand; hieronder telt alleen de band. Ze zijn zo verdeeld dat geen
      enkele pagina twee keer hetzelfde beeld draagt en dat de vijf kaarten in de
      rij op de sectorpagina allemaal van elkaar verschillen. */
-  'product-strandbar-reservaties': {
-    hero: '/landing/strandbar-opl-reservaties.webp',
-    manifesto: '/landing/auto-sec-strandbar-a.webp',
-    band: {
-      src: '/landing/auto-brugge-horeca.webp',
-      alt: {
-        en: 'A café terrace on cobbles at first light, the parasols still closed',
-        nl: 'Een caféterras op kasseien bij het eerste licht, de parasols nog dicht',
-      },
-    },
-  },
-  'product-strandbar-bed': {
-    hero: '/landing/strandbar-opl-bed.webp',
-    manifesto: '/landing/auto-oostende-kust.webp',
-    band: {
-      src: '/landing/auto-sec-horeca-a.webp',
-      alt: {
-        en: 'Rattan chairs and timber tables on decking facing an empty beach and the sea',
-        nl: 'Rieten stoelen en houten tafels op een terrasvlonder met zicht op het strand en de zee',
-      },
-    },
-  },
-  'product-strandbar-dag': {
-    hero: '/landing/strandbar-opl-dag.webp',
-    manifesto: '/landing/auto-opl-antwoord-b.webp',
-    band: {
-      src: '/landing/auto-sec-strandbar-a.webp',
-      alt: {
-        en: 'A beach bar counter with bentwood stools and the sea through an open frontage',
-        nl: 'De toog van een strandbar met houten krukken en de zee door een open gevel',
-      },
-    },
-  },
-  'product-strandbar-uren': {
-    hero: '/landing/strandbar-opl-uren.webp',
-    manifesto: '/landing/auto-brugge-horeca.webp',
-    band: {
-      src: '/landing/auto-sec-strandbar-b.webp',
-      alt: {
-        en: 'A beach bar terrace with long timber tables in low afternoon sun, the sea beyond',
-        nl: 'Een strandbarterras met lange houten tafels in late namiddagzon, de zee erachter',
-      },
-    },
-  },
-  'product-strandbar-drukte': {
-    hero: '/landing/strandbar-opl-drukte.webp',
-    manifesto: '/landing/auto-sec-strandbar-vol.webp',
-    band: {
-      src: '/landing/auto-oostende-kust.webp',
-      alt: {
-        en: 'A white beach cabin on stilts in the dunes, with cyclists along the waterline behind it',
-        nl: 'Een witte strandcabine op palen in de duinen, met fietsers langs de waterlijn erachter',
-      },
-    },
-  },
-}
+  }
 
 /**
  * Terugval voor een pagina die hierboven nog geen regel heeft.

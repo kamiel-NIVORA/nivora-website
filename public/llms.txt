@@ -16,6 +16,14 @@ Nivora (also written as Nivora Works or NivoraWorks) works with companies that w
 - [AIOS](https://nivoraworks.com/services/aios): an AI operating system tuned to your company that takes on admin, marketing, finance and support work.
 - [AI Consulting](https://nivoraworks.com/services/ai-consulting): mapping where AI genuinely pays off and implementing it with your team.
 
+## Sectors
+
+Nivora works in three trades and says no to the rest, so the work in each one goes deep enough to be worth buying.
+
+- [Estate agencies](https://nivoraworks.com/ai-automation-estate-agency): what is known about a property before it changes hands, gathered from the official Flemish sources instead of by hand.
+- [Architecture practices](https://nivoraworks.com/ai-automation-architect): the evidence file for a plot, its two governing dates, and what the regulations literally said, out of one address.
+- [Logistics](https://nivoraworks.com/ai-automation-logistics): forwarding, customs, ship agency and bonded warehousing around the Flemish ports. Alongside CargoWise, Descartes, IDMS, AES and Certified Pick up, never between you and the authorities.
+
 ## Pages
 
 - [About](https://nivoraworks.com/about): the studio and founder Kamiel Niville.

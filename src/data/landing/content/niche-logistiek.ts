@@ -1,7 +1,7 @@
 import { solutionPage } from '../solutionPage'
 
 /**
- * Sectorpagina voor de havensector, geschreven met het marktonderzoek in
+ * Sectorpagina voor de logistiek, geschreven met het marktonderzoek in
  * .nivora/research/ en daarna nagelezen door iemand die in de keten werkt.
  *
  * Deze pagina verving twaalf losse pagina's: één per beroep (douaneagent,
@@ -18,10 +18,10 @@ export default solutionPage(
     en:
     {
       eyebrow: 'Sectors',
-      h1: 'AI automation for the port sector, from declaration to release',
+      h1: 'AI automation for logistics, from declaration to release',
       subhead:
         'A declaration that has to be in before the vessel sails, a container that is released but has no time slot, and the one colleague who knows how that particular file fits together. We first count where the hours actually go, then take over the part that comes back every week.',
-      answerH2: 'What does Nivora Works do in the port sector?',
+      answerH2: 'What does Nivora Works do in logistics?',
       answer:
         'Nivora Works is a software and AI studio in Bruges working for the businesses around the Flemish ports: forwarders, customs brokers, ship agents, container haulage, bonded warehouses and survey practices. We take over the recurring work between the systems: reading what arrives as mail or PDF and putting it where it belongs, watching the terms that run per file, and finding back what was agreed on a shipment two years ago. We do not replace CargoWise, Descartes or your own package, and we do not sit between you and IDMS, AES, NCTS or Certified Pick up. What we build hangs alongside them, and where the data is sensitive the model runs on hardware in your own office.',
       answerDetail: [
@@ -57,7 +57,7 @@ export default solutionPage(
         'Free days expire and the first you hear of it is the invoice',
         'One colleague is the only one who knows how that consignee\'s files work',
       ],
-      automationsH2: 'What we can automate in the port sector',
+      automationsH2: 'What we can automate in logistics',
       automationsIntro:
         'Four things that come back across the whole chain, whichever of these trades you are in. We build them one at a time, and it starts with whichever one your own count puts first.',
       automations: [
@@ -110,28 +110,28 @@ export default solutionPage(
           a: 'It is mostly built for that size. A company with twelve people has the same retyping and the same terms as one with two hundred, and nobody spare to hand it to. We start with one thing, it runs alongside your own way of working for a fortnight, and it has to hold up in a busy week before anything is added. If it does not pay for itself we say so and stop.',
         },
       ],
-      featuresTitle: 'What does Nivora Works do in the port sector?',
+      featuresTitle: 'What does Nivora Works do in logistics?',
       featuresSubtitle:
         'A declaration that has to be in before the vessel sails, a container that is released but has no time slot, and the one colleague who knows how that particular file fits together. We first count where the hours actually go, then take over the part that comes back every week.',
       ctaTitle: 'Send us one ordinary week',
       ctaBody:
         'Take the mailbox of a single week and the files that ran through it, anonymised. Within the week we will tell you which part of that we would take over and which part is better left with your own people, with nothing agreed.',
-      seoTitle: 'AI automation for the port sector in Antwerp, Zeebrugge and Ghent · Nivora Works',
+      seoTitle: 'AI automation for logistics in Antwerp, Zeebrugge and Ghent · Nivora Works',
       seoDescription:
         'Nivora Works in Bruges takes over the recurring work in forwarding, customs, ship agency, container haulage and bonded storage: documents no longer retyped, terms watched across systems, and your own archive searchable. Alongside CargoWise, Descartes, IDMS, AES and Certified Pick up.',
     },
     nl:
     {
       eyebrow: 'Sectoren',
-      h1: 'AI-automatisering voor de havensector, van aangifte tot vrijgave',
+      h1: 'AI-automatisering voor de logistiek, van aangifte tot vrijgave',
       subhead:
         'Een aangifte die binnen moet zijn voor het schip vertrekt, een container die vrij is maar geen tijdslot heeft, en die ene collega die weet hoe dat dossier in elkaar zit. Wij tellen eerst waar de uren echt blijven hangen en nemen daarna het stuk over dat elke week terugkomt.',
-      answerH2: 'Wat doet Nivora Works in de havensector?',
+      answerH2: 'Wat doet Nivora Works in de logistiek?',
       answer:
         'Nivora Works is een software- en AI-studio in Brugge die werkt voor de bedrijven rond de Vlaamse havens: expediteurs, douaneagenten, scheepsagenturen, haventransport, entrepots en surveykantoren. Wij nemen het terugkerende werk tussen de systemen over: lezen wat binnenkomt als mail of pdf en het zetten waar het hoort, de termijnen bewaken die per dossier lopen, en terugvinden wat er twee jaar geleden over een zending afgesproken is. Wij vervangen CargoWise, Descartes of uw eigen pakket niet, en wij gaan niet tussen u en IDMS, AES, NCTS of Certified Pick up staan. Wat wij bouwen hangt ernaast, en waar de gegevens gevoelig zijn draait het model op hardware in uw eigen kantoor.',
       answerDetail: [
         'Dit zijn verschillende beroepen en dat schrijven wij op in plaats van eromheen. Een scheepsagent bewaakt een schuivende ETA, een douaneagent een aangiftetermijn, een transporteur een tijdslot, en een surveyor komt terug met vierhonderd foto\'s. Wat ze delen is dat het officiële systeem het probleem niet is: het probleem is alles wat een mens eromheen met de hand doet.',
-        'Wij starten dus met één afgebakend stuk in één beroep. Geen platform voor de haven, en geen project dat begint met een analyse van zes maanden. Eén ding, dat veertien dagen naast uw eigen manier van werken meeloopt, en daarna beslist u wat het volgende is.',
+        'Wij starten dus met één afgebakend stuk in één beroep. Geen platform voor de hele keten, en geen project dat begint met een analyse van zes maanden. Eén ding, dat veertien dagen naast uw eigen manier van werken meeloopt, en daarna beslist u wat het volgende is.',
       ],
       manifesto:
         'De aangifte is het werk niet. Alles wat er bijeen moet zijn voor ze buiten kan, dat is het werk.',
@@ -162,7 +162,7 @@ export default solutionPage(
         'Vrije dagen lopen af en u hoort het pas van de factuur',
         'Eén collega is de enige die weet hoe de dossiers van die geadresseerde werken',
       ],
-      automationsH2: 'Wat we kunnen automatiseren in de havensector',
+      automationsH2: 'Wat we kunnen automatiseren in de logistiek',
       automationsIntro:
         'Vier dingen die over de hele keten terugkomen, in welk van deze beroepen u ook zit. Wij bouwen ze één voor één, en het begint bij wat uw eigen telling bovenaan zet.',
       automations: [
@@ -215,13 +215,13 @@ export default solutionPage(
           a: 'Het is vooral daarvoor gemaakt. Een bedrijf van twaalf man heeft hetzelfde overtikwerk en dezelfde termijnen als een bedrijf van tweehonderd, en niemand om het aan door te geven. Wij starten met één ding, dat loopt veertien dagen mee naast uw eigen manier van werken, en het moet in een drukke week overeind blijven voor er iets bijkomt. Verdient het zichzelf niet terug, dan zeggen wij dat en stoppen wij.',
         },
       ],
-      featuresTitle: 'Wat doet Nivora Works in de havensector?',
+      featuresTitle: 'Wat doet Nivora Works in de logistiek?',
       featuresSubtitle:
         'Een aangifte die binnen moet zijn voor het schip vertrekt, een container die vrij is maar geen tijdslot heeft, en die ene collega die weet hoe dat dossier in elkaar zit. Wij tellen eerst waar de uren echt blijven hangen en nemen daarna het stuk over dat elke week terugkomt.',
       ctaTitle: 'Stuur ons één gewone week',
       ctaBody:
         'Neem de mailbox van één week en de dossiers die er doorheen liepen, geanonimiseerd. Wij zeggen u binnen de week welk stuk daarvan wij zouden overnemen en welk stuk beter bij uw eigen mensen blijft, zonder dat er iets vastligt.',
-      seoTitle: 'AI-automatisering voor de havensector in Antwerpen, Zeebrugge en Gent · Nivora Works',
+      seoTitle: 'AI-automatisering voor de logistiek in Antwerpen, Zeebrugge en Gent · Nivora Works',
       seoDescription:
         'Nivora Works uit Brugge neemt het terugkerende werk over in expeditie, douane, scheepsagentuur, haventransport en entrepot: documenten niet meer overtypen, termijnen bewaken over systemen heen, en uw eigen archief doorzoekbaar. Naast CargoWise, Descartes, IDMS, AES en Certified Pick up.',
     },

@@ -28,63 +28,46 @@ export type LandingEntry = {
 
 export const LANDING_ENTRIES = [
 
-  /* ── sectoren (tier N) ──
-     Eén pagina per beroep, en niet meer dan dat. De set is bewust kort: negen
-     sectoren waarin Nivora echt iets gebouwd heeft of echt iets kan tonen. De
-     vorige opzet had er zesentwintig, waaronder twaalf losse havenpagina's en
-     systeempagina's over IDMS, CPu en CargoWise. Die vielen elk apart te dun
-     uit en concurreerden bovendien met elkaar op nagenoeg dezelfde zoekvraag;
-     de havenketen staat nu als één sector op ./content/niche-haven.ts.
+  /* ── sectoren ──
+     Drie. Niet negen, en niet zesentwintig zoals de opzet daarvoor.
 
-     De slug volgt overal hetzelfde patroon als de stadspagina's:
-     `ai-automatisering-<sector>` in het Nederlands, `ai-automation-<sector>` in
-     het Engels. Iemand die zoekt tikt zijn eigen vak in, niet een productnaam,
-     en de Nederlandse slug draagt het woord dat het vak voor zichzelf gebruikt:
-     een boekhouder zoekt "boekhoudkantoor", niet "accountancydienstverlener". */
+     De set is niet gekozen op marktomvang maar op leverage: bij een
+     architectenbureau kan Kamiel meekijken en valideren, bij de immosector loopt
+     een gesprek over de aankoopkant, en voor de logistiek ligt er al een keer een
+     volledige uitwerking klaar. Zes sectoren zijn er in september 2026 uit
+     gegaan (notariskantoor, expertisekantoor, aannemer, installatiebedrijf,
+     boekhoudkantoor en strandbar), omdat negen vakken tegelijk leren meer tijd
+     kostte dan er per vak iets goed van te maken. Wat daarvan weg moest en
+     waarheen het verwijst, staat in de redirects in vercel.json.
+
+     De havensector heet nu logistiek. Dat is het woord waarmee het vak zichzelf
+     aanduidt en waarmee er ook echt gezocht wordt; "havensector" is een plek,
+     geen bedrijfstak. De oude slug blijft via een 301 werken.
+
+     De slug volgt overal hetzelfde patroon: `ai-automatisering-<sector>` in het
+     Nederlands, `ai-automation-<sector>` in het Engels. Iemand die zoekt tikt
+     zijn eigen vak in, niet een productnaam, en de Nederlandse slug draagt het
+     woord dat het vak voor zichzelf gebruikt. */
   { id: 'niche-immo', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-estate-agency', nl: 'ai-automatisering-immokantoor' } },
-  { id: 'niche-notaris', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-notary', nl: 'ai-automatisering-notariskantoor' } },
-  { id: 'niche-expertise', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-loss-adjuster', nl: 'ai-automatisering-expertisekantoor' } },
   { id: 'niche-architect', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-architect', nl: 'ai-automatisering-architectenbureau' } },
-  { id: 'niche-aannemer', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-building-contractor', nl: 'ai-automatisering-aannemer' } },
-  { id: 'niche-installateur', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-installation-company', nl: 'ai-automatisering-installatiebedrijf' } },
-  { id: 'niche-strandbar', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-beach-bar', nl: 'ai-automatisering-strandbar' } },
-  { id: 'niche-boekhouder', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-accountancy-firm', nl: 'ai-automatisering-boekhoudkantoor' } },
-  { id: 'niche-haven', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-port-logistics', nl: 'ai-automatisering-havensector' } },
+  { id: 'niche-logistiek', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-logistics', nl: 'ai-automatisering-logistiek' } },
 
-  /* ── oplossingen: wat wij per sector echt bouwen ──
-     Deze set wordt sector per sector opgebouwd, drie tot vijf per vak, in de
-     taal van dat vak. De vorige set liep generiek over alle sectoren heen
-     ("documenten niet meer overtypen") en stond daardoor overal een beetje en
-     nergens helemaal juist. Die vijftien bestanden staan geparkeerd in
-     .nivora/geparkeerde-oplossingen/, met een tabel erbij van welke bij welke
-     sector hoort. Ze komen terug wanneer die sector aan de beurt is.
+  /* ── oplossingen ──
+     Leeg, en dat is een stand van zaken en geen vergetelheid.
 
-     Een sector zonder oplossingen krijgt geen oplossingenrij op zijn pagina.
-     Dat is met opzet, en het is geregeld in solutionRailFor() in
-     src/pages/LandingPage.tsx: geen items betekent geen blok.
+     Hier stonden acht oplossingspagina's: drie voor de verkoopkant van de immo
+     (virtual staging, pandboek, woninganalyse) en vijf voor strandbars. Ze zijn
+     er in september 2026 samen uit gegaan. De strandbars omdat die sector weg
+     is, en de drie immopagina's omdat ze over de VERKOOPkant gingen terwijl het
+     werk naar de aankoopkant verschuift. De slugs van de strandbarpagina's
+     (`wie-krijgt-het-bed`, `de-dag-op-een-scherm`) waren bovendien interne
+     metaforen en geen woorden die iemand intikt.
 
-     Immokantoren (klaar). */
-  { id: 'product-virtual-staging', family: 'product', hub: 'products', slugs: { en: 'virtual-staging-empty-properties', nl: 'virtual-staging-lege-woning' } },
-  { id: 'product-pandboek', family: 'product', hub: 'products', slugs: { en: 'property-book-for-every-viewer', nl: 'pandboek-voor-de-kandidaat-koper' } },
-  { id: 'product-woninganalyse', family: 'product', hub: 'products', slugs: { en: 'property-analysis-from-your-photos', nl: 'woninganalyse-uit-uw-eigen-fotos' } },
-
-  /* Strandbars (klaar). Vijf stuks, in de volgorde waarin ze gebouwd worden:
-     alles vanaf de tweede leest uit de reservatielijst die de eerste aanlegt,
-     dus die volgorde is geen smaakkwestie. De inhoud leunt op een echt gebouwd
-     systeem voor een strandbar aan de kust en op het marktonderzoek in
-     .nivora/research/oplossingen-kandidaten.md. */
-  { id: 'product-strandbar-reservaties', family: 'product', hub: 'products', slugs: { en: 'beach-bar-reservations', nl: 'reservaties-voor-een-strandbar' } },
-  { id: 'product-strandbar-bed', family: 'product', hub: 'products', slugs: { en: 'who-gets-the-bed', nl: 'wie-krijgt-het-bed' } },
-  { id: 'product-strandbar-dag', family: 'product', hub: 'products', slugs: { en: 'your-day-on-one-screen', nl: 'de-dag-op-een-scherm' } },
-  { id: 'product-strandbar-uren', family: 'product', hub: 'products', slugs: { en: 'staff-hours-and-availability', nl: 'uren-en-beschikbaarheid' } },
-  { id: 'product-strandbar-drukte', family: 'product', hub: 'products', slugs: { en: 'how-busy-it-gets', nl: 'hoe-druk-het-wordt' } },
-
-  /* De zestien stadspagina's (ai-automatisering-brugge, -gent, -antwerpen, ...)
-     stonden hier tot augustus 2026. Ze zijn eruit: een stad verandert alleen de
-     woorden rond het aanbod en niet wat er te koop is, dus zestien varianten van
-     hetzelfde verhaal concurreerden met elkaar en met de sectorpagina's op
-     nagenoeg dezelfde zoekvraag. De bestanden en wat er verder mee weg moest,
-     staan in .nivora/geparkeerde-stadspaginas/ met een tabel erbij. */
+     Wat hier terugkomt is één oplossing, tweemaal: de perceelgeschiedenis uit
+     een adres, voor de architect en voor de koper. Zolang die pagina's niet
+     geschreven zijn, staat hier niets, en toont een sectorpagina geen
+     oplossingenrij. Dat is geregeld in solutionRailFor() in
+     src/pages/LandingPage.tsx: geen items betekent geen blok. */
 ] as const satisfies readonly LandingEntry[]
 
 /** Literal union of every landing id, so related-links are compile-checked. */
