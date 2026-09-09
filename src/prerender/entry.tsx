@@ -122,6 +122,7 @@ function staticRouteTree() {
       <Route path="contact" element={<ContactPage />} />
       <Route path="terms" element={<LegalPage slug="terms" />} />
       <Route path="privacy" element={<LegalPage slug="privacy" />} />
+      <Route path="dpa" element={<LegalPage slug="dpa" />} />
       <Route path="sitemap" element={<SitemapPage />} />
     </>
   )

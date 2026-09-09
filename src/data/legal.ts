@@ -28,7 +28,7 @@ import {
 
 export type LegalBlock = string | { list: string[] }
 export type LegalSection = { heading: string; blocks: LegalBlock[] }
-export type LegalSlug = 'terms' | 'privacy'
+export type LegalSlug = 'terms' | 'privacy' | 'dpa'
 export type LegalDoc = {
   slug: LegalSlug
   title: string
@@ -898,12 +898,215 @@ const PRIVACY_NL: LegalDoc = {
   ],
 }
 
+
+/* ────────────────────────────────────────────────────────────────────────────
+   VERWERKERSOVEREENKOMST
+
+   Vraag 37 van de juridische intake: een document dat Kamiel aan een klant
+   kan geven. Het is geen luxe. Zodra we voor een klant een systeem bouwen dat
+   hun mail, hun dossiers of hun klantgegevens verwerkt, zijn wij verwerker en
+   verplicht artikel 28 AVG een schriftelijke overeenkomst. Zonder dat document
+   mag die klant ons strikt genomen niet inschakelen, en het is het eerste dat
+   de juridische dienst van een groter bedrijf opvraagt.
+
+   Het staat op een eigen pagina zodat het los door te sturen is, zonder de
+   hele voorwaarden mee te geven. De bedrijfsgegevens komen uit company.ts,
+   net als in de andere twee documenten.
+   ──────────────────────────────────────────────────────────────────────── */
+
+const PROCESSING_EN: LegalDoc = {
+  slug: 'dpa',
+  title: 'Data Processing Agreement',
+  updated: UPDATED_EN,
+  intro:
+    'This agreement applies whenever we handle personal data on your behalf: your mailboxes, your files, your customer records, anything your system touches. Article 28 GDPR requires it in writing, so here it is, ready to sign. It forms part of our terms and overrides them for anything about processing.',
+  sections: [
+    {
+      heading: 'Who is who',
+      blocks: [
+        `You are the controller: it is your business that decides why this data is processed. ${COMPANY.legalNameEn}, ${COMPANY_ADDRESS_EN}, company and VAT number ${COMPANY.enterpriseNumber}, is the processor, and acts only on your instructions.`,
+        'For our own administration, invoicing and security we are the controller ourselves. Our privacy policy covers that part.',
+      ],
+    },
+    {
+      heading: 'What we process, and why',
+      blocks: [
+        'Subject: delivering, securing and supporting the system we built for you. Duration: as long as the engagement runs, plus the wind-down below.',
+        {
+          list: [
+            'Categories of people: your employees, your customers, your suppliers and anyone appearing in the data your system handles.',
+            'Categories of data: whatever the agreed scope requires. Typically names, contact details, correspondence, documents and the fields your process needs.',
+            'Special categories: we do not ask for them. They can appear because someone put them in a document or a message; we then process them only to run the agreed feature.',
+          ],
+        },
+        'We process personal data only on your documented instructions. The proposal, the agreed scope and your normal use of the system are those instructions. If the law obliges us to do more, we tell you first, unless that notice is itself prohibited. If we believe an instruction breaks data-protection law, we say so.',
+      ],
+    },
+    {
+      heading: 'What we ask of you',
+      blocks: [
+        'You confirm that you have a lawful basis for the data you put into the system, that you have informed the people it concerns, and that you answer their requests as the controller.',
+        'You decide who on your side gets access, and you withdraw that access promptly when somebody leaves.',
+      ],
+    },
+    {
+      heading: 'Confidentiality and security',
+      blocks: [
+        'Everyone who touches your data is bound by confidentiality, including the freelancers and subcontractors we bring in. Access is limited to whoever needs it for a specific task.',
+        'We take appropriate technical and organisational measures: encrypted secrets kept out of the browser, TLS in transit, row-level security on databases, separated environments, logging and restricted access. Measures can evolve as long as the level of protection does not drop.',
+      ],
+    },
+    {
+      heading: 'Other providers and where the data sits',
+      blocks: [
+        'We use hosting and infrastructure providers to run what we build. Our privacy policy names them and where they operate; we prefer providers inside the European Economic Area, and our databases run in Ireland and Germany, with our own server in Paris.',
+        'We impose the same obligations on them and remain responsible to you for their work. We tell you before a new provider starts handling your data, and you can object on reasonable data-protection grounds. Transfers outside the EEA run on the European Commission’s standard contractual clauses; ask us and we send you a copy.',
+      ],
+    },
+    {
+      heading: 'Your data is never training data',
+      blocks: [
+        'We do not use your data to train or improve AI models, and the model providers we use commit contractually not to train on it either. If we ever want to use real examples from your work to improve something, we ask separately and in writing, and you can refuse without consequence.',
+      ],
+    },
+    {
+      heading: 'Helping you with requests and duties',
+      blocks: [
+        'If someone contacts us about their data in your system, we pass the request to you and do not answer it ourselves, unless you ask us to.',
+        'We help you, in proportion to what we know and what we can see, with answering those requests, with a data protection impact assessment, and with any consultation of the supervisory authority.',
+      ],
+    },
+    {
+      heading: 'If something leaks',
+      blocks: [
+        'We tell you without undue delay after we become aware of a breach affecting your data, with what we know at that point about what happened, which data is involved, the likely consequences and what we are doing about it. We keep you updated as the investigation moves, and we help you meet your own notification duty. Telling you is not an admission of fault.',
+      ],
+    },
+    {
+      heading: 'When it ends',
+      blocks: [
+        'At the end of the engagement we return your data or delete it, whichever you choose, except where the law requires us to keep something. We give you a reasonable window to export before anything is deleted.',
+        'Backups expire on their own rolling schedule and are never restored as live data. As long as they exist they stay under the same security and confidentiality.',
+      ],
+    },
+    {
+      heading: 'Showing that we comply',
+      blocks: [
+        'On request we give you the information you need to demonstrate compliance with article 28 GDPR: this agreement, our privacy policy, the list of providers, and a description of our measures.',
+        'You can ask for one audit per year, or more if a supervisory authority or an incident requires it, with reasonable notice, during office hours, without disrupting the service and under confidentiality. If you organise the audit yourself, you carry its cost.',
+      ],
+    },
+    {
+      heading: 'Precedence and contact',
+      blocks: [
+        'Where this agreement and our terms disagree about processing, this agreement wins. For everything else the terms continue to apply, including the liability arrangement.',
+        `For a signed copy, a question about this agreement, or a request from someone whose data we handle: email ${CONTACT_EMAIL} or call ${CONTACT_PHONE}.`,
+      ],
+    },
+  ],
+}
+
+const PROCESSING_NL: LegalDoc = {
+  slug: 'dpa',
+  title: 'Verwerkersovereenkomst',
+  updated: UPDATED_NL,
+  intro:
+    'Deze overeenkomst geldt zodra wij persoonsgegevens verwerken in uw opdracht: uw mailboxen, uw dossiers, uw klantgegevens, alles wat uw systeem aanraakt. Artikel 28 AVG vraagt dat schriftelijk, dus hier staat het, klaar om te tekenen. Ze maakt deel uit van onze voorwaarden en gaat daarop voor voor alles wat de verwerking betreft.',
+  sections: [
+    {
+      heading: 'Wie is wie',
+      blocks: [
+        `U bent de verwerkingsverantwoordelijke: het is uw zaak die bepaalt waarom deze gegevens verwerkt worden. ${COMPANY.legalName}, ${COMPANY_ADDRESS_NL}, ondernemings- en btw-nummer ${COMPANY.enterpriseNumber}, is de verwerker en handelt enkel op uw instructie.`,
+        'Voor onze eigen administratie, facturatie en beveiliging zijn we zelf verantwoordelijke. Dat deel staat in ons privacybeleid.',
+      ],
+    },
+    {
+      heading: 'Wat we verwerken, en waarvoor',
+      blocks: [
+        'Onderwerp: het leveren, beveiligen en ondersteunen van het systeem dat we voor u bouwden. Duur: zolang de opdracht loopt, plus de afbouw hieronder.',
+        {
+          list: [
+            'Categorieën van personen: uw medewerkers, uw klanten, uw leveranciers en iedereen die voorkomt in de gegevens die uw systeem behandelt.',
+            'Categorieën van gegevens: wat de afgesproken scope nodig heeft. Meestal namen, contactgegevens, briefwisseling, documenten en de velden die uw proces vraagt.',
+            'Bijzondere categorieën: we vragen er niet om. Ze kunnen voorkomen omdat iemand ze in een document of een bericht zette; we verwerken ze dan enkel om de afgesproken functie te laten werken.',
+          ],
+        },
+        'We verwerken persoonsgegevens enkel op uw gedocumenteerde instructie. De offerte, de afgesproken scope en uw gewone gebruik van het systeem zijn die instructie. Verplicht de wet ons tot meer, dan zeggen we dat vooraf, tenzij die melding zelf verboden is. Vinden we dat een instructie de gegevensbeschermingswetgeving schendt, dan zeggen we dat.',
+      ],
+    },
+    {
+      heading: 'Wat we van u vragen',
+      blocks: [
+        'U bevestigt dat u een rechtsgrond hebt voor de gegevens die u in het systeem brengt, dat u de mensen om wie het gaat hebt ingelicht, en dat u hun vragen als verantwoordelijke beantwoordt.',
+        'U bepaalt wie aan uw kant toegang krijgt, en u trekt die toegang tijdig in wanneer iemand vertrekt.',
+      ],
+    },
+    {
+      heading: 'Geheimhouding en beveiliging',
+      blocks: [
+        'Iedereen die uw gegevens aanraakt is gebonden door geheimhouding, ook de freelancers en onderaannemers die we inschakelen. De toegang is beperkt tot wie ze voor een concrete taak nodig heeft.',
+        'We nemen passende technische en organisatorische maatregelen: versleutelde sleutels die nooit in de browser terechtkomen, TLS voor het verkeer, row-level security op de databanken, gescheiden omgevingen, logging en beperkte toegang. Die maatregelen kunnen evolueren zolang het beschermingsniveau niet daalt.',
+      ],
+    },
+    {
+      heading: 'Andere leveranciers, en waar de gegevens staan',
+      blocks: [
+        'We gebruiken hosting- en infrastructuurleveranciers om te laten draaien wat we bouwen. Ons privacybeleid noemt ze en zegt waar ze werken; we kiezen bij voorkeur binnen de Europese Economische Ruimte, onze databanken draaien in Ierland en Duitsland, en onze eigen server staat in Parijs.',
+        'We leggen hen dezelfde verplichtingen op en blijven tegenover u verantwoordelijk voor hun werk. We laten het weten voor een nieuwe leverancier uw gegevens behandelt, en u kunt daartegen bezwaar maken op redelijke gegevensbeschermingsgronden. Doorgiften buiten de EER steunen op de standaardcontractbepalingen van de Europese Commissie; vraag ernaar en we bezorgen u een kopie.',
+      ],
+    },
+    {
+      heading: 'Uw gegevens worden nooit trainingsdata',
+      blocks: [
+        'We gebruiken uw gegevens niet om AI-modellen te trainen of te verbeteren, en de modelleveranciers die we inzetten verbinden zich er contractueel toe dat ook niet te doen. Willen we ooit echte voorbeelden uit uw werk gebruiken om iets te verbeteren, dan vragen we dat apart en schriftelijk, en u mag weigeren zonder gevolg.',
+      ],
+    },
+    {
+      heading: 'Hulp bij vragen en verplichtingen',
+      blocks: [
+        'Neemt iemand contact met ons op over zijn gegevens in uw systeem, dan sturen we die vraag naar u door en beantwoorden we ze niet zelf, tenzij u dat vraagt.',
+        'We helpen u, in verhouding tot wat we weten en zien, bij het beantwoorden van die vragen, bij een gegevensbeschermingseffectbeoordeling, en bij een eventueel overleg met de toezichthouder.',
+      ],
+    },
+    {
+      heading: 'Als er iets lekt',
+      blocks: [
+        'We melden het u zonder onnodige vertraging nadat we een inbreuk vaststellen die uw gegevens raakt, met wat we op dat moment weten over wat er gebeurd is, welke gegevens betrokken zijn, de vermoedelijke gevolgen en wat we eraan doen. We houden u op de hoogte naarmate het onderzoek vordert, en we helpen u bij uw eigen meldplicht. Dat we het melden is geen erkenning van fout.',
+      ],
+    },
+    {
+      heading: 'Wanneer het stopt',
+      blocks: [
+        'Bij het einde van de opdracht geven we uw gegevens terug of wissen we ze, wat u verkiest, behalve waar de wet ons verplicht iets te bewaren. U krijgt een redelijke termijn om te exporteren voor er iets verdwijnt.',
+        'Back-ups vervallen volgens hun eigen rollende schema en worden nooit als actieve gegevens teruggezet. Zolang ze bestaan blijven ze onder dezelfde beveiliging en geheimhouding vallen.',
+      ],
+    },
+    {
+      heading: 'Aantonen dat we het naleven',
+      blocks: [
+        'Op vraag bezorgen we u de informatie die u nodig hebt om de naleving van artikel 28 AVG aan te tonen: deze overeenkomst, ons privacybeleid, de lijst van leveranciers, en een beschrijving van onze maatregelen.',
+        'U kunt één audit per jaar vragen, of meer als een toezichthouder of een incident dat vereist, mits redelijke voorafgaande melding, tijdens de kantooruren, zonder de dienst te verstoren en onder geheimhouding. Organiseert u de audit zelf, dan draagt u de kosten ervan.',
+      ],
+    },
+    {
+      heading: 'Voorrang en contact',
+      blocks: [
+        'Waar deze overeenkomst en onze voorwaarden elkaar tegenspreken over de verwerking, gaat deze overeenkomst voor. Voor de rest blijven die voorwaarden gelden, inclusief de aansprakelijkheidsregeling.',
+        `Voor een ondertekend exemplaar, een vraag over deze overeenkomst, of een verzoek van iemand van wie we gegevens verwerken: mail naar ${CONTACT_EMAIL} of bel ${CONTACT_PHONE}.`,
+      ],
+    },
+  ],
+}
+
+export const PROCESSING: Localized<LegalDoc> = { en: PROCESSING_EN, nl: PROCESSING_NL }
+
 export const TERMS: Localized<LegalDoc> = { en: TERMS_EN, nl: TERMS_NL }
 export const PRIVACY: Localized<LegalDoc> = { en: PRIVACY_EN, nl: PRIVACY_NL }
 
 const LEGAL_DOCS: Record<LegalSlug, Localized<LegalDoc>> = {
   terms: TERMS,
   privacy: PRIVACY,
+  dpa: PROCESSING,
 }
 
 export const getLegalDoc = (lang: Lang, slug: LegalSlug): LegalDoc =>

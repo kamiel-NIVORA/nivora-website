@@ -26,6 +26,7 @@ const COPY = {
     helpCenter: 'Help Center',
     privacy: 'Privacy Policy',
     terms: 'Terms',
+    dpa: 'Data Processing Agreement',
     cookieSettings: 'Cookie settings',
     sitemap: 'All pages',
     location: 'Brugge, Belgium',
@@ -43,6 +44,7 @@ const COPY = {
     helpCenter: 'Helpcentrum',
     privacy: 'Privacybeleid',
     terms: 'Voorwaarden',
+    dpa: 'Verwerkersovereenkomst',
     cookieSettings: 'Cookievoorkeuren',
     sitemap: 'Alle pagina’s',
     location: 'Brugge, België',
@@ -70,6 +72,7 @@ function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
       links: [
         { label: t.privacy, href: '/privacy' },
         { label: t.terms, href: '/terms' },
+        { label: t.dpa, href: '/dpa' },
         /* Toestemming intrekken moet even makkelijk zijn als ze geven. Deze
            regel roept de cookievraag opnieuw op, op elke pagina. */
         { label: t.cookieSettings, href: '#cookies', onClick: openCookieSettings },

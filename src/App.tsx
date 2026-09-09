@@ -58,6 +58,7 @@ function routeTree(homeHref: string) {
       <Route path="unsubscribed" element={<Unsubscribed />} />
       <Route path="terms" element={<LegalPage slug="terms" />} />
       <Route path="privacy" element={<LegalPage slug="privacy" />} />
+      <Route path="dpa" element={<LegalPage slug="dpa" />} />
       {/* Index of every URL. Linked from the footer's Legal column, and the
           reason the programmatic landing pages stay two clicks from home. */}
       <Route path="sitemap" element={<SitemapPage />} />

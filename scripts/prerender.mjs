@@ -834,7 +834,7 @@ const sourcesFor = (page) => {
   const base = typeof page.bases === 'string' ? page.bases : page.bases.en
   if (page.landingId) return [`src/data/landing/content/${page.landingId}.ts`]
   if (base.startsWith('/services/')) return ['src/data/services.ts', 'src/data/serviceContent.ts']
-  if (base === '/terms' || base === '/privacy') return ['src/data/legal.ts']
+  if (base === '/terms' || base === '/privacy' || base === '/dpa') return ['src/data/legal.ts']
   if (base === '/') return ['src/pages/Home.tsx', 'src/sections']
   if (base === '/blog') return ['src/data/posts.ts', 'src/pages/BlogIndex.tsx']
   if (base === '/sitemap') return ['src/pages/SitemapPage.tsx', 'src/data/landing/slugs.ts']
