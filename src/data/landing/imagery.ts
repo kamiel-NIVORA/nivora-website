@@ -78,9 +78,9 @@ const SOLUTIONS: Record<string, PageImagery> = {
     } },
   },
   'niche-architect': {
-    hero: '/landing/auto-sec-architect-a.webp',
-    manifesto: '/landing/auto-sec-architect-b.webp',
-    band: band('/landing/auto-opl-meetstaat-b.webp', 'build'),
+    hero: '/landing/arch-gebouw.webp',
+    manifesto: '/landing/arch-atelier.webp',
+    band: band('/landing/arch-zaal.webp', 'build'),
   },
   'niche-logistiek': {
     hero: '/landing/auto-brugge-zeebrugge.webp',

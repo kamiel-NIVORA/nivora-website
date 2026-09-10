@@ -20,8 +20,8 @@ export default nlOnlyPage({
   },
   manifesto:
     'Een dossier sneuvelt zelden op het ontwerp. Het sneuvelt op het verzekeringsattest van een partner dat niemand op tijd opvroeg.',
-  heroImage: '/landing/auto-sec-kantoor-a.webp',
-  manifestoImage: '/landing/auto-opl-overname-a.webp',
+  heroImage: '/landing/arch-zaal.webp',
+  manifestoImage: '/landing/arch-atelier.webp',
   blocks: [
     {
       kind: 'answer',

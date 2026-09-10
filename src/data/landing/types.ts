@@ -187,6 +187,16 @@ export type LandingBlock =
       priceForPayback?: number
       note: string
     }
+  /**
+   * Het scherm dat wij bouwen, in een kader dat rechtop komt te staan terwijl je
+   * ernaartoe scrollt.
+   *
+   * Eén per pagina, en alleen op een pagina waar er echt een scherm is. Een
+   * lezer die overweegt zevenduizend euro uit te geven, wil zien wat hij
+   * terugkrijgt; alles daarvoor is tekst over iets dat hij zich moet inbeelden.
+   * `mock` kiest welke nabouw er in het kader komt.
+   */
+  | { kind: 'showcase'; h2: string; intro?: string; mock: 'cockpit'; caption?: string }
   | { kind: 'cta'; h2: string; body: string; button: string; reassurance?: string }
 
 export type LandingFaq = { q: string; a: string }

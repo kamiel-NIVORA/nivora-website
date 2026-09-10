@@ -55,35 +55,6 @@ export default solutionPage(
         'Nobody can say what that project has cost the practice in hours',
         'A permit file goes back because one annex was missing',
       ],
-      automationsH2: 'What we can automate in an architecture practice',
-      automationsIntro:
-        'Four things that come back at almost every practice. We build them one at a time, and usually the first one pays for itself before the second one starts.',
-      automations: [
-        {
-          title: 'Counted from the plan',
-          body: 'Areas, running metres and counts come straight out of your own drawing, with your own rates on them and your own headings. Change the kitchen by a metre and you get the difference rather than a new count. What the drawing does not unambiguously contain is listed as a question instead of being estimated, because a quantity list with an invented figure in it is worse than no quantity list.',
-          image: '/landing/auto-opl-meetstaat-a.webp',
-          alt: 'The computer counts your drawing, with your own rates on it',
-        },
-        {
-          title: 'Site report same day',
-          body: 'Speak your notes into your phone in the car and the report is ready before you get back to the office, in your own numbering, with the open points carried over from the previous meeting and marked with how long each has been open. You correct what needs correcting and it goes out. A report that goes out the same evening is a different document from one written on Friday.',
-          image: '/landing/auto-sec-architect-b.webp',
-          alt: 'A house under construction with a bare brick and concrete frame and scaffolding along one facade',
-        },
-        {
-          title: 'Permit file check',
-          body: 'Before the file goes in you see what is missing against what this particular application actually needs: the forms, the plans at the right scale, the statements, the annexes that depend on the type of works. Not a general checklist but one built from your own previous files and from what came back on remarks last time.',
-          image: '/landing/auto-sec-architect-a.webp',
-          alt: 'An architecture studio with rolled drawings and white card models on a long table',
-        },
-        {
-          title: 'Hours against fee',
-          body: 'Per project you see what has gone in against what was agreed, and at which stage it started to run away. Usually that is one specific thing: a client who wanted a third variant, or a stage that got redrawn after an official remark. Knowing that while it is happening is what lets you have the conversation in month four instead of at the handover.',
-          image: '/landing/auto-opl-marge-a.webp',
-          alt: 'Your customer says yes in July, to a price you set in May',
-        },
-      ],
       outcomesH2: 'What we are not going to claim',
       outcomes: [
         'We are not going to say architects have no software. ArchiCAD, Revit, Vectorworks and BricsCAD do the drawing, there are Belgian packages that do the project administration and the hours, and BIM has been doing quantities out of the model for years in the practices that work that way. If your model already gives you a clean take-off, you do not need us for it and we will say so.',
@@ -121,23 +92,23 @@ export default solutionPage(
     nl:
     {
       eyebrow: 'Sectoren',
-      h1: 'AI-automatisering voor architectenbureaus, van schets tot oplevering',
+      h1: 'AI-automatisering voor architectenbureaus die wedstrijden doen',
       subhead:
-        'Het ereloon lag vast bij de eerste schets, en sindsdien is de keuken twee keer verschoven, de dakstructuur één keer en vraagt de bouwheer een derde variant. Wij kijken eerst waar die uren echt blijven hangen, en pas daarna wat een systeem van uw bureau kan wegnemen.',
-      answerH2: 'Wat doet Nivora Works voor een architectenbureau?',
+        'Een kandidatuur kost een bureau gemiddeld achtendertig uur, zonder ontwerpwerk. Doet u er tien per jaar, dan is dat tien werkweken die u weggeeft voor er ook maar één opdracht is. Wij nemen daar drie stukken van over.',
+      answerH2: 'Wat doet Nivora Works voor een wedstrijdbureau?',
       answer:
-        'Nivora Works is een software- en AI-studio in Brugge die de administratieve helft van een architectenbureau overneemt: de hoeveelheden uit uw eigen plan aftellen, een werfvergadering uitschrijven op de namiddag dat ze plaatsvond, een vergunningsdossier nakijken op wat er echt in moet, en per project weten hoeveel uren erin zitten tegenover het ereloon dat afgesproken is. Uw tekensoftware blijft uw tekensoftware. Of u nu in ArchiCAD, Revit, BricsCAD uit Gent, Vectorworks of SketchUp werkt, wij lezen wat eruit komt en vragen u niet om ergens anders te tekenen.',
+        'Nivora Works is een software- en AI-studio in Brugge die het werk rond een architectuurwedstrijd overneemt, behalve het ontwerp. Wij vinden de oproepen die bij uw bureau passen en scoren ze op wat ze vragen tegenover wat ze betalen, wij maken het kandidatuurdossier op uit uw eigen referenties en attesten, en wij houden per wedstrijd bij wat de deelname gekost en opgebracht heeft. Het ontwerpend onderzoek en de visienota blijven van u; daar komt geen systeem aan.',
       answerDetail: [
         'Wij gaan uw ontwerpproces niet hertekenen. Wat er tussen de schets en de vergunning gebeurt, is net waar uw bureau goed in is, en daar bestaat geen systeem voor dat het beter maakt. Wat wij overnemen is wat eromheen hangt, en dat is in zowat elk bureau dat wij gezien hebben hetzelfde.',
         'Wij starten met één ding. In de meeste bureaus is dat de meetstaat uit het plan of het werfverslag, want allebei zijn het avondwerk en allebei zijn ze elke keer precies hetzelfde werk. Dat laat u veertien dagen meelopen voor er iets bijkomt.',
       ],
       manifesto:
-        'Een architect wordt betaald voor het ontwerp. Al het meten, tikken en achternabellen eromheen is werk van iemand anders.',
-      problemH2: 'Waar de uren blijven hangen',
+        'Een architect wordt betaald voor het ontwerp. De weken die aan een kandidatuur voorafgaan, betaalt niemand.',
+      problemH2: 'Waar de weken heen gaan',
       problem: [
-        'Het ereloon ligt vroeg vast en het ontwerp blijft schuiven. Een bouwheer die een derde variant wil zien, een stabiliteitsingenieur wiens balk de vrije hoogte verandert, een opmerking in de vergunningsprocedure die de gevel verschuift: elk daarvan is op zich redelijk en geen van alle zat in het cijfer dat u gegeven hebt. Tegen dat het dossier buiten gaat, kan niemand op het bureau nog zeggen wat dat project u gekost heeft.',
-        'Na elke werfvergadering moet er een verslag komen. Wie er was, wat er beslist is, wat de aannemer tegen de volgende vergadering klaar moet hebben, en welk punt nu al drie vergaderingen op rij openstaat. Dezelfde dag geschreven is dat iets waard; op vrijdag geschreven voor drie vergaderingen tegelijk is het een lijst half onthouden dingen, en het is net het stuk waar u naar grijpt als er later discussie is.',
-        'Een meetstaat uit uw eigen plan is twee avonden tellen. Het plan weet al hoeveel vierkante meter chape, hoeveel lopende meter plint en hoeveel raamopeningen erin zitten, en iemand telt ze opnieuw met de hand omdat het eruit halen meer werk is dan het tellen. Daarna vraagt de bouwheer wat het kost als de keuken een meter opschuift, en begint het opnieuw.',
+        'Elke kandidatuur vraagt hetzelfde en wordt elke keer opnieuw gemaakt. Het aanbestedingsdocument, drie referenties in het formaat van deze opdrachtgever, de cv’s van het team, de attesten, en een nota waarom dit team voor deze opgave. Het meeste daarvan schreef u vorige keer ook al, alleen ligt het verspreid over vijf mappen en twee laptops.',
+        'Zoeken kost drie uur per week, en dat is het kleinste verlies. Het grootste is de ene wedstrijd per jaar waar u aan begint omdat ze er nu eenmaal is, en waarvan achteraf iedereen wist dat ze niet paste: gevelbeelden gevraagd in de eerste ronde, twaalf kandidaten, geen biedvergoeding.',
+        'En na afloop schrijft niemand op wat het gekost heeft. Daardoor weet het bureau na vijf jaar nog altijd niet bij welk soort opdrachtgever het wint en bij welk soort het structureel geld verliest.',
       ],
       pillarsH2: 'Hoe wij te werk gaan',
       pillars: [
@@ -155,80 +126,49 @@ export default solutionPage(
         },
       ],
       signals: [
-        'U meet een meetstaat met de hand op terwijl het plan ze al bevat',
-        'Werfverslagen worden op vrijdag geschreven voor drie vergaderingen tegelijk',
-        'Niemand kan zeggen wat dat project het bureau aan uren gekost heeft',
-        'Een vergunningsdossier komt terug omdat één bijlage ontbrak',
         'Een kandidatuur kost het bureau twee weken, ontwerp niet meegerekend',
+        'De oproep die het best paste, stond op een site die niemand volgt',
+        'Op de laatste dag blijkt een attest van een partner vervallen',
         'Achteraf wist iedereen dat we die wedstrijd niet hadden moeten doen',
       ],
-      offersH2: 'Voor bureaus die wedstrijden doen',
+      offersH2: 'Drie dingen die wij bouwen, en één die gratis is',
       offersIntro:
-        'Wie meedoet aan Open Oproepen, gemeentelijke aanbestedingen of ontwerpwedstrijden, levert weken werk voor er een opdracht is. Drie stukken daarvan hoeven niet meer met de hand. Elk heeft een eigen pagina met de prijs erop.',
+        'Elk stuk staat op zichzelf, met de prijs op de pagina. Begin waar uw week het meest aan lekt; de andere twee passen er later naast.',
       offers: [
         {
           title: 'Wedstrijd-Radar',
           body: 'Elke oproep die voor uw bureau in aanmerking komt, elke ochtend in één mail, gescoord op wat ze vraagt tegenover wat ze betaalt, met een go of no-go-fiche per stuk. Vanaf €1.950, eenmalig.',
-          image: '/landing/auto-opl-termijnwachter-hero.webp',
-          alt: 'Een agenda met termijnen op een bureau in een architectenatelier',
+          image: '/landing/card-radar.webp',
+          alt: 'Een witte kartonnen maquette van een schoolgebouw op een lichte houten tafel in strijklicht',
           href: '/architecten/wedstrijd-radar',
         },
         {
           title: 'Kandidatuur-Machine',
           body: 'De selectieleidraad erin, het dossier eruit: referentiefiches in het gevraagde formaat, cv\u2019s, attesten, en een lijst van wat er nog ontbreekt voor u indient. Vanaf €3.900, eenmalig.',
-          image: '/landing/auto-sec-kantoor-a.webp',
-          alt: 'Een bureau met ingebonden dossiers en een lamp, klaar om een aanvraag samen te stellen',
+          image: '/landing/card-machine.webp',
+          alt: 'Een lange lichte tafel met drie gelijke stapels blanco vellen en een opengevouwen plan ernaast',
           href: '/architecten/kandidatuur-machine',
         },
         {
           title: 'Intelligence',
           body: 'Wie deze opdrachtgever eerder koos, waar de punten in de gunning liggen, en wat elke wedstrijd uw bureau tot nu toe gekost en opgeleverd heeft. Vanaf €2.900, eenmalig.',
-          image: '/landing/auto-opl-marge-a.webp',
-          alt: 'Cijfers op een scherm naast een plan op een werktafel',
+          image: '/landing/card-intel.webp',
+          alt: 'Iemand bekijkt van achteren een rij witte maquettes op een lange plank tegen een witte muur',
           href: '/architecten/wedstrijd-intelligence',
         },
         {
           title: 'Gratis: de Terugblik',
           body: 'Nog niet zeker of dit bij uw bureau past? Kies één wedstrijd van de laatste twee jaar en wij spelen hem terug: wat het kostte, en wat een systeem eraan gescheeld had. Binnen twee werkdagen, zonder gesprek vooraf.',
-          image: '/landing/auto-opl-analyse-a.webp',
-          alt: 'Een leeg blad en een potlood op een werktafel, klaar om een dossier na te rekenen',
+          image: '/landing/arch-zaal.webp',
+          alt: 'Een lege vergaderzaal met een lange houten tafel en daglicht over de daken',
           href: '/architecten/wedstrijd-terugblik',
         },
         {
           title: 'De Cockpit',
           body: 'De drie samen in één omgeving in uw huisstijl, met één bureauprofiel eronder. €7.500 in plaats van €8.750, en zes maanden bijsturing in plaats van drie.',
-          image: '/landing/auto-opl-meetstaat-a.webp',
-          alt: 'Een werktafel met plannen, een maquette en een scherm naast elkaar',
+          image: '/landing/card-cockpit.webp',
+          alt: 'Het glazen atrium van een hedendaags openbaar gebouw met daglicht van boven en twee mensen ver weg',
           href: '/architecten/wedstrijd-cockpit',
-        },
-      ],
-      automationsH2: 'Voor elk bureau: de projectadministratie',
-      automationsIntro:
-        'Dit hangt aan projecten die al lopen, en het komt bij zowat elk bureau terug. Wij bouwen deze één voor één, tegen een vaste prijs, en meestal is de eerste terugverdiend voor de tweede begint. Voor deze vier is er nog geen eigen pagina: vraag ze aan via het formulier onderaan.',
-      automations: [
-        {
-          title: 'Aftellen uit uw plan',
-          body: 'Oppervlaktes, lopende meters en stuktallen komen rechtstreeks uit uw eigen plan, met uw eigen eenheidsprijzen erbij en uw eigen posten. Verschuift de keuken een meter, dan krijgt u het verschil in plaats van een nieuwe telling. Wat het plan niet ondubbelzinnig bevat, komt als vraag op de lijst in plaats van geschat te worden, want een meetstaat met een verzonnen cijfer erin is slechter dan geen meetstaat.',
-          image: '/landing/auto-opl-meetstaat-a.webp',
-          alt: 'De computer telt uw plan af, met uw eigen prijzen erbij',
-        },
-        {
-          title: 'Werfverslag dezelfde dag',
-          body: 'U spreekt uw nota\'s in op de gsm in de auto en het verslag staat klaar voor u terug op kantoor bent, in uw eigen nummering, met de openstaande punten uit de vorige vergadering overgenomen en aangeduid hoelang elk ervan al openstaat. U verbetert wat er te verbeteren valt en het vertrekt. Een verslag dat dezelfde avond buiten gaat, is een ander document dan een verslag van vrijdag.',
-          image: '/landing/auto-sec-architect-b.webp',
-          alt: 'Een woning in aanbouw met een kale bakstenen en betonnen structuur en stelling langs één gevel',
-        },
-        {
-          title: 'Vergunningsdossier',
-          body: 'Voor het dossier ingaat, ziet u wat er ontbreekt tegenover wat deze specifieke aanvraag echt nodig heeft: de formulieren, de plannen op de juiste schaal, de verklaringen, de bijlagen die van de aard van de werken afhangen. Geen algemene checklist maar een lijst die opgebouwd is uit uw eigen vorige dossiers en uit wat er de vorige keer aan opmerkingen terugkwam.',
-          image: '/landing/auto-sec-architect-a.webp',
-          alt: 'Een architectenatelier met planrollen en witte kartonnen maquettes op een lange tafel',
-        },
-        {
-          title: 'Uren tegen ereloon',
-          body: 'Per project ziet u wat erin gegaan is tegenover wat er afgesproken was, en vanaf welke fase het begon weg te lopen. Meestal is dat één welbepaald ding: een bouwheer die een derde variant wilde, of een fase die na een opmerking hertekend is. Dat weten terwijl het gebeurt, is wat u het gesprek in maand vier laat voeren in plaats van bij de oplevering.',
-          image: '/landing/auto-opl-marge-a.webp',
-          alt: 'Uw klant zegt in juli ja, op een prijs van mei',
         },
       ],
       outcomesH2: 'Wat wij niet gaan beweren',
@@ -255,16 +195,16 @@ export default solutionPage(
           a: 'De twee avonden die in een meetstaat kruipen zijn dezelfde twee avonden of u nu met twee of met twintig bent, en in een klein bureau komen ze uit uw eigen week. Wij starten met één ding en het moet binnen de veertien dagen zijn plaats verdienen. Blijkt uw projectenmix te wisselend om het te laten renderen, dan zeggen wij dat en stoppen wij.',
         },
       ],
-      featuresTitle: 'Wat doet Nivora Works voor een architectenbureau?',
+      featuresTitle: 'Wat doet Nivora Works voor een wedstrijdbureau?',
       featuresSubtitle:
         'Het ereloon lag vast bij de eerste schets, en sindsdien is de keuken twee keer verschoven, de dakstructuur één keer en vraagt de bouwheer een derde variant. Wij kijken eerst waar die uren echt blijven hangen, en pas daarna wat een systeem van uw bureau kan wegnemen.',
-      ctaTitle: 'Stuur ons één plan',
+      ctaTitle: 'Begin met één wedstrijd, niet met een offerte',
       ctaBody:
-        'Neem één project waar u nu aan werkt en de laatste drie werfverslagen ervan. Wij zeggen u binnen de week wat wij uit dat plan zouden halen en waar het tekortschiet, zonder dat er iets vastligt.',
+        'Kies er een van de laatste twee jaar, gewonnen of verloren. Wij zoeken de leidraad en de gunning op, zetten de tijdlijn op een rij, en tonen wat een systeem eraan gescheeld had, in uren en in euro. Binnen twee werkdagen, zonder gesprek vooraf.',
       seoTitle: 'AI-automatisering voor architectenbureaus in Vlaanderen · Nivora Works',
       seoDescription:
         'Nivora Works uit Brugge neemt de administratieve helft van een architectenbureau over: hoeveelheden uit uw plan, werfverslagen dezelfde dag, en uren tegenover het ereloon. En voor wedstrijdbureaus: oproepen gescoord, kandidaturen opgemaakt, cijfers per wedstrijd.',
     },
   },
-  { hero: '/landing/auto-sec-architect-a.webp', manifesto: '/landing/auto-sec-architect-b.webp' },
+  { hero: '/landing/arch-gebouw.webp', manifesto: '/landing/arch-atelier.webp' },
 )

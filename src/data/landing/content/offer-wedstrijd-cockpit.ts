@@ -22,8 +22,8 @@ export default nlOnlyPage({
   },
   manifesto:
     'Vier losse hulpmiddelen die niets van elkaar weten, is vier keer hetzelfde opnieuw invoeren.',
-  heroImage: '/landing/auto-opl-meetstaat-a.webp',
-  manifestoImage: '/landing/auto-sec-architect-b.webp',
+  heroImage: '/landing/arch-zaal.webp',
+  manifestoImage: '/landing/arch-atelier.webp',
   blocks: [
     {
       kind: 'answer',
@@ -33,6 +33,15 @@ export default nlOnlyPage({
       detail: [
         'Dat is het hele verschil met drie losse aankopen: de onderdelen voeden elkaar in plaats van dat u dezelfde gegevens drie keer invoert.',
       ],
+    },
+    {
+      kind: 'showcase',
+      h2: 'Dit is wat u ’s ochtends opent',
+      intro:
+        'Het tabblad Radar op een gewone dinsdag: de nieuwe oproepen, elk met een score, de reden erachter, en de twee getallen waar de beslissing op hangt.',
+      mock: 'cockpit',
+      caption:
+        'Een nabouw met voorbeeldgegevens, geen screenshot van een bestaand systeem. Wij bouwen de Cockpit met vijf bureaus, en die vijf bepalen mee hoe dit scherm eruitziet.',
     },
     {
       kind: 'pillars',

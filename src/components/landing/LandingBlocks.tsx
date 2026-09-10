@@ -7,6 +7,8 @@ import { LangLink as Link } from '@/components/ui/LangLink'
 import { useLang } from '@/i18n'
 import { AutomationRail } from '@/components/landing/AutomationRail'
 import { BeforeAfter } from '@/components/landing/BeforeAfter'
+import { ScrollReveal3D } from '@/components/ui/ScrollReveal3D'
+import { CockpitMock } from '@/components/landing/CockpitMock'
 import type { LandingBlock } from '@/data/landing/types'
 
 /**
@@ -408,6 +410,22 @@ export function LandingBlockView({ block, index }: { block: LandingBlock; index:
           <Reveal delay={delay + 0.05}>
             <Calculator block={block} />
           </Reveal>
+        </section>
+      )
+
+    case 'showcase':
+      return (
+        <section className={SECTION}>
+          <Reveal delay={delay}>
+            <h2 className={H2}>{block.h2}</h2>
+            {block.intro && <p className={INTRO}>{block.intro}</p>}
+          </Reveal>
+          <ScrollReveal3D className="mt-10">
+            <CockpitMock />
+          </ScrollReveal3D>
+          {block.caption && (
+            <p className="mx-auto mt-6 max-w-2xl text-center text-[14px] leading-relaxed text-dim">{block.caption}</p>
+          )}
         </section>
       )
 

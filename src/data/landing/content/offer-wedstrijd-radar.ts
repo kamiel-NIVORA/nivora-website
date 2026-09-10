@@ -22,8 +22,8 @@ export default nlOnlyPage({
   },
   manifesto:
     'De verkeerde wedstrijd kost u geen avond. Ze kost u de beste ontwerper van het bureau, twee weken lang.',
-  heroImage: '/landing/auto-sec-architect-a.webp',
-  manifestoImage: '/landing/auto-opl-termijnwachter-hero.webp',
+  heroImage: '/landing/arch-gebouw.webp',
+  manifestoImage: '/landing/arch-atelier.webp',
   blocks: [
     {
       kind: 'answer',
