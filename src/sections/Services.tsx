@@ -14,12 +14,14 @@ const COPY = {
     title: 'Our Services',
     subtitle: 'Tell us the challenge. We design, build, and install exactly what your business needs.',
     sectorsLead: 'The trades we know from the inside:',
+    sectorLeadOne: 'The trade we know from the inside:',
     learnMore: 'Learn more',
   },
   nl: {
     title: 'Onze diensten',
     subtitle: 'Vertel ons jullie uitdagingen. Wij ontwerpen, bouwen en installeren precies wat uw bedrijf nodig heeft.',
     sectorsLead: 'De vakken die wij van binnenuit kennen:',
+    sectorLeadOne: 'Het vak dat wij van binnenuit kennen:',
     learnMore: 'Lees meer',
   },
 } as const
@@ -117,7 +119,7 @@ export function Services() {
         {VISIBLE_SECTORS.length > 0 && (
         <Reveal delay={0.1}>
           <p className="mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[15px] text-faint sm:mt-16">
-            <span>{t.sectorsLead}</span>
+            <span>{VISIBLE_SECTORS.length === 1 ? t.sectorLeadOne : t.sectorsLead}</span>
             {VISIBLE_SECTORS.map((sector, i) => (
               <Fragment key={sector.id}>
                 {i > 0 && <span aria-hidden className="text-dim">·</span>}

@@ -26,23 +26,11 @@
       "destination": "/api/gone"
     },
     {
-      "source": "/ai-automation-building-contractor",
-      "destination": "/api/gone"
-    },
-    {
-      "source": "/nl/ai-automatisering-aannemer",
-      "destination": "/api/gone"
-    },
-    {
       "source": "/ai-automation-port-logistics",
       "destination": "/api/gone"
     },
     {
       "source": "/nl/ai-automatisering-havensector",
-      "destination": "/api/gone"
-    },
-    {
-      "source": "/nl/architecten",
       "destination": "/api/gone"
     },
     {
@@ -410,6 +398,26 @@
     {
       "source": "/quote-automation",
       "destination": "/services/aios",
+      "permanent": true
+    },
+    {
+      "source": "/ai-automation-building-contractor",
+      "destination": "/ai-automation-architect",
+      "permanent": true
+    },
+    {
+      "source": "/nl/ai-automatisering-aannemer",
+      "destination": "/nl/ai-automatisering-architectenbureau",
+      "permanent": true
+    },
+    {
+      "source": "/nl/architecten",
+      "destination": "/nl/ai-automatisering-architectenbureau",
+      "permanent": true
+    },
+    {
+      "source": "/architecten/:slug*",
+      "destination": "/nl/architecten/:slug*",
       "permanent": true
     }
   ],

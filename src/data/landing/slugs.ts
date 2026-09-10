@@ -76,7 +76,7 @@ export const LANDING_ENTRIES = [
      zijn eigen vak in, niet een productnaam, en de Nederlandse slug draagt het
      woord dat het vak voor zichzelf gebruikt. */
   { id: 'niche-immo', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-estate-agency', nl: 'ai-automatisering-immokantoor' } },
-  { id: 'niche-architect', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-architect', nl: 'ai-automatisering-architectenbureau' } },
+  { id: 'niche-architect', family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-architect', nl: 'ai-automatisering-architectenbureau' } },
   { id: 'niche-logistiek', draft: true, family: 'niche', hub: 'sectors', slugs: { en: 'ai-automation-logistics', nl: 'ai-automatisering-logistiek' } },
 
   /* ── oplossingen ──
@@ -111,11 +111,11 @@ export const LANDING_ENTRIES = [
 
      Vier ervan zijn te koop, de vijfde is de gratis aanleiding om te bellen en
      staat daarom in elke CTA van de andere vier. */
-  { id: 'offer-wedstrijd-radar', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-radar', nl: 'architecten/wedstrijd-radar' } },
-  { id: 'offer-kandidatuur-machine', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/kandidatuur-machine', nl: 'architecten/kandidatuur-machine' } },
-  { id: 'offer-wedstrijd-intelligence', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-intelligence', nl: 'architecten/wedstrijd-intelligence' } },
-  { id: 'offer-wedstrijd-cockpit', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-cockpit', nl: 'architecten/wedstrijd-cockpit' } },
-  { id: 'offer-wedstrijd-terugblik', draft: true, family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-terugblik', nl: 'architecten/wedstrijd-terugblik' } },
+  { id: 'offer-wedstrijd-radar', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-radar', nl: 'architecten/wedstrijd-radar' } },
+  { id: 'offer-kandidatuur-machine', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/kandidatuur-machine', nl: 'architecten/kandidatuur-machine' } },
+  { id: 'offer-wedstrijd-intelligence', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-intelligence', nl: 'architecten/wedstrijd-intelligence' } },
+  { id: 'offer-wedstrijd-cockpit', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-cockpit', nl: 'architecten/wedstrijd-cockpit' } },
+  { id: 'offer-wedstrijd-terugblik', family: 'product', hub: 'niche-architect', nlOnly: true, slugs: { en: 'architecten/wedstrijd-terugblik', nl: 'architecten/wedstrijd-terugblik' } },
 
 ] as const satisfies readonly LandingEntry[]
 
