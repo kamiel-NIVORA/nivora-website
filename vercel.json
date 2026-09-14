@@ -402,18 +402,18 @@
     },
     {
       "source": "/ai-automation-building-contractor",
-      "destination": "/ai-automation-architect",
-      "permanent": true
+      "destination": "/",
+      "permanent": false
     },
     {
       "source": "/nl/ai-automatisering-aannemer",
-      "destination": "/nl/ai-automatisering-architectenbureau",
-      "permanent": true
+      "destination": "/nl",
+      "permanent": false
     },
     {
       "source": "/nl/architecten",
-      "destination": "/nl/ai-automatisering-architectenbureau",
-      "permanent": true
+      "destination": "/nl",
+      "permanent": false
     },
     {
       "source": "/architecten/:slug*",
