@@ -121,6 +121,16 @@ const STATIC_EN = {
     description:
       'Notes from Nivora: how we build our apps Box and Voice, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
   },
+  '/cases': {
+    title: 'Work · Nivora',
+    description:
+      'Work we built for clients: websites, web shops, dashboards and the automations behind them, told the way the people who use them see it.',
+  },
+  '/cases/tafereel': {
+    title: 'Tafereel · Work · Nivora',
+    description:
+      'Website, web shop, classes, emails and Instagram for Eva Vandoorne’s studio in Bruges. All in one dashboard, so she never loses focus on the craft.',
+  },
   '/media': {
     title: 'Media kit · Nivora',
     description:
@@ -173,6 +183,16 @@ const STATIC_NL = {
     title: 'Blog · Nivora',
     description:
       'Notities van Nivora: hoe we onze apps Box en Voice bouwen, waar AI echt loont, en wat we leren bij het bouwen van intelligente systemen voor bedrijven.',
+  },
+  '/cases': {
+    title: 'Work · Nivora',
+    description:
+      'Werk dat we voor klanten bouwden: websites, webwinkels, dashboards en de automatisaties erachter, verteld zoals de mensen die ermee werken het zien.',
+  },
+  '/cases/tafereel': {
+    title: 'Tafereel · Work · Nivora',
+    description:
+      'Website, webwinkel, lessen, mails en Instagram voor het atelier van Eva Vandoorne in Brugge. Alles in één dashboard, zodat ze de focus op het handwerk niet verliest.',
   },
   '/media': {
     title: 'Mediakit · Nivora',

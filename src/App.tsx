@@ -18,6 +18,8 @@ const About = lazy(() => import('@/pages/About').then((m) => ({ default: m.About
 const ServicePage = lazy(() => import('@/pages/ServicePage').then((m) => ({ default: m.ServicePage })))
 const BlogIndex = lazy(() => import('@/pages/BlogIndex').then((m) => ({ default: m.BlogIndex })))
 const BlogPost = lazy(() => import('@/pages/BlogPost').then((m) => ({ default: m.BlogPost })))
+const CasesIndex = lazy(() => import('@/pages/CasesIndex').then((m) => ({ default: m.CasesIndex })))
+const CasePage = lazy(() => import('@/pages/CasePage').then((m) => ({ default: m.CasePage })))
 const MediaKit = lazy(() => import('@/pages/MediaKit').then((m) => ({ default: m.MediaKit })))
 const WaitlistPage = lazy(() => import('@/pages/WaitlistPage').then((m) => ({ default: m.WaitlistPage })))
 const AffiliatePage = lazy(() => import('@/pages/AffiliatePage').then((m) => ({ default: m.AffiliatePage })))
@@ -48,6 +50,8 @@ function routeTree(homeHref: string) {
       <Route path="services/:slug" element={<ServiceRoute />} />
       <Route path="blog" element={<BlogIndex />} />
       <Route path="blog/:slug" element={<BlogPost />} />
+      <Route path="cases" element={<CasesIndex />} />
+      <Route path="cases/:slug" element={<CasePage />} />
       <Route path="media" element={<MediaKit />} />
       <Route path="waitlist" element={<WaitlistPage />} />
       <Route path="affiliate" element={<AffiliatePage />} />

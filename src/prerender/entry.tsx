@@ -15,6 +15,8 @@ import { About } from '@/pages/About'
 import { ServicePage } from '@/pages/ServicePage'
 import { BlogIndex } from '@/pages/BlogIndex'
 import { BlogPost } from '@/pages/BlogPost'
+import { CasesIndex } from '@/pages/CasesIndex'
+import { CasePage } from '@/pages/CasePage'
 import { MediaKit } from '@/pages/MediaKit'
 import { WaitlistPage } from '@/pages/WaitlistPage'
 import { AffiliatePage } from '@/pages/AffiliatePage'
@@ -122,6 +124,8 @@ function staticRouteTree() {
       <Route path="services/:slug" element={<ServicePage />} />
       <Route path="blog" element={<BlogIndex />} />
       <Route path="blog/:slug" element={<BlogPost />} />
+      <Route path="cases" element={<CasesIndex />} />
+      <Route path="cases/:slug" element={<CasePage />} />
       <Route path="media" element={<MediaKit />} />
       <Route path="waitlist" element={<WaitlistPage />} />
       <Route path="affiliate" element={<AffiliatePage />} />

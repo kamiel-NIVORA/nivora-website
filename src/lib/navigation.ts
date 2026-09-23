@@ -1,4 +1,4 @@
-import { HelpCircle, Leaf, type LucideIcon } from 'lucide-react'
+import { Briefcase, HelpCircle, Leaf, type LucideIcon } from 'lucide-react'
 import { waitlistHref } from '@/data/contact'
 import { localizePath, type Lang, type Localized } from '@/i18n'
 
@@ -44,10 +44,12 @@ const SERVICES_NL: NavItem[] = [
 
 /* ── Company ── */
 const COMPANY_PRIMARY_EN: NavItem[] = [
+  { title: 'Work', desc: 'What we built for our clients.', href: '/cases', Icon: Briefcase },
   { title: 'About Us', desc: 'Learn more about our story and team.', href: '/about', iconImg: '/nav/icon-about.png' },
   { title: 'Affiliate', desc: 'Earn by referring Nivora to others.', href: '/affiliate', iconImg: '/nav/icon-affiliate.png', comingSoon: true },
 ]
 const COMPANY_PRIMARY_NL: NavItem[] = [
+  { title: 'Work', desc: 'Wat we voor onze klanten bouwden.', href: '/cases', Icon: Briefcase },
   { title: 'Over ons', desc: 'Lees meer over ons verhaal en ons team.', href: '/about', iconImg: '/nav/icon-about.png' },
   { title: 'Affiliate', desc: 'Verdien door Nivora aan te bevelen bij anderen.', href: '/affiliate', iconImg: '/nav/icon-affiliate.png', comingSoon: true },
 ]
