@@ -44,8 +44,10 @@ for (const entry of LANDING_ENTRIES) {
 }
 
 export const config = {
-  // Alleen documenten: sla de api-routes, /assets en bestanden-met-extensie over.
-  matcher: ['/((?!api/|assets/|.*\\.).*)'],
+  // Alleen documenten: sla de api-routes, de API-proxy /nivora-api, /assets en bestanden-met-extensie over.
+  // Zonder nivora-api/ stuurde de taal-redirect elk formulier (wachtlijst, nieuwsbrief, affiliate)
+  // naar /nl/nivora-api/... en dat bestaat niet: "Er ging iets mis" (gemeld 21 okt 2026).
+  matcher: ['/((?!api/|nivora-api/|assets/|.*\\.).*)'],
 }
 
 const DUTCH_COUNTRIES = new Set(['BE', 'NL', 'LU'])

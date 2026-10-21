@@ -168,6 +168,28 @@
   "redirects": [
     {
       "source": "/waitlist",
+      "missing": [
+        {
+          "type": "query",
+          "key": "product"
+        }
+      ],
+      "destination": "https://box.nivoraworks.com",
+      "permanent": false
+    },
+    {
+      "source": "/nl/waitlist",
+      "missing": [
+        {
+          "type": "query",
+          "key": "product"
+        }
+      ],
+      "destination": "https://box.nivoraworks.com",
+      "permanent": false
+    },
+    {
+      "source": "/waitlist",
       "has": [
         {
           "type": "query",
