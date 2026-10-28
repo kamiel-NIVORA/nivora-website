@@ -6,8 +6,7 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { CONTACT, waitlistHref } from '@/data/contact'
-import { useLang, localizePath } from '@/i18n'
-import { VOICE_IN_BOX_POST } from '@/data/posts'
+import { useLang } from '@/i18n'
 import { useSeo, SITE_URL } from '@/lib/seo'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
@@ -218,7 +217,7 @@ export function About() {
         logo={BOX_LOGO}
         image={MAC_IMG}
         cta={t.macCta}
-        ctaHref={localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang)}
+        ctaHref={'https://box.nivoraworks.com/voice'}
         newTab={false}
       />
       <ServicesTimeline />

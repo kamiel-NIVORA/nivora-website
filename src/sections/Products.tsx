@@ -9,7 +9,6 @@ import {
 } from 'framer-motion'
 import { ArrowRight, Lock, QrCode } from 'lucide-react'
 import { waitlistHref } from '@/data/contact'
-import { VOICE_IN_BOX_POST } from '@/data/posts'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -157,14 +156,14 @@ export function Products() {
           </BentoCard>
 
           {/* ── Box for Mac: wide black hero, the speech-to-clean-copy flow.
-              Links to the blog post that explains the Mac app (same tab). ── */}
+              Links to the Voice page on the Box site (same tab). ── */}
           <BentoCard
             progress={progress}
             dx={30}
             dy={-20}
             start={0.06}
             dark
-            href={localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang)}
+            href={'https://box.nivoraworks.com/voice'}
             newTab={false}
             ariaLabel={t.macAria}
             className="min-h-[500px] sm:min-h-[420px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"

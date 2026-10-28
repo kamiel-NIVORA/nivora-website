@@ -7,7 +7,7 @@ Nivora (also written as Nivora Works or NivoraWorks) works with companies that w
 ## Products
 
 - [Box](https://box.nivoraworks.com/): in beta. Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone.
-- [Box for Mac](https://nivoraworks.com/blog/voice-now-lives-in-box): Voice, the former speech-to-text app, is now part of Box. Hold a key, talk, and Box writes wherever your cursor is; a small island at the top of the screen shows calendar, follow-ups, chats and mail, and Box AI helps on the Mac. In beta, not publicly downloadable yet.
+- [Box for Mac](https://box.nivoraworks.com/voice): Voice, the former speech-to-text app, is now part of Box. Hold a key, talk, and Box writes wherever your cursor is; a small island at the top of the screen shows calendar, follow-ups, chats and mail, and Box AI helps on the Mac. In beta, not publicly downloadable yet.
 
 ## Services
 

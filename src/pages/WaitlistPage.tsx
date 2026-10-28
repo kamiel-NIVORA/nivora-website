@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Check, Loader2 } from 'lucide-react'
 import { subscribe } from '@/lib/newsletter'
 import { SOCIAL_LINKS } from '@/data/contact'
-import { useLang, localizePath } from '@/i18n'
-import { VOICE_IN_BOX_POST } from '@/data/posts'
+import { useLang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 
 /** Map the ?product= query to a friendly label. */
@@ -85,10 +84,10 @@ export function WaitlistPage() {
      forward straight to box.nivoraworks.com. The Vercel edge redirect handles
      this before React even loads; this is the client-side fallback. */
   /* Voice is part of Box since Oct 2026 (the Mac app): old voice links go to
-     the blog post that explains it. */
+     the Voice page on the Box site. */
   useEffect(() => {
     if (productSlug === 'box') window.location.replace('https://box.nivoraworks.com')
-    if (productSlug === 'voice') window.location.replace(localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang))
+    if (productSlug === 'voice') window.location.replace('https://box.nivoraworks.com/voice')
   }, [productSlug, lang])
   const product = PRODUCT_LABELS[productSlug]
   // Affiliate flow: same card, one extra step. The signup asks WHY you want to

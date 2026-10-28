@@ -65,54 +65,8 @@ export type Post = {
 
 export const AUTHOR_ROLE = 'Founder'
 
-/** Slug of the post about Voice moving into Box (the Mac app). The homepage
- *  "Box for Mac" card and the old Voice waitlist links point here. The slug is
- *  written out literally below too: scripts/prerender.mjs reads this file as
- *  text and only understands `slug: '...'`. */
-export const VOICE_IN_BOX_POST = 'voice-now-lives-in-box'
-
 const POSTS_BY_LANG: Localized<Post[]> = {
   en: [
-    {
-      slug: 'voice-now-lives-in-box',
-      title: 'Voice now lives in Box. And Box now lives on your Mac.',
-      category: 'Product',
-      author: 'Kamiel Niville',
-      date: 'Oct 28, 2026',
-      image: '/blog/blog-box-mac-voice.webp',
-      excerpt:
-        'Voice is no longer a separate app. We built it into Box, in a new Mac app that lives at the top of your screen. You talk, Box writes, wherever your cursor is. The Mac app is still in beta, and this is honestly where we stand.',
-      body: [
-        'In June we wrote that we were building two apps: Box and Voice. Box for all your messages in one place, Voice so you could talk instead of type. Today those two have become one. Voice is no longer a product of its own. It lives inside Box.',
-        { h2: 'Why one app instead of two' },
-        'The longer we worked on Voice, the more often we noticed the same thing. What you say out loud is almost always a reply. To an email, to a WhatsApp, to a customer who is waiting. And those messages already sit in Box. Box knows your conversations, your contacts and the tone you write in. A separate app that knew none of that felt wrong.',
-        'So we made the choice we also ask of our clients: fewer apps, not more. One Box that listens, reads and writes.',
-        { h2: 'An island at the top of your screen' },
-        'The new home of Voice is the Box app for Mac. At the top of your screen, around the camera, sits a small black pill. If you have an iPhone, you know the idea of the Dynamic Island. For us it is the place where Box lives while you work.',
-        'Most of the time you barely see it. Move your mouse over it and it opens: your next meeting from your calendar, the messages you still need to answer, your chats and your mail. You do not have to open Box to see what is waiting for you. It is simply there, quietly, at the top.',
-        { h2: 'You talk, Box writes, right where your cursor is' },
-        'This is the part that used to be called Voice. You hold one key and talk. When you let go, the text is there. Not in a separate window, but exactly where your cursor is: in an email, in a chat, in a document, in a form on a website.',
-        'And it is not a raw transcript. Box takes out the "uhms", puts the commas in the right place and turns it into a sentence you could have typed yourself. Short when it is a message, complete when it is an email.',
-        { quote: 'Talking is faster than typing. It just finally had to be ready to send, too.' },
-        { h2: 'Box AI that helps with your Mac' },
-        'With another key you do not talk to type, you talk to ask. Box AI then does the work on your Mac. A few things we do with it ourselves, every day:',
-        {
-          list: [
-            'Open a website or a new tab, without searching for it.',
-            'Find a file when you only roughly remember what it was called.',
-            'Convert an image to PNG, or make it smaller before you send it.',
-            'Write a message and send it to someone in your Box.',
-            'Check what is on your calendar today, or plan a follow-up.',
-          ],
-        },
-        'Whenever something gets sent or removed, Box asks first. Looking, searching and opening happen right away. We drew that line on purpose: Box should save you time, but never do something you have not seen.',
-        { h2: 'Honestly: where we stand' },
-        'The Mac app is in beta. That means we use it ourselves every day, and we still improve it every day. You cannot download it publicly yet. There is no download button, and we will only add one when it is as reliable as the rest of Box.',
-        'Box itself, with your mail and chats in one place, is at box.nivoraworks.com. That is also where the Mac app will appear first, as soon as it is ready. If you already use Box, you will hear it first.',
-        'In June we wrote that we did not want to add apps to your day, but take a few away. Putting Voice inside Box is the most literal example of that. One app fewer. And a Box that finally listens too.',
-        { cta: { label: 'Discover Box', href: 'https://box.nivoraworks.com' } },
-      ],
-    },
     {
       slug: 'meet-box-and-voice',
       title: 'We are building Box and Voice. Here is what they will do.',
@@ -196,46 +150,6 @@ const POSTS_BY_LANG: Localized<Post[]> = {
     },
   ],
   nl: [
-    {
-      slug: 'voice-now-lives-in-box',
-      title: 'Voice zit nu in Box. En Box zit nu op uw Mac.',
-      category: 'Product',
-      author: 'Kamiel Niville',
-      date: 'Oct 28, 2026',
-      image: '/blog/blog-box-mac-voice.webp',
-      excerpt:
-        'Voice is geen aparte app meer. We hebben het in Box gebouwd, in een nieuwe Mac-app die bovenaan uw scherm leeft. U praat, Box schrijft, waar uw cursor ook staat. De Mac-app zit nog in beta, en dit is eerlijk hoe ver we staan.',
-      body: [
-        'In juni schreven we dat we aan twee apps werkten: Box en Voice. Box voor al uw berichten op één plek, Voice om te praten in plaats van te typen. Vandaag zijn die twee er één geworden. Voice is geen los product meer. Het zit in Box.',
-        { h2: 'Waarom één app in plaats van twee' },
-        'Hoe langer we aan Voice bouwden, hoe vaker we hetzelfde merkten. Wat u inspreekt, is bijna altijd een antwoord. Op een mail, op een WhatsApp, op een klant die wacht. En die berichten staan al in Box. Box kent uw gesprekken, uw contacten en de toon waarin u schrijft. Een aparte app die dat allemaal niet wist, voelde verkeerd.',
-        'Dus maakten we de keuze die we ook aan onze klanten vragen: minder apps, niet meer. Eén Box die luistert, leest en schrijft.',
-        { h2: 'Een eiland bovenaan uw scherm' },
-        'Het nieuwe thuis van Voice is de Mac-app van Box. Bovenaan uw scherm, rond de camera, zit een kleine zwarte pil. Hebt u een iPhone, dan kent u het idee van het Dynamic Island. Bij ons is het de plek waar Box leeft terwijl u werkt.',
-        'Meestal ziet u er bijna niets van. Gaat u er met uw muis over, dan klapt hij open: uw volgende afspraak uit uw agenda, de berichten waarop u nog moet antwoorden, uw chats en uw mail. U hoeft Box niet te openen om te zien wat er op u wacht. Het staat er gewoon, rustig, bovenaan.',
-        { h2: 'U praat, Box schrijft, precies waar uw cursor staat' },
-        'Dit is het stuk dat vroeger Voice heette. U houdt één toets ingedrukt en praat. Laat u los, dan staat de tekst er. Niet in een apart venster, maar precies waar uw cursor staat: in een mail, in een chat, in een document, in een formulier op een website.',
-        'En het is geen ruwe uitschrijving. Box haalt de "euh"’s eruit, zet de komma’s goed en maakt er een zin van die u zelf had kunnen typen. Kort als het een bericht is, volledig als het een mail is.',
-        { quote: 'Praten gaat sneller dan typen. Het moest alleen eindelijk ook klaar zijn om te versturen.' },
-        { h2: 'Box AI die uw Mac helpt' },
-        'Met een andere toets praat u niet om te typen, maar om iets te vragen. Box AI doet dan het werk op uw Mac. Een paar dingen die we er zelf elke dag mee doen:',
-        {
-          list: [
-            'Een website of een nieuw tabblad openen, zonder te zoeken.',
-            'Een bestand terugvinden waarvan u alleen nog ongeveer weet hoe het heette.',
-            'Een afbeelding omzetten naar PNG, of verkleinen voor u ze doorstuurt.',
-            'Een bericht opstellen en versturen naar iemand uit uw Box.',
-            'Kijken wat er vandaag in uw agenda staat, of een opvolging inplannen.',
-          ],
-        },
-        'Bij alles wat iets verstuurt of iets weghaalt, vraagt Box eerst of het mag. Kijken, zoeken en openen gebeuren meteen. Die grens hebben we bewust zo getrokken: Box mag u tijd besparen, maar nooit iets doen wat u niet gezien hebt.',
-        { h2: 'Eerlijk: waar we nu staan' },
-        'De Mac-app zit in beta. Dat betekent dat we hem zelf elke dag gebruiken, en dat we hem nog elke dag beter maken. U kunt hem nog niet publiek downloaden. Er is geen downloadknop, en die komt er pas als de app even betrouwbaar is als de rest van Box.',
-        'Box zelf, met uw mail en chats op één plek, vindt u op box.nivoraworks.com. Daar verschijnt ook de Mac-app als eerste, zodra hij klaar is. Gebruikt u Box al, dan hoort u het als eerste.',
-        'In juni schreven we dat we geen apps aan uw dag wilden toevoegen, maar er een paar wilden wegnemen. Voice in Box steken is daar het meest letterlijke voorbeeld van. Eén app minder. En een Box die eindelijk ook luistert.',
-        { cta: { label: 'Ontdek Box', href: 'https://box.nivoraworks.com' } },
-      ],
-    },
     {
       slug: 'meet-box-and-voice',
       title: 'We bouwen aan Box en Voice. Dit is wat ze gaan doen.',
