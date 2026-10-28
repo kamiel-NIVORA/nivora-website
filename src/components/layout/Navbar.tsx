@@ -39,8 +39,8 @@ const COPY = {
     dismiss: 'Dismiss',
     home: 'Nivora works home',
     bannerLead: 'Box is in beta.',
-    bannerCta: 'Get early access',
-    bannerCtaShort: 'Get early access',
+    bannerCta: 'Discover Box',
+    bannerCtaShort: 'Discover Box',
   },
   nl: {
     comingSoon: 'Binnenkort',
@@ -56,8 +56,8 @@ const COPY = {
     dismiss: 'Sluiten',
     home: 'Nivora works home',
     bannerLead: 'Box zit in beta.',
-    bannerCta: 'Vraag vroege toegang aan',
-    bannerCtaShort: 'Vroege toegang',
+    bannerCta: 'Ontdek Box',
+    bannerCtaShort: 'Ontdek Box',
   },
 } as const
 
