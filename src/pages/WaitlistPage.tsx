@@ -4,30 +4,31 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Check, Loader2 } from 'lucide-react'
 import { subscribe } from '@/lib/newsletter'
 import { SOCIAL_LINKS } from '@/data/contact'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
+import { VOICE_IN_BOX_POST } from '@/data/posts'
 import { useSeo } from '@/lib/seo'
 
 /** Map the ?product= query to a friendly label. */
-const PRODUCT_LABELS: Record<string, string> = { box: 'Box', voice: 'Voice' }
+const PRODUCT_LABELS: Record<string, string> = { box: 'Box' }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const COPY = {
   en: {
-    thingGeneric: 'Box and Voice',
+    thingGeneric: 'Box',
     thingAffiliate: 'the affiliate program',
-    titleGeneric: 'Be first with Box and Voice.',
+    titleGeneric: 'Be first with Box.',
     titleAffiliate: 'Be first for the affiliate deals.',
     titleProduct: (p: string) => `Be first with ${p}.`,
     subtitle: "Leave your details and we'll reach out the moment they go live. Nothing else.",
     subtitleAffiliate:
-      'Leave your details and tell us briefly why you want to become an affiliate of Box and Voice. We reach out the moment the program opens.',
+      'Leave your details and tell us briefly why you want to become an affiliate of Box. We reach out the moment the program opens.',
     namePh: 'First + last name',
     nameHint: "We'll only reach out when they go live.",
     nameHintAffiliate: "We'll only reach out when the program opens.",
     emailPh: 'you@company.com',
     emailHint: 'One message at launch. No newsletters.',
     emailHintAffiliate: 'One message when the program opens. No newsletters.',
-    visionPh: 'Why do you want to become an affiliate of Box and Voice?',
+    visionPh: 'Why do you want to become an affiliate of Box?',
     visionHint: 'A few sentences is enough. It helps us tailor the program to you.',
     visionSubmit: 'Sign up as affiliate',
     errName: 'Please enter your full name.',
@@ -43,21 +44,21 @@ const COPY = {
     caption: 'Nivora',
   },
   nl: {
-    thingGeneric: 'Box en Voice',
+    thingGeneric: 'Box',
     thingAffiliate: 'het affiliate programma',
-    titleGeneric: 'Wees de eerste met Box en Voice.',
+    titleGeneric: 'Wees de eerste met Box.',
     titleAffiliate: 'Wees de eerste voor de affiliate deals.',
     titleProduct: (p: string) => `Wees de eerste met ${p}.`,
     subtitle: 'Laat uw gegevens achter en we laten van ons horen zodra ze live gaan. Niets anders.',
     subtitleAffiliate:
-      'Laat uw gegevens achter en vertel kort waarom u affiliate wilt worden van Box en Voice. We nemen contact op zodra het programma opent.',
+      'Laat uw gegevens achter en vertel kort waarom u affiliate wilt worden van Box. We nemen contact op zodra het programma opent.',
     namePh: 'Voornaam + achternaam',
     nameHint: 'We laten van ons horen zodra ze live gaan.',
     nameHintAffiliate: 'We laten van ons horen zodra het programma opent.',
     emailPh: 'naam@bedrijf.be',
     emailHint: 'Eén bericht bij de lancering. Geen nieuwsbrieven.',
     emailHintAffiliate: 'Eén bericht zodra het programma opent. Geen nieuwsbrieven.',
-    visionPh: 'Waarom wilt u affiliate worden van Box en Voice?',
+    visionPh: 'Waarom wilt u affiliate worden van Box?',
     visionHint: 'Een paar zinnen is genoeg. Zo kunnen we het programma op u afstemmen.',
     visionSubmit: 'Meld u aan als affiliate',
     errName: 'Vul alsjeblieft uw volledige naam in.',
@@ -83,9 +84,12 @@ export function WaitlistPage() {
   /* Box has its own site now: old /waitlist?product=box links (ads, socials)
      forward straight to box.nivoraworks.com. The Vercel edge redirect handles
      this before React even loads; this is the client-side fallback. */
+  /* Voice is part of Box since Oct 2026 (the Mac app): old voice links go to
+     the blog post that explains it. */
   useEffect(() => {
     if (productSlug === 'box') window.location.replace('https://box.nivoraworks.com')
-  }, [productSlug])
+    if (productSlug === 'voice') window.location.replace(localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang))
+  }, [productSlug, lang])
   const product = PRODUCT_LABELS[productSlug]
   // Affiliate flow: same card, one extra step. The signup asks WHY you want to
   // become an affiliate (the vision) and is stored as an affiliate signup in
@@ -96,11 +100,7 @@ export function WaitlistPage() {
   const subtitle = isAffiliate ? t.subtitleAffiliate : t.subtitle
   // Top icon: the product's own app tile on a product page, else the Nivora mark.
   const brandIcon =
-    productSlug === 'box'
-      ? '/products/box-logo.webp'
-      : productSlug === 'voice'
-        ? '/products/voice-logo.webp'
-        : '/brand/nivora-mark.webp'
+    productSlug === 'box' ? '/products/box-logo.webp' : '/brand/nivora-mark.webp'
 
   const [step, setStep] = useState<'name' | 'email' | 'vision'>('name')
   const [name, setName] = useState('')
@@ -132,8 +132,8 @@ export function WaitlistPage() {
         ? 'Schrijf u in voor het Nivora affiliate programma en wees er als eerste bij wanneer de deals live gaan.'
         : 'Sign up for the Nivora affiliate program and be first in line when the deals go live.'
       : lang === 'nl'
-        ? 'Zet uzelf op de wachtlijst voor Box en Voice, de Nivora-apps, en hoor het meteen wanneer ze live gaan.'
-        : 'Join the waitlist for Box and Voice, the Nivora apps, and hear the moment they go live.',
+        ? 'Zet uzelf op de lijst voor Box, de app van Nivora, en hoor het meteen wanneer er nieuws is.'
+        : 'Join the list for Box, the Nivora app, and hear it the moment there is news.',
     path: '/waitlist',
   })
 

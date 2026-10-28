@@ -168,6 +168,30 @@
   "redirects": [
     {
       "source": "/waitlist",
+      "has": [
+        {
+          "type": "query",
+          "key": "product",
+          "value": "voice"
+        }
+      ],
+      "destination": "/blog/voice-now-lives-in-box",
+      "permanent": false
+    },
+    {
+      "source": "/nl/waitlist",
+      "has": [
+        {
+          "type": "query",
+          "key": "product",
+          "value": "voice"
+        }
+      ],
+      "destination": "/nl/blog/voice-now-lives-in-box",
+      "permanent": false
+    },
+    {
+      "source": "/waitlist",
       "missing": [
         {
           "type": "query",

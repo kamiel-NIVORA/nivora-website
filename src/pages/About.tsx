@@ -6,7 +6,8 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { cn } from '@/lib/utils'
 import { CONTACT, waitlistHref } from '@/data/contact'
-import { useLang } from '@/i18n'
+import { useLang, localizePath } from '@/i18n'
+import { VOICE_IN_BOX_POST } from '@/data/posts'
 import { useSeo, SITE_URL } from '@/lib/seo'
 
 /** Neutral white accent, matching the redesigned service pages. No brand colour, no glow. */
@@ -15,8 +16,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 /** Scenic photos, incl. the glossy glass-slat frames for the product stories. */
 const HERO_IMG = '/about/hero.jpg'
-const VOICE_IMG = '/about/voice-glossy.webp'
-const VOICE_LOGO = '/products/voice-logo.webp'
+const MAC_IMG = '/about/voice-glossy.webp'
 const BOX_IMG = '/about/box-glossy.webp'
 const BOX_LOGO = '/products/box-logo.webp'
 const CTA_IMG = '/about/cta-sea.webp'
@@ -59,14 +59,16 @@ const COPY = {
   en: {
     docTitle: 'About · Nivora',
     metaDescription:
-      'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
+      'Nivora is a software and AI studio in Brugge. We make our own product, Box, and build custom software and AI for companies that want to get the most out of it.',
     heroHeadline: 'Nivora',
     heroSub: 'Intelligent systems',
-    voiceStory:
-      'Talking is faster than typing, everyone knows that. Dictation just never delivered on it, spitting out text that sounded like a machine and needed redoing anyway. Voice flips that around. You speak, and Voice picks up not just what you say, but the shape it should take. List a few things, and they become clean bullet points. Say “write an email”, and out comes an email, opening and sign-off included. Send a message, and it reads short and direct, the way you would actually type it yourself. No more dictaphone dumping everything out flat. Ready to send, not to rewrite.',
+    macName: 'Box for Mac',
+    macStory:
+      'Talking is faster than typing, everyone knows that. Dictation just never delivered on it. So we built it into Box, in the Box app for Mac. Hold one key, talk, and the text appears right where your cursor is, clean and ready to send. A small black island at the top of your screen shows your calendar, your follow-ups and your chats, and Box AI helps with your Mac: open a site, find a file, convert it. The Mac app is in beta and not publicly available yet.',
     boxStory:
       'Your attention lives across ten apps. A mail here, a chat there, a DM you only spot at night. Box pulls it all into one calm inbox, so nothing slips past you anymore, and communication becomes just one app to check. Read, sort, reply, all in one quiet place.',
-    joinWaitlist: 'Join the waiting list',
+    discoverBox: 'Discover Box',
+    macCta: 'Read how it works',
     learnMore: 'Learn more',
     servicesHeading: 'Software and AI, born from our own system.',
     servicesIntro:
@@ -97,14 +99,16 @@ const COPY = {
   nl: {
     docTitle: 'Over ons · Nivora',
     metaDescription:
-      'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
+      'Nivora is een software- en AI-studio in Brugge. We maken ons eigen product, Box, en bouwen software en AI op maat voor bedrijven die er echt alles uit willen halen.',
     heroHeadline: 'Nivora',
     heroSub: 'Intelligente systemen',
-    voiceStory:
-      'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit op: tekst die klonk als een machine en die u toch weer moest herschrijven. Voice draait dat om. U spreekt, en Voice hoort niet alleen wát u zegt, maar ook welke vorm het moet krijgen. Somt u iets op, dan worden het nette bullet points. Zegt u “schrijf een e-mail”, dan komt er een e-mail uit, met aanhef en afsluiting. Stuurt u een bericht, dan klinkt het kort en direct, zoals u het zelf zou typen. Geen dicteerapparaat meer dat alles plat achter elkaar plakt. Klaar om te versturen, niet om over te doen.',
+    macName: 'Box voor Mac',
+    macStory:
+      'Praten gaat sneller dan typen, dat weet iedereen. Alleen leverde dicteren dat nooit echt op. Daarom bouwden we het in Box, in de Box-app voor Mac. Hou één toets ingedrukt, praat, en de tekst verschijnt precies waar uw cursor staat, netjes en klaar om te versturen. Een klein zwart eiland bovenaan uw scherm toont uw agenda, uw opvolging en uw chats, en Box AI helpt met uw Mac: een site openen, een bestand vinden of omzetten. De Mac-app zit in beta en is nog niet publiek te downloaden.',
     boxStory:
       'Uw aandacht ligt verspreid over tien apps. Een mail hier, een chat daar, een DM die u pas ’s avonds opmerkt. Box brengt het allemaal samen in één rustige inbox, zodat u niets meer over het hoofd ziet en u nog maar één app hoeft te checken voor al uw communicatie. Lezen, sorteren, antwoorden, op één rustige plek.',
-    joinWaitlist: 'Schrijf u in op de wachtlijst',
+    discoverBox: 'Ontdek Box',
+    macCta: 'Lees hoe het werkt',
     learnMore: 'Lees meer',
     servicesHeading: 'Software en AI, ontstaan uit ons eigen systeem.',
     servicesIntro:
@@ -200,21 +204,22 @@ export function About() {
     >
       <Hero />
       <ProductStory
-        name="Voice"
-        story={t.voiceStory}
-        logo={VOICE_LOGO}
-        image={VOICE_IMG}
-        cta={t.joinWaitlist}
-        ctaHref={waitlistHref('voice')}
-      />
-      <ProductStory
-        reverse
         name="Box"
         story={t.boxStory}
         logo={BOX_LOGO}
         image={BOX_IMG}
-        cta={t.joinWaitlist}
+        cta={t.discoverBox}
         ctaHref={waitlistHref('box')}
+      />
+      <ProductStory
+        reverse
+        name={t.macName}
+        story={t.macStory}
+        logo={BOX_LOGO}
+        image={MAC_IMG}
+        cta={t.macCta}
+        ctaHref={localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang)}
+        newTab={false}
       />
       <ServicesTimeline />
       <Founder />
@@ -285,7 +290,7 @@ function Hero() {
 }
 
 /* Product story · a blurred nature frame with the product mark floating on it,
-   copy alongside. Voice and Box each get one, mirrored. Not a timeline. ──────── */
+   copy alongside. Box and Box for Mac each get one, mirrored. Not a timeline. ──────── */
 
 function ProductStory({
   name,
@@ -295,6 +300,7 @@ function ProductStory({
   cta,
   ctaHref,
   reverse,
+  newTab = true,
 }: {
   name: string
   story: string
@@ -303,6 +309,8 @@ function ProductStory({
   cta: string
   ctaHref: string
   reverse?: boolean
+  /** The Box site opens in a new tab; the blog post stays in this one. */
+  newTab?: boolean
 }) {
   return (
     <section className="relative mx-auto w-full max-w-[1150px] px-6 py-14 sm:py-20 lg:py-24">
@@ -335,8 +343,8 @@ function ProductStory({
           <Reveal delay={0.16}>
             <RippleButton
               href={ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={newTab ? '_blank' : undefined}
+              rel={newTab ? 'noopener noreferrer' : undefined}
               variant="ghost"
               className="mt-8 h-11 px-6 text-[14px]"
             >

@@ -110,6 +110,26 @@ export async function fetchPublishedPosts(lang: Lang = 'en'): Promise<Post[]> {
   return (await fetchPublishedRows()).map((r) => mapRow(r, lang))
 }
 
+/**
+ * Live posts win, but a bundled post that is not in the database yet (written
+ * in src/data/posts.ts and shipped with a deploy) must not vanish the moment
+ * the live list arrives: it would show on first paint and then turn into a 404.
+ * Each missing bundled post is slotted in before the first live post that is
+ * older than it, so the live order (published_at) stays untouched.
+ */
+function withBundled(live: Post[], bundled: Post[]): Post[] {
+  const have = new Set(live.map((p) => p.slug))
+  const out = [...live]
+  for (const post of bundled) {
+    if (have.has(post.slug)) continue
+    const t = Date.parse(post.date)
+    const at = Number.isNaN(t) ? -1 : out.findIndex((p) => Date.parse(p.date) < t)
+    if (at === -1) out.push(post)
+    else out.splice(at, 0, post)
+  }
+  return out
+}
+
 /** Posts for the blog. Starts with the bundled set for an instant render, then
  *  swaps in the live published posts from Supabase. `loaded` is true once the
  *  network call has settled (so a single-post page knows when to show 404).
@@ -140,7 +160,7 @@ export function usePosts(): { posts: Post[]; loaded: boolean } {
     }
   }, [])
   const posts = useMemo(
-    () => (rows ? rows.map((r) => mapRow(r, lang)) : getPosts(lang)),
+    () => (rows ? withBundled(rows.map((r) => mapRow(r, lang)), getPosts(lang)) : getPosts(lang)),
     [rows, lang],
   )
   return { posts, loaded }

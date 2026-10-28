@@ -529,12 +529,12 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
     },
     audience: {
       title: 'Is dit de juiste match?',
-      body: 'We bouwen voor oprichters met app-ideeën en teams die de juiste tool nodig hebben. Dit is voor wie het past, en voor wie niet.',
+      body: 'We bouwen voor starters en ondernemers met een app-idee, en voor teams die een tool op maat nodig hebben. Hieronder ziet u voor wie het past, en voor wie niet.',
       fits: [
-        'Oprichters die hun app-idee de eerste keer goed gebouwd willen',
-        'Teams waarvan het proces spreadsheets en generieke SaaS ontgroeid is',
-        'Iedereen die tegen het plafond van een template of een snelle route aanliep',
-        'Eigenaars die hun product willen bezitten, niet iets huren dat bijna werkt',
+        'Starters en ondernemers die hun app-idee meteen goed willen laten bouwen',
+        'Teams die gegroeid zijn uit spreadsheets en standaardsoftware',
+        'Wie vastloopt op de grenzen van een sjabloon of een snelle oplossing',
+        'Eigenaars die hun product zelf willen bezitten, in plaats van iets te huren dat bijna werkt',
       ],
       notFor: [
         'Wie op zoek is naar een goedkope kloon of een snelle template',
@@ -833,7 +833,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
       'Iedereen heeft wel een mening over AI, maar bijna niemand kijkt met genoeg context naar hoe uw bedrijf echt draait. Daar zit precies het verschil. Wij kruipen eerst in uw operations, en zeggen pas dan waar AI voor u het verschil kan maken. Geen lijstje met trends, maar een richting die klopt met uw praktijk.',
     problem: {
       title: 'U voelt de druk om iets met AI te doen. U weet alleen niet waar te beginnen.',
-      intro: 'De meeste oprichters met wie we praten zitten in dezelfde situatie: de verwachting is luid, het pad is stil.',
+      intro: 'De meeste ondernemers met wie we praten, zitten in dezelfde situatie: iedereen verwacht iets van AI, maar niemand wijst de weg.',
       points: [
         { title: 'Druk zonder richting', body: 'Iedereen zegt dat u AI zou moeten gebruiken, maar niemand vertelt u waar het in uw bedrijf past. Dus blijft u erop zitten, of u gokt en hoopt.' },
         { title: 'Bang om op het verkeerde te wedden', body: 'Een echte AI-build is echt geld, en uzelf vastleggen voordat u weet dat het de juiste zet is, is hoe goede bedrijven een kwartaal verspillen en intern vertrouwen verliezen.' },
@@ -886,7 +886,7 @@ export const SERVICE_CONTENT_NL: Record<ServiceSlug, ServiceContent> = {
         'Leiders die weten dat AI ertoe doet maar niet zeker weten waar te beginnen',
         'Teams die teleurgesteld zijn door de AI-hype en een nuchtere second opinion willen',
         'Bedrijven die een echt plan en eerlijke ROI willen voordat ze investeren',
-        'Oprichters die liever klein de waarde bewijzen dan te gokken op een grote build',
+        'Ondernemers die eerst klein willen bewijzen dat het werkt, in plaats van te gokken op een groot project',
       ],
       notFor: [
         'Mensen die al precies weten wat te bouwen (u wilt App Design of AIOS, en daar wijzen we u naartoe)',

@@ -15,7 +15,7 @@ export const CONTACT = {
 export const BOOKING_URL = 'https://booking.nivoraworks.com'
 
 /**
- * The standalone waiting page (Box & Voice). Like the booking page, it opens in
+ * The standalone waiting page (now mainly the affiliate sign-up). Like the booking page, it opens in
  * its own browser tab. Kept as a base URL so it can be pointed at the dedicated
  * domain in one place: set this to 'https://waitingpage.nivoraworks.com' once
  * that subdomain is live, and every product CTA follows. The relative '/waitlist'
@@ -24,10 +24,11 @@ export const BOOKING_URL = 'https://booking.nivoraworks.com'
 export const WAITLIST_URL = '/waitlist'
 
 /** Box has its own site now; every Box CTA points there instead of the
- *  waiting page. Voice (and the generic waitlist) keep the old flow. */
+ *  waiting page. Voice is part of Box since Oct 2026; old ?product=voice
+ *  links redirect to the blog post about it (vercel.json + WaitlistPage). */
 export const BOX_SITE_URL = 'https://box.nivoraworks.com'
 
-/** Build the waiting-page link, optionally tagged with the product (box|voice). */
+/** Build the waiting-page link, optionally tagged with the product (box|affiliate). */
 export const waitlistHref = (product?: string): string =>
   product === 'box' ? BOX_SITE_URL : product ? `${WAITLIST_URL}?product=${product}` : WAITLIST_URL
 

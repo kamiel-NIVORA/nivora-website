@@ -12,13 +12,13 @@ const COPY = {
     heading: 'Blog & News',
     viewAll: 'View All',
     metaDescription:
-      'Notes from Nivora: how we build our apps Box and Voice, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
+      'Notes from Nivora: how we build our app Box, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
   },
   nl: {
     heading: 'Blog & nieuws',
     viewAll: 'Alles',
     metaDescription:
-      'Notities vanuit Nivora: hoe we onze apps Box en Voice bouwen, waar AI echt rendeert en wat we leren terwijl we intelligente systemen voor bedrijven maken.',
+      'Notities vanuit Nivora: hoe we onze app Box bouwen, waar AI echt rendeert en wat we leren terwijl we intelligente systemen voor bedrijven maken.',
   },
 } as const
 

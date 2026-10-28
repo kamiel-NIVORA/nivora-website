@@ -58,9 +58,9 @@ function getColumns(lang: Lang): { title: string; links: FooterLink[] }[] {
   /* Vijf kolommen, want het raster hieronder staat op vijf en een zesde duwt
      Contact naar een tweede rij.
 
-     Producten (Box en Voice) staan hier bewust niet: allebei wijzen ze naar een
-     andere plek (box.nivoraworks.com en de wachtlijst), ze staan al in de
-     bovenbalk en op de homepage, en ze zijn nog niet uit. De sectoren zijn
+     Box staat hier bewust niet: het wijst naar een andere plek
+     (box.nivoraworks.com), staat al in de bovenbalk en op de homepage, en zit
+     nog in beta. Voice is sinds okt 2026 een deel van Box. De sectoren zijn
      nergens anders te vinden en verdienen die plaats dus meer. */
   return [
     { title: t.services, links: toLinks(getServices(lang)) },

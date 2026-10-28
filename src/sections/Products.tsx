@@ -9,6 +9,7 @@ import {
 } from 'framer-motion'
 import { ArrowRight, Lock, QrCode } from 'lucide-react'
 import { waitlistHref } from '@/data/contact'
+import { VOICE_IN_BOX_POST } from '@/data/posts'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { BoxConverge } from '@/components/ui/BoxConverge'
 import { VoiceSlingers } from '@/components/ui/VoiceSlingers'
@@ -25,67 +26,70 @@ const COPY = {
   en: {
     sectionTitle: 'Our Products',
     sectionSubtitle:
-      'Intelligent software, built by Nivora. Box is close: we are taking the time to get security right first. Leave your email and be among the first in.',
-    comingSoon: 'Coming soon',
+      'Software we build and use ourselves. Box brings your mail and chats together in one place, and on Mac you simply talk while Box writes. Box is in beta now.',
+    comingSoon: 'Beta',
     live: 'Available now',
-    boxAria: 'Box, request early access',
-    voiceAria: 'Voice, get notified at launch',
-    boxDesc: 'Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone.',
-    boxCta: 'Get early access',
-    voiceDesc: 'Speech to text, tuned to how you talk and how you write. Dictate once, get clean copy.',
-    phoneNotifAria: (name: string) => `${name}, coming soon, get notified at launch`,
+    boxAria: 'Box, open the Box site',
+    macAria: 'Box for Mac, read how it works',
+    boxDesc: 'Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox. Box AI shows which messages are still waiting for a reply and drafts the answer in your own tone.',
+    boxCta: 'Discover Box',
+    macTitle: 'Box for Mac',
+    macDesc: 'You talk, Box writes. Dictate wherever your cursor is, in any app. Box AI sits at the top of your screen and also helps with your Mac: open a site, find a file, convert it.',
+    phoneNotifAria: (name: string) => `${name}, in beta, open the Box site`,
     now: 'now',
     phoneBox: 'one calm inbox',
-    phoneVoice: 'speech to text',
-    phoneAlt: 'The Nivora suite on iPhone',
+    phoneVoice: 'you talk, Box writes',
+    phoneAlt: 'Box on iPhone',
     mobileTitle: 'Made for mobile',
-    mobileDesc: 'The whole suite in your pocket. Native and quietly out of the way.',
+    mobileDesc: 'Box always with you. Native and quietly out of the way.',
     desktopTitle: 'Made for desktop',
-    desktopDesc: 'Box and Voice live right in your dock on Mac and Windows. The full suite, a click away.',
+    desktopDesc: 'Box sits in your Mac dock. Hold one key and talk to Box AI, wherever you are working.',
     download: 'Download',
     storeOpen: 'Open',
     appStore: 'App Store',
     googlePlay: 'Google Play',
     scan: 'Scan',
     toDownload: 'to download',
-    lockAria: (appName: string) => `${appName} downloads are coming soon, get notified at launch`,
+    lockAria: (appName: string) => `${appName} is in beta, downloads open after the beta. Open the Box site`,
   },
   nl: {
     sectionTitle: 'Onze producten',
     sectionSubtitle:
-      'Intelligente software, gebouwd door Nivora. Box is dichtbij: we nemen eerst de tijd om de beveiliging goed te zetten. Laat uw e-mailadres achter en u bent er als eerste bij.',
-    comingSoon: 'Binnenkort',
+      'Software die we zelf bouwen en zelf gebruiken. Box brengt uw mail en chats samen op één plek, en op de Mac praat u gewoon terwijl Box schrijft. Box zit nu in beta.',
+    comingSoon: 'Beta',
     live: 'Nu beschikbaar',
-    boxAria: 'Box, request early access',
-    voiceAria: 'Voice, laat u op de hoogte brengen bij de lancering',
-    boxDesc: 'Gmail, Outlook, WhatsApp, Instagram en Messenger in één rustig postvak, met AI die zegt welke berichten echt op een antwoord wachten en die het antwoord al voorschrijft in uw eigen toon.',
-    boxCta: 'Vraag vroege toegang aan',
-    voiceDesc: 'Spraak naar tekst, afgestemd op hoe u praat en hoe u schrijft. Dicteer één keer, krijg nette tekst in de juiste vorm.',
-    phoneNotifAria: (name: string) => `${name}, binnenkort, laat u op de hoogte brengen bij de lancering`,
+    boxAria: 'Box, open de Box-site',
+    macAria: 'Box voor Mac, lees hoe het werkt',
+    boxDesc: 'Gmail, Outlook, WhatsApp, Instagram en Messenger in één rustige inbox. Box AI toont welke berichten nog op een antwoord wachten en schrijft dat antwoord al voor, in uw eigen toon.',
+    boxCta: 'Ontdek Box',
+    macTitle: 'Box voor Mac',
+    macDesc: 'U praat, Box schrijft. Spreek in waar uw cursor staat, in elke app. Box AI staat bovenaan uw scherm en helpt ook met uw Mac: een site openen, een bestand vinden of omzetten.',
+    phoneNotifAria: (name: string) => `${name}, in beta, open de Box-site`,
     now: 'nu',
     phoneBox: 'één rustige inbox',
-    phoneVoice: 'spraak naar tekst',
-    phoneAlt: 'De Nivora-suite op iPhone',
+    phoneVoice: 'u praat, Box schrijft',
+    phoneAlt: 'Box op iPhone',
     mobileTitle: 'Gemaakt voor mobiel',
-    mobileDesc: 'De volledige suite in uw zak. Native en rustig op de achtergrond.',
+    mobileDesc: 'Box altijd op zak. Native en rustig op de achtergrond.',
     desktopTitle: 'Gemaakt voor desktop',
-    desktopDesc: 'Box en Voice staan gewoon in uw dock op Mac en Windows.',
+    desktopDesc: 'Box staat in het dock van uw Mac. Hou één toets ingedrukt en praat met Box AI, waar u ook werkt.',
     download: 'Downloaden',
     storeOpen: 'Openen',
     appStore: 'App Store',
     googlePlay: 'Google Play',
     scan: 'Scan',
     toDownload: 'om te downloaden',
-    lockAria: (appName: string) => `${appName} downloads komen binnenkort, laat u op de hoogte brengen bij de lancering`,
+    lockAria: (appName: string) => `${appName} zit in beta, downloaden kan na de beta. Open de Box-site`,
   },
 } as const
 
 /**
  * Our Products — a bento of the Nivora tools.
  *
- * Five cards: Box (converging inboxes), Voice (a wide hero where spoken words
- * flow as ribbons of text and resolve into clean copy), and three smaller
- * utility cards — Made for mobile, Made for desktop, and a locked Download rack.
+ * Five cards: Box (converging inboxes), Box for Mac (a wide hero where spoken
+ * words flow as ribbons of text and resolve into clean copy; Voice became part
+ * of Box in Oct 2026), and three smaller utility cards: Made for mobile, Made
+ * for desktop, and a locked Download rack.
  *
  * It mirrors the "Our Services" language: glossy frosted-glass cards lifted on a
  * soft glow, paired with solid near-black cards for contrast. As the section
@@ -152,18 +156,20 @@ export function Products() {
             <MobileCard />
           </BentoCard>
 
-          {/* ── Voice — wide black hero, the speech-to-clean-copy flow ── */}
+          {/* ── Box for Mac: wide black hero, the speech-to-clean-copy flow.
+              Links to the blog post that explains the Mac app (same tab). ── */}
           <BentoCard
             progress={progress}
             dx={30}
             dy={-20}
             start={0.06}
             dark
-            href={localizePath(waitlistHref('voice'), lang)}
-            ariaLabel={t.voiceAria}
+            href={localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang)}
+            newTab={false}
+            ariaLabel={t.macAria}
             className="min-h-[360px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
-            <VoiceCard />
+            <MacCard />
           </BentoCard>
 
           {/* ── Made for desktop — glass card with the live macOS dock ── */}
@@ -205,6 +211,7 @@ function BentoCard({
   start = 0,
   dark = false,
   href,
+  newTab = true,
   ariaLabel,
   className,
   children,
@@ -215,6 +222,8 @@ function BentoCard({
   start?: number
   dark?: boolean
   href?: string
+  /** External links (the Box site) open in a new tab; internal ones do not. */
+  newTab?: boolean
   ariaLabel?: string
   className?: string
   children: ReactNode
@@ -253,8 +262,7 @@ function BentoCard({
       {href && (
         <a
           href={href}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           aria-label={ariaLabel}
           className="absolute inset-0 z-[1] rounded-[28px]"
         />
@@ -267,9 +275,8 @@ function BentoCard({
 }
 
 /* Small shared bits ──────────────────────────────────────────── */
-/* Box is uitgebracht en verkoopt abonnementen; Voice is nog in ontwikkeling.
-   Beide droegen hier hetzelfde "binnenkort"-label, wat op de homepage stond
-   terwijl box.nivoraworks.com al live was. */
+/* Box zit in beta (okt 2026). Voice is geen los product meer: het zit in Box,
+   in de Mac-app. Zet `live` zodra Box voor iedereen open is. */
 function StatusBadge({ live = false }: { live?: boolean }) {
   const { lang } = useLang()
   return (
@@ -307,9 +314,6 @@ function BoxCard() {
       <div className="pt-7">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <AppLogo src="/products/box-logo.webp" />
-          {/* Zet hier `live` zodra Box open gaat voor iedereen. Nu loopt alles
-              nog via de wachtlijst, dus zou "Nu beschikbaar" een belofte zijn die
-              we niet waarmaken. */}
           <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Box</h3>
           <StatusBadge />
         </div>
@@ -328,8 +332,8 @@ function BoxCard() {
   )
 }
 
-/* ── Card 2 · Voice — wide hero with the speech-to-clean-copy flow ────────── */
-function VoiceCard() {
+/* ── Card 2 · Box for Mac: wide hero with the speech-to-clean-copy flow ──── */
+function MacCard() {
   const { lang } = useLang()
   return (
     <div className="relative h-full">
@@ -343,11 +347,11 @@ function VoiceCard() {
       {/* Label — anchored top-left, above the node, ribbon and correction pills */}
       <div className="relative z-[1]">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <AppLogo src="/products/voice-logo.webp" />
-          <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">Voice</h3>
+          <AppLogo src="/products/box-logo.webp" />
+          <h3 className="font-serif text-[34px] leading-none tracking-[-0.01em] text-ink">{COPY[lang].macTitle}</h3>
           <StatusBadge />
         </div>
-        <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-faint">{COPY[lang].voiceDesc}</p>
+        <p className="mt-3 max-w-md text-[14px] leading-relaxed text-faint">{COPY[lang].macDesc}</p>
       </div>
     </div>
   )
@@ -355,8 +359,8 @@ function VoiceCard() {
 
 /* ── Card 3 · Made for mobile — glossy lock-screen notifications ──────────── */
 const PHONE_NOTIFS = [
-  { src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneBox', href: waitlistHref('box') },
-  { src: '/products/voice-logo.webp', name: 'Voice', bodyKey: 'phoneVoice', href: waitlistHref('voice') },
+  { id: 'inbox', src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneBox', href: waitlistHref('box') },
+  { id: 'voice', src: '/products/box-logo.webp', name: 'Box', bodyKey: 'phoneVoice', href: waitlistHref('box') },
 ] as const
 
 /** A single glossy notification — a button to the waiting list. Styled to match
@@ -401,8 +405,8 @@ function PhoneNotif({ src, name, bodyKey, href }: (typeof PHONE_NOTIFS)[number])
   )
 }
 
-/** Plays once when scrolled into view: Box drops in, then Voice rises in
- *  beneath it, pushing Box up, and the sequence settles. No loop. */
+/** Plays once when scrolled into view: the inbox note drops in, then the
+ *  dictation note rises in beneath it, pushing the first up. No loop. */
 function PhoneNotifications() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.5 })
@@ -423,7 +427,7 @@ function PhoneNotifications() {
       className="absolute inset-x-[9%] top-[35%] bottom-[36.5%] flex flex-col justify-end gap-[4.5%]"
     >
       {PHONE_NOTIFS.slice(0, shown).map((n) => (
-        <PhoneNotif key={n.name} {...n} />
+        <PhoneNotif key={n.id} {...n} />
       ))}
     </div>
   )
@@ -470,7 +474,6 @@ const getDockApps = (lang: Lang): DockApp[] => [
   { id: 'terminal', name: 'Terminal', icon: 'https://cdn.jim-nielsen.com/macos/1024/terminal-2021-06-03.png?rf=1024' },
   { id: 'notes', name: lang === 'nl' ? 'Notities' : 'Notes', icon: 'https://cdn.jim-nielsen.com/macos/1024/notes-2021-05-25.png?rf=1024' },
   { id: 'box', name: lang === 'nl' ? 'Box van Nivora' : 'Box by Nivora', icon: '/products/box-logo.webp' },
-  { id: 'voice', name: lang === 'nl' ? 'Voice van Nivora' : 'Voice by Nivora', icon: '/products/voice-logo.webp' },
   { id: 'safari', name: 'Safari', icon: 'https://cdn.jim-nielsen.com/macos/1024/safari-2021-06-02.png?rf=1024' },
   { id: 'photos', name: lang === 'nl' ? "Foto's" : 'Photos', icon: 'https://cdn.jim-nielsen.com/macos/1024/photos-2021-05-28.png?rf=1024' },
   { id: 'music', name: lang === 'nl' ? 'Muziek' : 'Music', icon: 'https://cdn.jim-nielsen.com/macos/1024/music-2021-05-25.png?rf=1024' },
@@ -481,13 +484,13 @@ function DesktopCard() {
   const t = COPY[lang]
   return (
     <>
-      {/* Live macOS dock — Box and Voice sit in the middle and magnify on hover.
+      {/* Live macOS dock: Box sits in the middle and magnifies on hover.
           The dock measures and fits this column, but a hidden-scrollbar x-rail on
           phone/tablet is a safety net so it can never clip its card. */}
       <div className="pointer-events-auto relative flex flex-1 items-center justify-center overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-hidden">
         <MacOSDock
           apps={getDockApps(lang)}
-          openApps={['box', 'voice']}
+          openApps={['box']}
           onAppClick={() => window.open(localizePath(waitlistHref(), lang), '_blank', 'noopener,noreferrer')}
         />
       </div>
@@ -500,7 +503,7 @@ function DesktopCard() {
   )
 }
 
-/* ── Card 5 · Download — locked until launch; Box/Voice picks the waiting list ── */
+/* ── Card 5 · Download: locked during the beta; the lock opens the Box site ── */
 /** One soft-black store tile: glyph top-left, two-line label bottom-left. */
 function RackTile({ glyph, line1, line2 }: { glyph: ReactNode; line1: string; line2: string }) {
   return (
@@ -517,21 +520,19 @@ function RackTile({ glyph, line1, line2 }: { glyph: ReactNode; line1: string; li
 function DownloadCard() {
   const { lang } = useLang()
   const t = COPY[lang]
-  const [tab, setTab] = useState<'box' | 'voice'>('box')
-  const appName = tab === 'box' ? 'Box' : 'Voice'
+  const appName = 'Box'
 
   return (
     <>
-      {/* Title + Box / Voice switch — the lock leads to the chosen app's waiting list */}
+      {/* Title + status. Box is the only product now, so no product switch. */}
       <div className="flex items-center justify-between gap-3">
         <h3 className="font-serif text-[20px] leading-none tracking-[-0.01em] text-ink">{t.download}</h3>
-        <ProductTabs value={tab} onChange={setTab} />
+        <StatusBadge />
       </div>
 
       {/* Store rack — dimmed + blurred behind a lock; the apps are not out yet */}
       <div className="relative mt-5 flex-1">
         <motion.div
-          key={tab}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 0.4, y: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -563,7 +564,7 @@ function DownloadCard() {
 
         {/* Lock badge — a quiet doorway to the chosen app's waiting list */}
         <a
-          href={localizePath(waitlistHref(tab), lang)}
+          href={localizePath(waitlistHref('box'), lang)}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t.lockAria(appName)}
@@ -577,41 +578,3 @@ function DownloadCard() {
     </>
   )
 }
-
-/** Box / Voice segmented switch with a white pill that glides between tabs. */
-function ProductTabs({
-  value,
-  onChange,
-}: {
-  value: 'box' | 'voice'
-  onChange: (v: 'box' | 'voice') => void
-}) {
-  return (
-    <div className="relative inline-flex shrink-0 rounded-full border border-line bg-white/[0.03] p-0.5">
-      {(['box', 'voice'] as const).map((p) => (
-        <button
-          key={p}
-          type="button"
-          onClick={() => onChange(p)}
-          aria-pressed={value === p}
-          className={cn(
-            'relative inline-flex min-h-[40px] min-w-[56px] items-center justify-center rounded-full px-4 py-2 text-[13px] font-medium capitalize transition-colors duration-200 sm:min-h-[36px] sm:px-3.5 sm:py-1.5 lg:min-h-0 lg:min-w-0 lg:px-3 lg:py-1 lg:text-[12px]',
-            value === p ? 'text-[#0a0a0a]' : 'text-faint hover:text-ink',
-          )}
-        >
-          {value === p && (
-            <motion.span
-              layoutId="download-tab-pill"
-              className="absolute inset-0 rounded-full bg-white"
-              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-            />
-          )}
-          <span className="relative z-[1]">{p}</span>
-        </button>
-      ))}
-    </div>
-  )
-}
-
-
-

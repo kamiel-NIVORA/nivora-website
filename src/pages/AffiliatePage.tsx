@@ -5,7 +5,7 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 import { useIsMobile } from '@/lib/useIsMobile'
 import { cn } from '@/lib/utils'
-import { waitlistHref } from '@/data/contact'
+import { BOX_SITE_URL, waitlistHref } from '@/data/contact'
 import { useLang } from '@/i18n'
 import { useSeo } from '@/lib/seo'
 
@@ -60,7 +60,7 @@ const SOCIALS: { name: string; src: string; left: string; top: string; size: num
 
 type Fact = { big: string; label: string }
 type Step = { title: string; body: string; keyword: string }
-type App = { logo: string; name: string; line: string }
+type App = { logo: string; name: string; line: string; href: string }
 
 const COPY = {
   en: {
@@ -73,7 +73,7 @@ const COPY = {
     steps: [
       {
         title: 'Get your personal link',
-        body: 'You join the program and we hand you your own link to Box and Voice. One link, yours, ready to share anywhere.',
+        body: 'You join the program and we hand you your own link to Box. One link, yours, ready to share anywhere.',
         keyword: 'Link',
       },
       {
@@ -96,16 +96,18 @@ const COPY = {
       {
         logo: '/products/box-logo.webp',
         name: 'Box',
-        line: 'All your communication, brought together in one place.',
+        line: 'All your mail and chats, brought together in one calm inbox.',
+        href: BOX_SITE_URL,
       },
       {
-        logo: '/products/voice-logo.webp',
-        name: 'Voice',
-        line: 'Speech to text, tuned to your voice and your writing.',
+        logo: '/products/box-logo.webp',
+        name: 'Box for Mac',
+        line: 'You talk, Box writes, right where your cursor is. Still in beta.',
+        href: BOX_SITE_URL,
       },
     ] as App[],
     badgeSoon: 'Coming soon',
-    heroLine1: 'Share Box and Voice.',
+    heroLine1: 'Share Box.',
     heroLine2: 'Earn 20%.',
     heroSub:
       'Post about it, or simply tell the right people. You keep 20% of every customer you bring in, every month they stay.',
@@ -118,16 +120,16 @@ const COPY = {
     waysSub: 'You do not need a big audience. Pick whichever fits you, both pay exactly the same.',
     postTitle: 'Post content',
     postBody:
-      'Make a video, a post, a story. Show what Box and Voice do for the people who already follow you. We hand you a full kit of assets and clear guidelines, so you always know what to share and how.',
+      'Make a video, a post, a story. Show what Box does for the people who already follow you. We hand you a full kit of assets and clear guidelines, so you always know what to share and how.',
     postCta: 'See the post guidelines',
     wordTitle: 'Word of mouth',
     wordBody:
       'No feed, no camera, no problem. Send your link in a message, drop it in a group chat, mention it to a business that needs it. One honest recommendation beats any ad.',
     wordChips: ['A message', 'A group chat', 'A quick word'],
-    appsHeading: 'Two apps people will actually want',
+    appsHeading: 'An app people will actually want',
     appsBody:
-      'Box and Voice are launching soon. As an affiliate you will be among the first to put them in front of the people who need them. Want to use the apps yourself? Join the waiting list below.',
-    joinWaitlist: (app: string) => `Sign up to use ${app}`,
+      'Box is in beta, on the web, on iPhone and soon on Mac. As an affiliate you will be among the first to put it in front of the people who need it. Want to use Box yourself? Start below.',
+    joinWaitlist: () => 'Discover Box',
     finalHeading: 'The program opens soon',
     finalBody:
       'We are putting the final pieces in place. Leave your details and we will reach out the moment you can join as an affiliate, with your link ready to share.',
@@ -143,7 +145,7 @@ const COPY = {
     steps: [
       {
         title: 'Krijg uw persoonlijke link',
-        body: 'U sluit zich aan bij het programma en wij geven u uw eigen link naar Box en Voice. Eén link, van u, klaar om overal te delen.',
+        body: 'U sluit zich aan bij het programma en wij geven u uw eigen link naar Box. Eén link, van u, klaar om overal te delen.',
         keyword: 'Link',
       },
       {
@@ -166,16 +168,18 @@ const COPY = {
       {
         logo: '/products/box-logo.webp',
         name: 'Box',
-        line: 'Al uw communicatie, samengebracht op één plek.',
+        line: 'Al uw mail en chats, samengebracht in één rustige inbox.',
+        href: BOX_SITE_URL,
       },
       {
-        logo: '/products/voice-logo.webp',
-        name: 'Voice',
-        line: 'Spraak naar tekst, afgestemd op uw stem en uw schrijfstijl.',
+        logo: '/products/box-logo.webp',
+        name: 'Box voor Mac',
+        line: 'U praat, Box schrijft, precies waar uw cursor staat. Nog in beta.',
+        href: BOX_SITE_URL,
       },
     ] as App[],
     badgeSoon: 'Binnenkort',
-    heroLine1: 'Deel Box en Voice.',
+    heroLine1: 'Deel Box.',
     heroLine2: 'Verdien 20%.',
     heroSub:
       'Post erover, of vertel het gewoon aan de juiste mensen. U houdt 20% van elke klant die u aanbrengt, elke maand opnieuw.',
@@ -188,16 +192,16 @@ const COPY = {
     waysSub: 'U hebt geen groot publiek nodig. Kies wat bij u past, beide betalen precies evenveel.',
     postTitle: 'Post content',
     postBody:
-      'Maak een video, een post, een story. Laat zien wat Box en Voice doen voor de mensen die u al volgen. Wij geven u een volledige kit met assets en heldere richtlijnen, zodat u altijd weet wat u deelt en hoe.',
+      'Maak een video, een post, een story. Laat zien wat Box doet voor de mensen die u al volgen. Wij geven u een volledige kit met assets en heldere richtlijnen, zodat u altijd weet wat u deelt en hoe.',
     postCta: 'Bekijk de post-richtlijnen',
     wordTitle: 'Mond-op-mond',
     wordBody:
       'Geen feed, geen camera, geen probleem. Stuur uw link in een bericht, zet hem in een groepschat, vermeld hem bij een bedrijf dat het nodig heeft. Eén eerlijke aanbeveling wint van elke advertentie.',
     wordChips: ['Een bericht', 'Een groepschat', 'Een kort woord'],
-    appsHeading: 'Twee apps die mensen echt zullen willen',
+    appsHeading: 'Een app die mensen echt willen',
     appsBody:
-      'Box en Voice lanceren binnenkort. Als affiliate bent u een van de eersten om ze onder de aandacht te brengen van de mensen die ze nodig hebben. Wilt u de apps zelf gebruiken? Schrijf u dan hieronder in op de wachtlijst.',
-    joinWaitlist: (app: string) => `Schrijf u in om ${app} te gebruiken`,
+      'Box zit in beta, op het web, op iPhone en binnenkort op de Mac. Als affiliate bent u een van de eersten die Box onder de aandacht brengt van de mensen die het nodig hebben. Wilt u Box zelf gebruiken? Begin hieronder.',
+    joinWaitlist: () => 'Ontdek Box',
     finalHeading: 'Het programma opent binnenkort',
     finalBody:
       'We leggen de laatste stukken op hun plaats. Laat uw gegevens achter en we nemen contact op zodra u zich als affiliate kunt aansluiten, met uw link klaar om te delen.',
@@ -215,8 +219,8 @@ export function AffiliatePage() {
     title: t.docTitle,
     description:
       lang === 'nl'
-        ? 'Word Nivora-affiliate: deel de apps Box en Voice met uw netwerk en verdien mee per nieuwe gebruiker. Schrijf u in en wees er als eerste bij.'
-        : 'Become a Nivora affiliate: share the Box and Voice apps with your network and earn for every new user. Sign up and be first in line.',
+        ? 'Word Nivora-affiliate: deel Box met uw netwerk en verdien mee per nieuwe gebruiker. Schrijf u in en wees er als eerste bij.'
+        : 'Become a Nivora affiliate: share Box with your network and earn for every new user. Sign up and be first in line.',
     path: '/affiliate',
   })
 
@@ -694,13 +698,13 @@ function Apps() {
               <p className="mt-5 flex-1 text-[14.5px] leading-relaxed text-faint">{a.line}</p>
               <div className="mt-6">
                 <RippleButton
-                  href={waitlistHref(a.name.toLowerCase())}
+                  href={a.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   variant="solid"
                   className="h-11 px-6 text-[14px]"
                 >
-                  {t.joinWaitlist(a.name)}
+                  {t.joinWaitlist()}
                 </RippleButton>
               </div>
             </div>

@@ -68,7 +68,7 @@ const TERMS_EN: LegalDoc = {
       blocks: [
         'These terms apply to this website and to the services we sell from it.',
         'Most of what follows is written for work with businesses. We also work with private individuals, and Belgian consumer law gives them rights that a set of terms cannot take away. If you are engaging us privately, outside any professional activity, read the chapter “If you are a consumer” below. That chapter overrides anything elsewhere in these terms that would give you less.',
-        'Our own applications have their own agreements. Box, Voice and the Nivora platform at app.nivoraworks.com are covered by the terms published on their own pages, not by this document.',
+        'Our own applications have their own agreements. Box and the Nivora platform at app.nivoraworks.com are covered by the terms published on their own pages, not by this document.',
         'The exact scope, deliverables, timeline, and price for each engagement are set out in a separate proposal or statement of work. Where that document and these terms disagree, the proposal wins for that project.',
       ],
     },
@@ -271,7 +271,7 @@ const TERMS_NL: LegalDoc = {
       blocks: [
         'Deze voorwaarden gelden voor deze website en voor de diensten die we van hieruit verkopen.',
         'Het meeste hieronder is geschreven voor werk met ondernemingen. We werken ook met particulieren, en het Belgische consumentenrecht geeft hen rechten die geen enkele voorwaarde kan afnemen. Werkt u met ons als privépersoon, buiten elke beroepsactiviteit, lees dan het hoofdstuk “Als u een particulier bent” verderop. Dat hoofdstuk gaat vóór op alles wat elders in deze voorwaarden minder zou geven.',
-        'Onze eigen apps hebben hun eigen overeenkomst. Box, Voice en het Nivora-platform op app.nivoraworks.com vallen onder de voorwaarden op hun eigen pagina, niet onder dit document.',
+        'Onze eigen apps hebben hun eigen overeenkomst. Box en het Nivora-platform op app.nivoraworks.com vallen onder de voorwaarden op hun eigen pagina, niet onder dit document.',
         'De exacte scope, opleveringen, timing en prijs van elke opdracht staan in een aparte offerte of opdrachtbeschrijving. Waar dat document en deze voorwaarden van elkaar verschillen, geldt voor dat project de offerte.',
       ],
     },
