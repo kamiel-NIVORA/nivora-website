@@ -34,7 +34,7 @@ const COPY = {
     boxDesc: 'Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox. Box AI shows which messages are still waiting for a reply and drafts the answer in your own tone.',
     boxCta: 'Discover Box',
     macTitle: 'Box for Mac',
-    macDesc: 'You talk, Box writes. Dictate wherever your cursor is, in any app. Box AI sits at the top of your screen and also helps with your Mac: open a site, find a file, convert it.',
+    macDesc: 'You talk, Box writes, right where your cursor is. Box AI sits at the top of your screen and helps with your Mac: open a site, find or convert a file.',
     phoneNotifAria: (name: string) => `${name}, in beta, open the Box site`,
     now: 'now',
     phoneBox: 'one calm inbox',
@@ -63,7 +63,7 @@ const COPY = {
     boxDesc: 'Gmail, Outlook, WhatsApp, Instagram en Messenger in één rustige inbox. Box AI toont welke berichten nog op een antwoord wachten en schrijft dat antwoord al voor, in uw eigen toon.',
     boxCta: 'Ontdek Box',
     macTitle: 'Box voor Mac',
-    macDesc: 'U praat, Box schrijft. Spreek in waar uw cursor staat, in elke app. Box AI staat bovenaan uw scherm en helpt ook met uw Mac: een site openen, een bestand vinden of omzetten.',
+    macDesc: 'U praat, Box schrijft, precies waar uw cursor staat. Box AI staat bovenaan uw scherm en helpt met uw Mac: een site openen, een bestand vinden of omzetten.',
     phoneNotifAria: (name: string) => `${name}, in beta, open de Box-site`,
     now: 'nu',
     phoneBox: 'één rustige inbox',
@@ -167,7 +167,7 @@ export function Products() {
             href={localizePath(`/blog/${VOICE_IN_BOX_POST}`, lang)}
             newTab={false}
             ariaLabel={t.macAria}
-            className="min-h-[360px] sm:min-h-[400px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
+            className="min-h-[500px] sm:min-h-[420px] lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:min-h-0"
           >
             <MacCard />
           </BentoCard>
