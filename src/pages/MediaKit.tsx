@@ -160,7 +160,7 @@ const COPY = {
     icons: {
       title: 'The apps, and the services.',
       intro:
-        'The app icon for Box, and the icon for each service. Same rules as the logo: copy or download, never redraw or recolour.',
+        'The app icons for Box and Voice, and the icon for each service. Same rules as the logo: copy or download, never redraw or recolour.',
       productsLabel: 'Product apps',
       servicesLabel: 'Services',
       copyImage: 'Copy',
@@ -219,7 +219,7 @@ const COPY = {
         'Posting through the affiliate program? Here is what makes a good post, where to share it, and the assets to build from.',
       postLabel: 'What to post',
       posts: [
-        'Show a real problem, then Box quietly solving it. A genuine moment beats any feature list.',
+        'Show a real problem, then Box or Voice quietly solving it. A genuine moment beats any feature list.',
         'Keep the tone calm and honest. No hype, no countdowns, no invented numbers or made-up results.',
         'Always include your personal link, so every signup is tied to you.',
         'Build from the assets above. Use the logo as it is, never redraw or recolour it.',
@@ -255,7 +255,7 @@ const COPY = {
     icons: {
       title: 'De apps, en de diensten.',
       intro:
-        'Het app-icoon voor Box, en het icoon voor elke dienst. Dezelfde regels als het logo: kopieer of download, teken of herkleur ze nooit.',
+        'De app-iconen voor Box en Voice, en het icoon voor elke dienst. Dezelfde regels als het logo: kopieer of download, teken of herkleur ze nooit.',
       productsLabel: 'Product-apps',
       servicesLabel: 'Diensten',
       copyImage: 'Kopieer',
@@ -314,7 +314,7 @@ const COPY = {
         'Deelt u via het affiliateprogramma? Hier leest u wat een goede post maakt, waar u het deelt, en met welke assets u bouwt.',
       postLabel: 'Wat u post',
       posts: [
-        'Toon een echt probleem, en dan Box dat het rustig oplost. Een oprecht moment wint van elke opsomming.',
+        'Toon een echt probleem, en dan Box of Voice die het rustig oplost. Een oprecht moment wint van elke opsomming.',
         'Houd de toon kalm en eerlijk. Geen hype, geen aftelklokken, geen verzonnen cijfers of resultaten.',
         'Voeg altijd uw persoonlijke link toe, zodat elke aanmelding aan u gekoppeld wordt.',
         'Bouw met de assets hierboven. Gebruik het logo zoals het is, teken of herkleur het nooit.',

@@ -6,29 +6,28 @@ import { useLang, type Lang } from '@/i18n'
 /**
  * Cleane iOS-stijl meldingen binnen het visual-paneel van het Products-kaartje.
  * De surf-foto is de wallpaper; daarboven komen de glass-meldingen
- * (twee Box-meldingen, "Beta") één voor één in beeld geschoven en
+ * (Box / Voice → "Coming soon") één voor één in beeld geschoven en
  * settelen verdeeld over het HELE kader (boven / midden / onder) — net als op
  * een Apple-lockscreen. Elke melding is een knop: tikken brengt je naar de
- * Box-site. Voice is sinds okt 2026 een deel van Box (de Mac-app), dus
- * geen apart product meer.
+ * wachtlijst.
  */
 
-type Notif = { id: string; app: string; logo: string; blurb: string; href: string }
+type Notif = { app: string; logo: string; blurb: string; href: string }
 
 const NOTIFS: Record<Lang, Notif[]> = {
   en: [
-    { id: 'inbox', app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your messages in one place.', href: waitlistHref('box') },
-    { id: 'voice', app: 'Box', logo: '/products/box-logo.webp', blurb: 'You talk, Box writes it out.', href: waitlistHref('box') },
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'All your communication in one place.', href: waitlistHref('box') },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Speech-to-text, tuned to your voice.', href: waitlistHref('voice') },
   ],
   nl: [
-    { id: 'inbox', app: 'Box', logo: '/products/box-logo.webp', blurb: 'Al uw berichten op één plek.', href: waitlistHref('box') },
-    { id: 'voice', app: 'Box', logo: '/products/box-logo.webp', blurb: 'U praat, Box schrijft het uit.', href: waitlistHref('box') },
+    { app: 'Box', logo: '/products/box-logo.webp', blurb: 'Al uw communicatie op één plek.', href: waitlistHref('box') },
+    { app: 'Voice', logo: '/products/voice-logo.webp', blurb: 'Spraak naar tekst, afgestemd op uw stem.', href: waitlistHref('voice') },
   ],
 }
 
 const COPY = {
-  en: { comingSoon: 'Beta', notifAria: (app: string) => `${app}, in beta, open the Box site` },
-  nl: { comingSoon: 'Beta', notifAria: (app: string) => `${app}, in beta, open de Box-site` },
+  en: { comingSoon: 'Coming soon', notifAria: (app: string) => `${app}, coming soon, get notified at launch` },
+  nl: { comingSoon: 'Binnenkort', notifAria: (app: string) => `${app}, binnenkort, laat u op de hoogte brengen bij de lancering` },
 } as const
 
 const CLOCK_LOCALE: Record<Lang, string> = { en: 'en-GB', nl: 'nl-NL' }
@@ -113,7 +112,7 @@ export function NotificationStack() {
           omhoog (bottom-anchored). 1 → 2 → 3, telkens van onderen erbij. */}
       <div className="absolute inset-0 flex flex-col justify-end gap-2.5 p-4 sm:p-5">
         {notifs.slice(0, shown).map((n) => (
-          <NotifCard key={n.id} {...n} time={time} />
+          <NotifCard key={n.app} {...n} time={time} />
         ))}
       </div>
     </div>

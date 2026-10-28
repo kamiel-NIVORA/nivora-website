@@ -12,7 +12,7 @@ const COPY = {
   },
   nl: {
     title: 'Laten we het juiste bouwen',
-    body: 'Vertel ons uw uitdaging, of het idee dat u maar niet gebouwd krijgt. We tonen u wat de moeite waard is, bewijzen de waarde voordat u zich vastlegt, en bouwen het samen met u.',
+    body: 'Vertel ons jullie uitdagingen, of de ideeën die jullie niet gebouwd krijgen. We tonen jullie wat de moeite waard is, bewijzen de waarde voordat jullie je vastleggen, en bouwen het samen met jullie.',
     bookCall: 'Boek een strategiegesprek',
     contact: 'Neem contact op',
   },

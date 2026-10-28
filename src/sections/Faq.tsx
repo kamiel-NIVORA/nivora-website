@@ -18,7 +18,7 @@ const COPY = {
     faq: [
       {
         q: 'What exactly does Nivora do?',
-        a: 'Two things. We build and install custom AI systems for your business, from private AI inside your own infrastructure to custom apps and complete ERP systems. And we make our own software, Box, that you can use directly. Either way, it is shaped around how you already work.',
+        a: 'Two things. We build and install custom AI systems for your business, from private AI inside your own infrastructure to custom apps and complete ERP systems. And we make our own software, Box and Voice, that you can use directly. Either way, it is shaped around how you already work.',
       },
       {
         q: 'Do I need to be technical to work with you?',
@@ -33,8 +33,8 @@ const COPY = {
         a: 'Yes. Local AI runs inside your own infrastructure, so your data never leaves your walls. Everything is GDPR-ready, and the systems we build are fully yours to keep.',
       },
       {
-        q: 'When can I use Box?',
-        a: 'Box is in beta. It connects Gmail, Outlook and WhatsApp today, with Instagram and Messenger built and waiting on Meta. We take our time on purpose: Box reads your mail and your WhatsApp, so security and privacy come first. Voice, our speech to text, is now part of Box, in the Box app for Mac. That Mac app is still in beta and not publicly available yet. Everything starts at box.nivoraworks.com.',
+        q: 'When can I use Box and Voice?',
+        a: 'Box is finished and in closed beta. We planned to open it in early September and did not: security and privacy were not where they needed to be, and Box reads your mail and your WhatsApp, so that is not something to launch with loose ends. It connects Gmail, Outlook and WhatsApp today, with Instagram and Messenger built and waiting on Meta, and Telegram, Slack and LinkedIn planned. Ask for early access at box.nivoraworks.com and you are among the first in. Voice is still in development.',
       },
       {
         q: 'How do we get started?',
@@ -44,13 +44,13 @@ const COPY = {
   },
   nl: {
     title: 'Vragen, beantwoord',
-    subtitle: 'Wat mensen meestal willen weten voor ze contact opnemen.',
+    subtitle: 'De dingen die mensen meestal willen weten voor ze contact opnemen.',
     stillHaveQuestion: 'Nog een vraag?',
     visitHelp: 'Ga naar het Helpcentrum',
     faq: [
       {
         q: 'Wat doet Nivora precies?',
-        a: 'Twee dingen. We bouwen en installeren AI-systemen op maat voor uw bedrijf, van private AI binnen uw eigen infrastructuur tot apps op maat en complete ERP-systemen. En we maken onze eigen software, Box, die u meteen kunt gebruiken. In beide gevallen past het bij hoe u vandaag al werkt.',
+        a: 'Twee dingen. We bouwen en installeren AI-systemen op maat voor uw bedrijf, van private AI binnen uw eigen infrastructuur tot apps op maat en complete ERP-systemen. En we maken onze eigen software, Box en Voice, die u meteen kunt gebruiken. Hoe dan ook, het wordt gevormd rond hoe u vandaag al werkt.',
       },
       {
         q: 'Moet ik technisch zijn om met u samen te werken?',
@@ -65,8 +65,8 @@ const COPY = {
         a: 'Ja. Local AI draait binnen uw eigen infrastructuur, dus uw gegevens verlaten nooit uw muren. Alles is GDPR-klaar, en de systemen die we bouwen blijven volledig van u.',
       },
       {
-        q: 'Wanneer kan ik Box gebruiken?',
-        a: 'Box zit in beta. Het koppelt vandaag Gmail, Outlook en WhatsApp. Instagram en Messenger zijn gebouwd en wachten op goedkeuring van Meta. We nemen bewust de tijd: Box leest uw mail en uw WhatsApp, dus beveiliging en privacy gaan voor. Voice, onze spraak naar tekst, zit nu in Box, in de Box-app voor Mac. Die Mac-app zit nog in beta en is nog niet publiek te downloaden. Alles begint op box.nivoraworks.com.',
+        q: 'Wanneer kan ik Box en Voice gebruiken?',
+        a: 'Box is af en zit in een besloten beta. We wilden begin september opengaan en hebben dat niet gedaan: beveiliging en privacy stonden nog niet zoals ze moesten staan, en Box leest uw mail en uw WhatsApp, dus dat lanceert u niet met losse eindjes. Het koppelt vandaag Gmail, Outlook en WhatsApp, met Instagram en Messenger gebouwd en wachtend op Meta, en Telegram, Slack en LinkedIn op de planning. Vraag vroege toegang aan op box.nivoraworks.com en u bent er als eerste bij. Voice is nog in ontwikkeling.',
       },
       {
         q: 'Hoe gaan we van start?',

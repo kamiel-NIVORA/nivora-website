@@ -168,30 +168,6 @@
   "redirects": [
     {
       "source": "/waitlist",
-      "has": [
-        {
-          "type": "query",
-          "key": "product",
-          "value": "voice"
-        }
-      ],
-      "destination": "https://box.nivoraworks.com/voice",
-      "permanent": false
-    },
-    {
-      "source": "/nl/waitlist",
-      "has": [
-        {
-          "type": "query",
-          "key": "product",
-          "value": "voice"
-        }
-      ],
-      "destination": "https://box.nivoraworks.com/voice",
-      "permanent": false
-    },
-    {
-      "source": "/waitlist",
       "missing": [
         {
           "type": "query",

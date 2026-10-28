@@ -114,12 +114,12 @@ const STATIC_EN = {
   '/about': {
     title: 'About · Nivora',
     description:
-      'Nivora is a software and AI studio in Brugge. We make our own product, Box, and build custom software and AI for companies that want to get the most out of it.',
+      'Nivora is a software and AI studio in Brugge. We make our own products, Box and Voice, and build custom software and AI for companies that want to get the most out of it.',
   },
   '/blog': {
     title: 'Blog · Nivora',
     description:
-      'Notes from Nivora: how we build our app Box, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
+      'Notes from Nivora: how we build our apps Box and Voice, where AI genuinely pays off, and what we learn building intelligent systems for companies.',
   },
   '/cases': {
     title: 'Work · Nivora',
@@ -138,12 +138,12 @@ const STATIC_EN = {
   },
   '/waitlist': {
     title: 'Waitlist · Nivora',
-    description: 'Join the list for Box, the Nivora app, and hear it the moment there is news.',
+    description: 'Join the waitlist for Box and Voice, the Nivora apps, and hear the moment they go live.',
   },
   '/affiliate': {
     title: 'Affiliate · Nivora',
     description:
-      'Become a Nivora affiliate: share Box with your network and earn for every new user. Sign up and be first in line.',
+      'Become a Nivora affiliate: share the Box and Voice apps with your network and earn for every new user. Sign up and be first in line.',
   },
   '/help': {
     title: 'Help Center · Nivora',
@@ -177,12 +177,12 @@ const STATIC_NL = {
   '/about': {
     title: 'Over Nivora · Nivora',
     description:
-      'Nivora is een software- en AI-studio in Brugge. We maken ons eigen product, Box, en bouwen software en AI op maat voor bedrijven die er het meeste uit willen halen.',
+      'Nivora is een software- en AI-studio in Brugge. We maken onze eigen producten, Box en Voice, en bouwen software en AI op maat voor bedrijven die er het meeste uit willen halen.',
   },
   '/blog': {
     title: 'Blog · Nivora',
     description:
-      'Notities van Nivora: hoe we onze app Box bouwen, waar AI echt loont, en wat we leren bij het bouwen van intelligente systemen voor bedrijven.',
+      'Notities van Nivora: hoe we onze apps Box en Voice bouwen, waar AI echt loont, en wat we leren bij het bouwen van intelligente systemen voor bedrijven.',
   },
   '/cases': {
     title: 'Work · Nivora',
@@ -201,12 +201,12 @@ const STATIC_NL = {
   },
   '/waitlist': {
     title: 'Wachtlijst · Nivora',
-    description: 'Zet uzelf op de lijst voor Box, de app van Nivora, en hoor het meteen wanneer er nieuws is.',
+    description: 'Schrijf u in op de wachtlijst voor Box en Voice, de Nivora-apps, en verneem het moment dat ze live gaan.',
   },
   '/affiliate': {
     title: 'Affiliate · Nivora',
     description:
-      'Word Nivora-affiliate: deel Box met uw netwerk en verdien voor elke nieuwe gebruiker. Schrijf u in en wees als eerste aan de beurt.',
+      'Word Nivora-affiliate: deel de apps Box en Voice met uw netwerk en verdien voor elke nieuwe gebruiker. Schrijf u in en wees als eerste aan de beurt.',
   },
   '/help': {
     title: 'Helpcentrum · Nivora',

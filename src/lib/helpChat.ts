@@ -322,8 +322,8 @@ function matchLocalReply(text: string, history: ChatMessage[], lang: Lang): stri
 
   if (has('box', 'voice', 'product', 'download', 'waitlist', 'early access', 'launch', 'beta', 'producten', 'wachtlijst', 'vroege toegang', 'lancering', 'lanceren')) {
     return nl
-      ? `Box is ons product, en het zit in beta. Box brengt al uw mail en chats samen op één plek. Voice, onze spraak naar tekst, zit nu in Box, in de Box-app voor Mac: u praat, en Box schrijft waar uw cursor staat. Die Mac-app is nog in beta en nog niet publiek te downloaden. Alles begint op box.nivoraworks.com.`
-      : `Box is our product, and it is in beta. Box brings all your mail and chats together in one place. Voice, our speech to text, now lives inside Box, in the Box app for Mac: you talk, and Box writes wherever your cursor is. That Mac app is still in beta and not publicly available yet. Everything starts at box.nivoraworks.com.`
+      ? `Box en Voice zijn onze twee producten, en beide lanceren binnenkort. Box brengt al uw communicatie samen op één plek, Voice is spraak naar tekst, afgestemd op hoe u schrijft. Laat uw gegevens achter op de wachtlijst, dan brengen we u op de hoogte zodra ze live gaan.`
+      : `Box and Voice are our two products, and both are launching soon. Box brings all your communication into one place, Voice is speech to text tuned to how you write. Leave your details on the waitlist and we'll notify you the moment they go live.`
   }
 
   if (has('contact', 'human', 'person', 'talk', 'call', 'email', 'phone', 'reach', 'speak', 'someone', 'mens', 'persoon', 'praten', 'bellen', 'mail', 'telefoon', 'bereiken', 'spreken', 'iemand')) {

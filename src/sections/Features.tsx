@@ -6,7 +6,7 @@ import { RippleButton } from '@/components/ui/RippleButton'
 import { NotificationStack } from '@/components/ui/NotificationStack'
 import { ServicesShowcase } from '@/components/ui/ServicesShowcase'
 import { getServices, type NavItem } from '@/lib/navigation'
-import { BOX_SITE_URL, opensInNewTab } from '@/data/contact'
+import { WAITLIST_URL } from '@/data/contact'
 import { useLang, localizePath } from '@/i18n'
 
 const cycleEase = [0.22, 1, 0.36, 1] as const
@@ -60,18 +60,18 @@ const COPY = {
   en: {
     headingTitle: 'The tools you need. The systems you want.',
     headingSubtitle:
-      'Use our own software, or let us build and install exactly what your business needs. Ready to use or built to order, both are made to fit right into your day.',
-    comingSoon: 'Beta',
+      'Use our software the day it launches, or let us build and install exactly what your business needs. Ready to use or built to order, both are made to fit right into your day.',
+    comingSoon: 'Coming soon',
     learnMoreAbout: 'Learn more about',
     altPrefix: 'Visual illustrating',
     features: [
       {
         title: 'Our Products',
-        body: 'Box, built by Nivora. All your mail and chats in one calm inbox, and on Mac you simply talk while Box writes. No complex setup, no long onboarding.',
+        body: 'Intelligent software built by Nivora, ready to use from day one. Pick the tool that fits your workflow and start immediately. No setup complexity, no lengthy onboarding.',
         notifications: true,
         comingSoon: true,
-        cta: 'Discover Box',
-        href: BOX_SITE_URL,
+        cta: 'Get notified at launch',
+        href: WAITLIST_URL,
         secondaryCta: 'See more',
         secondaryHref: '#products',
       },
@@ -87,24 +87,24 @@ const COPY = {
   nl: {
     headingTitle: 'De tools die u nodig hebt. De systemen die u wilt.',
     headingSubtitle:
-      'Gebruik onze eigen software, of laat ons bouwen en installeren wat uw bedrijf nodig heeft. Kant-en-klaar of op maat, het past in hoe u nu al werkt.',
-    comingSoon: 'Beta',
+      'Gebruik onze software meteen, of laat ons precies bouwen en installeren wat uw bedrijf nodig heeft. Klaar voor gebruik of op maat gebouwd.',
+    comingSoon: 'Binnenkort',
     learnMoreAbout: 'Lees meer over',
     altPrefix: 'Visual van',
     features: [
       {
         title: 'Onze producten',
-        body: 'Box, gebouwd door Nivora. Al uw mail en chats in één rustige inbox, en op de Mac praat u gewoon terwijl Box schrijft. Geen ingewikkelde installatie, geen lange uitleg.',
+        body: 'Intelligente software gebouwd door Nivora, klaar voor gebruik vanaf dag één. Kies de tool die bij uw workflow past en ga meteen aan de slag.',
         notifications: true,
         comingSoon: true,
-        cta: 'Ontdek Box',
-        href: BOX_SITE_URL,
+        cta: 'Word op de hoogte gebracht bij de lancering',
+        href: WAITLIST_URL,
         secondaryCta: 'Bekijk meer',
         secondaryHref: '#products',
       },
       {
         title: 'Onze diensten',
-        body: 'U brengt de uitdaging, wij regelen de rest. Van het installeren van private AI binnen uw infrastructuur tot het bouwen van apps op maat en complete ERP-systemen.',
+        body: 'U brengt jullie uitdagingen, wij regelen de rest. Van het installeren van private AI binnen uw infrastructuur tot het bouwen van apps op maat en complete ERP-systemen.',
         services: true,
         cta: 'Lees meer over AIOS',
         href: '#aios',
@@ -173,8 +173,8 @@ function FeatureCard({
               <RippleButton
                 variant="solid"
                 href={localizePath(href, lang)}
-                target={opensInNewTab(href) ? '_blank' : undefined}
-                rel={opensInNewTab(href) ? 'noopener noreferrer' : undefined}
+                target={href === WAITLIST_URL ? '_blank' : undefined}
+                rel={href === WAITLIST_URL ? 'noopener noreferrer' : undefined}
                 className="min-h-11 w-full justify-center px-5 py-2.5 text-center text-sm sm:w-auto"
               >
                 {cta}

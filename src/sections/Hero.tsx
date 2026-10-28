@@ -16,7 +16,7 @@ const COPY = {
   },
   nl: {
     headlineLines: ['Intelligente systemen', 'voor ambitieuze bedrijven.'],
-    sub: 'Elk bedrijf voelt de druk om meer met AI te doen.\nNivora bouwt alleen wat echt helpt, en toont u eerst wat het oplevert.',
+    sub: 'Elk bedrijf voelt de druk om meer te doen met AI. Nivora bouwt wat uw bedrijf echt vooruithelpt,\nen laat u de waarde van een AI-toepassing zien voordat u de investering maakt.',
     bookCall: 'Boek een gesprek',
     contact: 'Neem contact op',
   },

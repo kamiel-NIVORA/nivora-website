@@ -5,7 +5,7 @@ import { localizePath, type Lang, type Localized } from '@/i18n'
 /** Shared navigation source of truth — used by both the Navbar and the Footer
  *  so the two never drift apart. Each list exists in English and Dutch; call the
  *  `getX(lang)` selectors to read the right one. Brand and product names (Nivora,
- *  Box, AIOS, the service names) stay as-is in both languages. */
+ *  Box, Voice, AIOS, the service names) stay as-is in both languages. */
 export type NavItem = {
   title: string
   desc?: string
@@ -16,16 +16,16 @@ export type NavItem = {
   /** White line icon shown inside the subtle grey square — like the Lucide icons. */
   iconImg?: string
   comingSoon?: boolean
-  /** Shows a "Beta" tag instead of "Coming soon" (Box, since Oct 2026). */
-  beta?: boolean
 }
 
 /* ── Products ── */
 const PRODUCTS_EN: NavItem[] = [
-  { title: 'Box', desc: 'All your mail and chats in one calm inbox. And on Mac: you talk, Box writes.', href: waitlistHref('box'), img: '/products/box-logo.webp', beta: true },
+  { title: 'Box', desc: 'Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Speech-to-text, tuned to your voice and your writing.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 const PRODUCTS_NL: NavItem[] = [
-  { title: 'Box', desc: 'Al uw mail en chats in één rustige inbox. En op de Mac: u praat, Box schrijft.', href: waitlistHref('box'), img: '/products/box-logo.webp', beta: true },
+  { title: 'Box', desc: 'Gmail, Outlook, WhatsApp, Instagram en Messenger in één rustig postvak.', href: waitlistHref('box'), img: '/products/box-logo.webp', comingSoon: true },
+  { title: 'Voice', desc: 'Spraak naar tekst, afgestemd op uw stem en schrijfstijl.', href: waitlistHref('voice'), img: '/products/voice-logo.webp', comingSoon: true },
 ]
 
 /* ── Services ── */
@@ -87,9 +87,9 @@ export const getResources = (lang: Lang): NavItem[] => withLang(lang === 'nl' ? 
 export type MenuKey = 'Products' | 'Services' | 'Company' | 'Resources'
 
 /* De volgorde in de balk. Diensten staan vooraan omdat dat is wat Nivora
-   vandaag verkoopt; Box zit nog in beta (Voice is sinds okt 2026 een deel
-   van Box), dus wie eerst op Producten klikt ziet een beta voor hij gezien
-   heeft wat er wel te koop is. Dit is de leesvolgorde, niet de navigatiestructuur: elke sleutel houdt
+   vandaag verkoopt; Box en Voice zijn nog niet uit, dus wie op Producten klikt
+   komt twee keer "Binnenkort" tegen voor hij gezien heeft wat er wel te koop
+   is. Dit is de leesvolgorde, niet de navigatiestructuur: elke sleutel houdt
    zijn eigen items en labels hieronder. */
 export const MENU_KEYS: MenuKey[] = ['Services', 'Products', 'Company', 'Resources']
 

@@ -266,17 +266,18 @@ const LOGOS: Localized<LogoAsset[]> = {
 export const getLogos = (lang: Lang): LogoAsset[] => LOGOS[lang]
 
 /* ── Product & service marks ──
-   The app icon for Box, and the icon for each service. (Voice became part
-   of Box in Oct 2026, so it no longer has its own mark here.) Same handling
+   The app icons for Box and Voice, and the icon for each service. Same handling
    rules as the logo: copy or download, never redraw or recolour. ── */
 export type IconMark = { name: string; desc: string; src: string; filename: string }
 
 const PRODUCT_MARKS: Localized<IconMark[]> = {
   en: [
-    { name: 'Box', desc: 'The app icon for Box, all your mail and chats in one place.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Box', desc: 'The app icon for Box, all your communication in one place.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Voice', desc: 'The app icon for Voice, speech to text tuned to how you write.', src: '/products/voice-logo.webp', filename: 'nivora-voice.webp' },
   ],
   nl: [
-    { name: 'Box', desc: 'Het app-icoon voor Box, al uw mail en chats op één plek.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Box', desc: 'Het app-icoon voor Box, al uw communicatie op één plek.', src: '/products/box-logo.webp', filename: 'nivora-box.webp' },
+    { name: 'Voice', desc: 'Het app-icoon voor Voice, spraak naar tekst afgestemd op uw stijl.', src: '/products/voice-logo.webp', filename: 'nivora-voice.webp' },
   ],
 }
 

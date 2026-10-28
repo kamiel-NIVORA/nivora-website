@@ -1,13 +1,13 @@
 # Nivora Works
 
-> Nivora is a software and AI studio in Brugge, Belgium. It builds its own app, Box (in beta at box.nivoraworks.com), and designs custom software and AI systems for companies: bespoke apps, local (on-premise) AI installations, AI operating systems and AI consulting.
+> Nivora is a software and AI studio in Brugge, Belgium. It builds its own apps, Box (in closed beta at box.nivoraworks.com, opening soon) and Voice (in development), and designs custom software and AI systems for companies: bespoke apps, local (on-premise) AI installations, AI operating systems and AI consulting.
 
 Nivora (also written as Nivora Works or NivoraWorks) works with companies that want intelligent systems built around how they actually operate, with a strong focus on data privacy: its Local AI service runs powerful AI models on the customer's own servers so data never leaves the building.
 
 ## Products
 
-- [Box](https://box.nivoraworks.com/): in beta. Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone.
-- [Box for Mac](https://box.nivoraworks.com/voice): Voice, the former speech-to-text app, is now part of Box. Hold a key, talk, and Box writes wherever your cursor is; a small island at the top of the screen shows calendar, follow-ups, chats and mail, and Box AI helps on the Mac. In beta, not publicly downloadable yet.
+- [Box](https://box.nivoraworks.com/): finished and in closed beta, opening soon. Gmail, Outlook, WhatsApp, Instagram and Messenger in one calm inbox, with AI that says which messages are actually waiting on a reply and drafts the answer in your own tone. Telegram, Slack and LinkedIn are planned. Pricing is not published yet. Ask for early access on the site.
+- [Voice](https://nivoraworks.com/waitlist?product=voice): turns the way you talk into finished, well-formatted text in your own style. Still in development, waiting list open.
 
 ## Services
 
@@ -27,12 +27,12 @@ Nivora works in three trades and says no to the rest, so the work in each one go
 ## Pages
 
 - [About](https://nivoraworks.com/about): the studio and founder Kamiel Niville.
-- [Blog](https://nivoraworks.com/blog): notes on building Box and where AI creates real value.
+- [Blog](https://nivoraworks.com/blog): notes on building Box and Voice and where AI creates real value.
 - [Contact](https://nivoraworks.com/contact): Julius en Maurits Sabbestraat 15, 8000 Brugge, Belgium. kamiel@nivoraworks.com, +32 489 00 77 37.
 
 ## Frequently asked
 
-What does Nivora do? Nivora builds and installs custom AI systems for companies, from private (local) AI inside your own infrastructure to custom apps and complete AI operating systems, and it makes its own software, Box.
+What does Nivora do? Nivora builds and installs custom AI systems for companies, from private (local) AI inside your own infrastructure to custom apps and complete AI operating systems, and it makes its own software, Box and Voice.
 
 Where is Nivora based? Nivora is a software and AI studio in Brugge, Belgium, working with companies across Belgium and the Netherlands.
 

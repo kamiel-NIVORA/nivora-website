@@ -27,7 +27,6 @@ const ORDER: Record<MenuKey, number> = { Products: 0, Services: 1, Company: 2, R
 const COPY = {
   en: {
     comingSoon: 'Coming soon',
-    beta: 'Beta',
     interested: 'Interested?',
     bookDemo: 'Book a demo',
     bookStrategy: 'Book a strategy call',
@@ -38,13 +37,12 @@ const COPY = {
     toggleMenu: 'Toggle menu',
     dismiss: 'Dismiss',
     home: 'Nivora works home',
-    bannerLead: 'Box is in beta.',
-    bannerCta: 'Discover Box',
-    bannerCtaShort: 'Discover Box',
+    bannerLead: 'Box is coming soon.',
+    bannerCta: 'Get early access',
+    bannerCtaShort: 'Get early access',
   },
   nl: {
     comingSoon: 'Binnenkort',
-    beta: 'Beta',
     interested: 'Interesse?',
     bookDemo: 'Boek een demo',
     bookStrategy: 'Boek een strategiegesprek',
@@ -55,9 +53,9 @@ const COPY = {
     toggleMenu: 'Menu openen',
     dismiss: 'Sluiten',
     home: 'Nivora works home',
-    bannerLead: 'Box zit in beta.',
-    bannerCta: 'Ontdek Box',
-    bannerCtaShort: 'Ontdek Box',
+    bannerLead: 'Box komt binnenkort.',
+    bannerCta: 'Vraag vroege toegang aan',
+    bannerCtaShort: 'Vroege toegang',
   },
 } as const
 
@@ -68,7 +66,7 @@ const slide = {
 }
 
 /* Small, elegant "coming soon" tag — used next to Products. */
-function ComingSoonTag({ className, beta = false }: { className?: string; beta?: boolean }) {
+function ComingSoonTag({ className }: { className?: string }) {
   const { lang } = useLang()
   return (
     <span
@@ -78,13 +76,13 @@ function ComingSoonTag({ className, beta = false }: { className?: string; beta?:
       )}
     >
       <span className="h-1 w-1 rounded-full bg-olive shadow-[0_0_6px_rgba(150,167,102,0.7)]" />
-      {beta ? COPY[lang].beta : COPY[lang].comingSoon}
+      {COPY[lang].comingSoon}
     </span>
   )
 }
 
 /* ── Item primitives ── */
-function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon, beta }: Item) {
+function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon }: Item) {
   const { lang } = useLang()
   return (
     <a
@@ -111,7 +109,7 @@ function CardItem({ title, desc, href, Icon, img, iconImg, comingSoon, beta }: I
       <span className="min-w-0">
         <span className="flex items-center gap-2">
           <span className="text-[15px] font-semibold leading-tight text-ink">{title}</span>
-          {(comingSoon || beta) && <ComingSoonTag beta={beta} />}
+          {comingSoon && <ComingSoonTag />}
         </span>
         {desc && <span className="mt-1 block text-[13px] leading-snug text-faint">{desc}</span>}
       </span>
@@ -386,7 +384,7 @@ export function Navbar() {
                       className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] text-muted hover:bg-white/5 hover:text-ink active:bg-white/5"
                     >
                       {l.title}
-                      {(l.comingSoon || l.beta) && <ComingSoonTag beta={l.beta} />}
+                      {l.comingSoon && <ComingSoonTag />}
                     </a>
                   ))}
                 </Fragment>
