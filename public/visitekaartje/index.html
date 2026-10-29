@@ -77,11 +77,8 @@
   .action:hover { background: var(--tint-2) }
   .action:active { transform: scale(.96) }
   /* Iconen die zichzelf intekenen: telefoon-plus, mail-plus en globe, zoals op de Bonafia-kaart.
-     Vormen naar AnimateIcons / Lucide (MIT, github.com/Avijit07x/animateicons). Eén keer bij het openen
-     (vertraging --b per tegel, --d per lijn, duur --t), opnieuw bij hover. */
-  .ink [pathLength] { stroke-dasharray: 1 }
-  .ink.play [pathLength] { animation: ink var(--t, .6s) cubic-bezier(.16,1,.3,1) calc(var(--b, 0s) + var(--d, 0s)) both }
-  @keyframes ink { 0% { stroke-dashoffset: 1; opacity: 0 } 1% { opacity: 1 } 100% { stroke-dashoffset: 0; opacity: 1 } }
+     Vormen naar AnimateIcons / Lucide (MIT, github.com/Avijit07x/animateicons). De animatie zelf start
+     in het script onderaan (Web Animations API), zodat ze ook na de glazen opening betrouwbaar speelt. */
 
   .cta { display: flex; gap: 10px; margin-top: 10px }
   .primary { flex: 1; min-width: 0; height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 600; font-size: 16px; letter-spacing: -.01em; box-shadow: 0 12px 30px -14px rgba(6,6,6,.55); transition: transform .2s var(--ease) }
@@ -89,16 +86,8 @@
 
   /* Kalender-plus die zichzelf tekent. Zelfde paden, timing en easing als het "calendar plus"-icoon
      van AnimateIcons (Avijit Dey, MIT, github.com/Avijit07x/animateicons), hier in CSS i.p.v. motion/react. */
-  .cal path[pathLength] { stroke-dasharray: 1 }
-  .play .cal .body { animation: cal-draw .5s cubic-bezier(.16,1,.3,1) both }
-  .play .cal .hang { animation: cal-draw .3s cubic-bezier(.16,1,.3,1) calc(var(--i) * .08s) both }
   .cal .head { transform-box: view-box; transform-origin: 3px 10px }
-  .play .cal .head { animation: cal-grow .4s cubic-bezier(.16,1,.3,1) .28s both }
   .cal .sign { transform-box: view-box; transform-origin: 19px 19px }
-  .play .cal .sign { animation: cal-pop .42s cubic-bezier(.34,1.4,.64,1) calc(.42s + var(--i) * .08s) both }
-  @keyframes cal-draw { from { stroke-dashoffset: 1; opacity: 0 } to { stroke-dashoffset: 0; opacity: 1 } }
-  @keyframes cal-grow { from { transform: scaleX(0); opacity: 0 } to { transform: none; opacity: 1 } }
-  @keyframes cal-pop { 0% { transform: scale(0); opacity: 0 } 60% { transform: scale(1.2); opacity: 1 } 100% { transform: scale(1); opacity: 1 } }
   .circle { width: 56px; height: 56px; flex-shrink: 0; display: grid; place-items: center; border-radius: 999px; background: var(--tint); transition: transform .2s var(--ease), background .2s }
   .circle:hover { background: var(--tint-2) }
   .circle:active { transform: scale(.95) }
@@ -224,28 +213,28 @@
 
     <div class="sheet">
       <div class="actions rise" style="animation-delay:.3s">
-        <a class="action ink" style="--b:.55s" href="tel:+32489007737">
+        <a class="action ink" data-base=".55" href="tel:+32489007737">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path pathLength="1" style="--t:.7s" d="M8 3c0.5 0 2.5 4.5 2.5 5c0 1 -1.5 2 -2 3c-0.5 1 0.5 2 1.5 3c0.39 0.39 2 2 3 1.5c1 -0.5 2 -2 3 -2c0.5 0 5 2 5 2.5c0 2 -1.5 3.5 -3 4c-1.5 0.5 -2.5 0.5 -4.5 0c-2 -0.5 -3.5 -1 -6 -3.5c-2.5 -2.5 -3 -4 -3.5 -6c-0.5 -2 -0.5 -3 0 -4.5c0.5 -1.5 2 -3 4 -3Z"/>
-            <path pathLength="1" style="--d:.6s;--t:.25s" d="M15 6h6"/>
-            <path pathLength="1" style="--d:.75s;--t:.25s" d="M18 3v6"/>
+            <path pathLength="1" data-draw="0,.7" d="M8 3c0.5 0 2.5 4.5 2.5 5c0 1 -1.5 2 -2 3c-0.5 1 0.5 2 1.5 3c0.39 0.39 2 2 3 1.5c1 -0.5 2 -2 3 -2c0.5 0 5 2 5 2.5c0 2 -1.5 3.5 -3 4c-1.5 0.5 -2.5 0.5 -4.5 0c-2 -0.5 -3.5 -1 -6 -3.5c-2.5 -2.5 -3 -4 -3.5 -6c-0.5 -2 -0.5 -3 0 -4.5c0.5 -1.5 2 -3 4 -3Z"/>
+            <path pathLength="1" data-draw=".6,.25" d="M15 6h6"/>
+            <path pathLength="1" data-draw=".75,.25" d="M18 3v6"/>
           </svg>
           <span data-i18n="call">Bellen</span>
         </a>
-        <a class="action ink" style="--b:.67s" href="mailto:kamiel@nivoraworks.com">
+        <a class="action ink" data-base=".67" href="mailto:kamiel@nivoraworks.com">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path pathLength="1" style="--t:.7s" d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/>
-            <path pathLength="1" style="--d:.35s;--t:.5s" d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            <path pathLength="1" style="--d:.65s;--t:.25s" d="M19 16v6"/>
-            <path pathLength="1" style="--d:.75s;--t:.25s" d="M16 19h6"/>
+            <path pathLength="1" data-draw="0,.7" d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/>
+            <path pathLength="1" data-draw=".35,.5" d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            <path pathLength="1" data-draw=".65,.25" d="M19 16v6"/>
+            <path pathLength="1" data-draw=".75,.25" d="M16 19h6"/>
           </svg>
           <span>Mail</span>
         </a>
-        <a class="action ink" style="--b:.79s" href="https://nivoraworks.com/" target="_blank" rel="noopener">
+        <a class="action ink" data-base=".79" href="https://nivoraworks.com/" target="_blank" rel="noopener">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle pathLength="1" style="--t:.8s" cx="12" cy="12" r="10"/>
-            <path pathLength="1" style="--d:.35s;--t:.6s" d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-            <path pathLength="1" style="--d:.5s;--t:.45s" d="M2 12h20"/>
+            <circle pathLength="1" data-draw="0,.8" cx="12" cy="12" r="10"/>
+            <path pathLength="1" data-draw=".35,.6" d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path pathLength="1" data-draw=".5,.45" d="M2 12h20"/>
           </svg>
           <span>Website</span>
         </a>
@@ -254,12 +243,12 @@
       <div class="cta rise" style="animation-delay:.37s">
         <a class="primary" data-cal href="https://booking.nivoraworks.com/?via=visitekaartje&amp;lp=%2Fvisitekaartje" target="_blank" rel="noopener">
           <svg class="cal" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path class="hang" style="--i:0" pathLength="1" d="M8 2v4"/>
-            <path class="hang" style="--i:1" pathLength="1" d="M16 2v4"/>
-            <path class="body" pathLength="1" d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"/>
-            <path class="head" d="M3 10h18"/>
-            <path class="sign" style="--i:0" d="M16 19h6"/>
-            <path class="sign" style="--i:1" d="M19 16v6"/>
+            <path class="hang" pathLength="1" data-draw="0,.3" d="M8 2v4"/>
+            <path class="hang" pathLength="1" data-draw=".08,.3" d="M16 2v4"/>
+            <path class="body" pathLength="1" data-draw="0,.5" d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"/>
+            <path class="head" data-grow=".28" d="M3 10h18"/>
+            <path class="sign" data-pop=".42" d="M16 19h6"/>
+            <path class="sign" data-pop=".5" d="M19 16v6"/>
           </svg>
           <span data-i18n="book">Plan een gesprek</span>
         </a>
@@ -403,24 +392,41 @@
     toast(t('copied'))
   }))
 
-  // kalender in "Plan een gesprek": tekent zichzelf zodra de knop er staat, en opnieuw bij hover of focus
-  const cal = document.querySelector('[data-cal]')
-  const draw = () => { cal.classList.remove('play'); void cal.offsetWidth; cal.classList.add('play') }
-  if (document.documentElement.classList.contains('intro')) document.addEventListener('introend', () => setTimeout(draw, 650), { once: true })
-  else setTimeout(draw, 650)
-  cal.addEventListener('mouseenter', draw)
-  cal.addEventListener('focus', draw)
-
-  // snelknoppen: de iconen tekenen zich in zodra de kaart zichtbaar is (na de glazen opening),
-  // en opnieuw bij hover of focus. Zonder JavaScript staan ze er gewoon volledig.
+  // Iconen die zichzelf tekenen: de snelknoppen (telefoon-plus, mail-plus, globe) en de kalender in
+  // "Plan een gesprek". Web Animations API i.p.v. CSS-klassen: Chrome herberekende de CSS-animatie niet
+  // wanneer ze pas na de glazen opening startte. Zonder JavaScript of met "minder beweging" staan ze stil en volledig.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const OUT = 'cubic-bezier(.16,1,.3,1)'
+  const sec = (v) => parseFloat(v) * 1000
+  const animateIcon = (root, base) => {
+    if (still || !root.animate) return
+    root.querySelectorAll('[data-draw]').forEach((el) => {
+      const [d, t] = el.dataset.draw.split(',')
+      el.style.strokeDasharray = '1'
+      el.getAnimations().forEach((a) => a.cancel())
+      el.animate([{ strokeDashoffset: 1, opacity: 0 }, { strokeDashoffset: 1, opacity: 1, offset: 0.01 }, { strokeDashoffset: 0, opacity: 1 }], { duration: sec(t), delay: base + sec(d), easing: OUT, fill: 'both' })
+    })
+    root.querySelectorAll('[data-grow]').forEach((el) => {
+      el.getAnimations().forEach((a) => a.cancel())
+      el.animate([{ transform: 'scaleX(0)', opacity: 0 }, { transform: 'scaleX(1)', opacity: 1 }], { duration: 400, delay: base + sec(el.dataset.grow), easing: OUT, fill: 'both' })
+    })
+    root.querySelectorAll('[data-pop]').forEach((el) => {
+      el.getAnimations().forEach((a) => a.cancel())
+      el.animate([{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.2)', opacity: 1, offset: 0.6 }, { transform: 'scale(1)', opacity: 1 }], { duration: 420, delay: base + sec(el.dataset.pop), easing: 'cubic-bezier(.34,1.4,.64,1)', fill: 'both' })
+    })
+  }
   const inks = document.querySelectorAll('.action.ink')
-  const ink = () => inks.forEach((a) => a.classList.add('play'))
-  if (document.documentElement.classList.contains('intro')) document.addEventListener('introend', ink, { once: true })
-  else ink()
-  inks.forEach((a) => {
-    const again = () => { a.style.setProperty('--b', '0s'); a.classList.remove('play'); void a.offsetWidth; a.classList.add('play') }
-    a.addEventListener('mouseenter', again)
-    a.addEventListener('focus', again)
+  const cal = document.querySelector('[data-cal]')
+  const start = () => {
+    inks.forEach((a) => animateIcon(a, sec(a.dataset.base)))
+    animateIcon(cal, 650)
+  }
+  if (document.documentElement.classList.contains('intro')) document.addEventListener('introend', start, { once: true })
+  else start()
+  // opnieuw bij hover of focus, zonder de openingsvertraging
+  ;[...inks, cal].forEach((el) => {
+    el.addEventListener('mouseenter', () => animateIcon(el, 0))
+    el.addEventListener('focus', () => animateIcon(el, 0))
   })
 
   // deelvenster
