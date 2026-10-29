@@ -52,8 +52,8 @@ export const config = {
 
 const DUTCH_COUNTRIES = new Set(['BE', 'NL', 'LU'])
 
-/* Online visitekaartjes, zie public/kamiel. */
-const CARD_PATHS = new Set(['/kamiel', '/kamiel/'])
+/* Online visitekaartje, zie public/visitekaartje. */
+const CARD_PATHS = new Set(['/visitekaartje', '/visitekaartje/', '/kamiel', '/kamiel/'])
 
 /* Engelse basispaden naar hun Nederlandse spelling, en omgekeerd. Alleen de
    landingspagina's staan hierin; elke andere route (/about, /services/:slug,
@@ -105,8 +105,9 @@ export default function middleware(request: Request) {
   const path = url.pathname
 
   /* Het online visitekaartje (de QR-code op het papieren kaartje) is een losse
-     pagina in public/kamiel en kiest zelf zijn taal. Nooit naar /nl/kamiel sturen:
-     dat pad bestaat niet en de gedrukte QR moet altijd werken. */
+     pagina in public/visitekaartje en kiest zelf zijn taal. Nooit naar /nl sturen:
+     dat pad bestaat niet en de gedrukte QR moet altijd werken. /kamiel was het
+     eerste adres en verwijst door (vercel.json). */
   if (CARD_PATHS.has(path)) return
 
   // Crawlers: laat het opgevraagde pad met rust, in beide talen.

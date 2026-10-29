@@ -10,7 +10,7 @@ ADR;TYPE=WORK:;;Julius en Maurits Sabbestraat 15;Brugge;;8000;België
 URL;TYPE=WORK:https://nivoraworks.com
 item1.URL:https://booking.nivoraworks.com
 item1.X-ABLabel:Afspraak
-item2.URL:https://nivoraworks.com/kamiel
+item2.URL:https://nivoraworks.com/visitekaartje
 item2.X-ABLabel:Visitekaartje
 X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/nivoraworks/
 X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/company/116050071

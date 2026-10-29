@@ -180,6 +180,11 @@
   ],
   "redirects": [
     {
+      "source": "/kamiel",
+      "destination": "/visitekaartje",
+      "permanent": true
+    },
+    {
       "source": "/waitlist",
       "missing": [
         {
