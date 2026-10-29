@@ -21,6 +21,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
 <link rel="preload" as="image" href="/visitekaartje/kamiel.jpg">
+<script>
+  // Glazen opening: één keer per bezoek (#intro toont ze opnieuw), niet bij "minder beweging".
+  // Gaat het script mis, dan haalt de time-out de laag na 4,5 s toch weg.
+  try {
+    var k = 'nivora-card-intro'
+    if (location.hash === '#intro' || (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem(k))) {
+      sessionStorage.setItem(k, '1')
+      document.documentElement.classList.add('intro')
+      setTimeout(function () {
+        if (!document.documentElement.classList.contains('intro')) return
+        document.documentElement.classList.remove('intro')
+        document.dispatchEvent(new Event('introend'))
+      }, 4500)
+    }
+  } catch (e) {}
+</script>
+<script src="/visitekaartje/glass-intro.js" defer></script>
 <style>
   :root {
     --ink: #060606; --ink-2: #3d3d3d; --muted: #737373; --faint: #a3a3a3;
@@ -163,12 +180,28 @@
   .toast.show { opacity: 1; transform: translate(-50%, 0) }
 
   .rise { opacity: 0; transform: translateY(14px); animation: up .8s var(--ease) forwards }
+
+  /* glazen opening */
+  .intro-layer { display: none }
+  html.intro .intro-layer, .intro-layer.out { display: block; position: fixed; inset: 0; z-index: 70; background: #060606; cursor: pointer; transition: opacity .55s var(--ease) }
+  .intro-layer.out { opacity: 0; pointer-events: none }
+  .intro-stage { position: absolute; inset: 0 }
+  .intro-foot { position: absolute; inset: auto 0 0; display: flex; justify-content: center; padding-bottom: max(36px, calc(env(safe-area-inset-bottom) + 20px)); opacity: 0; animation: up .8s var(--ease) .9s forwards }
+  .intro-foot img { height: 11px; width: auto; opacity: .5 }
+  html.intro { overflow: hidden }
+  .card { animation: card-in .9s var(--ease) both }
+  @keyframes card-in { from { opacity: 0; transform: translateY(28px) } }
+  html.intro .card, html.intro .rise, html.intro .photo, html.intro .aside { animation-play-state: paused }
   @keyframes up { to { opacity: 1; transform: none } }
   @keyframes photo { to { opacity: 1; transform: none } }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important } }
 </style>
 </head>
 <body>
+<div class="intro-layer" data-intro role="img" aria-label="Nivora Works">
+  <div class="intro-stage" data-stage></div>
+  <div class="intro-foot"><img src="/visitekaartje/nivora-woordmerk-wit.svg" alt=""></div>
+</div>
 <main class="page">
   <article class="card">
     <header class="poster">
@@ -191,7 +224,7 @@
 
     <div class="sheet">
       <div class="actions rise" style="animation-delay:.3s">
-        <a class="action ink play" style="--b:.55s" href="tel:+32489007737">
+        <a class="action ink" style="--b:.55s" href="tel:+32489007737">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path pathLength="1" style="--t:.7s" d="M8 3c0.5 0 2.5 4.5 2.5 5c0 1 -1.5 2 -2 3c-0.5 1 0.5 2 1.5 3c0.39 0.39 2 2 3 1.5c1 -0.5 2 -2 3 -2c0.5 0 5 2 5 2.5c0 2 -1.5 3.5 -3 4c-1.5 0.5 -2.5 0.5 -4.5 0c-2 -0.5 -3.5 -1 -6 -3.5c-2.5 -2.5 -3 -4 -3.5 -6c-0.5 -2 -0.5 -3 0 -4.5c0.5 -1.5 2 -3 4 -3Z"/>
             <path pathLength="1" style="--d:.6s;--t:.25s" d="M15 6h6"/>
@@ -199,7 +232,7 @@
           </svg>
           <span data-i18n="call">Bellen</span>
         </a>
-        <a class="action ink play" style="--b:.67s" href="mailto:kamiel@nivoraworks.com">
+        <a class="action ink" style="--b:.67s" href="mailto:kamiel@nivoraworks.com">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path pathLength="1" style="--t:.7s" d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/>
             <path pathLength="1" style="--d:.35s;--t:.5s" d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
@@ -208,7 +241,7 @@
           </svg>
           <span>Mail</span>
         </a>
-        <a class="action ink play" style="--b:.79s" href="https://nivoraworks.com/" target="_blank" rel="noopener">
+        <a class="action ink" style="--b:.79s" href="https://nivoraworks.com/" target="_blank" rel="noopener">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle pathLength="1" style="--t:.8s" cx="12" cy="12" r="10"/>
             <path pathLength="1" style="--d:.35s;--t:.6s" d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
@@ -373,12 +406,18 @@
   // kalender in "Plan een gesprek": tekent zichzelf zodra de knop er staat, en opnieuw bij hover of focus
   const cal = document.querySelector('[data-cal]')
   const draw = () => { cal.classList.remove('play'); void cal.offsetWidth; cal.classList.add('play') }
-  setTimeout(draw, 650)
+  if (document.documentElement.classList.contains('intro')) document.addEventListener('introend', () => setTimeout(draw, 650), { once: true })
+  else setTimeout(draw, 650)
   cal.addEventListener('mouseenter', draw)
   cal.addEventListener('focus', draw)
 
-  // snelknoppen: bij hover of focus tekent het icoon zich opnieuw
-  document.querySelectorAll('.action.ink').forEach((a) => {
+  // snelknoppen: de iconen tekenen zich in zodra de kaart zichtbaar is (na de glazen opening),
+  // en opnieuw bij hover of focus. Zonder JavaScript staan ze er gewoon volledig.
+  const inks = document.querySelectorAll('.action.ink')
+  const ink = () => inks.forEach((a) => a.classList.add('play'))
+  if (document.documentElement.classList.contains('intro')) document.addEventListener('introend', ink, { once: true })
+  else ink()
+  inks.forEach((a) => {
     const again = () => { a.style.setProperty('--b', '0s'); a.classList.remove('play'); void a.offsetWidth; a.classList.add('play') }
     a.addEventListener('mouseenter', again)
     a.addEventListener('focus', again)
