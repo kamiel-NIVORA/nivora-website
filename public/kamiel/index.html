@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kamiel Niville · Nivora Works</title>
+<meta name="description" content="Oprichter van Nivora Works, software- en AI-studio in Brugge. Plan een gesprek, bewaar mijn contact of bekijk ons werk.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Kamiel Niville · Nivora Works">
+<meta property="og:description" content="Plan een gesprek, bewaar mijn contact of bekijk ons werk.">
+<meta property="og:url" content="https://nivoraworks.com/kamiel">
+<meta property="og:image" content="https://nivoraworks.com/visitekaartje/og-kamiel.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/visitekaartje/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/visitekaartje/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<link rel="preload" as="image" href="/visitekaartje/kamiel.jpg">
+<style>
+  :root {
+    --ink: #060606; --ink-2: #3d3d3d; --muted: #737373; --faint: #a3a3a3;
+    --tint: #f4f4f3; --tint-2: #ecebe9; --line: #ecebe8; --page: #f6f6f5;
+    --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0 }
+  html { background: #fff; -webkit-text-size-adjust: 100% }
+  body { min-height: 100dvh; background: #fff; color: var(--ink); font: 400 16px/1.5 var(--sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-tap-highlight-color: transparent }
+  a { color: inherit; text-decoration: none }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer }
+  svg { display: block; flex-shrink: 0 }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 14px }
+
+  .card { position: relative; width: 100%; max-width: 440px; margin: 0 auto; background: #fff; overflow: clip }
+
+  /* portret, met de naam erover */
+  .poster { position: relative; height: min(560px, 66svh); min-height: 420px; overflow: hidden; background: #2a2a2a }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 24%; transform: scale(1.06); opacity: 0; animation: photo 1.4s var(--ease) forwards }
+  .shade-top { position: absolute; inset: 0 0 auto; height: 128px; background: linear-gradient(180deg, rgba(0,0,0,.4), transparent) }
+  .shade-bottom { position: absolute; inset: auto 0 0; height: 62%; background: linear-gradient(0deg, rgba(0,0,0,.8), rgba(0,0,0,.3) 55%, transparent) }
+  .bar { position: absolute; inset: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: max(16px, env(safe-area-inset-top)) 16px 0 }
+  .glass { display: flex; align-items: center; height: 40px; border-radius: 999px; color: #fff; background: rgba(0,0,0,.2); box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px) }
+  .org { gap: 10px; padding: 0 16px 0 7px; font-size: 13.5px; font-weight: 500 }
+  .org img { width: 26px; height: 26px; border-radius: 8px }
+  .round { width: 40px; justify-content: center; transition: transform .2s var(--ease) }
+  .round:active { transform: scale(.94) }
+  .who { position: absolute; inset: auto 0 0; padding: 0 24px 48px; color: #fff }
+  h1 { font: 600 36px/1.02 var(--sans); letter-spacing: -.045em; text-shadow: 0 2px 24px rgba(0,0,0,.25) }
+  .role { margin-top: 10px; font-size: 16px; line-height: 1.35; color: rgba(255,255,255,.85) }
+
+  /* blad */
+  .sheet { position: relative; margin-top: -24px; border-radius: 28px 28px 0 0; background: #fff; padding: 22px 20px 0 }
+  .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px }
+  .action { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 15px 0 12px; border-radius: 20px; background: var(--tint); font-size: 12.5px; font-weight: 500; color: var(--ink-2); transition: transform .2s var(--ease), background .2s }
+  .action:hover { background: var(--tint-2) }
+  .action:active { transform: scale(.96) }
+  .action svg { color: var(--ink) }
+
+  .cta { display: flex; gap: 10px; margin-top: 10px }
+  .primary { flex: 1; min-width: 0; height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 600; font-size: 16px; letter-spacing: -.01em; box-shadow: 0 12px 30px -14px rgba(6,6,6,.55); transition: transform .2s var(--ease) }
+  .primary:active { transform: scale(.98) }
+  .circle { width: 56px; height: 56px; flex-shrink: 0; display: grid; place-items: center; border-radius: 999px; background: var(--tint); transition: transform .2s var(--ease), background .2s }
+  .circle:hover { background: var(--tint-2) }
+  .circle:active { transform: scale(.95) }
+  .save { margin-top: 10px; height: 52px; display: flex; align-items: center; justify-content: center; gap: 9px; border-radius: 999px; background: var(--tint); font-weight: 500; font-size: 15px; letter-spacing: -.01em; transition: transform .2s var(--ease), background .2s }
+  .save:hover { background: var(--tint-2) }
+  .save:active { transform: scale(.98) }
+
+  section { margin-top: 32px }
+  h2 { padding: 0 4px; font-size: 12.5px; font-weight: 500; color: var(--muted) }
+  .apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 8px; margin-top: 14px }
+  .app { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; transition: transform .2s var(--ease) }
+  .app:active { transform: scale(.94) }
+  .tile { width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; background: var(--ink); box-shadow: 0 8px 20px -12px rgba(6,6,6,.55); transition: transform .3s var(--ease) }
+  .app:hover .tile { transform: translateY(-2px) }
+  .tile img { width: 30px; height: 30px; object-fit: contain }
+  .tile.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%) }
+  .tile.li { background: #0a66c2 }
+  .app span { max-width: 100%; font-size: 12px; font-weight: 500; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+
+  .list { margin-top: 12px; border-radius: 24px; background: #f7f7f6; overflow: hidden }
+  .row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; transition: background .2s }
+  .row:hover { background: #f1f1ef }
+  .row + .row { box-shadow: inset 0 1px 0 var(--line) }
+  .row .ic { width: 36px; height: 36px; flex-shrink: 0; display: grid; place-items: center; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px rgba(6,6,6,.05) }
+  .row div { flex: 1; min-width: 0 }
+  .row small { display: block; font-size: 11.5px; color: var(--muted) }
+  .row span { display: block; font-size: 15px; font-weight: 500; letter-spacing: -.005em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+  .row .go { color: var(--faint) }
+
+  .bio { margin-top: 10px; padding: 0 4px; font-size: 15.5px; line-height: 1.65; color: var(--ink-2) }
+
+  footer { display: flex; justify-content: center; padding: 40px 0 max(32px, env(safe-area-inset-bottom)) }
+  footer a { opacity: .55; transition: opacity .2s }
+  footer a:hover { opacity: 1 }
+  footer img { height: 13px; width: auto; display: block }
+
+  /* groot scherm: kaart in het midden, QR ernaast */
+  .aside { display: none }
+  @media (min-width: 820px) {
+    body { background: linear-gradient(180deg, #ededec 0%, var(--page) 60%) fixed }
+    .page { display: flex; align-items: flex-start; justify-content: center; gap: 72px; padding: 64px 32px }
+    .card { margin: 0; border-radius: 40px; box-shadow: 0 50px 120px -50px rgba(6,6,6,.4), 0 0 0 1px rgba(6,6,6,.04) }
+    .aside { display: block; position: sticky; top: 64px; width: 280px; opacity: 0; animation: up .9s var(--ease) .4s forwards }
+    .aside .qr { padding: 26px; border-radius: 32px; background: #fff; box-shadow: 0 30px 80px -45px rgba(6,6,6,.35) }
+    .aside .qr img { display: block; width: 100%; height: auto }
+    .aside h3 { margin-top: 24px; font-size: 17px; font-weight: 600; letter-spacing: -.015em }
+    .aside p { margin-top: 4px; font-size: 14px; color: var(--muted) }
+    .aside button { margin-top: 18px; height: 40px; padding: 0 16px; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px rgba(6,6,6,.08); font-size: 13.5px; font-weight: 500 }
+  }
+
+  /* deelvenster */
+  .scrim { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; background: rgba(6,6,6,.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease) }
+  .scrim.open { opacity: 1; pointer-events: auto }
+  .sheet-share { width: 100%; max-width: 440px; max-height: 94dvh; overflow-y: auto; border-radius: 34px 34px 0 0; background: #fbfbfa; padding: 10px 16px max(20px, env(safe-area-inset-bottom)); transform: translateY(100%); transition: transform .5s var(--ease); scrollbar-width: none; outline: none }
+  .scrim.open .sheet-share { transform: none }
+  @media (min-width: 640px) { .scrim { align-items: center } .sheet-share { border-radius: 34px } }
+  .grab { width: 40px; height: 5px; margin: 0 auto; border-radius: 9px; background: rgba(6,6,6,.1) }
+  .share-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 4px 0 }
+  .share-head p { font-size: 17px; font-weight: 600; letter-spacing: -.015em }
+  .share-head button { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 999px; background: rgba(6,6,6,.05) }
+  .sheet-share .qr { width: min(270px, 72vw); margin: 18px auto 0; padding: 20px; border-radius: 30px; background: #fff; box-shadow: 0 24px 60px -34px rgba(6,6,6,.45), 0 0 0 1px rgba(6,6,6,.04) }
+  .sheet-share .qr img { display: block; width: 100%; height: auto }
+  .hint { max-width: 260px; margin: 14px auto 0; text-align: center; font-size: 13.5px; line-height: 1.4; color: var(--muted) }
+  .sheet-share .list { margin-top: 22px; background: #f2f2f0 }
+  .sheet-share .row { width: 100%; text-align: left }
+  .sheet-share .row:hover { background: #ebebe8 }
+  .sheet-share .row .ic { border-radius: 12px; width: 40px; height: 40px }
+  .ic.blue { background: linear-gradient(#37a6ff, #0a7aff); box-shadow: none; color: #fff }
+  .ic.green { background: #25d366; box-shadow: none; color: #fff }
+  [hidden] { display: none !important }
+
+  .toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); z-index: 60; padding: 11px 16px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; opacity: 0; transform: translate(-50%, 16px); transition: .35s var(--ease); pointer-events: none }
+  .toast.show { opacity: 1; transform: translate(-50%, 0) }
+
+  .rise { opacity: 0; transform: translateY(14px); animation: up .8s var(--ease) forwards }
+  @keyframes up { to { opacity: 1; transform: none } }
+  @keyframes photo { to { opacity: 1; transform: none } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important } }
+</style>
+</head>
+<body>
+<main class="page">
+  <article class="card">
+    <header class="poster">
+      <img class="photo" src="/visitekaartje/kamiel.jpg" alt="Kamiel Niville" width="800" height="969" fetchpriority="high">
+      <div class="shade-top"></div>
+      <div class="shade-bottom"></div>
+      <div class="bar rise" style="animation-delay:.45s">
+        <a class="glass org" href="https://nivoraworks.com/" target="_blank" rel="noopener">
+          <img src="/visitekaartje/icon.svg" alt=""> Nivora Works
+        </a>
+        <button class="glass round" type="button" data-open-share aria-label="Delen" data-i18n-aria="share">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M8 11H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>
+        </button>
+      </div>
+      <div class="who rise" style="animation-delay:.25s">
+        <h1>Kamiel Niville</h1>
+        <p class="role"><span data-i18n="role">Oprichter</span>, Nivora Works</p>
+      </div>
+    </header>
+
+    <div class="sheet">
+      <div class="actions rise" style="animation-delay:.3s">
+        <a class="action" href="tel:+32489007737">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+          <span data-i18n="call">Bellen</span>
+        </a>
+        <a class="action" href="mailto:kamiel@nivoraworks.com">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 7 8.5 6 8.5-6"/></svg>
+          <span>Mail</span>
+        </a>
+        <a class="action" href="https://nivoraworks.com/" target="_blank" rel="noopener">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5a14.5 14.5 0 0 1 0 19M12 2.5a14.5 14.5 0 0 0 0 19"/></svg>
+          <span>Website</span>
+        </a>
+      </div>
+
+      <div class="cta rise" style="animation-delay:.37s">
+        <a class="primary" href="https://booking.nivoraworks.com/?via=visitekaartje&amp;lp=%2Fkamiel" target="_blank" rel="noopener">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+          <span data-i18n="book">Plan een gesprek</span>
+        </a>
+        <button class="circle" type="button" data-open-share aria-label="AirDrop">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.763 16.473a5 5 0 1 1 4.474 0m1.789 3.579a9 9 0 1 0-8.052 0M13 12a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg>
+        </button>
+      </div>
+      <a class="save rise" style="animation-delay:.42s" href="/visitekaartje/kamiel.vcf">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M2.5 21a7.5 7.5 0 0 1 13.4-4.6"/><path d="M19 15v6M16 18h6"/></svg>
+        <span data-i18n="save">Bewaar contact</span>
+      </a>
+
+      <section class="rise" style="animation-delay:.5s">
+        <h2 data-i18n="services">Wat we doen</h2>
+        <nav class="apps">
+          <a class="app" href="https://nivoraworks.com/services/app-design" target="_blank" rel="noopener"><i class="tile"><img src="/visitekaartje/services/appdesign.png" alt=""></i><span>App Design</span></a>
+          <a class="app" href="https://nivoraworks.com/services/local-ai" target="_blank" rel="noopener"><i class="tile"><img src="/visitekaartje/services/localai.png" alt=""></i><span>Local AI</span></a>
+          <a class="app" href="https://nivoraworks.com/services/aios" target="_blank" rel="noopener"><i class="tile"><img src="/visitekaartje/services/aios.png" alt=""></i><span>AIOS</span></a>
+          <a class="app" href="https://nivoraworks.com/services/ai-consulting" target="_blank" rel="noopener"><i class="tile"><img src="/visitekaartje/services/consulting.png" alt=""></i><span>AI Consulting</span></a>
+        </nav>
+      </section>
+
+      <section class="rise" style="animation-delay:.57s">
+        <h2 data-i18n="follow">Volg ons</h2>
+        <nav class="apps">
+          <a class="app" href="https://www.instagram.com/nivoraworks/" target="_blank" rel="noopener"><i class="tile ig"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="#fff"/></svg></i><span>Instagram</span></a>
+          <a class="app" href="https://www.linkedin.com/company/116050071" target="_blank" rel="noopener"><i class="tile li"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.850 3.370-1.850 3.601 0 4.267 2.370 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452z"/></svg></i><span>LinkedIn</span></a>
+        </nav>
+      </section>
+
+      <section class="rise" style="animation-delay:.64s">
+        <h2 data-i18n="details">Gegevens</h2>
+        <div class="list">
+          <a class="row" href="tel:+32489007737">
+            <i class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></i>
+            <div><small data-i18n="phone">Telefoon</small><span>+32 489 00 77 37</span></div>
+            <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+          <a class="row" href="mailto:kamiel@nivoraworks.com">
+            <i class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></i>
+            <div><small>E-mail</small><span>kamiel@nivoraworks.com</span></div>
+            <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+          <a class="row" href="https://nivoraworks.com/" target="_blank" rel="noopener">
+            <i class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5a14.5 14.5 0 0 1 0 19M12 2.5a14.5 14.5 0 0 0 0 19"/></svg></i>
+            <div><small>Website</small><span>nivoraworks.com</span></div>
+            <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+          <a class="row" href="https://www.google.com/maps/search/?api=1&amp;query=Julius%20en%20Maurits%20Sabbestraat%2015%2C%208000%20Brugge" target="_blank" rel="noopener">
+            <i class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></i>
+            <div><small>Maps</small><span>Sabbestraat 15, 8000 Brugge</span></div>
+            <svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="rise" style="animation-delay:.7s">
+        <h2 data-i18n="about">Over</h2>
+        <p class="bio" data-i18n="bio">Nivora Works is een software- en AI-studio in Brugge. We bouwen eigen apps, Box en Voice, en ontwerpen apps op maat, lokale AI-installaties, AI-besturingssystemen en AI-advies voor bedrijven.</p>
+      </section>
+
+      <footer>
+        <a href="https://nivoraworks.com/" target="_blank" rel="noopener" aria-label="Nivora Works"><img src="/visitekaartje/nivora-logo-zwart.svg" alt="Nivora"></a>
+      </footer>
+    </div>
+  </article>
+
+  <aside class="aside">
+    <div class="qr"><img src="/visitekaartje/qr-kamiel.svg" alt="QR-code naar nivoraworks.com/kamiel" width="300" height="300"></div>
+    <h3 data-i18n="scan">Scan om het contact te bewaren</h3>
+    <p>Kamiel Niville, Nivora Works</p>
+    <button type="button" data-copy>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+      <span data-i18n="copy">Kopieer link</span>
+    </button>
+  </aside>
+</main>
+
+<div class="scrim" data-scrim aria-hidden="true">
+  <div class="sheet-share" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="grab"></div>
+    <div class="share-head">
+      <p id="share-title" data-i18n="shareTitle">Deel mijn kaart</p>
+      <button type="button" data-close aria-label="Sluiten" data-i18n-aria="close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="qr"><img src="/visitekaartje/qr-kamiel.svg" alt="QR-code" width="300" height="300"></div>
+    <p class="hint" data-i18n="hint">Laat de code scannen, of stuur de kaart door.</p>
+    <div class="list">
+      <button class="row" type="button" data-native-file hidden>
+        <i class="ic blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.763 16.473a5 5 0 1 1 4.474 0m1.789 3.579a9 9 0 1 0-8.052 0M13 12a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg></i>
+        <div><span data-file-title>AirDrop mijn contact</span><small data-file-sub>Komt meteen in Contacten</small></div>
+      </button>
+      <button class="row" type="button" data-native-link hidden>
+        <i class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M8 11H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg></i>
+        <div><span data-i18n="shareLink">Deel de link</span><small data-i18n="shareLinkSub">Berichten, Mail, Slack…</small></div>
+      </button>
+      <a class="row" data-wa target="_blank" rel="noopener" href="#">
+        <i class="ic green"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.8a9.9 9.9 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.88 9.88 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.9 11.9 0 0 0 5.69 1.45c6.55 0 11.89-5.33 11.9-11.89a11.8 11.8 0 0 0-3.490-8.41"/></svg></i>
+        <div><span data-i18n="wa">Stuur via WhatsApp</span></div>
+      </a>
+      <button class="row" type="button" data-copy>
+        <i class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></i>
+        <div><span data-i18n="copy">Kopieer link</span><small>nivoraworks.com/kamiel</small></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const URL_CARD = 'https://nivoraworks.com/kamiel'
+  const NAME = 'Kamiel Niville'
+
+  // Nederlands is de standaard; wie geen Nederlands als browsertaal heeft, krijgt Engels.
+  const EN = {
+    role: 'Founder', call: 'Call', book: 'Book a call', save: 'Save contact', services: 'What we do', follow: 'Follow us',
+    details: 'Details', phone: 'Phone', about: 'About',
+    bio: 'Nivora Works is a software and AI studio in Bruges, Belgium. We build our own apps, Box and Voice, and design custom apps, local AI installations, AI operating systems and AI consulting for companies.',
+    scan: 'Scan to save the contact', copy: 'Copy link', copied: 'Link copied', shareTitle: 'Share my card',
+    hint: 'Let someone scan the code, or send the card on.', shareLink: 'Share the link', shareLinkSub: 'Messages, Mail, Slack…',
+    wa: 'Send via WhatsApp', share: 'Share', close: 'Close',
+    airdrop: 'AirDrop my contact', airdropSub: 'Lands straight in Contacts', sendContact: 'Send my contact', sendContactSub: 'As a contact card (.vcf)',
+  }
+  const NL = { copied: 'Link gekopieerd', airdrop: 'AirDrop mijn contact', airdropSub: 'Komt meteen in Contacten', sendContact: 'Stuur mijn contact', sendContactSub: 'Als contactkaart (.vcf)' }
+  const langs = (navigator.languages || [navigator.language || 'nl']).map((l) => l.toLowerCase())
+  const en = !langs.some((l) => l.startsWith('nl'))
+  const t = (k) => (en ? EN[k] : NL[k]) || ''
+  if (en) {
+    document.documentElement.lang = 'en'
+    document.querySelectorAll('[data-i18n]').forEach((el) => { const v = EN[el.dataset.i18n]; if (v) el.textContent = v })
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => { const v = EN[el.dataset.i18nAria]; if (v) el.setAttribute('aria-label', v) })
+  }
+  document.querySelector('[data-wa]').href = 'https://wa.me/?text=' + encodeURIComponent('Kamiel Niville, Nivora Works: ' + URL_CARD)
+
+  const toastEl = document.querySelector('.toast')
+  let toastTimer
+  const toast = (msg) => { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800) }
+  document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(URL_CARD) } catch { const i = document.createElement('input'); i.value = URL_CARD; document.body.append(i); i.select(); document.execCommand('copy'); i.remove() }
+    toast(t('copied'))
+  }))
+
+  // deelvenster
+  const scrim = document.querySelector('[data-scrim]')
+  const panel = scrim.querySelector('.sheet-share')
+  let lastFocus
+  const open = () => { lastFocus = document.activeElement; scrim.classList.add('open'); scrim.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; panel.focus({ preventScroll: true }) }
+  const close = () => { scrim.classList.remove('open'); scrim.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; lastFocus && lastFocus.focus({ preventScroll: true }) }
+  document.querySelectorAll('[data-open-share]').forEach((b) => b.addEventListener('click', open))
+  scrim.addEventListener('click', (e) => { if (e.target === scrim) close() })
+  scrim.querySelector('[data-close]').addEventListener('click', close)
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && scrim.classList.contains('open')) close() })
+  // nivoraworks.com/kamiel#delen opent meteen de QR om te tonen
+  if (location.hash === '#delen') open()
+
+  // deelmenu van het toestel: het contact zelf als .vcf (AirDrop op iPhone en Mac), of de link.
+  // Het bestand wordt vooraf geladen: Safari opent het deelmenu enkel binnen dezelfde tik.
+  if (typeof navigator.share === 'function') {
+    const apple = /iPhone|iPad|Macintosh|Mac OS X/.test(navigator.userAgent)
+    const fileBtn = document.querySelector('[data-native-file]')
+    const linkBtn = document.querySelector('[data-native-link]')
+    fileBtn.querySelector('[data-file-title]').textContent = t(apple ? 'airdrop' : 'sendContact')
+    fileBtn.querySelector('[data-file-sub]').textContent = t(apple ? 'airdropSub' : 'sendContactSub')
+    linkBtn.hidden = false
+    linkBtn.addEventListener('click', () => navigator.share({ title: NAME, url: URL_CARD }).catch(() => {}))
+    fetch('/visitekaartje/kamiel.vcf').then((r) => (r.ok ? r.blob() : null)).then((b) => {
+      if (!b) return
+      const file = new File([b], 'Kamiel-Niville.vcf', { type: 'text/vcard' })
+      if (!navigator.canShare || !navigator.canShare({ files: [file] })) return
+      fileBtn.hidden = false
+      fileBtn.addEventListener('click', () => navigator.share({ files: [file], title: NAME }).catch(() => {}))
+    }).catch(() => {})
+  }
+})()
+</script>
+</body>
+</html>

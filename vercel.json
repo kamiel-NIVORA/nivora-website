@@ -144,6 +144,19 @@
   ],
   "headers": [
     {
+      "source": "/visitekaartje/(.*)\\.vcf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/vcard; charset=utf-8"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"Kamiel-Niville.vcf\""
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
