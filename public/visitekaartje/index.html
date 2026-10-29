@@ -23,14 +23,14 @@
 <link rel="preload" as="image" href="/visitekaartje/kamiel.jpg">
 <script>
   // Glazen opening: één keer per bezoek (#intro toont ze opnieuw), niet bij "minder beweging".
-  // Gaat het script mis, dan haalt de time-out de laag na 4,5 s toch weg.
+  // Laadt het glas-script niet, dan haalt de time-out de laag na 4,5 s toch weg.
   try {
     var k = 'nivora-card-intro'
     if (location.hash === '#intro' || (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem(k))) {
       sessionStorage.setItem(k, '1')
       document.documentElement.classList.add('intro')
       setTimeout(function () {
-        if (!document.documentElement.classList.contains('intro')) return
+        if (window.__glass || !document.documentElement.classList.contains('intro')) return
         document.documentElement.classList.remove('intro')
         document.dispatchEvent(new Event('introend'))
       }, 4500)
