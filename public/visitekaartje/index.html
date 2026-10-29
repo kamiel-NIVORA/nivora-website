@@ -71,7 +71,18 @@
   .role { margin-top: 10px; font-size: 16px; line-height: 1.35; color: rgba(255,255,255,.85) }
 
   /* blad */
-  .sheet { position: relative; margin-top: -24px; border-radius: 28px 28px 0 0; background: #fff; padding: 22px 20px 0 }
+  .sheet { position: relative; z-index: 1; margin-top: -24px; border-radius: 28px 28px 0 0; background: #fff; padding: 22px 20px 0 }
+
+  /* Scrollen: op gsm blijft de foto staan en schuift het witte blad er als een kader overheen. Naam en
+     functie vervagen en schuiven mee omhoog, de foto zakt licht weg; terugscrollen draait alles om.
+     Het script zet --p (0 tot 1) op de poster; de lagen lezen het alleen via transform en opacity. */
+  .zoom { position: absolute; inset: 0; transform: scale(calc(1 + var(--p, 0) * .08)); transform-origin: 50% 30%; will-change: transform }
+  .dim { position: absolute; inset: 0; background: #060606; opacity: calc(var(--p, 0) * .55); pointer-events: none }
+  .who-move { opacity: calc(1 - var(--q, 0) * 1.25); transform: translateY(calc(var(--q, 0) * -56px)) scale(calc(1 - var(--q, 0) * .04)); transform-origin: 0 100%; will-change: transform, opacity }
+  .bar-move { opacity: calc(1 - var(--p, 0) * 1.6) }
+  @media (max-width: 819px) {
+    .poster { position: sticky; top: 0; z-index: 0 }
+  }
   .actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px }
   .action { height: 78px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; border-radius: 22px; background: var(--tint); color: var(--ink); font-size: 12.5px; line-height: 1; font-weight: 600; letter-spacing: -.005em; transition: transform .2s var(--ease), background .2s }
   .action:hover { background: var(--tint-2) }
@@ -228,10 +239,11 @@
 <main class="page">
   <article class="card">
     <header class="poster">
-      <img class="photo" src="/visitekaartje/kamiel.jpg" alt="Kamiel Niville" width="800" height="969" fetchpriority="high">
+      <div class="zoom"><img class="photo" src="/visitekaartje/kamiel.jpg" alt="Kamiel Niville" width="800" height="969" fetchpriority="high"></div>
       <div class="shade-top"></div>
       <div class="shade-bottom"></div>
-      <div class="bar rise" style="animation-delay:.45s">
+      <div class="dim"></div>
+      <div class="bar-move"><div class="bar rise" style="animation-delay:.45s">
         <a class="glass org" href="https://nivoraworks.com/" target="_blank" rel="noopener">
           <img src="/visitekaartje/icon.svg" alt=""> Nivora Works
         </a>
@@ -239,9 +251,11 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M8 11H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>
         </button>
       </div>
-      <div class="who rise" style="animation-delay:.25s">
+      </div>
+      <div class="who"><div class="who-move"><div class="rise" style="animation-delay:.25s">
         <h1>Kamiel Niville</h1>
         <p class="role"><span data-i18n="role">Oprichter</span>, Nivora Works</p>
+      </div></div>
       </div>
     </header>
 
@@ -516,6 +530,29 @@
     el.addEventListener('mouseenter', () => animateIcon(el, 0))
     el.addEventListener('focus', () => animateIcon(el, 0))
   })
+
+  // Scrollen over de foto: --p loopt van 0 tot 1 over de hoogte van de foto (zoom en verduistering),
+  // --q sneller, over de eerste 45 % (naam en functie vervagen en schuiven omhoog). Eén update per frame.
+  const poster = document.querySelector('.poster')
+  const card = document.querySelector('.card')
+  const bar = document.querySelector('.bar-move')
+  if (!still) {
+    let queued = false
+    const scrollFx = () => {
+      queued = false
+      const h = poster.offsetHeight
+      const y = Math.max(0, -card.getBoundingClientRect().top) // hoe ver de kaart al voorbij de bovenrand is
+      const p = Math.min(1, y / h)
+      const q = Math.min(1, y / (h * 0.45))
+      poster.style.setProperty('--p', p.toFixed(4))
+      poster.style.setProperty('--q', q.toFixed(4))
+      bar.style.pointerEvents = p > 0.5 ? 'none' : ''
+    }
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(scrollFx) } }
+    addEventListener('scroll', queue, { passive: true })
+    addEventListener('resize', queue)
+    scrollFx()
+  }
 
   // vensters (delen en Box): openen, sluiten met de knop, een tik ernaast of Escape
   let lastFocus
