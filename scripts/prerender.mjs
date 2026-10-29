@@ -784,7 +784,8 @@ for (const [text, where] of paragraphSeen) {
 
    Daarom hier, bij de build, waar we precies weten welke pagina's er straks in
    dist staan. Externe bestemmingen en alles onder /api slaan we over, en een
-   bestemming met een :parameter erin kunnen we niet natrekken. */
+   bestemming met een :parameter erin kunnen we niet natrekken. Een losse pagina
+   uit public/ telt mee zodra haar index.html in dist staat. */
 {
   const gepubliceerd = new Set()
   for (const page of pages) {
@@ -798,7 +799,9 @@ for (const [text, where] of paragraphSeen) {
     const dest = r.destination
     if (!dest?.startsWith('/') || dest.startsWith('/api/') || dest.includes(':')) continue
     const schoon = dest.replace(/\/$/, '') || '/'
-    if (!gepubliceerd.has(schoon)) {
+    // een losse pagina uit public/ (zoals /visitekaartje) staat als index.html in dist
+    const statisch = existsSync(join(dist, schoon, 'index.html'))
+    if (!gepubliceerd.has(schoon) && !statisch) {
       problems.push(
         `vercel.json: redirect ${r.source} wijst naar ${dest}, en die pagina wordt niet gepubliceerd. ` +
           'Staat de bestemming op draft, laat de oude URL dan een 410 geven via /api/gone.',
